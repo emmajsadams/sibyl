@@ -2,7 +2,7 @@ import { writeFileSync, mkdirSync } from "fs";
 import { readFileSync } from "fs";
 import { join } from "path";
 import type { TrainingEvent, TrainingFile } from "./schema";
-import type { GameState, Unit } from "../types";
+import type { GameState, Unit, GameConfig } from "../types";
 import { readTrainingConfig, writeTrainingConfig } from "./config";
 
 const PKG_PATH = join(import.meta.dir, "../../package.json");
@@ -18,24 +18,29 @@ export class TrainingRecorder {
   private data: TrainingFile;
   private filePath: string;
 
-  constructor(agent: string, config?: string) {
+  constructor(agent: string, gameConfig: GameConfig) {
     const version: string = readJson(PKG_PATH).version;
     const cfg = readTrainingConfig();
     const nextGameId = cfg.nextGameId;
-    const gameId = `v${version}-${nextGameId}`;
+    const configId = `v${version}-${nextGameId}`;
+    const gameId = configId;
 
     mkdirSync("training", { recursive: true });
+    mkdirSync("training/versions", { recursive: true });
     this.filePath = join("training", `training-${gameId}.json`);
+
+    // Save the versioned config
+    const configPath = join("training/versions", `${configId}.json`);
+    writeFileSync(configPath, JSON.stringify(gameConfig, null, 2));
 
     // Increment the counter and write back
     writeTrainingConfig({ nextGameId: nextGameId + 1 });
 
     this.data = {
-      version: GAME_VERSION,
+      configId,
       gameId,
       timestamp: new Date().toISOString(),
       agent,
-      config,
       events: [],
     };
 

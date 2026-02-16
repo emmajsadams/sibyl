@@ -236,11 +236,10 @@ export type TrainingEvent = z.infer<typeof TrainingEvent>;
 // === Training Data File ===
 
 export const TrainingFile = z.object({
-  version: z.string(),
+  configId: z.string(),
   gameId: z.string(),
   timestamp: z.string(),
   agent: z.string(),
-  config: z.string().optional(),
   events: z.array(TrainingEvent),
 });
 

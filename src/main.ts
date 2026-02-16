@@ -23,6 +23,7 @@ import { ask, askMultiline, close } from "./cli/input";
 import { GameLogger } from "./logger";
 import { TrainingRecorder } from "./training/recorder";
 import { setTrainingListener, emit as emitTraining } from "./training/emitter";
+import { generateRandomConfig } from "./training/squads";
 import type { GameState, UnitClass, Unit, UnitAction, UnitConfig, GameConfig } from "./types";
 import { readFileSync } from "fs";
 
@@ -211,34 +212,41 @@ async function main() {
   console.log("\x1b[0m");
 
   const configPath = process.argv.filter((a) => a !== "--cli")[2];
-  let playerUnits: UnitConfig[];
-  let opponentUnits: UnitConfig[];
-  let playerPlacementPrompt: string;
-  let opponentPlacementPrompt: string;
+  let gameConfig: GameConfig;
   let interactive: boolean;
 
   if (configPath) {
-    const config = loadConfig(configPath);
-    playerUnits = config.player.units;
-    opponentUnits = config.opponent.units;
-    playerPlacementPrompt = config.player.placementPrompt;
-    opponentPlacementPrompt = config.opponent.placementPrompt;
+    gameConfig = loadConfig(configPath);
     interactive = false;
     console.log(`  Config: ${configPath}`);
     console.log(`  Agent:  ${USE_CLI ? "claude CLI (subscription)" : "API (credits)"}`);
-    console.log(`  ${"\x1b[36m"}Player:${"\x1b[0m"}   ${playerUnits.map((u) => `${u.name} (${u.class})`).join(" · ")}`);
-    console.log(`  ${"\x1b[31m"}Opponent:${"\x1b[0m"} ${opponentUnits.map((u) => `${u.name} (${u.class})`).join(" · ")}`);
-  } else {
-    playerUnits = await selectSquad();
-    opponentUnits = [
+    console.log(`  ${"\x1b[36m"}Player:${"\x1b[0m"}   ${gameConfig.player.units.map((u) => `${u.name} (${u.class})`).join(" · ")}`);
+    console.log(`  ${"\x1b[31m"}Opponent:${"\x1b[0m"} ${gameConfig.opponent.units.map((u) => `${u.name} (${u.class})`).join(" · ")}`);
+  } else if (USE_CLI) {
+    const playerUnits = await selectSquad();
+    const opponentUnits: UnitConfig[] = [
       { name: "Guard", class: "sentinel", prompt: "Advance toward the nearest enemy. Use shield_wall facing the direction with the most enemies." },
       { name: "Sniper", class: "striker", prompt: "Stay at range. Use precision_shot on the lowest HP enemy. Retreat if enemies close in." },
       { name: "Field Doc", class: "medic", prompt: "Stay behind Guard. Patch the most injured ally. If all healthy, overclock Sniper." },
     ];
-    playerPlacementPrompt = "Place units strategically.";
-    opponentPlacementPrompt = "Place Guard center front. Sniper back. Field Doc behind Guard.";
+    gameConfig = {
+      player: { units: playerUnits, placementPrompt: "Place units strategically." },
+      opponent: { units: opponentUnits, placementPrompt: "Place Guard center front. Sniper back. Field Doc behind Guard." },
+    };
     interactive = true;
+  } else {
+    gameConfig = generateRandomConfig();
+    interactive = false;
+    console.log("  Config: random squad generation");
+    console.log(`  Agent:  ${USE_CLI ? "claude CLI (subscription)" : "API (credits)"}`);
+    console.log(`  ${"\x1b[36m"}Player:${"\x1b[0m"}   ${gameConfig.player.units.map((u) => `${u.name} (${u.class})`).join(" · ")}`);
+    console.log(`  ${"\x1b[31m"}Opponent:${"\x1b[0m"} ${gameConfig.opponent.units.map((u) => `${u.name} (${u.class})`).join(" · ")}`);
   }
+
+  const playerUnits = gameConfig.player.units;
+  const opponentUnits = gameConfig.opponent.units;
+  const playerPlacementPrompt = gameConfig.player.placementPrompt;
+  const opponentPlacementPrompt = gameConfig.opponent.placementPrompt;
 
   const state = createGame();
   const logger = new GameLogger(USE_CLI ? "cli" : "api", configPath);
@@ -246,7 +254,7 @@ async function main() {
   logger.setSquad("opponent", opponentUnits);
 
   // Training data recorder
-  const recorder = new TrainingRecorder(USE_CLI ? "cli" : "api", configPath);
+  const recorder = new TrainingRecorder(USE_CLI ? "cli" : "api", gameConfig);
   setTrainingListener((event) => recorder.record(event));
 
   // Record full game config at start

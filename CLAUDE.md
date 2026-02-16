@@ -24,8 +24,14 @@ Pre-commit hook (husky) runs oxlint + tsc automatically.
 ## Key Directories
 - `src/engine/` — game logic (no presentation)
 - `src/agent/` — LLM agent (API + CLI backends)
-- `src/training/` — Zod schemas + event recorder
+- `src/training/` — Zod schemas + event recorder + random squad generation
 - `src/cli/` — terminal renderer + input
-- `configs/` — game config JSON files
-- `training/` — generated training data (gitignored)
+- `training/versions/` — versioned game configs (committed)
+- `training/` — generated training data (gitignored, except versions/)
 - `runs/` — game logs (JSON + markdown)
+
+## Training Versions
+- Each training run saves its config to `training/versions/v{version}-{gameId}.json`
+- To create a new test run: bump the version tag, then either provide a config or let it randomize
+- Training output references configs by `configId` (e.g. "v0.5.0-0")
+- Review previous configs in `training/versions/` to iterate on prompts

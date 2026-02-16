@@ -13,6 +13,16 @@ training-v{version}-{gameId}.json
 
 Examples: `training-v0.5.0-0.json`, `training-v0.5.0-1.json`
 
+## Versioned Configs
+
+Each training run saves its game config to `training/versions/`:
+
+```
+training/versions/v{version}-{gameId}.json
+```
+
+These are committed to git (they're inputs, not outputs). Training output files reference them by `configId`.
+
 ## Config
 
 `training/config.json` stores runtime state (typed via Zod in `src/training/config.ts`):
@@ -25,20 +35,32 @@ Examples: `training-v0.5.0-0.json`, `training-v0.5.0-1.json`
 
 Incremented automatically each game. Auto-created on first run if missing. Reset manually when needed (e.g. new version).
 
+## Random Squad Generation
+
+When running without a config file in non-interactive (API) mode, SIBYL generates random squads via `src/training/squads.ts`:
+
+- Picks 3 random classes per side (no duplicates within a side)
+- Assigns thematic names and tactical prompts from templates
+- Generates a placement prompt for each side
+- The generated config is saved to `training/versions/` like any other config
+
+Usage: `bun run src/main.ts` (no config argument, no --cli flag)
+
 ## File Structure
 
 Each training file is a JSON object:
 
 ```json
 {
-  "version": "0.5.0",
+  "configId": "v0.5.0-0",
   "gameId": "v0.5.0-0",
   "timestamp": "2026-02-16T07:04:17.000Z",
   "agent": "claude-sonnet-4-20250514",
-  "config": "optional config string",
   "events": [ ... ]
 }
 ```
+
+The `configId` references the versioned config file at `training/versions/v0.5.0-0.json`.
 
 ## Event Types
 
@@ -73,6 +95,7 @@ Full Zod schema with all event types: `src/training/schema.ts`
 
 `src/training/recorder.ts` handles:
 - Reading version + game counter
-- Creating the file and incrementing the counter
+- Creating the training file and versioned config file
+- Incrementing the counter
 - `record(event)` appends and flushes to disk immediately
 - Static helpers for snapshotting units/traps from game state
