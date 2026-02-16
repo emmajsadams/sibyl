@@ -99,11 +99,12 @@ export function getUnitAt(state: GameState, pos: Position): Unit | undefined {
 export function isBehind(attacker: Position, target: Unit): boolean {
   const dx = attacker.x - target.position.x;
   const dy = attacker.y - target.position.y;
+  // If target faces N (+y), their back is south, attacker must be south (dy < 0)
   switch (target.facing) {
-    case "N": return dy > 0; // behind = south of target
-    case "S": return dy < 0;
-    case "E": return dx < 0;
-    case "W": return dx > 0;
+    case "N": return dy < 0; // back is south
+    case "S": return dy > 0; // back is north
+    case "E": return dx < 0; // back is west
+    case "W": return dx > 0; // back is east
   }
 }
 
@@ -377,7 +378,8 @@ function abilityBreach(
 
 function abilityCloak(unit: Unit): string | null {
   if (unit.class !== "specter") return "Only Specter can use Cloak";
-  unit.statusEffects.push({ type: "cloaked", turnsLeft: 1 });
+  // turnsLeft: 2 = lasts through this turn + enemy turn, expires at start of your next turn
+  unit.statusEffects.push({ type: "cloaked", turnsLeft: 2 });
   return null;
 }
 
@@ -549,9 +551,12 @@ export function startPlay(state: GameState): void {
 
 export function endTurn(state: GameState): void {
   // Clean up expiring effects
+  const actingSide = state.activesSide;
   for (const unit of state.units) {
     unit.statusEffects = unit.statusEffects.filter((e) => {
+      // Cloak only expires for the cloaking unit's own side
       if (e.type === "cloaked") {
+        if (unit.side !== actingSide) return true; // keep — not their turn yet
         e.turnsLeft--;
         return e.turnsLeft > 0;
       }
