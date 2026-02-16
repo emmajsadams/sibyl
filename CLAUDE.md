@@ -25,12 +25,9 @@ Four steps, repeating:
 - Reports back with clear summary of all code changes (what changed, why, in which files)
 
 ### 4. PUBLISH
-- `npx oxlint --fix src/` — 0 warnings
-- `bun test` — all tests pass
-- `~/.bun/bin/bunx tsc --noEmit` — compiles clean
-- Commit with clear message, push to GitHub
-- Tag new version: `git tag -a v{version} -m "v{version}: {summary}"`
-- Push tags: `git push --tags`
+- Spawn a subagent to run the `PUBLISH.md` process
+- Lints, tests, compiles, commits, tags, and pushes
+- Reports back with version number and summary
 
 Pre-commit hook (husky) runs oxlint + tests + tsc automatically.
 
@@ -42,6 +39,7 @@ Pre-commit hook (husky) runs oxlint + tests + tsc automatically.
 | `SPEC.md` | Game design spec — mechanics, classes, abilities | Reference for humans + Claude |
 | `BALANCE.md` | Balance review checklist — subagent prompt | BALANCE step subagent |
 | `REVIEW.md` | Code review checklist — subagent prompt | REVIEW step subagent |
+| `PUBLISH.md` | Publish checklist — subagent prompt | PUBLISH step subagent |
 | `README.md` | Project overview + training data docs | Humans / GitHub |
 
 CLAUDE.md orchestrates. BALANCE.md and REVIEW.md are subagent prompts (read by spawned agents during their respective steps). SPEC.md is the source of truth for game design.
