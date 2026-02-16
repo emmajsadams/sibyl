@@ -1,13 +1,15 @@
-// @ts-ignore — claude-code SDK
-import { query } from "@anthropic-ai/claude-code";
-import type { GameContext, TurnAction, UnitAction, Unit } from "../types";
+import Anthropic from "@anthropic-ai/sdk";
+import type { GameContext, UnitAction } from "../types";
+import type { UnitClass } from "../types";
 import {
   buildSystemPrompt,
   buildContextPrompt,
   buildPlayerPromptSection,
   buildPlacementPrompt,
 } from "./prompts";
-import type { UnitClass } from "../types";
+
+const client = new Anthropic();
+const MODEL = "claude-sonnet-4-20250514";
 
 export interface AgentResponse {
   thinking: string;
@@ -20,41 +22,30 @@ export interface PlacementResponse {
   placements: { name: string; position: { x: number; y: number } }[];
 }
 
+async function complete(system: string, user: string): Promise<string> {
+  const response = await client.messages.create({
+    model: MODEL,
+    max_tokens: 1024,
+    system,
+    messages: [{ role: "user", content: user }],
+  });
+
+  return response.content
+    .filter((b): b is Anthropic.TextBlock => b.type === "text")
+    .map((b) => b.text)
+    .join("");
+}
+
 /**
  * Ask the AI agent what a unit should do this turn.
  */
-export async function getUnitAction(
-  ctx: GameContext,
-  abortSignal?: AbortSignal
-): Promise<AgentResponse> {
+export async function getUnitAction(ctx: GameContext): Promise<AgentResponse> {
   const systemPrompt = buildSystemPrompt(ctx.unit);
   const contextPrompt = buildContextPrompt(ctx);
   const playerPrompt = buildPlayerPromptSection(ctx.unit);
-
   const fullPrompt = `${contextPrompt}\n${playerPrompt}\n\nDecide your actions for this turn.`;
 
-  const result = await query({
-    prompt: fullPrompt,
-    systemPrompt,
-    options: {
-      maxTurns: 1,
-      model: "claude-sonnet-4-20250514",
-    },
-    abortController: abortSignal
-      ? { signal: abortSignal, abort: () => {} }
-      : undefined,
-  });
-
-  const text = (result as any[])
-    .filter((m: any) => m.role === "assistant")
-    .map((m: any) =>
-      m.content
-        .filter((b: any) => b.type === "text")
-        .map((b: any) => b.text)
-        .join("")
-    )
-    .join("");
-
+  const text = await complete(systemPrompt, fullPrompt);
   return parseAgentResponse(text);
 }
 
@@ -64,34 +55,12 @@ export async function getUnitAction(
 export async function getPlacement(
   units: { name: string; class: UnitClass }[],
   side: "player" | "opponent",
-  prompt: string,
-  abortSignal?: AbortSignal
+  prompt: string
 ): Promise<PlacementResponse> {
   const systemPrompt = buildPlacementPrompt(units, side);
   const fullPrompt = `${prompt}\n\nDecide where to place your units.`;
 
-  const result = await query({
-    prompt: fullPrompt,
-    systemPrompt,
-    options: {
-      maxTurns: 1,
-      model: "claude-sonnet-4-20250514",
-    },
-    abortController: abortSignal
-      ? { signal: abortSignal, abort: () => {} }
-      : undefined,
-  });
-
-  const text = (result as any[])
-    .filter((m: any) => m.role === "assistant")
-    .map((m: any) =>
-      m.content
-        .filter((b: any) => b.type === "text")
-        .map((b: any) => b.text)
-        .join("")
-    )
-    .join("");
-
+  const text = await complete(systemPrompt, fullPrompt);
   return parsePlacementResponse(text);
 }
 

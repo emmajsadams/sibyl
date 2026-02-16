@@ -13,6 +13,7 @@ import { getUnitAction, getPlacement } from "./agent/agent";
 import { renderTurn, renderGrid, renderUnitStatus } from "./cli/renderer";
 import { ask, askMultiline, close } from "./cli/input";
 import type { GameState, UnitClass, Side, Unit, UnitAction } from "./types";
+import { readFileSync } from "fs";
 
 const CLASSES: UnitClass[] = [
   "sentinel",
@@ -23,147 +24,126 @@ const CLASSES: UnitClass[] = [
   "vector",
 ];
 
-async function selectSquad(): Promise<
-  { name: string; class: UnitClass }[]
-> {
+// === Config Loading ===
+
+interface UnitConfig {
+  name: string;
+  class: UnitClass;
+  prompt: string;
+}
+
+interface SideConfig {
+  units: UnitConfig[];
+  placementPrompt: string;
+}
+
+interface GameConfig {
+  player: SideConfig;
+  opponent: SideConfig;
+}
+
+function loadConfig(path: string): GameConfig {
+  const raw = readFileSync(path, "utf-8");
+  return JSON.parse(raw);
+}
+
+// === Interactive Squad Selection ===
+
+async function selectSquad(): Promise<UnitConfig[]> {
   console.log("\n\x1b[1m═══ SIBYL — SQUAD SELECTION ═══\x1b[0m\n");
   console.log("Available units:");
   CLASSES.forEach((c, i) => console.log(`  ${i + 1}. ${c.toUpperCase()}`));
   console.log();
 
-  const picks: { name: string; class: UnitClass }[] = [];
+  const picks: UnitConfig[] = [];
   for (let i = 0; i < 3; i++) {
     const input = await ask(`Pick unit ${i + 1} (1-6): `);
     const idx = parseInt(input) - 1;
-    if (idx < 0 || idx >= CLASSES.length) {
-      console.log("Invalid pick, defaulting to sentinel");
-      picks.push({ name: `Unit-${i + 1}`, class: "sentinel" });
-    } else {
-      const name = await ask(`Name for your ${CLASSES[idx]}: `);
-      picks.push({ name: name || `${CLASSES[idx]}-${i + 1}`, class: CLASSES[idx]! });
-    }
+    const cls = (idx >= 0 && idx < CLASSES.length) ? CLASSES[idx]! : "sentinel" as UnitClass;
+    const name = await ask(`Name for your ${cls}: `);
+    console.log(`\x1b[36m${name || cls}\x1b[0m (${cls.toUpperCase()}) — write prompt:`);
+    const prompt = await askMultiline("> ");
+    picks.push({ name: name || `${cls}-${i + 1}`, class: cls, prompt });
+    console.log();
   }
   return picks;
 }
 
-async function writePrompts(
-  squad: { name: string; class: UnitClass }[]
-): Promise<Map<string, string>> {
-  console.log("\n\x1b[1m═══ WRITE YOUR PROMPTS ═══\x1b[0m");
-  console.log(
-    "Write instructions for each unit. These prompts will guide their AI.\n"
-  );
-
-  const prompts = new Map<string, string>();
-  for (const unit of squad) {
-    console.log(
-      `\x1b[36m${unit.name}\x1b[0m (${unit.class.toUpperCase()}):`
-    );
-    const prompt = await askMultiline("> ");
-    prompts.set(unit.name, prompt);
-    console.log();
-  }
-  return prompts;
-}
-
-function generateOpponentSquad(): {
-  squad: { name: string; class: UnitClass }[];
-  prompts: Map<string, string>;
-} {
-  // Starter opponent — simple comp with basic prompts
-  const squad = [
-    { name: "Guard", class: "sentinel" as UnitClass },
-    { name: "Sniper", class: "striker" as UnitClass },
-    { name: "Field Doc", class: "medic" as UnitClass },
-  ];
-
-  const prompts = new Map<string, string>();
-  prompts.set(
-    "Guard",
-    "Advance toward the nearest enemy. Use shield_wall facing the direction with the most enemies. Protect allies when possible."
-  );
-  prompts.set(
-    "Sniper",
-    "Stay at range. Use precision_shot on the lowest HP enemy. If enemies are close, retreat first. Never move into melee range."
-  );
-  prompts.set(
-    "Field Doc",
-    "Stay behind Guard. Patch the most injured ally. If everyone is healthy, use overclock on Sniper."
-  );
-
-  return { squad, prompts };
-}
+// === Placement ===
 
 async function runPlacementPhase(
   state: GameState,
-  playerSquad: { name: string; class: UnitClass }[],
-  playerPrompts: Map<string, string>,
-  opponentSquad: { name: string; class: UnitClass }[],
-  opponentPrompts: Map<string, string>
+  playerUnits: UnitConfig[],
+  playerPlacementPrompt: string,
+  opponentUnits: UnitConfig[],
+  opponentPlacementPrompt: string,
+  interactive: boolean
 ): Promise<void> {
   console.log("\n\x1b[1m═══ PLACEMENT PHASE ═══\x1b[0m\n");
 
-  // Player placement
-  console.log("Place your units in rows 0-1 (bottom two rows).");
-  console.log("Grid is 6 wide (x: 0-5).\n");
-
-  for (const pick of playerSquad) {
-    const input = await ask(
-      `Place ${pick.name} (${pick.class}) at x,y: `
-    );
-    const [x, y] = input.split(",").map((n) => parseInt(n.trim()));
-    const unit = createUnit(
-      `p-${pick.name}`,
-      pick.name,
-      pick.class,
-      "player",
-      { x: x || 0, y: y || 0 },
-      playerPrompts.get(pick.name) || ""
-    );
-    const err = placeUnit(state, unit, unit.position);
-    if (err) {
-      console.log(`  ⚠ ${err} — placing at default`);
-      unit.position = { x: playerSquad.indexOf(pick) * 2, y: 0 };
-      placeUnit(state, unit, unit.position);
+  if (interactive) {
+    console.log("Place your units in rows 0-1 (bottom two rows). Grid is 6 wide (x: 0-5).\n");
+    for (const pick of playerUnits) {
+      const input = await ask(`Place ${pick.name} (${pick.class}) at x,y: `);
+      const [x, y] = input.split(",").map((n) => parseInt(n.trim()));
+      const unit = createUnit(
+        `p-${pick.name}`, pick.name, pick.class, "player",
+        { x: x || 0, y: y || 0 }, pick.prompt
+      );
+      const err = placeUnit(state, unit, unit.position);
+      if (err) {
+        console.log(`  ⚠ ${err} — placing at default`);
+        unit.position = { x: playerUnits.indexOf(pick) * 2, y: 0 };
+        placeUnit(state, unit, unit.position);
+      }
+      console.log(`  ✓ ${pick.name} placed at (${unit.position.x}, ${unit.position.y})`);
     }
-    console.log(
-      `  ✓ ${pick.name} placed at (${unit.position.x}, ${unit.position.y})`
+  } else {
+    // AI-driven placement for player too
+    console.log("Player placing units...");
+    const playerPlacement = await getPlacement(
+      playerUnits.map((u) => ({ name: u.name, class: u.class })),
+      "player",
+      playerPlacementPrompt
     );
+    for (const p of playerPlacement.placements) {
+      const pick = playerUnits.find((u) => u.name === p.name);
+      if (!pick) continue;
+      const unit = createUnit(
+        `p-${pick.name}`, pick.name, pick.class, "player", p.position, pick.prompt
+      );
+      const err = placeUnit(state, unit, unit.position);
+      if (err) {
+        unit.position = { x: playerUnits.indexOf(pick) * 2, y: 0 };
+        placeUnit(state, unit, unit.position);
+      }
+      console.log(`  ✓ ${pick.name} placed at (${unit.position.x}, ${unit.position.y})`);
+    }
   }
 
-  // Opponent placement (AI-driven)
+  // Opponent placement (always AI)
   console.log("\nOpponent placing units...");
   const oppPlacement = await getPlacement(
-    opponentSquad,
+    opponentUnits.map((u) => ({ name: u.name, class: u.class })),
     "opponent",
-    "Place your units strategically. Spread out to avoid area damage. Keep the medic behind the front line."
+    opponentPlacementPrompt
   );
-
   for (const p of oppPlacement.placements) {
-    const pick = opponentSquad.find((u) => u.name === p.name);
+    const pick = opponentUnits.find((u) => u.name === p.name);
     if (!pick) continue;
     const unit = createUnit(
-      `o-${pick.name}`,
-      pick.name,
-      pick.class,
-      "opponent",
-      p.position,
-      opponentPrompts.get(pick.name) || ""
+      `o-${pick.name}`, pick.name, pick.class, "opponent", p.position, pick.prompt
     );
     const err = placeUnit(state, unit, unit.position);
     if (err) {
-      // Fallback placement
-      unit.position = {
-        x: opponentSquad.indexOf(pick) * 2,
-        y: 5,
-      };
+      unit.position = { x: opponentUnits.indexOf(pick) * 2, y: 5 };
       placeUnit(state, unit, unit.position);
     }
-    console.log(
-      `  ✓ ${pick.name} placed at (${unit.position.x}, ${unit.position.y})`
-    );
+    console.log(`  ✓ ${pick.name} placed at (${unit.position.x}, ${unit.position.y})`);
   }
 }
+
+// === Turn Execution ===
 
 async function executeTurn(
   state: GameState,
@@ -174,24 +154,21 @@ async function executeTurn(
   const units = getLivingUnits(state, side);
 
   for (const unit of units) {
+    if (unit.hp <= 0) continue; // may have died mid-turn
     const ctx = buildGameContext(state, unit, lastTurnLog);
 
-    console.log(
-      `\n  \x1b[2m${unit.name} (${unit.class}) thinking...\x1b[0m`
-    );
+    console.log(`\n  \x1b[2m${unit.name} (${unit.class}) thinking...\x1b[0m`);
 
     try {
       const response = await getUnitAction(ctx);
       console.log(`  \x1b[2m💭 ${response.thinking}\x1b[0m`);
 
-      // Execute first action
       const err1 = executeAction(state, unit, response.firstAction);
       if (err1) {
         console.log(`  ⚠ First action failed: ${err1}`);
         turnLog.push(`${unit.name}: first action failed (${err1})`);
       }
 
-      // Execute second action
       const err2 = executeAction(state, unit, response.secondAction);
       if (err2) {
         console.log(`  ⚠ Second action failed: ${err2}`);
@@ -210,23 +187,12 @@ async function executeTurn(
   return turnLog;
 }
 
-function executeAction(
-  state: GameState,
-  unit: Unit,
-  action: UnitAction
-): string | null {
+function executeAction(state: GameState, unit: Unit, action: UnitAction): string | null {
   switch (action.type) {
     case "move":
       return moveUnit(state, unit, action.target);
     case "ability":
-      return useAbility(
-        state,
-        unit,
-        action.ability,
-        action.target,
-        action.direction,
-        action.addendum
-      );
+      return useAbility(state, unit, action.ability, action.target, action.direction, action.addendum);
     case "wait":
       return null;
     default:
@@ -257,50 +223,63 @@ async function main() {
   console.log("  ╚═══════════════════════╝");
   console.log("\x1b[0m");
 
-  // Squad selection
-  const playerSquad = await selectSquad();
-  const playerPrompts = await writePrompts(playerSquad);
+  const configPath = process.argv[2];
+  let playerUnits: UnitConfig[];
+  let opponentUnits: UnitConfig[];
+  let playerPlacementPrompt: string;
+  let opponentPlacementPrompt: string;
+  let interactive: boolean;
 
-  // Opponent
-  const { squad: opponentSquad, prompts: opponentPrompts } =
-    generateOpponentSquad();
-  console.log(
-    `\nOpponent squad: ${opponentSquad.map((u) => u.name + " (" + u.class + ")").join(", ")}`
-  );
+  if (configPath) {
+    console.log(`Loading config from ${configPath}...`);
+    const config = loadConfig(configPath);
+    playerUnits = config.player.units;
+    opponentUnits = config.opponent.units;
+    playerPlacementPrompt = config.player.placementPrompt;
+    opponentPlacementPrompt = config.opponent.placementPrompt;
+    interactive = false;
 
-  // Game setup
+    console.log(`\nPlayer squad: ${playerUnits.map((u) => `${u.name} (${u.class})`).join(", ")}`);
+    console.log(`Opponent squad: ${opponentUnits.map((u) => `${u.name} (${u.class})`).join(", ")}`);
+  } else {
+    playerUnits = await selectSquad();
+    opponentUnits = [
+      { name: "Guard", class: "sentinel", prompt: "Advance toward the nearest enemy. Use shield_wall facing the direction with the most enemies. Protect allies when possible." },
+      { name: "Sniper", class: "striker", prompt: "Stay at range. Use precision_shot on the lowest HP enemy. If enemies are close, retreat first. Never move into melee range." },
+      { name: "Field Doc", class: "medic", prompt: "Stay behind Guard. Patch the most injured ally. If everyone is healthy, use overclock on Sniper." },
+    ];
+    playerPlacementPrompt = "Place units strategically.";
+    opponentPlacementPrompt = "Place Guard in center front. Sniper in back with clear sight lines. Field Doc behind Guard for safety.";
+    interactive = true;
+
+    console.log(`\nOpponent squad: ${opponentUnits.map((u) => `${u.name} (${u.class})`).join(", ")}`);
+  }
+
   const state = createGame();
 
-  // Placement
   await runPlacementPhase(
-    state,
-    playerSquad,
-    playerPrompts,
-    opponentSquad,
-    opponentPrompts
+    state, playerUnits, playerPlacementPrompt,
+    opponentUnits, opponentPlacementPrompt, interactive
   );
 
-  // Begin
   startPlay(state);
   let lastPlayerLog: string[] = [];
   let lastOpponentLog: string[] = [];
 
-  // Game loop
-  while (state.phase === "play") {
+  const MAX_TURNS = 20; // safety valve
+
+  while (state.phase === "play" && state.turn <= MAX_TURNS) {
     console.log(renderTurn(state));
 
     if (state.activesSide === "player") {
-      // Allow prompt editing
-      const edit = await ask(
-        "\nEdit prompts? (y/N): "
-      );
-      if (edit.toLowerCase() === "y") {
-        for (const unit of getLivingUnits(state, "player")) {
-          console.log(
-            `\n\x1b[36m${unit.name}\x1b[0m current prompt:\n  ${unit.prompt}`
-          );
-          const newPrompt = await ask("New prompt (enter to keep): ");
-          if (newPrompt) unit.prompt = newPrompt;
+      if (interactive) {
+        const edit = await ask("\nEdit prompts? (y/N): ");
+        if (edit.toLowerCase() === "y") {
+          for (const unit of getLivingUnits(state, "player")) {
+            console.log(`\n\x1b[36m${unit.name}\x1b[0m current prompt:\n  ${unit.prompt}`);
+            const newPrompt = await ask("New prompt (enter to keep): ");
+            if (newPrompt) unit.prompt = newPrompt;
+          }
         }
       }
 
@@ -314,11 +293,15 @@ async function main() {
     endTurn(state);
   }
 
-  // Game over
-  console.log(renderTurn(state));
-  console.log(
-    `\n\x1b[1m${state.winner === "player" ? "🏆 VICTORY!" : "💀 DEFEAT."}\x1b[0m\n`
-  );
+  if (state.turn > MAX_TURNS && state.phase === "play") {
+    console.log("\n\x1b[1m⏰ DRAW — Max turns reached.\x1b[0m\n");
+  } else {
+    console.log(renderTurn(state));
+    console.log(
+      `\n\x1b[1m${state.winner === "player" ? "🏆 VICTORY!" : "💀 DEFEAT."}\x1b[0m\n`
+    );
+  }
+
   close();
 }
 
