@@ -9,8 +9,13 @@ import {
   getLivingUnits,
   buildGameContext,
 } from "./engine/game";
-import { getUnitAction, getPlacement } from "./agent/agent";
+import * as apiAgent from "./agent/agent";
+import * as cliAgent from "./agent/cli-agent";
 import { renderFullState, renderGameOver } from "./cli/renderer";
+
+// Select agent backend based on --cli flag
+const USE_CLI = process.argv.includes("--cli");
+const { getUnitAction, getPlacement } = USE_CLI ? cliAgent : apiAgent;
 import { ask, askMultiline, close } from "./cli/input";
 import type { GameState, UnitClass, Side, Unit, UnitAction } from "./types";
 import { readFileSync } from "fs";
@@ -198,7 +203,7 @@ async function main() {
   console.log("  ╚═══════════════════════════╝");
   console.log("\x1b[0m");
 
-  const configPath = process.argv[2];
+  const configPath = process.argv.filter((a) => a !== "--cli")[2];
   let playerUnits: UnitConfig[];
   let opponentUnits: UnitConfig[];
   let playerPlacementPrompt: string;
@@ -213,6 +218,7 @@ async function main() {
     opponentPlacementPrompt = config.opponent.placementPrompt;
     interactive = false;
     console.log(`  Config: ${configPath}`);
+    console.log(`  Agent:  ${USE_CLI ? "claude CLI (subscription)" : "API (credits)"}`);
     console.log(`  ${"\x1b[36m"}Player:${"\x1b[0m"}   ${playerUnits.map((u) => `${u.name} (${u.class})`).join(" · ")}`);
     console.log(`  ${"\x1b[31m"}Opponent:${"\x1b[0m"} ${opponentUnits.map((u) => `${u.name} (${u.class})`).join(" · ")}`);
   } else {
