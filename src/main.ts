@@ -17,6 +17,7 @@ import { renderFullState, renderGameOver } from "./cli/renderer";
 const USE_CLI = process.argv.includes("--cli");
 const { getUnitAction, getPlacement } = USE_CLI ? cliAgent : apiAgent;
 import { ask, askMultiline, close } from "./cli/input";
+import { GameLogger } from "./logger";
 import type { GameState, UnitClass, Side, Unit, UnitAction } from "./types";
 import { readFileSync } from "fs";
 
@@ -129,12 +130,15 @@ async function runPlacementPhase(
 async function executeTurn(
   state: GameState,
   side: Side,
-  lastTurnLog: string[]
+  lastTurnLog: string[],
+  logger: GameLogger
 ): Promise<{ turnLog: string[]; actionSummary: string[] }> {
   const turnLog: string[] = [];
   const actionSummary: string[] = [];
   const units = getLivingUnits(state, side);
   const sideLabel = side === "player" ? "\x1b[36m" : "\x1b[31m";
+
+  logger.startTurn(state.turn, side);
 
   for (const unit of units) {
     if (unit.hp <= 0) continue;
@@ -162,16 +166,20 @@ async function executeTurn(
         actions.push(describeAction(response.secondAction));
       }
 
+      logger.logAction(unit, response.thinking, response.firstAction, err1, response.secondAction, err2);
+
       const summary = `${sideLabel}${unit.name}\x1b[0m: ${actions.join(" → ")}`;
       actionSummary.push(summary);
       turnLog.push(`${unit.name}: ${actions.join(" → ")}`);
     } catch (e: any) {
       process.stdout.write(` ⚠ error: ${e.message}\n`);
+      logger.logError(unit, e.message);
       actionSummary.push(`${sideLabel}${unit.name}\x1b[0m: \x1b[31mAGENT ERROR — turn wasted\x1b[0m`);
       turnLog.push(`${unit.name}: agent error`);
     }
   }
 
+  logger.endTurn(state);
   return { turnLog, actionSummary };
 }
 
@@ -234,6 +242,10 @@ async function main() {
   }
 
   const state = createGame();
+  const logger = new GameLogger(USE_CLI ? "cli" : "api", configPath);
+  logger.setSquad("player", playerUnits);
+  logger.setSquad("opponent", opponentUnits);
+
   await runPlacementPhase(state, playerUnits, playerPlacementPrompt, opponentUnits, opponentPlacementPrompt, interactive);
 
   startPlay(state);
@@ -261,8 +273,8 @@ async function main() {
     }
 
     const { turnLog, actionSummary } = side === "player"
-      ? await executeTurn(state, "player", lastOpponentLog)
-      : await executeTurn(state, "opponent", lastPlayerLog);
+      ? await executeTurn(state, "player", lastOpponentLog, logger)
+      : await executeTurn(state, "opponent", lastPlayerLog, logger);
 
     if (side === "player") lastPlayerLog = turnLog;
     else lastOpponentLog = turnLog;
@@ -275,8 +287,10 @@ async function main() {
 
   if (state.turn > MAX_TURNS && state.phase === "play") {
     console.log("\n\x1b[1m⏰ DRAW — Max turns reached.\x1b[0m\n");
+    logger.finish(state, "Max turns reached");
   } else {
     console.log(renderGameOver(state));
+    logger.finish(state, state.winner ? `${state.winner} eliminated all enemies` : "unknown");
   }
 
   close();
