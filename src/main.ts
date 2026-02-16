@@ -10,21 +10,16 @@ import {
   buildGameContext,
 } from "./engine/game";
 import { getUnitAction, getPlacement } from "./agent/agent";
-import { renderTurn, renderGrid, renderUnitStatus } from "./cli/renderer";
+import { renderFullState, renderGameOver } from "./cli/renderer";
 import { ask, askMultiline, close } from "./cli/input";
 import type { GameState, UnitClass, Side, Unit, UnitAction } from "./types";
 import { readFileSync } from "fs";
 
 const CLASSES: UnitClass[] = [
-  "sentinel",
-  "specter",
-  "oracle",
-  "striker",
-  "medic",
-  "vector",
+  "sentinel", "specter", "oracle", "striker", "medic", "vector",
 ];
 
-// === Config Loading ===
+// === Config ===
 
 interface UnitConfig {
   name: string;
@@ -43,11 +38,10 @@ interface GameConfig {
 }
 
 function loadConfig(path: string): GameConfig {
-  const raw = readFileSync(path, "utf-8");
-  return JSON.parse(raw);
+  return JSON.parse(readFileSync(path, "utf-8"));
 }
 
-// === Interactive Squad Selection ===
+// === Interactive ===
 
 async function selectSquad(): Promise<UnitConfig[]> {
   console.log("\n\x1b[1m═══ SIBYL — SQUAD SELECTION ═══\x1b[0m\n");
@@ -82,64 +76,46 @@ async function runPlacementPhase(
   console.log("\n\x1b[1m═══ PLACEMENT PHASE ═══\x1b[0m\n");
 
   if (interactive) {
-    console.log("Place your units in rows 0-1 (bottom two rows). Grid is 6 wide (x: 0-5).\n");
+    console.log("Place your units in rows 0-1 (bottom). Grid: x 0-5.\n");
     for (const pick of playerUnits) {
       const input = await ask(`Place ${pick.name} (${pick.class}) at x,y: `);
       const [x, y] = input.split(",").map((n) => parseInt(n.trim()));
-      const unit = createUnit(
-        `p-${pick.name}`, pick.name, pick.class, "player",
-        { x: x || 0, y: y || 0 }, pick.prompt
-      );
+      const unit = createUnit(`p-${pick.name}`, pick.name, pick.class, "player", { x: x || 0, y: y || 0 }, pick.prompt);
       const err = placeUnit(state, unit, unit.position);
       if (err) {
-        console.log(`  ⚠ ${err} — placing at default`);
         unit.position = { x: playerUnits.indexOf(pick) * 2, y: 0 };
         placeUnit(state, unit, unit.position);
       }
-      console.log(`  ✓ ${pick.name} placed at (${unit.position.x}, ${unit.position.y})`);
+      console.log(`  ✓ ${pick.name} → (${unit.position.x}, ${unit.position.y})`);
     }
   } else {
-    // AI-driven placement for player too
     console.log("Player placing units...");
-    const playerPlacement = await getPlacement(
-      playerUnits.map((u) => ({ name: u.name, class: u.class })),
-      "player",
-      playerPlacementPrompt
-    );
-    for (const p of playerPlacement.placements) {
+    const pp = await getPlacement(playerUnits.map((u) => ({ name: u.name, class: u.class })), "player", playerPlacementPrompt);
+    for (const p of pp.placements) {
       const pick = playerUnits.find((u) => u.name === p.name);
       if (!pick) continue;
-      const unit = createUnit(
-        `p-${pick.name}`, pick.name, pick.class, "player", p.position, pick.prompt
-      );
+      const unit = createUnit(`p-${pick.name}`, pick.name, pick.class, "player", p.position, pick.prompt);
       const err = placeUnit(state, unit, unit.position);
       if (err) {
         unit.position = { x: playerUnits.indexOf(pick) * 2, y: 0 };
         placeUnit(state, unit, unit.position);
       }
-      console.log(`  ✓ ${pick.name} placed at (${unit.position.x}, ${unit.position.y})`);
+      console.log(`  ✓ ${pick.name} → (${unit.position.x}, ${unit.position.y})`);
     }
   }
 
-  // Opponent placement (always AI)
   console.log("\nOpponent placing units...");
-  const oppPlacement = await getPlacement(
-    opponentUnits.map((u) => ({ name: u.name, class: u.class })),
-    "opponent",
-    opponentPlacementPrompt
-  );
-  for (const p of oppPlacement.placements) {
+  const op = await getPlacement(opponentUnits.map((u) => ({ name: u.name, class: u.class })), "opponent", opponentPlacementPrompt);
+  for (const p of op.placements) {
     const pick = opponentUnits.find((u) => u.name === p.name);
     if (!pick) continue;
-    const unit = createUnit(
-      `o-${pick.name}`, pick.name, pick.class, "opponent", p.position, pick.prompt
-    );
+    const unit = createUnit(`o-${pick.name}`, pick.name, pick.class, "opponent", p.position, pick.prompt);
     const err = placeUnit(state, unit, unit.position);
     if (err) {
       unit.position = { x: opponentUnits.indexOf(pick) * 2, y: 5 };
       placeUnit(state, unit, unit.position);
     }
-    console.log(`  ✓ ${pick.name} placed at (${unit.position.x}, ${unit.position.y})`);
+    console.log(`  ✓ ${pick.name} → (${unit.position.x}, ${unit.position.y})`);
   }
 }
 
@@ -149,78 +125,77 @@ async function executeTurn(
   state: GameState,
   side: Side,
   lastTurnLog: string[]
-): Promise<string[]> {
+): Promise<{ turnLog: string[]; actionSummary: string[] }> {
   const turnLog: string[] = [];
+  const actionSummary: string[] = [];
   const units = getLivingUnits(state, side);
+  const sideLabel = side === "player" ? "\x1b[36m" : "\x1b[31m";
 
   for (const unit of units) {
-    if (unit.hp <= 0) continue; // may have died mid-turn
+    if (unit.hp <= 0) continue;
     const ctx = buildGameContext(state, unit, lastTurnLog);
 
-    console.log(`\n  \x1b[2m${unit.name} (${unit.class}) thinking...\x1b[0m`);
+    process.stdout.write(`  ${sideLabel}${unit.name}\x1b[0m thinking...`);
 
     try {
       const response = await getUnitAction(ctx);
-      console.log(`  \x1b[2m💭 ${response.thinking}\x1b[0m`);
+      process.stdout.write(` \x1b[2m💭 ${response.thinking}\x1b[0m\n`);
+
+      const actions: string[] = [];
 
       const err1 = executeAction(state, unit, response.firstAction);
       if (err1) {
-        console.log(`  ⚠ First action failed: ${err1}`);
-        turnLog.push(`${unit.name}: first action failed (${err1})`);
+        actions.push(`⚠ ${describeAction(response.firstAction)} FAILED: ${err1}`);
+      } else {
+        actions.push(describeAction(response.firstAction));
       }
 
       const err2 = executeAction(state, unit, response.secondAction);
       if (err2) {
-        console.log(`  ⚠ Second action failed: ${err2}`);
-        turnLog.push(`${unit.name}: second action failed (${err2})`);
+        actions.push(`⚠ ${describeAction(response.secondAction)} FAILED: ${err2}`);
+      } else {
+        actions.push(describeAction(response.secondAction));
       }
 
-      turnLog.push(
-        `${unit.name}: ${describeAction(response.firstAction)} then ${describeAction(response.secondAction)}`
-      );
+      const summary = `${sideLabel}${unit.name}\x1b[0m: ${actions.join(" → ")}`;
+      actionSummary.push(summary);
+      turnLog.push(`${unit.name}: ${actions.join(" → ")}`);
     } catch (e: any) {
-      console.log(`  ⚠ Agent error: ${e.message}`);
-      turnLog.push(`${unit.name}: agent error, wasted turn`);
+      process.stdout.write(` ⚠ error: ${e.message}\n`);
+      actionSummary.push(`${sideLabel}${unit.name}\x1b[0m: \x1b[31mAGENT ERROR — turn wasted\x1b[0m`);
+      turnLog.push(`${unit.name}: agent error`);
     }
   }
 
-  return turnLog;
+  return { turnLog, actionSummary };
 }
 
 function executeAction(state: GameState, unit: Unit, action: UnitAction): string | null {
   switch (action.type) {
-    case "move":
-      return moveUnit(state, unit, action.target);
-    case "ability":
-      return useAbility(state, unit, action.ability, action.target, action.direction, action.addendum);
-    case "wait":
-      return null;
-    default:
-      return "Unknown action type";
+    case "move": return moveUnit(state, unit, action.target);
+    case "ability": return useAbility(state, unit, action.ability, action.target, action.direction, action.addendum);
+    case "wait": return null;
+    default: return "Unknown action";
   }
 }
 
 function describeAction(action: UnitAction): string {
   switch (action.type) {
-    case "move":
-      return `moved to (${action.target.x}, ${action.target.y})`;
-    case "ability":
-      return `used ${action.ability}${action.target ? ` at (${action.target.x}, ${action.target.y})` : ""}`;
-    case "wait":
-      return "waited";
-    default:
-      return "unknown";
+    case "move": return `move → (${action.target.x},${action.target.y})`;
+    case "ability": return `${action.ability}${action.target ? ` → (${action.target.x},${action.target.y})` : ""}${action.direction ? ` facing ${action.direction}` : ""}`;
+    case "wait": return "wait";
+    default: return "?";
   }
 }
 
 // === Main ===
 
 async function main() {
-  console.log("\x1b[1m");
-  console.log("  ╔═══════════════════════╗");
-  console.log("  ║       S I B Y L       ║");
-  console.log("  ║  Prompt-Driven Tactics ║");
-  console.log("  ╚═══════════════════════╝");
+  console.log("\x1b[1m\x1b[35m");
+  console.log("  ╔═══════════════════════════╗");
+  console.log("  ║        S I B Y L          ║");
+  console.log("  ║   Prompt-Driven Tactics   ║");
+  console.log("  ╚═══════════════════════════╝");
   console.log("\x1b[0m");
 
   const configPath = process.argv[2];
@@ -231,75 +206,71 @@ async function main() {
   let interactive: boolean;
 
   if (configPath) {
-    console.log(`Loading config from ${configPath}...`);
     const config = loadConfig(configPath);
     playerUnits = config.player.units;
     opponentUnits = config.opponent.units;
     playerPlacementPrompt = config.player.placementPrompt;
     opponentPlacementPrompt = config.opponent.placementPrompt;
     interactive = false;
-
-    console.log(`\nPlayer squad: ${playerUnits.map((u) => `${u.name} (${u.class})`).join(", ")}`);
-    console.log(`Opponent squad: ${opponentUnits.map((u) => `${u.name} (${u.class})`).join(", ")}`);
+    console.log(`  Config: ${configPath}`);
+    console.log(`  ${"\x1b[36m"}Player:${"\x1b[0m"}   ${playerUnits.map((u) => `${u.name} (${u.class})`).join(" · ")}`);
+    console.log(`  ${"\x1b[31m"}Opponent:${"\x1b[0m"} ${opponentUnits.map((u) => `${u.name} (${u.class})`).join(" · ")}`);
   } else {
     playerUnits = await selectSquad();
     opponentUnits = [
-      { name: "Guard", class: "sentinel", prompt: "Advance toward the nearest enemy. Use shield_wall facing the direction with the most enemies. Protect allies when possible." },
-      { name: "Sniper", class: "striker", prompt: "Stay at range. Use precision_shot on the lowest HP enemy. If enemies are close, retreat first. Never move into melee range." },
-      { name: "Field Doc", class: "medic", prompt: "Stay behind Guard. Patch the most injured ally. If everyone is healthy, use overclock on Sniper." },
+      { name: "Guard", class: "sentinel", prompt: "Advance toward the nearest enemy. Use shield_wall facing the direction with the most enemies." },
+      { name: "Sniper", class: "striker", prompt: "Stay at range. Use precision_shot on the lowest HP enemy. Retreat if enemies close in." },
+      { name: "Field Doc", class: "medic", prompt: "Stay behind Guard. Patch the most injured ally. If all healthy, overclock Sniper." },
     ];
     playerPlacementPrompt = "Place units strategically.";
-    opponentPlacementPrompt = "Place Guard in center front. Sniper in back with clear sight lines. Field Doc behind Guard for safety.";
+    opponentPlacementPrompt = "Place Guard center front. Sniper back. Field Doc behind Guard.";
     interactive = true;
-
-    console.log(`\nOpponent squad: ${opponentUnits.map((u) => `${u.name} (${u.class})`).join(", ")}`);
   }
 
   const state = createGame();
-
-  await runPlacementPhase(
-    state, playerUnits, playerPlacementPrompt,
-    opponentUnits, opponentPlacementPrompt, interactive
-  );
+  await runPlacementPhase(state, playerUnits, playerPlacementPrompt, opponentUnits, opponentPlacementPrompt, interactive);
 
   startPlay(state);
   let lastPlayerLog: string[] = [];
   let lastOpponentLog: string[] = [];
+  const MAX_TURNS = 20;
 
-  const MAX_TURNS = 20; // safety valve
+  // Show initial state
+  console.log(renderFullState(state));
 
   while (state.phase === "play" && state.turn <= MAX_TURNS) {
-    console.log(renderTurn(state));
+    const side = state.activesSide;
+    const label = side === "player" ? "\x1b[36m▶ PLAYER TURN\x1b[0m" : "\x1b[31m▶ ENEMY TURN\x1b[0m";
+    console.log(`\n  \x1b[1m${label}\x1b[0m\n`);
 
-    if (state.activesSide === "player") {
-      if (interactive) {
-        const edit = await ask("\nEdit prompts? (y/N): ");
-        if (edit.toLowerCase() === "y") {
-          for (const unit of getLivingUnits(state, "player")) {
-            console.log(`\n\x1b[36m${unit.name}\x1b[0m current prompt:\n  ${unit.prompt}`);
-            const newPrompt = await ask("New prompt (enter to keep): ");
-            if (newPrompt) unit.prompt = newPrompt;
-          }
+    if (interactive && side === "player") {
+      const edit = await ask("  Edit prompts? (y/N): ");
+      if (edit.toLowerCase() === "y") {
+        for (const unit of getLivingUnits(state, "player")) {
+          console.log(`\n  \x1b[36m${unit.name}\x1b[0m: ${unit.prompt}`);
+          const np = await ask("  New prompt (enter to keep): ");
+          if (np) unit.prompt = np;
         }
       }
-
-      console.log("\n\x1b[1mYour units act:\x1b[0m");
-      lastPlayerLog = await executeTurn(state, "player", lastOpponentLog);
-    } else {
-      console.log("\n\x1b[1mEnemy units act:\x1b[0m");
-      lastOpponentLog = await executeTurn(state, "opponent", lastPlayerLog);
     }
 
+    const { turnLog, actionSummary } = side === "player"
+      ? await executeTurn(state, "player", lastOpponentLog)
+      : await executeTurn(state, "opponent", lastPlayerLog);
+
+    if (side === "player") lastPlayerLog = turnLog;
+    else lastOpponentLog = turnLog;
+
     endTurn(state);
+
+    // Render full state after both sides have gone, or after each side
+    console.log(renderFullState(state, actionSummary));
   }
 
   if (state.turn > MAX_TURNS && state.phase === "play") {
     console.log("\n\x1b[1m⏰ DRAW — Max turns reached.\x1b[0m\n");
   } else {
-    console.log(renderTurn(state));
-    console.log(
-      `\n\x1b[1m${state.winner === "player" ? "🏆 VICTORY!" : "💀 DEFEAT."}\x1b[0m\n`
-    );
+    console.log(renderGameOver(state));
   }
 
   close();
