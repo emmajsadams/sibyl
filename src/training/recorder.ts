@@ -4,34 +4,33 @@ import { join } from "path";
 import type { TrainingEvent, TrainingFile } from "./schema";
 import type { GameState, Unit, Side } from "../types";
 
-// Path to package.json
 const PKG_PATH = join(import.meta.dir, "../../package.json");
+const CONFIG_PATH = join(import.meta.dir, "../../training/config.json");
 
-function readPkg(): any {
-  return JSON.parse(readFileSync(PKG_PATH, "utf-8"));
+function readJson(path: string): any {
+  return JSON.parse(readFileSync(path, "utf-8"));
 }
 
 // Read version from package.json at import time
-export const GAME_VERSION: string = readPkg().version;
+export const GAME_VERSION: string = readJson(PKG_PATH).version;
 
 export class TrainingRecorder {
   private data: TrainingFile;
   private filePath: string;
 
   constructor(agent: string, config?: string) {
-    // Read package.json to get version and next game id
-    const pkg = readPkg();
-    const version: string = pkg.version;
-    const nextGameId: number = pkg.sibyl?.nextGameId ?? 0;
+    // Read version from package.json, game counter from training/config.json
+    const version: string = readJson(PKG_PATH).version;
+    const cfg = readJson(CONFIG_PATH);
+    const nextGameId: number = cfg.nextGameId ?? 0;
     const gameId = `v${version}-${nextGameId}`;
 
     mkdirSync("training", { recursive: true });
     this.filePath = join("training", `training-${gameId}.json`);
 
     // Increment the counter and write back
-    if (!pkg.sibyl) pkg.sibyl = {};
-    pkg.sibyl.nextGameId = nextGameId + 1;
-    writeFileSync(PKG_PATH, JSON.stringify(pkg, null, 2) + "\n");
+    cfg.nextGameId = nextGameId + 1;
+    writeFileSync(CONFIG_PATH, JSON.stringify(cfg, null, 2) + "\n");
 
     this.data = {
       version: GAME_VERSION,
