@@ -30,7 +30,7 @@ const UnitSnapshot = z.object({
   facing: Direction,
   statusEffects: z.array(StatusEffect),
   prompt: z.string(),
-  breachAddendum: z.string().optional(),
+  originalPrompt: z.string().optional(),
   movedThisTurn: z.boolean().optional(),
   healsUsed: z.number().optional(),
 });

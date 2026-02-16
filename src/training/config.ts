@@ -8,7 +8,7 @@ const TrainingConfig = z.object({
 
 type TrainingConfig = z.infer<typeof TrainingConfig>;
 
-const CONFIG_PATH = join(import.meta.dir, "../../training/config.json");
+const CONFIG_PATH = join(import.meta.dirname ?? new URL(".", import.meta.url).pathname, "../../training/config.json");
 
 export function readTrainingConfig(): TrainingConfig {
   if (!existsSync(CONFIG_PATH)) {

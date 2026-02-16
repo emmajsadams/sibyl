@@ -5,7 +5,9 @@
 Four steps, repeating:
 
 ### 1. RUN
-- Run a game with the current version: `bun run src/main.ts [config]`
+- Run a game with the current version: `npx tsx src/main.ts --auto [config]`
+- Uses Claude CLI (subscription) by default. Pass `--api` to use Anthropic API credits instead.
+- `--auto` skips interactive squad selection and uses random config (required for automated/subagent runs)
 - If no config provided, `generateRandomConfig()` creates random squads
 - Training data auto-saves to `training/training-v{version}-{gameId}.json`
 - Config auto-saves to `training/versions/v{version}-{gameId}.json`

@@ -16,8 +16,9 @@ import * as apiAgent from "./agent/agent";
 import * as cliAgent from "./agent/cli-agent";
 import { renderFullState, renderGameOver } from "./cli/renderer";
 
-// Select agent backend based on --cli flag
-const USE_CLI = process.argv.includes("--cli");
+// Select agent backend: CLI by default, --api to use API credits instead
+const USE_API = process.argv.includes("--api");
+const USE_CLI = !USE_API;
 const { getUnitAction, getPlacement } = USE_CLI ? cliAgent : apiAgent;
 import { ask, askMultiline, close } from "./cli/input";
 import { GameLogger } from "./logger";
@@ -276,7 +277,8 @@ async function main() {
   console.log("  ╚═══════════════════════════╝");
   console.log("\x1b[0m");
 
-  const configPath = process.argv.filter((a) => a !== "--cli")[2];
+  const AUTO = process.argv.includes("--auto");
+  const configPath = process.argv.filter((a) => !a.startsWith("--"))[2];
   let gameConfig: GameConfig;
   let interactive: boolean;
 
@@ -291,7 +293,7 @@ async function main() {
     console.log(
       `  ${"\x1b[31m"}Opponent:${"\x1b[0m"} ${gameConfig.opponent.units.map((u) => `${u.name} (${u.class})`).join(" · ")}`,
     );
-  } else if (USE_CLI) {
+  } else if (USE_CLI && !AUTO) {
     const playerUnits = await selectSquad();
     const opponentUnits: UnitConfig[] = [
       {

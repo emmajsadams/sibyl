@@ -61,8 +61,14 @@ export interface Unit {
   facing: Direction;
   statusEffects: StatusEffect[];
   prompt: string;
-  /** Temporary prompt addendum injected by Breach */
-  breachAddendum?: string;
+  /** Original prompt saved before breach (restored when breach fades) */
+  originalPrompt?: string;
+  /** Turns remaining before breach fades */
+  breachTurnsLeft?: number;
+  /** Number of times this unit has used Breach (cap: 2) */
+  breachesUsed?: number;
+  /** Cooldown turns remaining before Breach can be used again */
+  breachCooldown?: number;
   /** Whether this unit moved during current turn (for Striker penalty) */
   movedThisTurn?: boolean;
   /** Heal count used (Medic heal cap) */
@@ -115,6 +121,8 @@ export interface GameState {
   phase: "setup" | "play" | "ended";
   winner?: Side;
   log: string[];
+  /** Tracks which enemies each Oracle has scanned: oracleId -> { enemyId -> last known prompt } */
+  scanHistory: Record<string, Record<string, string>>;
   /** Full turn order for this round (unit IDs, highest speed first) */
   turnStack: string[];
   /** Remaining units yet to act this round */
@@ -148,6 +156,8 @@ export interface GameContext {
     hasActed: boolean;
   }[];
   lastTurnActions?: string[]; // only for Oracle
+  /** Enemies this Oracle has already scanned: enemyId -> last known prompt */
+  scannedEnemies?: Record<string, string>;
 }
 
 /** What a unit can see about another unit */

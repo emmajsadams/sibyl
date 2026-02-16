@@ -54,6 +54,7 @@ export function createGame(): GameState {
     log: [],
     turnStack: [],
     currentTurnStack: [],
+    scanHistory: {},
   };
 }
 
@@ -197,6 +198,7 @@ export function buildGameContext(
     round: state.round,
     turnOrder,
     lastTurnActions: unit.class === "oracle" ? lastRoundLog : undefined,
+    scannedEnemies: unit.class === "oracle" ? (state.scanHistory[unit.id] ?? {}) : undefined,
   };
 }
 
@@ -473,11 +475,19 @@ function abilityBreach(
   if (distance(unit.position, enemy.position) > 2) return "Must be within 2 tiles";
   if (!isBehind(unit.position, enemy)) return "Must be behind the target";
   if (!addendum) return "Must provide addendum text for Breach";
+  // Cap: Specter can breach at most 2 times per game
+  const breachCount = unit.breachesUsed ?? 0;
+  if (breachCount >= 2) return "Breach limit reached (max 2 per game)";
+  // Cooldown: 2-turn cooldown between uses
+  if ((unit.breachCooldown ?? 0) > 0) return `Breach on cooldown (${unit.breachCooldown} turns remaining)`;
+  // Breach replaces the target's prompt — store original for restoration
   const oldPrompt = enemy.prompt;
-  // Breach COMPLETELY REPLACES the target's prompt
+  if (!enemy.originalPrompt) enemy.originalPrompt = oldPrompt;
   enemy.prompt = addendum;
-  enemy.breachAddendum = undefined;
-  state.log.push(`${unit.name} breaches ${enemy.name}'s prompt! (replaced)`);
+  enemy.breachTurnsLeft = 3; // fades after 3 of the target's turns
+  unit.breachesUsed = breachCount + 1;
+  unit.breachCooldown = 2; // can't breach again for 2 turns
+  state.log.push(`${unit.name} breaches ${enemy.name}'s prompt! (replaced, fades in 3 turns)`);
   emit({ type: "breach", attackerId: unit.id, targetId: enemy.id, oldPrompt, newPrompt: addendum });
   return null;
 }
@@ -498,9 +508,12 @@ function abilityScan(state: GameState, unit: Unit, target?: Position): string | 
   const enemy = getUnitAt(state, target);
   if (!enemy || enemy.side === unit.side) return "No enemy at target";
   if (distance(unit.position, enemy.position) > 4) return "Out of range (max 4)";
-  state.log.push(
-    `${unit.name} scans ${enemy.name}: "${enemy.prompt}${enemy.breachAddendum ? " [BREACHED: " + enemy.breachAddendum + "]" : ""}"`,
-  );
+  const prompt = enemy.prompt + (enemy.originalPrompt ? " [BREACHED — original overwritten]" : "");
+  state.log.push(`${unit.name} scans ${enemy.name}: "${prompt}"`);
+  // Track scan history
+  if (!state.scanHistory) state.scanHistory = {};
+  if (!state.scanHistory[unit.id]) state.scanHistory[unit.id] = {};
+  state.scanHistory[unit.id]![enemy.id] = prompt;
   return null;
 }
 
@@ -515,7 +528,8 @@ function abilityRecalibrate(
   if (!addendum) return "Must provide addendum for recalibration";
   const ally = getUnitAt(state, target);
   if (!ally || ally.side !== unit.side) return "No ally at target";
-  ally.breachAddendum = addendum;
+  // Recalibrate appends to prompt (buff, not replacement)
+  ally.prompt = ally.prompt + "\n" + addendum;
   state.log.push(`${unit.name} recalibrates ${ally.name}`);
   return null;
 }
@@ -752,6 +766,23 @@ export function cleanupAfterUnitActs(state: GameState, unit: Unit): void {
 
   // Reset movement tracking
   unit.movedThisTurn = false;
+
+  // Decay breach cooldown
+  if (unit.breachCooldown != null && unit.breachCooldown > 0) {
+    unit.breachCooldown--;
+  }
+  // Decay breach effect — restore original prompt when it fades
+  if (unit.breachTurnsLeft != null && unit.breachTurnsLeft > 0) {
+    unit.breachTurnsLeft--;
+    if (unit.breachTurnsLeft <= 0) {
+      if (unit.originalPrompt) {
+        unit.prompt = unit.originalPrompt;
+        unit.originalPrompt = undefined;
+      }
+      unit.breachTurnsLeft = undefined;
+      state.log.push(`${unit.name} shakes off the breach!`);
+    }
+  }
 
   // Sentinel fortify: re-add if not present (will be removed when they move)
   if (unit.class === "sentinel" && unit.hp > 0) {

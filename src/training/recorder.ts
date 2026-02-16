@@ -5,7 +5,7 @@ import type { TrainingEvent, TrainingFile } from "./schema";
 import type { GameState, Unit, GameConfig } from "../types";
 import { readTrainingConfig, writeTrainingConfig } from "./config";
 
-const PKG_PATH = join(import.meta.dir, "../../package.json");
+const PKG_PATH = join(import.meta.dirname ?? new URL(".", import.meta.url).pathname, "../../package.json");
 
 function readJson(path: string): any {
   return JSON.parse(readFileSync(path, "utf-8"));
@@ -67,7 +67,7 @@ export class TrainingRecorder {
       facing: u.facing,
       statusEffects: u.statusEffects.map((e) => ({ ...e })),
       prompt: u.prompt,
-      breachAddendum: u.breachAddendum,
+      originalPrompt: u.originalPrompt,
       movedThisTurn: u.movedThisTurn,
       healsUsed: u.healsUsed,
     }));
@@ -94,7 +94,7 @@ export class TrainingRecorder {
       facing: u.facing,
       statusEffects: u.statusEffects.map((e) => ({ ...e })),
       prompt: u.prompt,
-      breachAddendum: u.breachAddendum,
+      originalPrompt: u.originalPrompt,
       movedThisTurn: u.movedThisTurn,
       healsUsed: u.healsUsed,
     };
