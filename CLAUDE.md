@@ -8,7 +8,8 @@
 ## Commit Workflow
 1. Spawn a subagent to run the full `REVIEW.md` checklist against your changes — it reviews, fixes issues, and reports back with a clear summary of all code changes (what changed, why, in which files)
 2. `npx oxlint --fix src/` — 0 warnings
-3. `~/.bun/bin/bunx tsc --noEmit` — must pass
+3. `bun test` — all tests must pass
+4. `~/.bun/bin/bunx tsc --noEmit` — must pass
 4. Commit with a clear message, then push
 
 Pre-commit hook (husky) runs oxlint + tsc automatically.
