@@ -17,15 +17,22 @@ export interface UnitStats {
   maxHp: number;
   movement: number;
   range: number;
+  speed: number; // 1-3, determines turn order (higher = acts first)
 }
 
 export const UNIT_STATS: Record<UnitClass, UnitStats> = {
-  sentinel: { maxHp: 10, movement: 2, range: 1 },
-  specter: { maxHp: 5, movement: 3, range: 1 },
-  oracle: { maxHp: 6, movement: 2, range: 4 },
-  striker: { maxHp: 5, movement: 2, range: 3 },
-  medic: { maxHp: 6, movement: 2, range: 1 },
-  vector: { maxHp: 6, movement: 2, range: 2 },
+  // Specter: fastest — assassin strikes first, breach lands before target acts
+  specter: { maxHp: 5, movement: 3, range: 1, speed: 3 },
+  // Striker: mid-speed sniper
+  striker: { maxHp: 5, movement: 2, range: 3, speed: 2 },
+  // Oracle: mid-speed intel
+  oracle: { maxHp: 6, movement: 2, range: 4, speed: 2 },
+  // Medic: mid-speed — heals after initial damage lands
+  medic: { maxHp: 6, movement: 2, range: 1, speed: 2 },
+  // Vector: slow — places traps AFTER seeing where everyone moved
+  vector: { maxHp: 6, movement: 2, range: 2, speed: 1 },
+  // Sentinel: slowest — positions last, reactive tank
+  sentinel: { maxHp: 10, movement: 2, range: 1, speed: 1 },
 };
 
 export interface Unit {
@@ -38,6 +45,7 @@ export interface Unit {
   position: Position;
   movement: number;
   range: number;
+  speed: number;
   facing: Direction;
   statusEffects: StatusEffect[];
   prompt: string;
@@ -82,11 +90,19 @@ export interface GameState {
   grid: Grid;
   units: Unit[];
   traps: Trap[];
+  /** Current round number (increments after all units act) */
+  round: number;
+  /** Legacy compat — same as round */
   turn: number;
   phase: "setup" | "play" | "ended";
-  activesSide: Side;
   winner?: Side;
   log: string[];
+  /** Full turn order for this round (unit IDs, highest speed first) */
+  turnStack: string[];
+  /** Remaining units yet to act this round */
+  currentTurnStack: string[];
+  /** ID of the unit currently acting */
+  activeUnit?: string;
 }
 
 export interface Grid {
@@ -103,6 +119,9 @@ export interface GameContext {
   traps: Position[]; // only own traps visible
   grid: Grid;
   turn: number;
+  round: number;
+  /** Full turn order for this round */
+  turnOrder: { id: string; name: string; class: UnitClass; side: Side; speed: number; hasActed: boolean }[];
   lastTurnActions?: string[]; // only for Oracle
 }
 
@@ -116,6 +135,7 @@ export interface UnitView {
   hp?: number; // only visible to Medic for allies
   facing: Direction;
   cloaked: boolean;
+  speed: number;
 }
 
 export interface AgentDecision {

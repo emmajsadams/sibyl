@@ -78,11 +78,23 @@ Only include fields relevant to the action. Direction is only for shield_wall. A
 
 export function buildContextPrompt(ctx: GameContext): string {
   const lines: string[] = ["## Current Situation"];
-  lines.push(`Turn: ${ctx.turn}`);
+  lines.push(`Round: ${ctx.round}`);
   lines.push(
     `Your position: (${ctx.unit.position.x}, ${ctx.unit.position.y}) facing ${ctx.unit.facing}`
   );
   lines.push(`Your HP: ${ctx.unit.hp}/${ctx.unit.maxHp}`);
+  lines.push(`Your speed: ${ctx.unit.speed} (higher = acts earlier in the round)`);
+
+  // Turn order
+  if (ctx.turnOrder && ctx.turnOrder.length > 0) {
+    lines.push("\n## Turn Order This Round (by speed)");
+    for (const entry of ctx.turnOrder) {
+      const side = entry.side === ctx.unit.side ? "ally" : "enemy";
+      const acted = entry.hasActed ? " ✓ already acted" : " ← waiting";
+      const isYou = entry.id === ctx.unit.id ? " (YOU)" : "";
+      lines.push(`- ${entry.name} (${entry.class}, spd:${entry.speed}, ${side})${isYou}${acted}`);
+    }
+  }
 
   if (ctx.unit.statusEffects.length > 0) {
     lines.push(
@@ -95,7 +107,7 @@ export function buildContextPrompt(ctx: GameContext): string {
     for (const a of ctx.allies) {
       const hpStr = a.hp !== undefined ? `HP: ${a.hp}` : `Status: ${a.status}`;
       lines.push(
-        `- ${a.name} (${a.class}) at (${a.position.x}, ${a.position.y}) facing ${a.facing} — ${hpStr}`
+        `- ${a.name} (${a.class}, spd:${a.speed}) at (${a.position.x}, ${a.position.y}) facing ${a.facing} — ${hpStr}`
       );
     }
   }
@@ -104,7 +116,7 @@ export function buildContextPrompt(ctx: GameContext): string {
     lines.push("\n## Visible Enemies");
     for (const e of ctx.enemies) {
       lines.push(
-        `- ${e.name} (${e.class}) at (${e.position.x}, ${e.position.y}) facing ${e.facing} — ${e.status}`
+        `- ${e.name} (${e.class}, spd:${e.speed}) at (${e.position.x}, ${e.position.y}) facing ${e.facing} — ${e.status}`
       );
     }
   } else {

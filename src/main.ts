@@ -3,11 +3,15 @@ import {
   createUnit,
   placeUnit,
   startPlay,
-  endTurn,
   moveUnit,
   useAbility,
   getLivingUnits,
   buildGameContext,
+  getNextUnit,
+  unitActed,
+  cleanupAfterUnitActs,
+  advanceRound,
+  checkWinCondition,
 } from "./engine/game";
 import * as apiAgent from "./agent/agent";
 import * as cliAgent from "./agent/cli-agent";
@@ -127,82 +131,7 @@ async function runPlacementPhase(
   }
 }
 
-// === Turn Execution ===
-
-async function executeTurn(
-  state: GameState,
-  side: Side,
-  lastTurnLog: string[],
-  logger: GameLogger
-): Promise<{ turnLog: string[]; actionSummary: string[] }> {
-  const turnLog: string[] = [];
-  const actionSummary: string[] = [];
-  const units = getLivingUnits(state, side);
-  const sideLabel = side === "player" ? "\x1b[36m" : "\x1b[31m";
-
-  logger.startTurn(state.turn, side);
-
-  emitTraining({
-    type: "turn_start",
-    turn: state.turn,
-    side,
-    units: TrainingRecorder.snapshotUnits(state) as any,
-    traps: TrainingRecorder.snapshotTraps(state),
-  });
-
-  for (const unit of units) {
-    if (unit.hp <= 0) continue;
-    const ctx = buildGameContext(state, unit, lastTurnLog);
-
-    process.stdout.write(`  ${sideLabel}${unit.name}\x1b[0m thinking...`);
-
-    try {
-      const t0 = Date.now();
-      const response = await getUnitAction(ctx);
-      const durationMs = Date.now() - t0;
-      process.stdout.write(` \x1b[2m💭 ${response.thinking}\x1b[0m\n`);
-
-      emitTraining({
-        type: "agent_decision",
-        unitId: unit.id,
-        thinking: response.thinking,
-        firstAction: actionToRecord(response.firstAction),
-        secondAction: actionToRecord(response.secondAction),
-        durationMs,
-      });
-
-      const actions: string[] = [];
-
-      const err1 = executeAction(state, unit, response.firstAction);
-      if (err1) {
-        actions.push(`⚠ ${describeAction(response.firstAction)} FAILED: ${err1}`);
-      } else {
-        actions.push(describeAction(response.firstAction));
-      }
-
-      const err2 = executeAction(state, unit, response.secondAction);
-      if (err2) {
-        actions.push(`⚠ ${describeAction(response.secondAction)} FAILED: ${err2}`);
-      } else {
-        actions.push(describeAction(response.secondAction));
-      }
-
-      logger.logAction(unit, response.thinking, response.firstAction, err1, response.secondAction, err2);
-
-      const summary = `${sideLabel}${unit.name}\x1b[0m: ${actions.join(" → ")}`;
-      actionSummary.push(summary);
-      turnLog.push(`${unit.name}: ${actions.join(" → ")}`);
-    } catch (e: any) {
-      process.stdout.write(` ⚠ error: ${e.message}\n`);
-      logger.logError(unit, e.message);
-      actionSummary.push(`${sideLabel}${unit.name}\x1b[0m: \x1b[31mAGENT ERROR — turn wasted\x1b[0m`);
-      turnLog.push(`${unit.name}: agent error`);
-    }
-  }
-
-  logger.endTurn(state);
-  return { turnLog, actionSummary };
-}
+// === Action Helpers ===
 
 function actionToRecord(action: UnitAction): { type: string; ability?: string; target?: { x: number; y: number }; direction?: "N" | "S" | "E" | "W" } {
   switch (action.type) {
@@ -228,6 +157,65 @@ function describeAction(action: UnitAction): string {
     case "ability": return `${action.ability}${action.target ? ` → (${action.target.x},${action.target.y})` : ""}${action.direction ? ` facing ${action.direction}` : ""}`;
     case "wait": return "wait";
     default: return "?";
+  }
+}
+
+// === Execute Single Unit Turn ===
+
+async function executeUnitTurn(
+  state: GameState,
+  unit: Unit,
+  lastRoundLog: string[],
+  logger: GameLogger,
+): Promise<{ actionLog: string; actionSummary: string }> {
+  const ctx = buildGameContext(state, unit, lastRoundLog);
+  const sideLabel = unit.side === "player" ? "\x1b[36m" : "\x1b[31m";
+
+  process.stdout.write(`  ${sideLabel}${unit.name}\x1b[0m \x1b[2m(${unit.class} spd:${unit.speed})\x1b[0m thinking...`);
+
+  try {
+    const t0 = Date.now();
+    const response = await getUnitAction(ctx);
+    const durationMs = Date.now() - t0;
+    process.stdout.write(` \x1b[2m💭 ${response.thinking}\x1b[0m\n`);
+
+    emitTraining({
+      type: "agent_decision",
+      unitId: unit.id,
+      thinking: response.thinking,
+      firstAction: actionToRecord(response.firstAction),
+      secondAction: actionToRecord(response.secondAction),
+      durationMs,
+    });
+
+    const actions: string[] = [];
+
+    const err1 = executeAction(state, unit, response.firstAction);
+    if (err1) {
+      actions.push(`⚠ ${describeAction(response.firstAction)} FAILED: ${err1}`);
+    } else {
+      actions.push(describeAction(response.firstAction));
+    }
+
+    const err2 = executeAction(state, unit, response.secondAction);
+    if (err2) {
+      actions.push(`⚠ ${describeAction(response.secondAction)} FAILED: ${err2}`);
+    } else {
+      actions.push(describeAction(response.secondAction));
+    }
+
+    logger.logAction(unit, response.thinking, response.firstAction, err1, response.secondAction, err2);
+
+    const summary = `${sideLabel}${unit.name}\x1b[0m: ${actions.join(" → ")}`;
+    const log = `${unit.name}: ${actions.join(" → ")}`;
+    return { actionLog: log, actionSummary: summary };
+  } catch (e: any) {
+    process.stdout.write(` ⚠ error: ${e.message}\n`);
+    logger.logError(unit, e.message);
+    return {
+      actionLog: `${unit.name}: agent error`,
+      actionSummary: `${sideLabel}${unit.name}\x1b[0m: \x1b[31mAGENT ERROR — turn wasted\x1b[0m`,
+    };
   }
 }
 
@@ -283,45 +271,83 @@ async function main() {
   await runPlacementPhase(state, playerUnits, playerPlacementPrompt, opponentUnits, opponentPlacementPrompt, interactive);
 
   startPlay(state);
-  let lastPlayerLog: string[] = [];
-  let lastOpponentLog: string[] = [];
-  const MAX_TURNS = 20;
+  let lastRoundLog: string[] = [];
+  const MAX_ROUNDS = 20;
 
   // Show initial state
   console.log(renderFullState(state));
 
-  while (state.phase === "play" && state.turn <= MAX_TURNS) {
-    const side = state.activesSide;
-    const label = side === "player" ? "\x1b[36m▶ PLAYER TURN\x1b[0m" : "\x1b[31m▶ ENEMY TURN\x1b[0m";
-    console.log(`\n  \x1b[1m${label}\x1b[0m\n`);
+  // === Per-Unit Turn Loop ===
+  while (state.phase === "play" && state.round <= MAX_ROUNDS) {
+    console.log(`\n  \x1b[1m\x1b[35m═══ ROUND ${state.round} ═══\x1b[0m`);
 
-    if (interactive && side === "player") {
-      const edit = await ask("  Edit prompts? (y/N): ");
-      if (edit.toLowerCase() === "y") {
-        for (const unit of getLivingUnits(state, "player")) {
-          console.log(`\n  \x1b[36m${unit.name}\x1b[0m: ${unit.prompt}`);
-          const np = await ask("  New prompt (enter to keep): ");
-          if (np) unit.prompt = np;
-        }
+    // Show turn order
+    const orderStr = state.turnStack.map((id) => {
+      const u = state.units.find((u) => u.id === id);
+      if (!u || u.hp <= 0) return null;
+      const color = u.side === "player" ? "\x1b[36m" : "\x1b[31m";
+      return `${color}${u.name}\x1b[0m\x1b[2m(${u.speed})\x1b[0m`;
+    }).filter(Boolean).join(" → ");
+    console.log(`  \x1b[2mOrder:\x1b[0m ${orderStr}\n`);
+
+    logger.startTurn(state.round, "player"); // compat
+
+    emitTraining({
+      type: "turn_start",
+      turn: state.round,
+      side: "player", // legacy compat
+      units: TrainingRecorder.snapshotUnits(state) as any,
+      traps: TrainingRecorder.snapshotTraps(state),
+      turnStack: [...state.turnStack],
+    });
+
+    const roundActions: string[] = [];
+    const roundLog: string[] = [];
+
+    // Process each unit in speed order
+    let unit = getNextUnit(state);
+    while (unit) {
+      if (interactive && unit.side === "player") {
+        console.log(`\n  \x1b[36m${unit.name}\x1b[0m: ${unit.prompt}`);
+        const np = await ask("  New prompt (enter to keep): ");
+        if (np) unit.prompt = np;
       }
+
+      const { actionLog, actionSummary } = await executeUnitTurn(
+        state, unit, lastRoundLog, logger
+      );
+
+      roundActions.push(actionSummary);
+      roundLog.push(actionLog);
+
+      // Cleanup this unit's temporary effects
+      cleanupAfterUnitActs(state, unit);
+
+      // Mark as acted
+      unitActed(state);
+
+      // Check for win condition after each unit acts (someone might have died)
+      if (checkWinCondition(state)) break;
+
+      // Get next unit
+      unit = getNextUnit(state);
     }
 
-    const { turnLog, actionSummary } = side === "player"
-      ? await executeTurn(state, "player", lastOpponentLog, logger)
-      : await executeTurn(state, "opponent", lastPlayerLog, logger);
+    if ((state as GameState).phase === "ended") break;
 
-    if (side === "player") lastPlayerLog = turnLog;
-    else lastOpponentLog = turnLog;
+    logger.endTurn(state);
+    lastRoundLog = roundLog;
 
-    endTurn(state);
+    // Show state after each round
+    console.log(renderFullState(state, roundActions));
 
-    // Render full state after both sides have gone, or after each side
-    console.log(renderFullState(state, actionSummary));
+    // Advance to next round
+    if (!advanceRound(state)) break;
   }
 
-  if (state.turn > MAX_TURNS && state.phase === "play") {
-    console.log("\n\x1b[1m⏰ DRAW — Max turns reached.\x1b[0m\n");
-    logger.finish(state, "Max turns reached");
+  if (state.round > MAX_ROUNDS && state.phase === "play") {
+    console.log("\n\x1b[1m⏰ DRAW — Max rounds reached.\x1b[0m\n");
+    logger.finish(state, "Max rounds reached");
   } else {
     console.log(renderGameOver(state));
     logger.finish(state, state.winner ? `${state.winner} eliminated all enemies` : "unknown");

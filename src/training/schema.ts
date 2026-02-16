@@ -8,7 +8,7 @@ const Direction = z.enum(["N", "S", "E", "W"]);
 const UnitClass = z.enum(["sentinel", "specter", "oracle", "striker", "medic", "vector"]);
 const UnitStatus = z.enum(["healthy", "wounded", "critical", "dead"]);
 
-// === Unit Snapshot (full state of a unit at a point in time) ===
+// === Unit Snapshot ===
 
 const StatusEffect = z.discriminatedUnion("type", [
   z.object({ type: z.literal("cloaked"), turnsLeft: z.number() }),
@@ -25,6 +25,7 @@ const UnitSnapshot = z.object({
   side: Side,
   hp: z.number(),
   maxHp: z.number(),
+  speed: z.number(),
   position: Position,
   facing: Direction,
   statusEffects: z.array(StatusEffect),
@@ -34,20 +35,24 @@ const UnitSnapshot = z.object({
   healsUsed: z.number().optional(),
 });
 
-// === Event Types ===
+const TrapSnapshot = z.object({ position: Position, owner: z.string(), side: Side });
+
+// === Event Types (all have `turn` = current round number) ===
 
 const GameStartEvent = z.object({
   type: z.literal("game_start"),
   grid: z.object({ width: z.number(), height: z.number() }),
   units: z.array(UnitSnapshot),
+  turnStack: z.array(z.string()),
 });
 
-const TurnStartEvent = z.object({
+const RoundStartEvent = z.object({
   type: z.literal("turn_start"),
   turn: z.number(),
-  side: Side,
+  side: Side, // legacy compat
   units: z.array(UnitSnapshot),
-  traps: z.array(z.object({ position: Position, owner: z.string(), side: Side })),
+  traps: z.array(TrapSnapshot),
+  turnStack: z.array(z.string()),
 });
 
 const UnitPlacedEvent = z.object({
@@ -101,14 +106,14 @@ const StatusAppliedEvent = z.object({
   type: z.literal("status_applied"),
   unitId: z.string(),
   effect: StatusEffect,
-  source: z.string(), // ability name or "passive"
+  source: z.string(),
 });
 
 const StatusRemovedEvent = z.object({
   type: z.literal("status_removed"),
   unitId: z.string(),
   effectType: z.string(),
-  reason: z.string(), // "expired", "moved", "turn_end", "ability_break"
+  reason: z.string(),
 });
 
 const UnitKilledEvent = z.object({
@@ -166,12 +171,12 @@ const DenialBlockedEvent = z.object({
   vectorId: z.string(),
 });
 
-const TurnEndEvent = z.object({
+const RoundEndEvent = z.object({
   type: z.literal("turn_end"),
   turn: z.number(),
-  side: Side,
+  side: Side, // legacy compat
   units: z.array(UnitSnapshot),
-  traps: z.array(z.object({ position: Position, owner: z.string(), side: Side })),
+  traps: z.array(TrapSnapshot),
 });
 
 const GameEndEvent = z.object({
@@ -186,7 +191,7 @@ const GameEndEvent = z.object({
 
 export const TrainingEvent = z.discriminatedUnion("type", [
   GameStartEvent,
-  TurnStartEvent,
+  RoundStartEvent,
   UnitPlacedEvent,
   UnitMovedEvent,
   AbilityUsedEvent,
@@ -200,7 +205,7 @@ export const TrainingEvent = z.discriminatedUnion("type", [
   BreachEvent,
   AgentDecisionEvent,
   DenialBlockedEvent,
-  TurnEndEvent,
+  RoundEndEvent,
   GameEndEvent,
 ]);
 
@@ -219,9 +224,9 @@ export const TrainingFile = z.object({
 
 export type TrainingFile = z.infer<typeof TrainingFile>;
 
-// Re-export individual event types for convenience
+// Re-export individual event types
 export type GameStartEvent = z.infer<typeof GameStartEvent>;
-export type TurnStartEvent = z.infer<typeof TurnStartEvent>;
+export type RoundStartEvent = z.infer<typeof RoundStartEvent>;
 export type UnitPlacedEvent = z.infer<typeof UnitPlacedEvent>;
 export type UnitMovedEvent = z.infer<typeof UnitMovedEvent>;
 export type AbilityUsedEvent = z.infer<typeof AbilityUsedEvent>;
@@ -235,5 +240,5 @@ export type TrapTriggeredEvent = z.infer<typeof TrapTriggeredEvent>;
 export type BreachEvent = z.infer<typeof BreachEvent>;
 export type AgentDecisionEvent = z.infer<typeof AgentDecisionEvent>;
 export type DenialBlockedEvent = z.infer<typeof DenialBlockedEvent>;
-export type TurnEndEvent = z.infer<typeof TurnEndEvent>;
+export type RoundEndEvent = z.infer<typeof RoundEndEvent>;
 export type GameEndEvent = z.infer<typeof GameEndEvent>;
