@@ -5,6 +5,12 @@
 - Use `npx tsc --noEmit` to verify changes compile.
 - Test individual functions or small code snippets, not full games.
 
+## Commit Workflow
+1. Before every commit, run the full `REVIEW.md` checklist against your changes
+2. Fix anything that fails the review
+3. `~/.bun/bin/bunx tsc --noEmit` must pass
+4. Commit with a clear message, then push
+
 ## Project
 - Runtime: Bun + TypeScript
 - Path: `~/code/sibyl/`
