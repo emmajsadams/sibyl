@@ -18,6 +18,8 @@ const USE_CLI = process.argv.includes("--cli");
 const { getUnitAction, getPlacement } = USE_CLI ? cliAgent : apiAgent;
 import { ask, askMultiline, close } from "./cli/input";
 import { GameLogger } from "./logger";
+import { TrainingRecorder } from "./training/recorder";
+import { setTrainingListener, emit as emitTraining } from "./training/emitter";
 import type { GameState, UnitClass, Side, Unit, UnitAction } from "./types";
 import { readFileSync } from "fs";
 
@@ -140,6 +142,14 @@ async function executeTurn(
 
   logger.startTurn(state.turn, side);
 
+  emitTraining({
+    type: "turn_start",
+    turn: state.turn,
+    side,
+    units: TrainingRecorder.snapshotUnits(state) as any,
+    traps: TrainingRecorder.snapshotTraps(state),
+  });
+
   for (const unit of units) {
     if (unit.hp <= 0) continue;
     const ctx = buildGameContext(state, unit, lastTurnLog);
@@ -147,8 +157,19 @@ async function executeTurn(
     process.stdout.write(`  ${sideLabel}${unit.name}\x1b[0m thinking...`);
 
     try {
+      const t0 = Date.now();
       const response = await getUnitAction(ctx);
+      const durationMs = Date.now() - t0;
       process.stdout.write(` \x1b[2m💭 ${response.thinking}\x1b[0m\n`);
+
+      emitTraining({
+        type: "agent_decision",
+        unitId: unit.id,
+        thinking: response.thinking,
+        firstAction: actionToRecord(response.firstAction),
+        secondAction: actionToRecord(response.secondAction),
+        durationMs,
+      });
 
       const actions: string[] = [];
 
@@ -181,6 +202,15 @@ async function executeTurn(
 
   logger.endTurn(state);
   return { turnLog, actionSummary };
+}
+
+function actionToRecord(action: UnitAction): { type: string; ability?: string; target?: { x: number; y: number }; direction?: "N" | "S" | "E" | "W" } {
+  switch (action.type) {
+    case "move": return { type: "move", target: action.target };
+    case "ability": return { type: "ability", ability: action.ability, target: action.target, direction: action.direction };
+    case "wait": return { type: "wait" };
+    default: return { type: "unknown" };
+  }
 }
 
 function executeAction(state: GameState, unit: Unit, action: UnitAction): string | null {
@@ -245,6 +275,10 @@ async function main() {
   const logger = new GameLogger(USE_CLI ? "cli" : "api", configPath);
   logger.setSquad("player", playerUnits);
   logger.setSquad("opponent", opponentUnits);
+
+  // Training data recorder
+  const recorder = new TrainingRecorder(USE_CLI ? "cli" : "api", configPath);
+  setTrainingListener((event) => recorder.record(event));
 
   await runPlacementPhase(state, playerUnits, playerPlacementPrompt, opponentUnits, opponentPlacementPrompt, interactive);
 

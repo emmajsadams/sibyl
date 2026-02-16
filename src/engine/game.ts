@@ -13,6 +13,8 @@ import type {
   UNIT_STATS,
 } from "../types";
 import { UNIT_STATS as Stats } from "../types";
+import { emit } from "../training/emitter";
+import { TrainingRecorder } from "../training/recorder";
 
 const GRID_WIDTH = 6;
 const GRID_HEIGHT = 6;
@@ -184,6 +186,7 @@ export function placeUnit(
   if (isOccupied(state, pos)) return "Position occupied";
   unit.position = pos;
   if (!state.units.includes(unit)) state.units.push(unit);
+  emit({ type: "unit_placed", unitId: unit.id, side: unit.side, class: unit.class, position: { ...pos } });
   return null;
 }
 
@@ -207,6 +210,7 @@ export function moveUnit(
     return "Specter can move through but not end on occupied tile";
 
   // Update facing based on movement direction
+  const from = { ...unit.position };
   const dx = target.x - unit.position.x;
   const dy = target.y - unit.position.y;
   if (Math.abs(dy) >= Math.abs(dx)) {
@@ -222,14 +226,25 @@ export function moveUnit(
   const trap = state.traps.find(
     (t) => t.position.x === target.x && t.position.y === target.y && t.side !== unit.side
   );
+  let triggeredTrap = false;
   if (trap) {
     unit.hp -= 2;
     state.traps = state.traps.filter((t) => t !== trap);
     state.log.push(`${unit.name} triggered a trap! (-2 HP)`);
+    triggeredTrap = true;
+    emit({ type: "trap_triggered", unitId: unit.id, position: { ...target }, damage: 2, unitHpAfter: unit.hp });
+    if (unit.hp <= 0) {
+      emit({ type: "unit_killed", unitId: unit.id, killerId: trap.owner, ability: "trap" });
+    }
   }
 
+  emit({ type: "unit_moved", unitId: unit.id, from, to: { ...target }, newFacing: unit.facing, triggeredTrap, trapDamage: triggeredTrap ? 2 : undefined });
+
   // Remove fortified
-  unit.statusEffects = unit.statusEffects.filter((e) => e.type !== "fortified");
+  if (unit.statusEffects.some((e) => e.type === "fortified")) {
+    unit.statusEffects = unit.statusEffects.filter((e) => e.type !== "fortified");
+    emit({ type: "status_removed", unitId: unit.id, effectType: "fortified", reason: "moved" });
+  }
 
   return null;
 }
@@ -246,12 +261,19 @@ export function useAbility(
 ): string | null {
   // Denial check
   if (isAdjacentToVector(state, unit)) {
+    const blocker = getLivingUnits(state).find(
+      (u) => u.class === "vector" && u.side !== unit.side && distance(u.position, unit.position) === 1
+    );
+    emit({ type: "denial_blocked", unitId: unit.id, blockedAbility: ability, vectorId: blocker?.id || "unknown" });
     return "Cannot use abilities — adjacent to enemy Vector (Denial)";
   }
 
   // Break cloak on ability use (except Cloak itself and Shadow Strike)
   if (ability !== "cloak" && ability !== "shadow_strike") {
-    unit.statusEffects = unit.statusEffects.filter((e) => e.type !== "cloaked");
+    if (unit.statusEffects.some((e) => e.type === "cloaked")) {
+      unit.statusEffects = unit.statusEffects.filter((e) => e.type !== "cloaked");
+      emit({ type: "status_removed", unitId: unit.id, effectType: "cloaked", reason: "ability_break" });
+    }
   }
 
   switch (ability) {
@@ -295,11 +317,15 @@ function abilityBasicAttack(
 ): string | null {
   if (!target) return "Must specify target";
   const enemy = getUnitAt(state, target);
-  if (!enemy || enemy.side === unit.side) return "No enemy at target";
+  if (!enemy) return "No unit at target";
+  if (enemy.id === unit.id) return "Cannot attack self";
   if (isCloaked(enemy)) return "Cannot target cloaked unit";
   if (distance(unit.position, enemy.position) > 1) return "Must be adjacent";
   const dmg = applyDamage(enemy, 1);
-  state.log.push(`${unit.name} attacks ${enemy.name} (-${dmg} HP)`);
+  const friendly = enemy.side === unit.side;
+  state.log.push(`${unit.name} attacks ${enemy.name} (-${dmg} HP)${friendly ? " [FRIENDLY FIRE]" : ""}`);
+  emit({ type: "damage_dealt", sourceId: unit.id, targetId: enemy.id, amount: dmg, ability: "attack", targetHpAfter: enemy.hp });
+  if (enemy.hp <= 0) emit({ type: "unit_killed", unitId: enemy.id, killerId: unit.id, ability: "attack" });
   return null;
 }
 
@@ -315,6 +341,8 @@ function abilityShadowStrike(
   if (distance(unit.position, enemy.position) > 1) return "Must be adjacent";
   const dmg = applyDamage(enemy, 2);
   state.log.push(`${unit.name} shadow strikes ${enemy.name} (-${dmg} HP)`);
+  emit({ type: "damage_dealt", sourceId: unit.id, targetId: enemy.id, amount: dmg, ability: "shadow_strike", targetHpAfter: enemy.hp });
+  if (enemy.hp <= 0) emit({ type: "unit_killed", unitId: enemy.id, killerId: unit.id, ability: "shadow_strike" });
   // Shadow Strike does NOT break cloak (unique to Specter)
   return null;
 }
@@ -326,8 +354,10 @@ function abilityShieldWall(
 ): string | null {
   if (unit.class !== "sentinel") return "Only Sentinel can use Shield Wall";
   if (!direction) return "Must specify direction";
-  unit.statusEffects.push({ type: "shieldWall", direction });
+  const effect = { type: "shieldWall" as const, direction };
+  unit.statusEffects.push(effect);
   state.log.push(`${unit.name} raises Shield Wall facing ${direction}`);
+  emit({ type: "status_applied", unitId: unit.id, effect, source: "shield_wall" });
   return null;
 }
 
@@ -369,17 +399,23 @@ function abilityBreach(
   if (distance(unit.position, enemy.position) > 2) return "Must be within 2 tiles";
   if (!isBehind(unit.position, enemy)) return "Must be behind the target";
   if (!addendum) return "Must provide addendum text for Breach";
-  enemy.breachAddendum = addendum;
+  const oldPrompt = enemy.prompt;
+  // Breach COMPLETELY REPLACES the target's prompt — enables friendly fire, self-sabotage, anything
+  enemy.prompt = addendum;
+  enemy.breachAddendum = undefined; // clean slate
   state.log.push(
-    `${unit.name} breaches ${enemy.name}'s prompt!`
+    `${unit.name} breaches ${enemy.name}'s prompt! (replaced)`
   );
+  emit({ type: "breach", attackerId: unit.id, targetId: enemy.id, oldPrompt, newPrompt: addendum });
   return null;
 }
 
 function abilityCloak(unit: Unit): string | null {
   if (unit.class !== "specter") return "Only Specter can use Cloak";
   // turnsLeft: 2 = lasts through this turn + enemy turn, expires at start of your next turn
-  unit.statusEffects.push({ type: "cloaked", turnsLeft: 2 });
+  const effect = { type: "cloaked" as const, turnsLeft: 2 };
+  unit.statusEffects.push(effect);
+  emit({ type: "status_applied", unitId: unit.id, effect, source: "cloak" });
   return null;
 }
 
@@ -424,7 +460,8 @@ function abilityPrecisionShot(
   if (unit.class !== "striker") return "Only Striker can use Precision Shot";
   if (!target) return "Must specify target";
   const enemy = getUnitAt(state, target);
-  if (!enemy || enemy.side === unit.side) return "No enemy at target";
+  if (!enemy) return "No unit at target";
+  if (enemy.id === unit.id) return "Cannot target self";
   if (isCloaked(enemy)) return "Cannot target cloaked unit";
   const range =
     unit.range +
@@ -438,7 +475,10 @@ function abilityPrecisionShot(
     return "Out of range";
   const baseDmg = unit.movedThisTurn ? 2 : 3; // reduced damage after moving
   const dmg = applyDamage(enemy, baseDmg);
-  state.log.push(`${unit.name} fires Precision Shot at ${enemy.name} (-${dmg} HP)${unit.movedThisTurn ? " [moved]" : ""}`);
+  const friendly = enemy.side === unit.side;
+  state.log.push(`${unit.name} fires Precision Shot at ${enemy.name} (-${dmg} HP)${unit.movedThisTurn ? " [moved]" : ""}${friendly ? " [FRIENDLY FIRE]" : ""}`);
+  emit({ type: "damage_dealt", sourceId: unit.id, targetId: enemy.id, amount: dmg, ability: "precision_shot", targetHpAfter: enemy.hp });
+  if (enemy.hp <= 0) emit({ type: "unit_killed", unitId: enemy.id, killerId: unit.id, ability: "precision_shot" });
   return null;
 }
 
@@ -455,12 +495,16 @@ function abilitySuppressingFire(
   const tiles = [target, { x: target.x + dx, y: target.y + dy }];
   for (const tile of tiles) {
     const hit = getUnitAt(state, tile);
-    if (hit && hit.side !== unit.side) {
+    if (hit && hit.id !== unit.id) {
       const dmg = applyDamage(hit, 1);
       hit.statusEffects.push({ type: "suppressed" });
+      const friendly = hit.side === unit.side;
       state.log.push(
-        `${unit.name} suppresses ${hit.name} (-${dmg} HP, movement reduced)`
+        `${unit.name} suppresses ${hit.name} (-${dmg} HP, movement reduced)${friendly ? " [FRIENDLY FIRE]" : ""}`
       );
+      emit({ type: "damage_dealt", sourceId: unit.id, targetId: hit.id, amount: dmg, ability: "suppressing_fire", targetHpAfter: hit.hp });
+      emit({ type: "status_applied", unitId: hit.id, effect: { type: "suppressed" }, source: "suppressing_fire" });
+      if (hit.hp <= 0) emit({ type: "unit_killed", unitId: hit.id, killerId: unit.id, ability: "suppressing_fire" });
     }
   }
   return null;
@@ -482,6 +526,7 @@ function abilityPatch(
   ally.hp += healed;
   unit.healsUsed = usedHeals + 1;
   state.log.push(`${unit.name} patches ${ally.name} (+${healed} HP) [${3 - usedHeals - 1} heals left]`);
+  emit({ type: "healing_done", sourceId: unit.id, targetId: ally.id, amount: healed, targetHpAfter: ally.hp, healsRemaining: 3 - usedHeals - 1 });
   return null;
 }
 
@@ -496,8 +541,11 @@ function abilityOverclock(
   if (!ally || ally.side !== unit.side) return "No ally at target";
   if (distance(unit.position, ally.position) > 1) return "Must be adjacent";
   ally.hp -= 1;
-  ally.statusEffects.push({ type: "overclocked" });
+  const effect = { type: "overclocked" as const };
+  ally.statusEffects.push(effect);
   state.log.push(`${unit.name} overclocks ${ally.name} (-1 HP, double ability next turn)`);
+  emit({ type: "damage_dealt", sourceId: unit.id, targetId: ally.id, amount: 1, ability: "overclock", targetHpAfter: ally.hp });
+  emit({ type: "status_applied", unitId: ally.id, effect, source: "overclock" });
   return null;
 }
 
@@ -513,6 +561,7 @@ function abilityTrap(
   if (isOccupied(state, target)) return "Position occupied";
   state.traps.push({ position: target, owner: unit.id, side: unit.side });
   state.log.push(`${unit.name} places a trap`);
+  emit({ type: "trap_placed", unitId: unit.id, position: { ...target } });
   return null;
 }
 
@@ -524,6 +573,8 @@ function abilityPulse(state: GameState, unit: Unit): string | null {
   for (const target of affected) {
     const dmg = applyDamage(target, 1);
     state.log.push(`${unit.name}'s Pulse hits ${target.name} (-${dmg} HP)`);
+    emit({ type: "damage_dealt", sourceId: unit.id, targetId: target.id, amount: dmg, ability: "pulse", targetHpAfter: target.hp });
+    if (target.hp <= 0) emit({ type: "unit_killed", unitId: target.id, killerId: unit.id, ability: "pulse" });
   }
   return null;
 }
@@ -547,6 +598,11 @@ export function startPlay(state: GameState): void {
   state.turn = 1;
   state.activesSide = "player";
   state.log.push("=== Battle begins ===");
+  emit({
+    type: "game_start",
+    grid: { ...state.grid },
+    units: TrainingRecorder.snapshotUnits(state) as any,
+  });
 }
 
 export function endTurn(state: GameState): void {
@@ -558,11 +614,15 @@ export function endTurn(state: GameState): void {
       if (e.type === "cloaked") {
         if (unit.side !== actingSide) return true; // keep — not their turn yet
         e.turnsLeft--;
-        return e.turnsLeft > 0;
+        if (e.turnsLeft <= 0) {
+          emit({ type: "status_removed", unitId: unit.id, effectType: "cloaked", reason: "expired" });
+          return false;
+        }
+        return true;
       }
-      if (e.type === "suppressed") return false;
-      if (e.type === "shieldWall") return false;
-      if (e.type === "overclocked") return false;
+      if (e.type === "suppressed") { emit({ type: "status_removed", unitId: unit.id, effectType: "suppressed", reason: "turn_end" }); return false; }
+      if (e.type === "shieldWall") { emit({ type: "status_removed", unitId: unit.id, effectType: "shieldWall", reason: "turn_end" }); return false; }
+      if (e.type === "overclocked") { emit({ type: "status_removed", unitId: unit.id, effectType: "overclocked", reason: "turn_end" }); return false; }
       return true;
     });
 
@@ -571,15 +631,22 @@ export function endTurn(state: GameState): void {
 
     // Sentinel fortify: if didn't move (handled by checking if fortified was removed during move)
     if (unit.class === "sentinel" && unit.hp > 0) {
-      // Re-add fortified at end of turn (will be removed if they move next turn)
       if (!unit.statusEffects.some((e) => e.type === "fortified")) {
-        unit.statusEffects.push({ type: "fortified" });
+        const effect = { type: "fortified" as const };
+        unit.statusEffects.push(effect);
+        emit({ type: "status_applied", unitId: unit.id, effect, source: "passive" });
       }
     }
-
-    // Clear breach addendum after it's been used for one turn
-    unit.breachAddendum = undefined;
   }
+
+  // Emit turn end before switching sides
+  emit({
+    type: "turn_end",
+    turn: state.turn,
+    side: actingSide,
+    units: TrainingRecorder.snapshotUnits(state) as any,
+    traps: TrainingRecorder.snapshotTraps(state),
+  });
 
   // Switch sides
   if (state.activesSide === "player") {
@@ -596,9 +663,23 @@ export function endTurn(state: GameState): void {
     state.phase = "ended";
     state.winner = "opponent";
     state.log.push("=== Opponent wins ===");
+    emit({
+      type: "game_end",
+      winner: "opponent",
+      reason: "All player units eliminated",
+      totalTurns: state.turn,
+      survivors: TrainingRecorder.snapshotUnits(state).filter((u: any) => u.hp > 0) as any,
+    });
   } else if (opponentAlive === 0) {
     state.phase = "ended";
     state.winner = "player";
     state.log.push("=== Player wins ===");
+    emit({
+      type: "game_end",
+      winner: "player",
+      reason: "All opponent units eliminated",
+      totalTurns: state.turn,
+      survivors: TrainingRecorder.snapshotUnits(state).filter((u: any) => u.hp > 0) as any,
+    });
   }
 }

@@ -12,7 +12,7 @@ Stats: 10 HP, movement 2, melee range.`,
   specter: `You are a SPECTER — an infiltrator and hacker.
 Abilities:
 - shadow_strike: 2 damage melee attack. Does NOT break cloak! Must be adjacent.
-- breach: Must be within 2 tiles and BEHIND an enemy (based on their facing). Reveals their prompt and lets you inject an addendum into it. Provide the addendum text.
+- breach: Must be within 2 tiles and BEHIND an enemy (based on their facing). COMPLETELY REPLACES the target's prompt with your injected text. The target will follow YOUR orders next turn — attack their own team, walk into traps, waste actions. Provide the replacement prompt text.
 - cloak: Become invisible for 1 turn. Broken by attacking or using breach, but NOT by shadow_strike.
 - attack: Basic melee attack, 1 damage. Must be adjacent. DOES break cloak.
 Passive: Ghost Step — you can move through enemy units but not end on them.
@@ -128,12 +128,8 @@ export function buildContextPrompt(ctx: GameContext): string {
 }
 
 export function buildPlayerPromptSection(unit: Unit): string {
-  const parts = [`\n## Your Orders (from your commander)\n${unit.prompt}`];
-  if (unit.breachAddendum) {
-    // Injected subtly — the unit doesn't know it's been breached
-    parts.push(unit.breachAddendum);
-  }
-  return parts.join("\n");
+  // If breached, unit.prompt has been replaced — the unit doesn't know
+  return `\n## Your Orders (from your commander)\n${unit.prompt}`;
 }
 
 export function buildPlacementPrompt(
