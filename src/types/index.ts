@@ -41,10 +41,10 @@ export interface UnitStats {
 export const UNIT_STATS: Record<UnitClass, UnitStats> = {
   // Specter: fastest — assassin strikes first, breach lands before target acts
   specter: { maxHp: 5, movement: 3, range: 1, speed: 3 },
-  // Striker: mid-speed sniper
-  striker: { maxHp: 5, movement: 2, range: 3, speed: 2 },
-  // Oracle: mid-speed intel
-  oracle: { maxHp: 6, movement: 2, range: 4, speed: 2 },
+  // Striker: mid-speed sniper — reduced HP to create counterplay opportunities
+  striker: { maxHp: 4, movement: 2, range: 3, speed: 2 },
+  // Oracle: buffed HP so it doesn't melt to 2 precision shots
+  oracle: { maxHp: 8, movement: 2, range: 4, speed: 2 },
   // Medic: mid-speed — heals after initial damage lands
   medic: { maxHp: 6, movement: 2, range: 1, speed: 2 },
   // Vector: slow — places traps AFTER seeing where everyone moved

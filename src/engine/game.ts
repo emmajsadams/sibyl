@@ -313,13 +313,14 @@ export function useAbility(
   direction?: string,
   addendum?: string
 ): string | null {
-  // Denial check
-  if (isAdjacentToVector(state, unit)) {
+  // Denial check - only blocks specific abilities, not movement or basic attacks
+  const deniedAbilities = ["cloak", "breach", "scan", "precision_shot", "trap", "patch", "overclock"];
+  if (deniedAbilities.includes(ability) && isAdjacentToVector(state, unit)) {
     const blocker = getLivingUnits(state).find(
       (u) => u.class === "vector" && u.side !== unit.side && distance(u.position, unit.position) === 1
     );
     emit({ type: "denial_blocked", unitId: unit.id, blockedAbility: ability, vectorId: blocker?.id || "unknown" });
-    return "Cannot use abilities — adjacent to enemy Vector (Denial)";
+    return `Cannot use ${ability} — adjacent to enemy Vector (Denial)`;
   }
 
   // Break cloak on ability use (except Cloak itself and Shadow Strike)
@@ -465,8 +466,8 @@ function abilityBreach(
 function abilityCloak(unit: Unit): string | null {
   if (unit.class !== "specter") return "Only Specter can use Cloak";
   // turnsLeft tracks how many individual unit-turns until cloak expires
-  // 2 = lasts through ~one full round of other units acting
-  const effect = { type: "cloaked" as const, turnsLeft: 2 };
+  // 3 = lasts longer to be more useful
+  const effect = { type: "cloaked" as const, turnsLeft: 3 };
   unit.statusEffects.push(effect);
   emit({ type: "status_applied", unitId: unit.id, effect, source: "cloak" });
   return null;
@@ -524,7 +525,7 @@ function abilityPrecisionShot(
       : 0); // High Ground passive
   if (distance(unit.position, enemy.position) > range)
     return "Out of range";
-  const baseDmg = unit.movedThisTurn ? 2 : 3;
+  const baseDmg = unit.movedThisTurn ? 1 : 2;
   const dmg = applyDamage(enemy, baseDmg);
   const friendly = enemy.side === unit.side;
   state.log.push(`${unit.name} fires Precision Shot at ${enemy.name} (-${dmg} HP)${unit.movedThisTurn ? " [moved]" : ""}${friendly ? " [FRIENDLY FIRE]" : ""}`);
