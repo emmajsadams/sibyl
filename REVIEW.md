@@ -9,7 +9,8 @@ Run this review on all staged/changed files before committing. Fix issues before
 3. Review against every checklist item below
 4. Fix anything that fails
 5. `~/.bun/bin/bunx tsc --noEmit` — must pass
-6. Only then commit and push
+6. Output a clear summary of all changes: each file modified, what changed, and why
+7. Only then commit and push
 
 ## Checklist
 
