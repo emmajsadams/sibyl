@@ -4,13 +4,9 @@ import type {
   UnitClass,
   Side,
   Position,
-  Trap,
-  UnitAction,
-  TurnAction,
   UnitStatus,
   GameContext,
   UnitView,
-  UNIT_STATS,
 } from "../types";
 import { UNIT_STATS as Stats } from "../types";
 import { emit } from "../training/emitter";

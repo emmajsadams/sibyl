@@ -5,7 +5,6 @@ import {
   startPlay,
   moveUnit,
   useAbility,
-  getLivingUnits,
   buildGameContext,
   getNextUnit,
   unitActed,
@@ -24,7 +23,7 @@ import { ask, askMultiline, close } from "./cli/input";
 import { GameLogger } from "./logger";
 import { TrainingRecorder } from "./training/recorder";
 import { setTrainingListener, emit as emitTraining } from "./training/emitter";
-import type { GameState, UnitClass, Side, Unit, UnitAction, UnitConfig, SideConfig, GameConfig } from "./types";
+import type { GameState, UnitClass, Unit, UnitAction, UnitConfig, GameConfig } from "./types";
 import { readFileSync } from "fs";
 
 const CLASSES: UnitClass[] = [

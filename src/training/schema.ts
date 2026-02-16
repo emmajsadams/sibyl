@@ -6,7 +6,7 @@ const Position = z.object({ x: z.number(), y: z.number() });
 const Side = z.enum(["player", "opponent"]);
 const Direction = z.enum(["N", "S", "E", "W"]);
 const UnitClass = z.enum(["sentinel", "specter", "oracle", "striker", "medic", "vector"]);
-const UnitStatus = z.enum(["healthy", "wounded", "critical", "dead"]);
+const _UnitStatus = z.enum(["healthy", "wounded", "critical", "dead"]);
 
 // === Unit Snapshot ===
 

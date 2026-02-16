@@ -3,7 +3,7 @@
  */
 
 import type { GameContext, Position, UnitView } from "../types";
-import { distance, isValidPosition, isBehind } from "../engine/game";
+import { distance, isValidPosition } from "../engine/game";
 
 export interface ToolDefinition {
   name: string;

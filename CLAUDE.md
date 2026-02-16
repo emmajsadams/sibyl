@@ -8,8 +8,11 @@
 ## Commit Workflow
 1. Before every commit, run the full `REVIEW.md` checklist against your changes
 2. Fix anything that fails the review
-3. `~/.bun/bin/bunx tsc --noEmit` must pass
-4. Commit with a clear message, then push
+3. `npx oxlint src/` — 0 warnings
+4. `~/.bun/bin/bunx tsc --noEmit` — must pass
+5. Commit with a clear message, then push
+
+Pre-commit hook (husky) runs oxlint + tsc automatically.
 
 ## Project
 - Runtime: Bun + TypeScript

@@ -2,7 +2,7 @@ import { writeFileSync, mkdirSync } from "fs";
 import { readFileSync } from "fs";
 import { join } from "path";
 import type { TrainingEvent, TrainingFile } from "./schema";
-import type { GameState, Unit, Side } from "../types";
+import type { GameState, Unit } from "../types";
 import { readTrainingConfig, writeTrainingConfig } from "./config";
 
 const PKG_PATH = join(import.meta.dir, "../../package.json");

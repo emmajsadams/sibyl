@@ -1,4 +1,4 @@
-import type { GameState, Unit } from "../types";
+import type { GameState } from "../types";
 import { getUnitStatus, getLivingUnits } from "../engine/game";
 
 const UNIT_SYMBOLS: Record<string, string> = {
@@ -90,7 +90,7 @@ export function renderFullState(state: GameState, actionLog: string[] = []): str
     for (const unit of state.units.filter((u) => u.side === side)) {
       const dead = unit.hp <= 0;
       const sym = UNIT_SYMBOLS[unit.class];
-      const status = getUnitStatus(unit);
+      const _status = getUnitStatus(unit);
       const bar = hpBar(unit.hp, unit.maxHp);
       const pos = `(${unit.position.x},${unit.position.y})`;
       const effects = unit.statusEffects.length
@@ -159,5 +159,5 @@ export function renderGameOver(state: GameState): string {
 // Keep old exports for compatibility
 export { renderFullState as renderTurn };
 export function renderGrid(state: GameState): string { return renderFullState(state); }
-export function renderUnitStatus(state: GameState): string { return ""; }
-export function renderLog(state: GameState): string { return ""; }
+export function renderUnitStatus(_state: GameState): string { return ""; }
+export function renderLog(_state: GameState): string { return ""; }
