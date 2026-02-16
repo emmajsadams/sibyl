@@ -20,10 +20,10 @@ export interface UnitStats {
 }
 
 export const UNIT_STATS: Record<UnitClass, UnitStats> = {
-  sentinel: { maxHp: 8, movement: 2, range: 1 },
-  specter: { maxHp: 4, movement: 3, range: 1 },
+  sentinel: { maxHp: 10, movement: 2, range: 1 },
+  specter: { maxHp: 5, movement: 3, range: 1 },
   oracle: { maxHp: 6, movement: 2, range: 4 },
-  striker: { maxHp: 6, movement: 2, range: 3 },
+  striker: { maxHp: 5, movement: 2, range: 3 },
   medic: { maxHp: 6, movement: 2, range: 1 },
   vector: { maxHp: 6, movement: 2, range: 2 },
 };
@@ -43,6 +43,10 @@ export interface Unit {
   prompt: string;
   /** Temporary prompt addendum injected by Breach */
   breachAddendum?: string;
+  /** Whether this unit moved during current turn (for Striker penalty) */
+  movedThisTurn?: boolean;
+  /** Heal count used (Medic heal cap) */
+  healsUsed?: number;
 }
 
 export type StatusEffect =

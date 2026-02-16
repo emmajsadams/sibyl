@@ -279,20 +279,21 @@ function toolCheckBehind(
       distance(p, enemy.position) === 1 // must be adjacent
   );
 
-  const isCurrentlyBehind =
-    distance(pos, enemy.position) === 1 &&
-    isBehindCheck(pos, enemy);
+  const dist = distance(pos, enemy.position);
+  const isCurrentlyBehind = dist <= 2 && isBehindCheck(pos, enemy);
 
   return {
     output: JSON.stringify({
       enemy: { name: enemy.name, position: enemy.position, facing: enemy.facing },
       your_position: pos,
-      is_adjacent: distance(pos, enemy.position) === 1,
+      distance: dist,
+      is_adjacent: dist === 1,
+      is_within_breach_range: dist <= 2,
       is_behind: isCurrentlyBehind,
       behind_positions: validBehind,
       note: isCurrentlyBehind
-        ? "You ARE behind the enemy. Breach is possible!"
-        : `Move to one of the behind_positions to get behind ${enemy.name}.`,
+        ? "You ARE behind the enemy and in range. Breach is possible!"
+        : `Move to one of the behind_positions to get behind ${enemy.name}. Breach range is 2 tiles.`,
     }),
   };
 }

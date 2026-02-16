@@ -215,6 +215,7 @@ export function moveUnit(
   }
 
   unit.position = target;
+  unit.movedThisTurn = true;
 
   // Check traps
   const trap = state.traps.find(
@@ -247,12 +248,14 @@ export function useAbility(
     return "Cannot use abilities — adjacent to enemy Vector (Denial)";
   }
 
-  // Break cloak on ability use (except Cloak itself)
-  if (ability !== "cloak") {
+  // Break cloak on ability use (except Cloak itself and Shadow Strike)
+  if (ability !== "cloak" && ability !== "shadow_strike") {
     unit.statusEffects = unit.statusEffects.filter((e) => e.type !== "cloaked");
   }
 
   switch (ability) {
+    case "attack":
+      return abilityBasicAttack(state, unit, target);
     case "shield_wall":
       return abilityShieldWall(state, unit, direction as any);
     case "intercept":
@@ -261,6 +264,8 @@ export function useAbility(
       return abilityBreach(state, unit, target, addendum);
     case "cloak":
       return abilityCloak(unit);
+    case "shadow_strike":
+      return abilityShadowStrike(state, unit, target);
     case "scan":
       return abilityScan(state, unit, target);
     case "recalibrate":
@@ -280,6 +285,37 @@ export function useAbility(
     default:
       return `Unknown ability: ${ability}`;
   }
+}
+
+function abilityBasicAttack(
+  state: GameState,
+  unit: Unit,
+  target?: Position
+): string | null {
+  if (!target) return "Must specify target";
+  const enemy = getUnitAt(state, target);
+  if (!enemy || enemy.side === unit.side) return "No enemy at target";
+  if (isCloaked(enemy)) return "Cannot target cloaked unit";
+  if (distance(unit.position, enemy.position) > 1) return "Must be adjacent";
+  const dmg = applyDamage(enemy, 1);
+  state.log.push(`${unit.name} attacks ${enemy.name} (-${dmg} HP)`);
+  return null;
+}
+
+function abilityShadowStrike(
+  state: GameState,
+  unit: Unit,
+  target?: Position
+): string | null {
+  if (unit.class !== "specter") return "Only Specter can use Shadow Strike";
+  if (!target) return "Must specify target";
+  const enemy = getUnitAt(state, target);
+  if (!enemy || enemy.side === unit.side) return "No enemy at target";
+  if (distance(unit.position, enemy.position) > 1) return "Must be adjacent";
+  const dmg = applyDamage(enemy, 2);
+  state.log.push(`${unit.name} shadow strikes ${enemy.name} (-${dmg} HP)`);
+  // Shadow Strike does NOT break cloak (unique to Specter)
+  return null;
 }
 
 function abilityShieldWall(
@@ -329,7 +365,7 @@ function abilityBreach(
   if (!target) return "Must specify target";
   const enemy = getUnitAt(state, target);
   if (!enemy || enemy.side === unit.side) return "No enemy at target";
-  if (distance(unit.position, enemy.position) !== 1) return "Must be adjacent";
+  if (distance(unit.position, enemy.position) > 2) return "Must be within 2 tiles";
   if (!isBehind(unit.position, enemy)) return "Must be behind the target";
   if (!addendum) return "Must provide addendum text for Breach";
   enemy.breachAddendum = addendum;
@@ -387,6 +423,7 @@ function abilityPrecisionShot(
   if (!target) return "Must specify target";
   const enemy = getUnitAt(state, target);
   if (!enemy || enemy.side === unit.side) return "No enemy at target";
+  if (isCloaked(enemy)) return "Cannot target cloaked unit";
   const range =
     unit.range +
     (unit.statusEffects.some((e) => e.type === "fortified") ? 0 : 0) +
@@ -397,8 +434,9 @@ function abilityPrecisionShot(
       : 0); // High Ground passive
   if (distance(unit.position, enemy.position) > range)
     return "Out of range";
-  const dmg = applyDamage(enemy, 3);
-  state.log.push(`${unit.name} fires Precision Shot at ${enemy.name} (-${dmg} HP)`);
+  const baseDmg = unit.movedThisTurn ? 2 : 3; // reduced damage after moving
+  const dmg = applyDamage(enemy, baseDmg);
+  state.log.push(`${unit.name} fires Precision Shot at ${enemy.name} (-${dmg} HP)${unit.movedThisTurn ? " [moved]" : ""}`);
   return null;
 }
 
@@ -436,9 +474,12 @@ function abilityPatch(
   const ally = getUnitAt(state, target);
   if (!ally || ally.side !== unit.side) return "No ally at target";
   if (distance(unit.position, ally.position) > 1) return "Must be adjacent";
-  const healed = Math.min(3, ally.maxHp - ally.hp);
+  const usedHeals = unit.healsUsed || 0;
+  if (usedHeals >= 3) return "No heals remaining (max 3 per game)";
+  const healed = Math.min(2, ally.maxHp - ally.hp);
   ally.hp += healed;
-  state.log.push(`${unit.name} patches ${ally.name} (+${healed} HP)`);
+  unit.healsUsed = usedHeals + 1;
+  state.log.push(`${unit.name} patches ${ally.name} (+${healed} HP) [${3 - usedHeals - 1} heals left]`);
   return null;
 }
 
@@ -519,6 +560,9 @@ export function endTurn(state: GameState): void {
       if (e.type === "overclocked") return false;
       return true;
     });
+
+    // Reset movement tracking
+    unit.movedThisTurn = false;
 
     // Sentinel fortify: if didn't move (handled by checking if fortified was removed during move)
     if (unit.class === "sentinel" && unit.hp > 0) {

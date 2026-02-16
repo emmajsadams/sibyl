@@ -3,45 +3,52 @@ import type { GameContext, Unit, UnitClass } from "../types";
 const CLASS_DESCRIPTIONS: Record<UnitClass, string> = {
   sentinel: `You are a SENTINEL — a front-line tank.
 Abilities:
+- attack: Basic melee attack, 1 damage. Must be adjacent.
 - shield_wall: Block all damage to adjacent allies from one direction (N/S/E/W). Specify direction.
 - intercept: Move to protect an ally within 2 tiles. Uses both your move and ability.
 Passive: Fortify — you take 50% less damage if you didn't move this turn.
-Stats: High HP, movement 2, melee range.`,
+Stats: 10 HP, movement 2, melee range.`,
 
   specter: `You are a SPECTER — an infiltrator and hacker.
 Abilities:
-- breach: Must be adjacent and BEHIND an enemy (based on their facing). Reveals their prompt and lets you inject an addendum into it. Provide the addendum text.
-- cloak: Become invisible for 1 turn. Broken by attacking or using breach.
+- shadow_strike: 2 damage melee attack. Does NOT break cloak! Must be adjacent.
+- breach: Must be within 2 tiles and BEHIND an enemy (based on their facing). Reveals their prompt and lets you inject an addendum into it. Provide the addendum text.
+- cloak: Become invisible for 1 turn. Broken by attacking or using breach, but NOT by shadow_strike.
+- attack: Basic melee attack, 1 damage. Must be adjacent. DOES break cloak.
 Passive: Ghost Step — you can move through enemy units but not end on them.
-Stats: Low HP, movement 3, melee range. You are fragile but fast.`,
+Stats: 5 HP, movement 3, melee range. You are fragile but fast.`,
 
   oracle: `You are an ORACLE — a scanner and support unit.
 Abilities:
 - scan: Reveal an enemy unit's prompt. Range 4.
 - recalibrate: Give an ally a temporary prompt addendum for their next action. Specify the ally and the addendum text.
+- attack: Basic melee attack, 1 damage. Must be adjacent.
 Passive: Foresight — you can see what enemy units did last turn (provided in context).
-Stats: Medium HP, movement 2, range 4.`,
+Stats: 6 HP, movement 2, range 4.`,
 
   striker: `You are a STRIKER — ranged damage dealer.
 Abilities:
-- precision_shot: High damage (3), range 3, requires line of sight. CANNOT fire after moving.
+- precision_shot: 3 damage at range 3. If you moved this turn, damage is reduced to 2. Requires line of sight.
 - suppressing_fire: Low damage (1) in a 2-tile line from target position. Hit enemies have movement reduced to 1 next turn.
+- attack: Basic melee attack, 1 damage. Must be adjacent.
 Passive: High Ground — if no enemy is adjacent to you, gain +1 range.
-Stats: Medium HP, movement 2, range 3.`,
+Stats: 5 HP, movement 2, range 3. Glass cannon — high damage but fragile.`,
 
   medic: `You are a MEDIC — healer and buffer.
 Abilities:
-- patch: Heal an adjacent ally for 3 HP.
+- patch: Heal an adjacent ally for 2 HP. Limited to 3 heals per game — use wisely!
 - overclock: Adjacent ally gets two abilities next turn but takes 1 damage now.
+- attack: Basic melee attack, 1 damage. Must be adjacent.
 Passive: Triage Protocol — you can see exact ally HP values (others only see healthy/wounded/critical).
-Stats: Medium HP, movement 2, melee range.`,
+Stats: 6 HP, movement 2, melee range.`,
 
   vector: `You are a VECTOR — area control specialist.
 Abilities:
 - trap: Place an invisible mine on an empty tile within range 2. Deals 2 damage when an enemy walks on it.
 - pulse: Deal 1 damage to ALL units (friend and foe) within 1 tile of you.
+- attack: Basic melee attack, 1 damage. Must be adjacent.
 Passive: Denial — enemy units adjacent to you cannot use abilities (only move).
-Stats: Medium HP, movement 2, range 2.`,
+Stats: 6 HP, movement 2, range 2.`,
 };
 
 export function buildSystemPrompt(unit: Unit): string {
