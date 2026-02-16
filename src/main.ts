@@ -24,30 +24,12 @@ import { ask, askMultiline, close } from "./cli/input";
 import { GameLogger } from "./logger";
 import { TrainingRecorder } from "./training/recorder";
 import { setTrainingListener, emit as emitTraining } from "./training/emitter";
-import type { GameState, UnitClass, Side, Unit, UnitAction } from "./types";
+import type { GameState, UnitClass, Side, Unit, UnitAction, UnitConfig, SideConfig, GameConfig } from "./types";
 import { readFileSync } from "fs";
 
 const CLASSES: UnitClass[] = [
   "sentinel", "specter", "oracle", "striker", "medic", "vector",
 ];
-
-// === Config ===
-
-interface UnitConfig {
-  name: string;
-  class: UnitClass;
-  prompt: string;
-}
-
-interface SideConfig {
-  units: UnitConfig[];
-  placementPrompt: string;
-}
-
-interface GameConfig {
-  player: SideConfig;
-  opponent: SideConfig;
-}
 
 function loadConfig(path: string): GameConfig {
   return JSON.parse(readFileSync(path, "utf-8"));
@@ -267,6 +249,15 @@ async function main() {
   // Training data recorder
   const recorder = new TrainingRecorder(USE_CLI ? "cli" : "api", configPath);
   setTrainingListener((event) => recorder.record(event));
+
+  // Record full game config at start
+  emitTraining({
+    type: "game_config",
+    player: { units: playerUnits, placementPrompt: playerPlacementPrompt },
+    opponent: { units: opponentUnits, placementPrompt: opponentPlacementPrompt },
+    agent: USE_CLI ? "cli" : "api",
+    configFile: configPath,
+  });
 
   await runPlacementPhase(state, playerUnits, playerPlacementPrompt, opponentUnits, opponentPlacementPrompt, interactive);
 

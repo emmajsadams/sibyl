@@ -3,9 +3,9 @@ import { readFileSync } from "fs";
 import { join } from "path";
 import type { TrainingEvent, TrainingFile } from "./schema";
 import type { GameState, Unit, Side } from "../types";
+import { readTrainingConfig, writeTrainingConfig } from "./config";
 
 const PKG_PATH = join(import.meta.dir, "../../package.json");
-const CONFIG_PATH = join(import.meta.dir, "../../training/config.json");
 
 function readJson(path: string): any {
   return JSON.parse(readFileSync(path, "utf-8"));
@@ -19,18 +19,16 @@ export class TrainingRecorder {
   private filePath: string;
 
   constructor(agent: string, config?: string) {
-    // Read version from package.json, game counter from training/config.json
     const version: string = readJson(PKG_PATH).version;
-    const cfg = readJson(CONFIG_PATH);
-    const nextGameId: number = cfg.nextGameId ?? 0;
+    const cfg = readTrainingConfig();
+    const nextGameId = cfg.nextGameId;
     const gameId = `v${version}-${nextGameId}`;
 
     mkdirSync("training", { recursive: true });
     this.filePath = join("training", `training-${gameId}.json`);
 
     // Increment the counter and write back
-    cfg.nextGameId = nextGameId + 1;
-    writeFileSync(CONFIG_PATH, JSON.stringify(cfg, null, 2) + "\n");
+    writeTrainingConfig({ nextGameId: nextGameId + 1 });
 
     this.data = {
       version: GAME_VERSION,

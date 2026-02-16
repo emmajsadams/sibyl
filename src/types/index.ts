@@ -1,3 +1,21 @@
+// === Game Config (input to a game) ===
+
+export interface UnitConfig {
+  name: string;
+  class: UnitClass;
+  prompt: string;
+}
+
+export interface SideConfig {
+  units: UnitConfig[];
+  placementPrompt: string;
+}
+
+export interface GameConfig {
+  player: SideConfig;
+  opponent: SideConfig;
+}
+
 // === Core Types ===
 
 export type Position = { x: number; y: number };

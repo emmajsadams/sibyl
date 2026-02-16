@@ -15,7 +15,7 @@ Examples: `training-v0.5.0-0.json`, `training-v0.5.0-1.json`
 
 ## Config
 
-`training/config.json` stores runtime state:
+`training/config.json` stores runtime state (typed via Zod in `src/training/config.ts`):
 
 ```json
 {
@@ -23,7 +23,7 @@ Examples: `training-v0.5.0-0.json`, `training-v0.5.0-1.json`
 }
 ```
 
-Incremented automatically each game. Reset manually when needed (e.g. new version).
+Incremented automatically each game. Auto-created on first run if missing. Reset manually when needed (e.g. new version).
 
 ## File Structure
 
@@ -46,6 +46,7 @@ Events are recorded in order as the game plays out:
 
 | Event | Description |
 |---|---|
+| `game_config` | Full input config: player/opponent sides, agent, config file path |
 | `game_start` | Grid size, initial units, turn stack |
 | `turn_start` | Round N begins — full unit/trap snapshots, turn order |
 | `unit_placed` | Unit placed during setup phase |

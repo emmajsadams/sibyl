@@ -187,9 +187,31 @@ const GameEndEvent = z.object({
   survivors: z.array(UnitSnapshot),
 });
 
+// === Game Config Schemas ===
+
+const UnitConfigSchema = z.object({
+  name: z.string(),
+  class: UnitClass,
+  prompt: z.string(),
+});
+
+const SideConfigSchema = z.object({
+  units: z.array(UnitConfigSchema),
+  placementPrompt: z.string(),
+});
+
+const GameConfigEvent = z.object({
+  type: z.literal("game_config"),
+  player: SideConfigSchema,
+  opponent: SideConfigSchema,
+  agent: z.string(),
+  configFile: z.string().optional(),
+});
+
 // === Union ===
 
 export const TrainingEvent = z.discriminatedUnion("type", [
+  GameConfigEvent,
   GameStartEvent,
   RoundStartEvent,
   UnitPlacedEvent,
@@ -242,3 +264,4 @@ export type AgentDecisionEvent = z.infer<typeof AgentDecisionEvent>;
 export type DenialBlockedEvent = z.infer<typeof DenialBlockedEvent>;
 export type RoundEndEvent = z.infer<typeof RoundEndEvent>;
 export type GameEndEvent = z.infer<typeof GameEndEvent>;
+export type GameConfigEvent = z.infer<typeof GameConfigEvent>;
