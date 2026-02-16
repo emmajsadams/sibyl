@@ -1,165 +1,93 @@
 import type { GameContext, Unit, UnitClass } from "../types";
 
 const CLASS_DESCRIPTIONS: Record<UnitClass, string> = {
-  sentinel: `You are a SENTINEL — a front-line tank.
-Abilities:
-- attack: Basic melee attack, 1 damage. Must be adjacent.
-- shield_wall: Block all damage to adjacent allies from one direction (N/S/E/W). Specify direction.
-- intercept: Move to protect an ally within 2 tiles. Uses both your move and ability.
-Passive: Fortify — you take 50% less damage if you didn't move this turn.
-Stats: 10 HP, movement 2, melee range.`,
-
-  specter: `You are a SPECTER — an infiltrator and hacker.
-Abilities:
-- shadow_strike: 2 damage melee attack. Does NOT break cloak! Must be adjacent.
-- breach: Must be within 2 tiles and BEHIND an enemy (based on their facing). COMPLETELY REPLACES the target's prompt with your injected text. The target will follow YOUR orders next turn — attack their own team, walk into traps, waste actions. Provide the replacement prompt text.
-- cloak: Become invisible for 1 turn. Broken by attacking or using breach, but NOT by shadow_strike.
-- attack: Basic melee attack, 1 damage. Must be adjacent. DOES break cloak.
-Passive: Ghost Step — you can move through enemy units but not end on them.
-Stats: 5 HP, movement 3, melee range. You are fragile but fast.`,
-
-  oracle: `You are an ORACLE — a scanner and support unit.
-Abilities:
-- scan: Reveal an enemy unit's prompt. Range 4.
-- recalibrate: Give an ally a temporary prompt addendum for their next action. Specify the ally and the addendum text.
-- attack: Basic melee attack, 1 damage. Must be adjacent.
-Passive: Foresight — you can see what enemy units did last turn (provided in context).
-Stats: 6 HP, movement 2, range 4.`,
-
-  striker: `You are a STRIKER — ranged damage dealer.
-Abilities:
-- precision_shot: 3 damage at range 3. If you moved this turn, damage is reduced to 2. Requires line of sight.
-- suppressing_fire: Low damage (1) in a 2-tile line from target position. Hit enemies have movement reduced to 1 next turn.
-- attack: Basic melee attack, 1 damage. Must be adjacent.
-Passive: High Ground — if no enemy is adjacent to you, gain +1 range.
-Stats: 5 HP, movement 2, range 3. Glass cannon — high damage but fragile.`,
-
-  medic: `You are a MEDIC — healer and buffer.
-Abilities:
-- patch: Heal an adjacent ally for 2 HP. Limited to 3 heals per game — use wisely!
-- overclock: Adjacent ally gets two abilities next turn but takes 1 damage now.
-- attack: Basic melee attack, 1 damage. Must be adjacent.
-Passive: Triage Protocol — you can see exact ally HP values (others only see healthy/wounded/critical).
-Stats: 6 HP, movement 2, melee range.`,
-
-  vector: `You are a VECTOR — area control specialist.
-Abilities:
-- trap: Place an invisible mine on an empty tile within range 2. Deals 2 damage when an enemy walks on it.
-- pulse: Deal 1 damage to ALL units (friend and foe) within 1 tile of you.
-- attack: Basic melee attack, 1 damage. Must be adjacent.
-Passive: Denial — enemy units adjacent to you cannot use abilities (only move).
-Stats: 6 HP, movement 2, range 2.`,
+  sentinel: `SENTINEL (Tank) | 10HP, mv2, melee | Abilities: attack(1dmg,adj), shield_wall(block dmg to adj allies from dir NSEW), intercept(protect ally ≤2 tiles, uses move+ability) | Passive: Fortify(50% dmg reduction if didn't move)`,
+  specter: `SPECTER (Infiltrator) | 5HP, mv3, melee | Abilities: shadow_strike(2dmg,adj,keeps cloak), breach(≤2 tiles,must be BEHIND enemy by facing,replaces target prompt—they obey YOU next turn), cloak(invis 1 turn,broken by attack/breach but NOT shadow_strike), attack(1dmg,adj,breaks cloak) | Passive: Ghost Step(move through enemies, can't end on them)`,
+  oracle: `ORACLE (Scanner) | 6HP, mv2, rng4 | Abilities: scan(reveal enemy prompt,rng4), recalibrate(give ally prompt addendum for next action), attack(1dmg,adj) | Passive: Foresight(see enemy actions last turn)`,
+  striker: `STRIKER (Ranged DPS) | 5HP, mv2, rng3 | Abilities: precision_shot(3dmg rng3,2dmg if moved,needs LoS), suppressing_fire(1dmg 2-tile line from target,slows hit enemies mv1), attack(1dmg,adj) | Passive: High Ground(+1 rng if no adj enemy)`,
+  medic: `MEDIC (Healer) | 6HP, mv2, melee | Abilities: patch(heal adj ally 2HP,3 uses/game), overclock(adj ally gets 2 abilities next turn,takes 1dmg now), attack(1dmg,adj) | Passive: Triage(see exact ally HP)`,
+  vector: `VECTOR (Area Control) | 6HP, mv2, rng2 | Abilities: trap(invis mine on empty tile rng2,2dmg on step), pulse(1dmg ALL units within 1 tile), attack(1dmg,adj) | Passive: Denial(adj enemies can't use abilities,only move)`,
 };
 
 export function buildSystemPrompt(unit: Unit): string {
-  return `You are an AI-controlled unit in SIBYL, a tactical grid combat game.
+  return `SIBYL tactical AI. You control one unit on a 6x6 grid. Coords (x,y), (0,0)=bottom-left.
 
 ${CLASS_DESCRIPTIONS[unit.class]}
 
-## Rules
-- The grid is 6x6. Coordinates are (x, y) where (0,0) is bottom-left.
-- Each turn you can MOVE and use an ABILITY in either order, or do only one, or WAIT.
-- You must respond with valid JSON.
+Rules: Each turn you may MOVE + ABILITY (either order), or just one, or WAIT.
 
-## Response Format
-Respond with a JSON object:
+Response format — JSON object:
 {
   "thinking": "brief tactical reasoning",
   "firstAction": { "type": "move"|"ability"|"wait", ... },
   "secondAction": { "type": "move"|"ability"|"wait", ... }
 }
-
-For move: { "type": "move", "target": { "x": number, "y": number } }
-For ability: { "type": "ability", "ability": "ability_name", "target": { "x": number, "y": number }, "direction": "N"|"S"|"E"|"W", "addendum": "text for breach/recalibrate" }
-For wait: { "type": "wait" }
-
-Only include fields relevant to the action. Direction is only for shield_wall. Addendum is only for breach/recalibrate.`;
+Move: { "type": "move", "target": { "x": N, "y": N } }
+Ability: { "type": "ability", "ability": "name", "target": { "x": N, "y": N }, "direction": "N|S|E|W", "addendum": "text" }
+Wait: { "type": "wait" }
+Only include relevant fields. direction=shield_wall only. addendum=breach/recalibrate only.`;
 }
 
 export function buildContextPrompt(ctx: GameContext): string {
-  const lines: string[] = ["## Current Situation"];
-  lines.push(`Round: ${ctx.round}`);
-  lines.push(
-    `Your position: (${ctx.unit.position.x}, ${ctx.unit.position.y}) facing ${ctx.unit.facing}`
-  );
-  lines.push(`Your HP: ${ctx.unit.hp}/${ctx.unit.maxHp}`);
-  lines.push(`Your speed: ${ctx.unit.speed} (higher = acts earlier in the round)`);
+  const u = ctx.unit;
+  const lines: string[] = [
+    `R${ctx.round} | You: (${u.position.x},${u.position.y})→${u.facing} HP:${u.hp}/${u.maxHp} spd:${u.speed}`,
+  ];
 
-  // Turn order
-  if (ctx.turnOrder && ctx.turnOrder.length > 0) {
-    lines.push("\n## Turn Order This Round (by speed)");
-    for (const entry of ctx.turnOrder) {
-      const side = entry.side === ctx.unit.side ? "ally" : "enemy";
-      const acted = entry.hasActed ? " ✓ already acted" : " ← waiting";
-      const isYou = entry.id === ctx.unit.id ? " (YOU)" : "";
-      lines.push(`- ${entry.name} (${entry.class}, spd:${entry.speed}, ${side})${isYou}${acted}`);
-    }
+  if (u.statusEffects.length > 0) {
+    lines.push(`Status: ${u.statusEffects.map((e) => e.type).join(", ")}`);
   }
 
-  if (ctx.unit.statusEffects.length > 0) {
-    lines.push(
-      `Status effects: ${ctx.unit.statusEffects.map((e) => e.type).join(", ")}`
-    );
+  if (ctx.turnOrder && ctx.turnOrder.length > 0) {
+    const order = ctx.turnOrder.map((e) => {
+      const side = e.side === u.side ? "A" : "E";
+      const mark = e.id === u.id ? "*" : e.hasActed ? "✓" : "·";
+      return `${mark}${e.name}(${e.class},${side},spd${e.speed})`;
+    });
+    lines.push(`Order: ${order.join(" ")}`);
   }
 
   if (ctx.allies.length > 0) {
-    lines.push("\n## Allies");
-    for (const a of ctx.allies) {
-      const hpStr = a.hp !== undefined ? `HP: ${a.hp}` : `Status: ${a.status}`;
-      lines.push(
-        `- ${a.name} (${a.class}, spd:${a.speed}) at (${a.position.x}, ${a.position.y}) facing ${a.facing} — ${hpStr}`
-      );
-    }
+    lines.push("Allies: " + ctx.allies.map((a) => {
+      const hp = a.hp !== undefined ? `HP:${a.hp}` : a.status;
+      return `${a.name}(${a.class},spd${a.speed}) @(${a.position.x},${a.position.y})→${a.facing} ${hp}`;
+    }).join(" | "));
   }
 
   if (ctx.enemies.length > 0) {
-    lines.push("\n## Visible Enemies");
-    for (const e of ctx.enemies) {
-      lines.push(
-        `- ${e.name} (${e.class}, spd:${e.speed}) at (${e.position.x}, ${e.position.y}) facing ${e.facing} — ${e.status}`
-      );
-    }
+    lines.push("Enemies: " + ctx.enemies.map((e) =>
+      `${e.name}(${e.class},spd${e.speed}) @(${e.position.x},${e.position.y})→${e.facing} ${e.status}`
+    ).join(" | "));
   } else {
-    lines.push("\n## No enemies currently visible.");
+    lines.push("No enemies visible.");
   }
 
   if (ctx.traps.length > 0) {
-    lines.push(
-      `\n## Your traps: ${ctx.traps.map((t) => `(${t.x}, ${t.y})`).join(", ")}`
-    );
+    lines.push(`Traps: ${ctx.traps.map((t) => `(${t.x},${t.y})`).join(" ")}`);
   }
 
   if (ctx.lastTurnActions) {
-    lines.push("\n## Enemy actions last turn (Foresight):");
-    for (const action of ctx.lastTurnActions) {
-      lines.push(`- ${action}`);
-    }
+    lines.push("Foresight: " + ctx.lastTurnActions.join("; "));
   }
 
   return lines.join("\n");
 }
 
 export function buildPlayerPromptSection(unit: Unit): string {
-  // If breached, unit.prompt has been replaced — the unit doesn't know
-  return `\n## Your Orders (from your commander)\n${unit.prompt}`;
+  return `\nOrders: ${unit.prompt}`;
 }
 
 export function buildPlacementPrompt(
   units: { name: string; class: UnitClass }[],
   side: "player" | "opponent"
 ): string {
-  const rows = side === "player" ? "0 and 1 (bottom)" : "4 and 5 (top)";
-  return `You need to place your units on the grid for battle.
-Grid is 6x6. You must place units in rows ${rows}.
+  const rows = side === "player" ? "0-1 (bottom)" : "4-5 (top)";
+  return `Place units on 6x6 grid, rows ${rows}.
+Units: ${units.map((u) => `${u.name}(${u.class})`).join(", ")}
 
-Your units:
-${units.map((u) => `- ${u.name} (${u.class})`).join("\n")}
-
-Respond with JSON:
+Respond JSON:
 {
   "thinking": "placement reasoning",
-  "placements": [
-    { "name": "unit_name", "position": { "x": number, "y": number } }
-  ]
+  "placements": [{ "name": "unit_name", "position": { "x": N, "y": N } }]
 }`;
 }

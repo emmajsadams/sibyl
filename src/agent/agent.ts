@@ -60,7 +60,7 @@ Use the available tools to verify ranges, check positions, and plan your moves. 
 
     const response = await client.messages.create({
       model: MODEL,
-      max_tokens: 512,
+      max_tokens: 256,
       system: systemPrompt,
       tools,
       messages,
@@ -97,21 +97,9 @@ Use the available tools to verify ranges, check positions, and plan your moves. 
 
   const decisionPrompt = `${contextPrompt}\n${playerPrompt}
 
-## Reconnaissance Results
-${gatheredInfo.length > 0 ? gatheredInfo.join("\n\n") : "No recon data gathered."}
+Recon: ${gatheredInfo.length > 0 ? gatheredInfo.join("\n") : "None."}
 
-Based on the above information, decide your actions. Respond with ONLY a JSON code block:
-\`\`\`json
-{
-  "thinking": "brief tactical reasoning",
-  "firstAction": { "type": "move"|"ability"|"wait", ... },
-  "secondAction": { "type": "move"|"ability"|"wait", ... }
-}
-\`\`\`
-
-For move: { "type": "move", "target": { "x": number, "y": number } }
-For ability: { "type": "ability", "ability": "ability_name", "target": { "x": number, "y": number }, "direction": "N"|"S"|"E"|"W", "addendum": "text" }
-For wait: { "type": "wait" }`;
+Decide your actions. Respond per the JSON format in your instructions.`;
 
   const decisionResponse = await client.messages.create({
     model: MODEL,
