@@ -34,11 +34,16 @@ function hpBar(hp: number, max: number, width = 10): string {
 
 function facingArrow(facing: string): string {
   switch (facing) {
-    case "N": return "↑";
-    case "S": return "↓";
-    case "E": return "→";
-    case "W": return "←";
-    default: return "·";
+    case "N":
+      return "↑";
+    case "S":
+      return "↓";
+    case "E":
+      return "→";
+    case "W":
+      return "←";
+    default:
+      return "·";
   }
 }
 
@@ -49,7 +54,9 @@ export function renderFullState(state: GameState, actionLog: string[] = []): str
   // Header
   lines.push("");
   lines.push(`${C.bold}${C.magenta}  ╔${"═".repeat(W - 4)}╗${C.reset}`);
-  lines.push(`${C.bold}${C.magenta}  ║${" ".repeat(Math.floor((W - 22) / 2))}S I B Y L  —  Turn ${String(state.turn).padStart(2)}${" ".repeat(Math.ceil((W - 22) / 2))}║${C.reset}`);
+  lines.push(
+    `${C.bold}${C.magenta}  ║${" ".repeat(Math.floor((W - 22) / 2))}S I B Y L  —  Turn ${String(state.turn).padStart(2)}${" ".repeat(Math.ceil((W - 22) / 2))}║${C.reset}`,
+  );
   lines.push(`${C.bold}${C.magenta}  ╚${"═".repeat(W - 4)}╝${C.reset}`);
   lines.push("");
 
@@ -60,9 +67,7 @@ export function renderFullState(state: GameState, actionLog: string[] = []): str
   for (let y = 5; y >= 0; y--) {
     let row = `${C.dim} ${y} │${C.reset}`;
     for (let x = 0; x < 6; x++) {
-      const unit = state.units.find(
-        (u) => u.hp > 0 && u.position.x === x && u.position.y === y
-      );
+      const unit = state.units.find((u) => u.hp > 0 && u.position.x === x && u.position.y === y);
       if (unit) {
         const color = unit.side === "player" ? C.cyan : C.red;
         const sym = UNIT_SYMBOLS[unit.class] || "?";
@@ -101,7 +106,7 @@ export function renderFullState(state: GameState, actionLog: string[] = []): str
         lines.push(`${C.dim}  ${sym} ${unit.name} (${unit.class}) — DEAD${C.reset}`);
       } else {
         lines.push(
-          `  ${color}${sym}${C.reset} ${C.bold}${unit.name}${C.reset} ${C.dim}(${unit.class})${C.reset} at ${pos} ${facingArrow(unit.facing)}  ${bar} ${unit.hp}/${unit.maxHp}${effects}`
+          `  ${color}${sym}${C.reset} ${C.bold}${unit.name}${C.reset} ${C.dim}(${unit.class})${C.reset} at ${pos} ${facingArrow(unit.facing)}  ${bar} ${unit.hp}/${unit.maxHp}${effects}`,
         );
       }
     }
@@ -158,6 +163,12 @@ export function renderGameOver(state: GameState): string {
 
 // Keep old exports for compatibility
 export { renderFullState as renderTurn };
-export function renderGrid(state: GameState): string { return renderFullState(state); }
-export function renderUnitStatus(_state: GameState): string { return ""; }
-export function renderLog(_state: GameState): string { return ""; }
+export function renderGrid(state: GameState): string {
+  return renderFullState(state);
+}
+export function renderUnitStatus(_state: GameState): string {
+  return "";
+}
+export function renderLog(_state: GameState): string {
+  return "";
+}

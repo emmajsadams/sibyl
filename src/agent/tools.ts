@@ -86,7 +86,7 @@ export const GAME_TOOLS: ToolDefinition[] = [
 export function executeTool(
   ctx: GameContext,
   toolName: string,
-  args: Record<string, any>
+  args: Record<string, any>,
 ): ToolResult {
   switch (toolName) {
     case "check_range":
@@ -119,9 +119,8 @@ function toolCheckRange(ctx: GameContext, tx: number, ty: number): ToolResult {
 }
 
 function toolGetEnemiesInRange(ctx: GameContext, fromX?: number, fromY?: number): ToolResult {
-  const pos = fromX !== undefined && fromY !== undefined
-    ? { x: fromX, y: fromY }
-    : ctx.unit.position;
+  const pos =
+    fromX !== undefined && fromY !== undefined ? { x: fromX, y: fromY } : ctx.unit.position;
   const range = getEffectiveRange(ctx);
 
   const inR = ctx.enemies
@@ -159,7 +158,7 @@ function toolGetValidMoves(ctx: GameContext): ToolResult {
       if (!isValidPosition(target)) continue;
       if (Math.abs(dx) + Math.abs(dy) > maxMove) continue;
       const occupied = [...ctx.allies, ...ctx.enemies].some(
-        (u) => u.position.x === target.x && u.position.y === target.y
+        (u) => u.position.x === target.x && u.position.y === target.y,
       );
       if (occupied) continue;
       moves.push([target.x, target.y]);
@@ -173,18 +172,21 @@ function toolCheckBehind(
   ctx: GameContext,
   enemyId: string,
   fromX?: number,
-  fromY?: number
+  fromY?: number,
 ): ToolResult {
   const enemy = ctx.enemies.find(
-    (e) => e.id === enemyId || e.name.toLowerCase() === enemyId.toLowerCase()
+    (e) => e.id === enemyId || e.name.toLowerCase() === enemyId.toLowerCase(),
   );
   if (!enemy) {
-    return { output: JSON.stringify({ error: `Enemy "${enemyId}" not found. Available: ${ctx.enemies.map((e) => e.name).join(", ")}` }) };
+    return {
+      output: JSON.stringify({
+        error: `Enemy "${enemyId}" not found. Available: ${ctx.enemies.map((e) => e.name).join(", ")}`,
+      }),
+    };
   }
 
-  const pos = fromX !== undefined && fromY !== undefined
-    ? { x: fromX, y: fromY }
-    : ctx.unit.position;
+  const pos =
+    fromX !== undefined && fromY !== undefined ? { x: fromX, y: fromY } : ctx.unit.position;
 
   const behindPositions: Position[] = [];
   switch (enemy.facing) {
@@ -192,28 +194,28 @@ function toolCheckBehind(
       behindPositions.push(
         { x: enemy.position.x, y: enemy.position.y - 1 },
         { x: enemy.position.x - 1, y: enemy.position.y - 1 },
-        { x: enemy.position.x + 1, y: enemy.position.y - 1 }
+        { x: enemy.position.x + 1, y: enemy.position.y - 1 },
       );
       break;
     case "S":
       behindPositions.push(
         { x: enemy.position.x, y: enemy.position.y + 1 },
         { x: enemy.position.x - 1, y: enemy.position.y + 1 },
-        { x: enemy.position.x + 1, y: enemy.position.y + 1 }
+        { x: enemy.position.x + 1, y: enemy.position.y + 1 },
       );
       break;
     case "E":
       behindPositions.push(
         { x: enemy.position.x - 1, y: enemy.position.y },
         { x: enemy.position.x - 1, y: enemy.position.y - 1 },
-        { x: enemy.position.x - 1, y: enemy.position.y + 1 }
+        { x: enemy.position.x - 1, y: enemy.position.y + 1 },
       );
       break;
     case "W":
       behindPositions.push(
         { x: enemy.position.x + 1, y: enemy.position.y },
         { x: enemy.position.x + 1, y: enemy.position.y - 1 },
-        { x: enemy.position.x + 1, y: enemy.position.y + 1 }
+        { x: enemy.position.x + 1, y: enemy.position.y + 1 },
       );
       break;
   }
@@ -268,13 +270,9 @@ function toolSimulateMove(ctx: GameContext, tx: number, ty: number): ToolResult 
   return { output: JSON.stringify(result) };
 }
 
-function toolGetPathOptions(
-  ctx: GameContext,
-  enemyId: string,
-  needBehind?: boolean
-): ToolResult {
+function toolGetPathOptions(ctx: GameContext, enemyId: string, needBehind?: boolean): ToolResult {
   const enemy = ctx.enemies.find(
-    (e) => e.id === enemyId || e.name.toLowerCase() === enemyId.toLowerCase()
+    (e) => e.id === enemyId || e.name.toLowerCase() === enemyId.toLowerCase(),
   );
   if (!enemy) {
     return { output: JSON.stringify({ error: `Enemy "${enemyId}" not found.` }) };
@@ -294,7 +292,7 @@ function toolGetPathOptions(
       if (Math.abs(dx) + Math.abs(dy) > maxMove) continue;
 
       const occupied = [...ctx.allies, ...ctx.enemies].some(
-        (u) => u.position.x === target.x && u.position.y === target.y
+        (u) => u.position.x === target.x && u.position.y === target.y,
       );
       if (occupied && !(dx === 0 && dy === 0)) continue;
 
@@ -326,7 +324,7 @@ function getEffectiveRange(ctx: GameContext): number {
   let range = ctx.unit.range;
   if (ctx.unit.class === "striker") {
     const hasAdjacentEnemy = ctx.enemies.some(
-      (e) => !e.cloaked && distance(ctx.unit.position, e.position) === 1
+      (e) => !e.cloaked && distance(ctx.unit.position, e.position) === 1,
     );
     if (!hasAdjacentEnemy) range += 1;
   }
@@ -337,10 +335,15 @@ function isBehindCheck(attackerPos: Position, target: UnitView): boolean {
   const dx = attackerPos.x - target.position.x;
   const dy = attackerPos.y - target.position.y;
   switch (target.facing) {
-    case "N": return dy < 0;
-    case "S": return dy > 0;
-    case "E": return dx < 0;
-    case "W": return dx > 0;
-    default: return false;
+    case "N":
+      return dy < 0;
+    case "S":
+      return dy > 0;
+    case "E":
+      return dx < 0;
+    case "W":
+      return dx > 0;
+    default:
+      return false;
   }
 }

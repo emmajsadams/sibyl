@@ -178,12 +178,16 @@ export class GameLogger {
       // HP snapshot
       const alive = turn.stateAfter.filter((u) => u.alive);
       const dead = turn.stateAfter.filter((u) => !u.alive);
-      lines.push(`  State: ${alive.map((u) => `${u.name} ${u.hp}/${u.maxHp}`).join(", ")}${dead.length ? ` | Dead: ${dead.map((u) => u.name).join(", ")}` : ""}`);
+      lines.push(
+        `  State: ${alive.map((u) => `${u.name} ${u.hp}/${u.maxHp}`).join(", ")}${dead.length ? ` | Dead: ${dead.map((u) => u.name).join(", ")}` : ""}`,
+      );
       lines.push("");
     }
 
     lines.push("## Result");
-    lines.push(`**${this.log.result.winner === "draw" ? "DRAW" : this.log.result.winner.toUpperCase() + " WINS"}** — ${this.log.result.reason}`);
+    lines.push(
+      `**${this.log.result.winner === "draw" ? "DRAW" : this.log.result.winner.toUpperCase() + " WINS"}** — ${this.log.result.reason}`,
+    );
     lines.push(`Total turns: ${this.log.result.totalTurns}`);
 
     writeFileSync(`${base}.md`, lines.join("\n"));
@@ -193,9 +197,13 @@ export class GameLogger {
 
 function descAction(action: UnitAction): string {
   switch (action.type) {
-    case "move": return `move(${action.target.x},${action.target.y})`;
-    case "ability": return `${action.ability}${action.target ? `(${action.target.x},${action.target.y})` : ""}${action.direction ? ` ${action.direction}` : ""}`;
-    case "wait": return "wait";
-    default: return "?";
+    case "move":
+      return `move(${action.target.x},${action.target.y})`;
+    case "ability":
+      return `${action.ability}${action.target ? `(${action.target.x},${action.target.y})` : ""}${action.direction ? ` ${action.direction}` : ""}`;
+    case "wait":
+      return "wait";
+    default:
+      return "?";
   }
 }

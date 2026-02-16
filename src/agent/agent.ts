@@ -36,7 +36,9 @@ function buildRecon(ctx: GameContext): string {
   if (ctx.unit.class === "specter") {
     for (const enemy of ctx.enemies) {
       if (!enemy.cloaked) {
-        recon.push(`check_behind(${enemy.name}): ${executeTool(ctx, "check_behind", { enemy_id: enemy.name }).output}`);
+        recon.push(
+          `check_behind(${enemy.name}): ${executeTool(ctx, "check_behind", { enemy_id: enemy.name }).output}`,
+        );
       }
     }
   }
@@ -49,7 +51,9 @@ function buildRecon(ctx: GameContext): string {
     // Sample up to 5 positions spread across the move options
     const sample = tiles.length <= 5 ? tiles : pickSpread(tiles, 5);
     for (const [x, y] of sample) {
-      recon.push(`simulate_move(${x},${y}): ${executeTool(ctx, "simulate_move", { target_x: x, target_y: y }).output}`);
+      recon.push(
+        `simulate_move(${x},${y}): ${executeTool(ctx, "simulate_move", { target_x: x, target_y: y }).output}`,
+      );
     }
   }
 
@@ -107,7 +111,7 @@ Decide your actions. Respond per the JSON format in your instructions.`;
 export async function getPlacement(
   units: { name: string; class: UnitClass }[],
   side: "player" | "opponent",
-  prompt: string
+  prompt: string,
 ): Promise<PlacementResponse> {
   const systemPrompt = buildPlacementPrompt(units, side);
 
@@ -144,7 +148,11 @@ function parseAgentResponse(text: string, unitName?: string): AgentResponse {
   const jsonMatch = jsonStr.match(/\{[\s\S]*\}/);
   if (!jsonMatch) {
     console.error(`  [agent] WARNING: ${unitName || "unit"} no JSON found, falling back to wait`);
-    return { thinking: text.slice(0, 200), firstAction: { type: "wait" }, secondAction: { type: "wait" } };
+    return {
+      thinking: text.slice(0, 200),
+      firstAction: { type: "wait" },
+      secondAction: { type: "wait" },
+    };
   }
   try {
     const parsed = JSON.parse(jsonMatch[0]);
@@ -154,8 +162,14 @@ function parseAgentResponse(text: string, unitName?: string): AgentResponse {
       secondAction: parsed.secondAction || { type: "wait" },
     };
   } catch {
-    console.error(`  [agent] WARNING: ${unitName || "unit"} JSON parse failed, falling back to wait`);
-    return { thinking: "parse error", firstAction: { type: "wait" }, secondAction: { type: "wait" } };
+    console.error(
+      `  [agent] WARNING: ${unitName || "unit"} JSON parse failed, falling back to wait`,
+    );
+    return {
+      thinking: "parse error",
+      firstAction: { type: "wait" },
+      secondAction: { type: "wait" },
+    };
   }
 }
 

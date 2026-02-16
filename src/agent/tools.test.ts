@@ -69,9 +69,7 @@ describe("get_valid_moves", () => {
     const ally = createUnit("a1", "A", "striker", "player", { x: 3, y: 2 }, "");
     const ctx = makeCtx({ unit: u, allies: [view(ally)] });
     const res = JSON.parse(executeTool(ctx, "get_valid_moves", {}).output);
-    const hasOccupied = res.tiles.some(
-      ([tx, ty]: number[]) => tx === 3 && ty === 2,
-    );
+    const hasOccupied = res.tiles.some(([tx, ty]: number[]) => tx === 3 && ty === 2);
     expect(hasOccupied).toBe(false);
   });
 });

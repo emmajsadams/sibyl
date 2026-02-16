@@ -23,13 +23,7 @@ export type Direction = "N" | "S" | "E" | "W";
 export type Side = "player" | "opponent";
 export type UnitStatus = "healthy" | "wounded" | "critical" | "dead";
 
-export type UnitClass =
-  | "sentinel"
-  | "specter"
-  | "oracle"
-  | "striker"
-  | "medic"
-  | "vector";
+export type UnitClass = "sentinel" | "specter" | "oracle" | "striker" | "medic" | "vector";
 
 export interface UnitStats {
   maxHp: number;
@@ -93,7 +87,13 @@ export interface Trap {
 export type UnitAction =
   | { type: "move"; target: Position }
   | { type: "attack"; target: Position }
-  | { type: "ability"; ability: string; target?: Position; direction?: Direction; addendum?: string }
+  | {
+      type: "ability";
+      ability: string;
+      target?: Position;
+      direction?: Direction;
+      addendum?: string;
+    }
   | { type: "wait" };
 
 export interface TurnAction {
@@ -139,7 +139,14 @@ export interface GameContext {
   turn: number;
   round: number;
   /** Full turn order for this round */
-  turnOrder: { id: string; name: string; class: UnitClass; side: Side; speed: number; hasActed: boolean }[];
+  turnOrder: {
+    id: string;
+    name: string;
+    class: UnitClass;
+    side: Side;
+    speed: number;
+    hasActed: boolean;
+  }[];
   lastTurnActions?: string[]; // only for Oracle
 }
 

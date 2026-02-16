@@ -23,7 +23,7 @@ export function createUnit(
   unitClass: UnitClass,
   side: Side,
   position: Position,
-  prompt: string
+  prompt: string,
 ): Unit {
   const stats = Stats[unitClass];
   return {
@@ -64,9 +64,7 @@ export function getUnit(state: GameState, id: string): Unit | undefined {
 }
 
 export function getLivingUnits(state: GameState, side?: Side): Unit[] {
-  return state.units.filter(
-    (u) => u.hp > 0 && (side === undefined || u.side === side)
-  );
+  return state.units.filter((u) => u.hp > 0 && (side === undefined || u.side === side));
 }
 
 export function getUnitStatus(unit: Unit): UnitStatus {
@@ -82,9 +80,7 @@ export function isValidPosition(pos: Position): boolean {
 }
 
 export function isOccupied(state: GameState, pos: Position): boolean {
-  return state.units.some(
-    (u) => u.hp > 0 && u.position.x === pos.x && u.position.y === pos.y
-  );
+  return state.units.some((u) => u.hp > 0 && u.position.x === pos.x && u.position.y === pos.y);
 }
 
 export function distance(a: Position, b: Position): number {
@@ -92,9 +88,7 @@ export function distance(a: Position, b: Position): number {
 }
 
 export function getUnitAt(state: GameState, pos: Position): Unit | undefined {
-  return state.units.find(
-    (u) => u.hp > 0 && u.position.x === pos.x && u.position.y === pos.y
-  );
+  return state.units.find((u) => u.hp > 0 && u.position.x === pos.x && u.position.y === pos.y);
 }
 
 export function isBehind(attacker: Position, target: Unit): boolean {
@@ -102,10 +96,14 @@ export function isBehind(attacker: Position, target: Unit): boolean {
   const dy = attacker.y - target.position.y;
   // If target faces N (+y), their back is south, attacker must be south (dy < 0)
   switch (target.facing) {
-    case "N": return dy < 0; // back is south
-    case "S": return dy > 0; // back is north
-    case "E": return dx < 0; // back is west
-    case "W": return dx > 0; // back is east
+    case "N":
+      return dy < 0; // back is south
+    case "S":
+      return dy > 0; // back is north
+    case "E":
+      return dx < 0; // back is west
+    case "W":
+      return dx > 0; // back is east
   }
 }
 
@@ -116,9 +114,7 @@ function isCloaked(unit: Unit): boolean {
 function isAdjacentToVector(state: GameState, unit: Unit): boolean {
   return getLivingUnits(state).some(
     (u) =>
-      u.class === "vector" &&
-      u.side !== unit.side &&
-      distance(u.position, unit.position) === 1
+      u.class === "vector" && u.side !== unit.side && distance(u.position, unit.position) === 1,
   );
 }
 
@@ -160,41 +156,36 @@ export function unitActed(state: GameState): void {
 export function buildGameContext(
   state: GameState,
   unit: Unit,
-  lastRoundLog?: string[]
+  lastRoundLog?: string[],
 ): GameContext {
   const allies = getLivingUnits(state, unit.side)
     .filter((u) => u.id !== unit.id)
     .map((u) => unitToView(u, unit));
 
-  const enemies = getLivingUnits(
-    state,
-    unit.side === "player" ? "opponent" : "player"
-  )
+  const enemies = getLivingUnits(state, unit.side === "player" ? "opponent" : "player")
     .filter((u) => !isCloaked(u))
     .map((u) => unitToView(u, unit));
 
-  const ownTraps = state.traps
-    .filter((t) => t.side === unit.side)
-    .map((t) => t.position);
+  const ownTraps = state.traps.filter((t) => t.side === unit.side).map((t) => t.position);
 
   // Build turn order info — who has acted and who hasn't
-  const actedIds = new Set(
-    state.turnStack.filter((id) => !state.currentTurnStack.includes(id))
-  );
-  const turnOrder = state.turnStack.map((id) => {
-    const u = getUnit(state, id);
-    return {
-      id,
-      name: u?.name || "?",
-      class: u?.class || "sentinel" as UnitClass,
-      side: u?.side || "player" as Side,
-      speed: u?.speed || 1,
-      hasActed: actedIds.has(id),
-    };
-  }).filter((u) => {
-    const unit2 = getUnit(state, u.id);
-    return unit2 && unit2.hp > 0;
-  });
+  const actedIds = new Set(state.turnStack.filter((id) => !state.currentTurnStack.includes(id)));
+  const turnOrder = state.turnStack
+    .map((id) => {
+      const u = getUnit(state, id);
+      return {
+        id,
+        name: u?.name || "?",
+        class: u?.class || ("sentinel" as UnitClass),
+        side: u?.side || ("player" as Side),
+        speed: u?.speed || 1,
+        hasActed: actedIds.has(id),
+      };
+    })
+    .filter((u) => {
+      const unit2 = getUnit(state, u.id);
+      return unit2 && unit2.hp > 0;
+    });
 
   return {
     unit,
@@ -216,10 +207,7 @@ function unitToView(target: Unit, viewer: Unit): UnitView {
     class: target.class,
     position: target.position,
     status: getUnitStatus(target),
-    hp:
-      viewer.class === "medic" && target.side === viewer.side
-        ? target.hp
-        : undefined,
+    hp: viewer.class === "medic" && target.side === viewer.side ? target.hp : undefined,
     facing: target.facing,
     cloaked: isCloaked(target),
     speed: target.speed,
@@ -228,38 +216,32 @@ function unitToView(target: Unit, viewer: Unit): UnitView {
 
 // === Placement ===
 
-export function placeUnit(
-  state: GameState,
-  unit: Unit,
-  pos: Position
-): string | null {
-  const validRows =
-    unit.side === "player" ? [0, 1] : [GRID_HEIGHT - 2, GRID_HEIGHT - 1];
+export function placeUnit(state: GameState, unit: Unit, pos: Position): string | null {
+  const validRows = unit.side === "player" ? [0, 1] : [GRID_HEIGHT - 2, GRID_HEIGHT - 1];
   if (!validRows.includes(pos.y)) return "Invalid row for placement";
   if (!isValidPosition(pos)) return "Position out of bounds";
   if (isOccupied(state, pos)) return "Position occupied";
   unit.position = pos;
   if (!state.units.includes(unit)) state.units.push(unit);
-  emit({ type: "unit_placed", unitId: unit.id, side: unit.side, class: unit.class, position: { ...pos } });
+  emit({
+    type: "unit_placed",
+    unitId: unit.id,
+    side: unit.side,
+    class: unit.class,
+    position: { ...pos },
+  });
   return null;
 }
 
 // === Movement ===
 
-export function moveUnit(
-  state: GameState,
-  unit: Unit,
-  target: Position
-): string | null {
+export function moveUnit(state: GameState, unit: Unit, target: Position): string | null {
   if (!isValidPosition(target)) return "Out of bounds";
 
-  const maxMove = unit.statusEffects.some((e) => e.type === "suppressed")
-    ? 1
-    : unit.movement;
+  const maxMove = unit.statusEffects.some((e) => e.type === "suppressed") ? 1 : unit.movement;
   const dist = distance(unit.position, target);
   if (dist > maxMove) return `Can only move ${maxMove} tiles`;
-  if (isOccupied(state, target) && unit.class !== "specter")
-    return "Position occupied";
+  if (isOccupied(state, target) && unit.class !== "specter") return "Position occupied";
   if (unit.class === "specter" && isOccupied(state, target))
     return "Specter can move through but not end on occupied tile";
 
@@ -278,7 +260,7 @@ export function moveUnit(
 
   // Check traps
   const trap = state.traps.find(
-    (t) => t.position.x === target.x && t.position.y === target.y && t.side !== unit.side
+    (t) => t.position.x === target.x && t.position.y === target.y && t.side !== unit.side,
   );
   let triggeredTrap = false;
   if (trap) {
@@ -286,13 +268,27 @@ export function moveUnit(
     state.traps = state.traps.filter((t) => t !== trap);
     state.log.push(`${unit.name} triggered a trap! (-2 HP)`);
     triggeredTrap = true;
-    emit({ type: "trap_triggered", unitId: unit.id, position: { ...target }, damage: 2, unitHpAfter: unit.hp });
+    emit({
+      type: "trap_triggered",
+      unitId: unit.id,
+      position: { ...target },
+      damage: 2,
+      unitHpAfter: unit.hp,
+    });
     if (unit.hp <= 0) {
       emit({ type: "unit_killed", unitId: unit.id, killerId: trap.owner, ability: "trap" });
     }
   }
 
-  emit({ type: "unit_moved", unitId: unit.id, from, to: { ...target }, newFacing: unit.facing, triggeredTrap, trapDamage: triggeredTrap ? 2 : undefined });
+  emit({
+    type: "unit_moved",
+    unitId: unit.id,
+    from,
+    to: { ...target },
+    newFacing: unit.facing,
+    triggeredTrap,
+    trapDamage: triggeredTrap ? 2 : undefined,
+  });
 
   // Remove fortified
   if (unit.statusEffects.some((e) => e.type === "fortified")) {
@@ -311,15 +307,29 @@ export function useAbility(
   ability: string,
   target?: Position,
   direction?: string,
-  addendum?: string
+  addendum?: string,
 ): string | null {
   // Denial check - only blocks specific abilities, not movement or basic attacks
-  const deniedAbilities = ["cloak", "breach", "scan", "precision_shot", "trap", "patch", "overclock"];
+  const deniedAbilities = [
+    "cloak",
+    "breach",
+    "scan",
+    "precision_shot",
+    "trap",
+    "patch",
+    "overclock",
+  ];
   if (deniedAbilities.includes(ability) && isAdjacentToVector(state, unit)) {
     const blocker = getLivingUnits(state).find(
-      (u) => u.class === "vector" && u.side !== unit.side && distance(u.position, unit.position) === 1
+      (u) =>
+        u.class === "vector" && u.side !== unit.side && distance(u.position, unit.position) === 1,
     );
-    emit({ type: "denial_blocked", unitId: unit.id, blockedAbility: ability, vectorId: blocker?.id || "unknown" });
+    emit({
+      type: "denial_blocked",
+      unitId: unit.id,
+      blockedAbility: ability,
+      vectorId: blocker?.id || "unknown",
+    });
     return `Cannot use ${ability} — adjacent to enemy Vector (Denial)`;
   }
 
@@ -327,7 +337,12 @@ export function useAbility(
   if (ability !== "cloak" && ability !== "shadow_strike") {
     if (unit.statusEffects.some((e) => e.type === "cloaked")) {
       unit.statusEffects = unit.statusEffects.filter((e) => e.type !== "cloaked");
-      emit({ type: "status_removed", unitId: unit.id, effectType: "cloaked", reason: "ability_break" });
+      emit({
+        type: "status_removed",
+        unitId: unit.id,
+        effectType: "cloaked",
+        reason: "ability_break",
+      });
     }
   }
 
@@ -365,11 +380,7 @@ export function useAbility(
   }
 }
 
-function abilityBasicAttack(
-  state: GameState,
-  unit: Unit,
-  target?: Position
-): string | null {
+function abilityBasicAttack(state: GameState, unit: Unit, target?: Position): string | null {
   if (!target) return "Must specify target";
   const enemy = getUnitAt(state, target);
   if (!enemy) return "No unit at target";
@@ -378,17 +389,23 @@ function abilityBasicAttack(
   if (distance(unit.position, enemy.position) > 1) return "Must be adjacent";
   const dmg = applyDamage(enemy, 1);
   const friendly = enemy.side === unit.side;
-  state.log.push(`${unit.name} attacks ${enemy.name} (-${dmg} HP)${friendly ? " [FRIENDLY FIRE]" : ""}`);
-  emit({ type: "damage_dealt", sourceId: unit.id, targetId: enemy.id, amount: dmg, ability: "attack", targetHpAfter: enemy.hp });
-  if (enemy.hp <= 0) emit({ type: "unit_killed", unitId: enemy.id, killerId: unit.id, ability: "attack" });
+  state.log.push(
+    `${unit.name} attacks ${enemy.name} (-${dmg} HP)${friendly ? " [FRIENDLY FIRE]" : ""}`,
+  );
+  emit({
+    type: "damage_dealt",
+    sourceId: unit.id,
+    targetId: enemy.id,
+    amount: dmg,
+    ability: "attack",
+    targetHpAfter: enemy.hp,
+  });
+  if (enemy.hp <= 0)
+    emit({ type: "unit_killed", unitId: enemy.id, killerId: unit.id, ability: "attack" });
   return null;
 }
 
-function abilityShadowStrike(
-  state: GameState,
-  unit: Unit,
-  target?: Position
-): string | null {
+function abilityShadowStrike(state: GameState, unit: Unit, target?: Position): string | null {
   if (unit.class !== "specter") return "Only Specter can use Shadow Strike";
   if (!target) return "Must specify target";
   const enemy = getUnitAt(state, target);
@@ -396,8 +413,16 @@ function abilityShadowStrike(
   if (distance(unit.position, enemy.position) > 1) return "Must be adjacent";
   const dmg = applyDamage(enemy, 2);
   state.log.push(`${unit.name} shadow strikes ${enemy.name} (-${dmg} HP)`);
-  emit({ type: "damage_dealt", sourceId: unit.id, targetId: enemy.id, amount: dmg, ability: "shadow_strike", targetHpAfter: enemy.hp });
-  if (enemy.hp <= 0) emit({ type: "unit_killed", unitId: enemy.id, killerId: unit.id, ability: "shadow_strike" });
+  emit({
+    type: "damage_dealt",
+    sourceId: unit.id,
+    targetId: enemy.id,
+    amount: dmg,
+    ability: "shadow_strike",
+    targetHpAfter: enemy.hp,
+  });
+  if (enemy.hp <= 0)
+    emit({ type: "unit_killed", unitId: enemy.id, killerId: unit.id, ability: "shadow_strike" });
   // Shadow Strike does NOT break cloak (unique to Specter)
   return null;
 }
@@ -405,7 +430,7 @@ function abilityShadowStrike(
 function abilityShieldWall(
   state: GameState,
   unit: Unit,
-  direction?: "N" | "S" | "E" | "W"
+  direction?: "N" | "S" | "E" | "W",
 ): string | null {
   if (unit.class !== "sentinel") return "Only Sentinel can use Shield Wall";
   if (!direction) return "Must specify direction";
@@ -416,11 +441,7 @@ function abilityShieldWall(
   return null;
 }
 
-function abilityIntercept(
-  state: GameState,
-  unit: Unit,
-  target?: Position
-): string | null {
+function abilityIntercept(state: GameState, unit: Unit, target?: Position): string | null {
   if (unit.class !== "sentinel") return "Only Sentinel can use Intercept";
   if (!target) return "Must specify ally position to protect";
   const ally = getUnitAt(state, target);
@@ -443,7 +464,7 @@ function abilityBreach(
   state: GameState,
   unit: Unit,
   target?: Position,
-  addendum?: string
+  addendum?: string,
 ): string | null {
   if (unit.class !== "specter") return "Only Specter can use Breach";
   if (!target) return "Must specify target";
@@ -456,9 +477,7 @@ function abilityBreach(
   // Breach COMPLETELY REPLACES the target's prompt
   enemy.prompt = addendum;
   enemy.breachAddendum = undefined;
-  state.log.push(
-    `${unit.name} breaches ${enemy.name}'s prompt! (replaced)`
-  );
+  state.log.push(`${unit.name} breaches ${enemy.name}'s prompt! (replaced)`);
   emit({ type: "breach", attackerId: unit.id, targetId: enemy.id, oldPrompt, newPrompt: addendum });
   return null;
 }
@@ -473,18 +492,14 @@ function abilityCloak(unit: Unit): string | null {
   return null;
 }
 
-function abilityScan(
-  state: GameState,
-  unit: Unit,
-  target?: Position
-): string | null {
+function abilityScan(state: GameState, unit: Unit, target?: Position): string | null {
   if (unit.class !== "oracle") return "Only Oracle can use Scan";
   if (!target) return "Must specify target";
   const enemy = getUnitAt(state, target);
   if (!enemy || enemy.side === unit.side) return "No enemy at target";
   if (distance(unit.position, enemy.position) > 4) return "Out of range (max 4)";
   state.log.push(
-    `${unit.name} scans ${enemy.name}: "${enemy.prompt}${enemy.breachAddendum ? " [BREACHED: " + enemy.breachAddendum + "]" : ""}"`
+    `${unit.name} scans ${enemy.name}: "${enemy.prompt}${enemy.breachAddendum ? " [BREACHED: " + enemy.breachAddendum + "]" : ""}"`,
   );
   return null;
 }
@@ -493,7 +508,7 @@ function abilityRecalibrate(
   state: GameState,
   unit: Unit,
   target?: Position,
-  addendum?: string
+  addendum?: string,
 ): string | null {
   if (unit.class !== "oracle") return "Only Oracle can use Recalibrate";
   if (!target) return "Must specify ally position";
@@ -505,11 +520,7 @@ function abilityRecalibrate(
   return null;
 }
 
-function abilityPrecisionShot(
-  state: GameState,
-  unit: Unit,
-  target?: Position
-): string | null {
+function abilityPrecisionShot(state: GameState, unit: Unit, target?: Position): string | null {
   if (unit.class !== "striker") return "Only Striker can use Precision Shot";
   if (!target) return "Must specify target";
   const enemy = getUnitAt(state, target);
@@ -519,26 +530,31 @@ function abilityPrecisionShot(
   const range =
     unit.range +
     (getLivingUnits(state).filter(
-      (u) => u.side !== unit.side && distance(u.position, unit.position) === 1
+      (u) => u.side !== unit.side && distance(u.position, unit.position) === 1,
     ).length === 0
       ? 1
       : 0); // High Ground passive
-  if (distance(unit.position, enemy.position) > range)
-    return "Out of range";
+  if (distance(unit.position, enemy.position) > range) return "Out of range";
   const baseDmg = unit.movedThisTurn ? 1 : 2;
   const dmg = applyDamage(enemy, baseDmg);
   const friendly = enemy.side === unit.side;
-  state.log.push(`${unit.name} fires Precision Shot at ${enemy.name} (-${dmg} HP)${unit.movedThisTurn ? " [moved]" : ""}${friendly ? " [FRIENDLY FIRE]" : ""}`);
-  emit({ type: "damage_dealt", sourceId: unit.id, targetId: enemy.id, amount: dmg, ability: "precision_shot", targetHpAfter: enemy.hp });
-  if (enemy.hp <= 0) emit({ type: "unit_killed", unitId: enemy.id, killerId: unit.id, ability: "precision_shot" });
+  state.log.push(
+    `${unit.name} fires Precision Shot at ${enemy.name} (-${dmg} HP)${unit.movedThisTurn ? " [moved]" : ""}${friendly ? " [FRIENDLY FIRE]" : ""}`,
+  );
+  emit({
+    type: "damage_dealt",
+    sourceId: unit.id,
+    targetId: enemy.id,
+    amount: dmg,
+    ability: "precision_shot",
+    targetHpAfter: enemy.hp,
+  });
+  if (enemy.hp <= 0)
+    emit({ type: "unit_killed", unitId: enemy.id, killerId: unit.id, ability: "precision_shot" });
   return null;
 }
 
-function abilitySuppressingFire(
-  state: GameState,
-  unit: Unit,
-  target?: Position
-): string | null {
+function abilitySuppressingFire(state: GameState, unit: Unit, target?: Position): string | null {
   if (unit.class !== "striker") return "Only Striker can use Suppressing Fire";
   if (!target) return "Must specify target direction tile";
   const dx = Math.sign(target.x - unit.position.x);
@@ -551,21 +567,35 @@ function abilitySuppressingFire(
       hit.statusEffects.push({ type: "suppressed" });
       const friendly = hit.side === unit.side;
       state.log.push(
-        `${unit.name} suppresses ${hit.name} (-${dmg} HP, movement reduced)${friendly ? " [FRIENDLY FIRE]" : ""}`
+        `${unit.name} suppresses ${hit.name} (-${dmg} HP, movement reduced)${friendly ? " [FRIENDLY FIRE]" : ""}`,
       );
-      emit({ type: "damage_dealt", sourceId: unit.id, targetId: hit.id, amount: dmg, ability: "suppressing_fire", targetHpAfter: hit.hp });
-      emit({ type: "status_applied", unitId: hit.id, effect: { type: "suppressed" }, source: "suppressing_fire" });
-      if (hit.hp <= 0) emit({ type: "unit_killed", unitId: hit.id, killerId: unit.id, ability: "suppressing_fire" });
+      emit({
+        type: "damage_dealt",
+        sourceId: unit.id,
+        targetId: hit.id,
+        amount: dmg,
+        ability: "suppressing_fire",
+        targetHpAfter: hit.hp,
+      });
+      emit({
+        type: "status_applied",
+        unitId: hit.id,
+        effect: { type: "suppressed" },
+        source: "suppressing_fire",
+      });
+      if (hit.hp <= 0)
+        emit({
+          type: "unit_killed",
+          unitId: hit.id,
+          killerId: unit.id,
+          ability: "suppressing_fire",
+        });
     }
   }
   return null;
 }
 
-function abilityPatch(
-  state: GameState,
-  unit: Unit,
-  target?: Position
-): string | null {
+function abilityPatch(state: GameState, unit: Unit, target?: Position): string | null {
   if (unit.class !== "medic") return "Only Medic can use Patch";
   if (!target) return "Must specify ally position";
   const ally = getUnitAt(state, target);
@@ -576,16 +606,21 @@ function abilityPatch(
   const healed = Math.min(2, ally.maxHp - ally.hp);
   ally.hp += healed;
   unit.healsUsed = usedHeals + 1;
-  state.log.push(`${unit.name} patches ${ally.name} (+${healed} HP) [${3 - usedHeals - 1} heals left]`);
-  emit({ type: "healing_done", sourceId: unit.id, targetId: ally.id, amount: healed, targetHpAfter: ally.hp, healsRemaining: 3 - usedHeals - 1 });
+  state.log.push(
+    `${unit.name} patches ${ally.name} (+${healed} HP) [${3 - usedHeals - 1} heals left]`,
+  );
+  emit({
+    type: "healing_done",
+    sourceId: unit.id,
+    targetId: ally.id,
+    amount: healed,
+    targetHpAfter: ally.hp,
+    healsRemaining: 3 - usedHeals - 1,
+  });
   return null;
 }
 
-function abilityOverclock(
-  state: GameState,
-  unit: Unit,
-  target?: Position
-): string | null {
+function abilityOverclock(state: GameState, unit: Unit, target?: Position): string | null {
   if (unit.class !== "medic") return "Only Medic can use Overclock";
   if (!target) return "Must specify ally position";
   const ally = getUnitAt(state, target);
@@ -595,16 +630,19 @@ function abilityOverclock(
   const effect = { type: "overclocked" as const };
   ally.statusEffects.push(effect);
   state.log.push(`${unit.name} overclocks ${ally.name} (-1 HP, double ability next turn)`);
-  emit({ type: "damage_dealt", sourceId: unit.id, targetId: ally.id, amount: 1, ability: "overclock", targetHpAfter: ally.hp });
+  emit({
+    type: "damage_dealt",
+    sourceId: unit.id,
+    targetId: ally.id,
+    amount: 1,
+    ability: "overclock",
+    targetHpAfter: ally.hp,
+  });
   emit({ type: "status_applied", unitId: ally.id, effect, source: "overclock" });
   return null;
 }
 
-function abilityTrap(
-  state: GameState,
-  unit: Unit,
-  target?: Position
-): string | null {
+function abilityTrap(state: GameState, unit: Unit, target?: Position): string | null {
   if (unit.class !== "vector") return "Only Vector can use Trap";
   if (!target) return "Must specify position";
   if (distance(unit.position, target) > 2) return "Out of range (max 2)";
@@ -619,13 +657,21 @@ function abilityTrap(
 function abilityPulse(state: GameState, unit: Unit): string | null {
   if (unit.class !== "vector") return "Only Vector can use Pulse";
   const affected = state.units.filter(
-    (u) => u.hp > 0 && u.id !== unit.id && distance(u.position, unit.position) <= 1
+    (u) => u.hp > 0 && u.id !== unit.id && distance(u.position, unit.position) <= 1,
   );
   for (const target of affected) {
     const dmg = applyDamage(target, 1);
     state.log.push(`${unit.name}'s Pulse hits ${target.name} (-${dmg} HP)`);
-    emit({ type: "damage_dealt", sourceId: unit.id, targetId: target.id, amount: dmg, ability: "pulse", targetHpAfter: target.hp });
-    if (target.hp <= 0) emit({ type: "unit_killed", unitId: target.id, killerId: unit.id, ability: "pulse" });
+    emit({
+      type: "damage_dealt",
+      sourceId: unit.id,
+      targetId: target.id,
+      amount: dmg,
+      ability: "pulse",
+      targetHpAfter: target.hp,
+    });
+    if (target.hp <= 0)
+      emit({ type: "unit_killed", unitId: target.id, killerId: unit.id, ability: "pulse" });
   }
   return null;
 }
@@ -674,9 +720,33 @@ export function cleanupAfterUnitActs(state: GameState, unit: Unit): void {
       return true;
     }
     // Remove temporary per-action effects
-    if (e.type === "suppressed") { emit({ type: "status_removed", unitId: unit.id, effectType: "suppressed", reason: "turn_end" }); return false; }
-    if (e.type === "shieldWall") { emit({ type: "status_removed", unitId: unit.id, effectType: "shieldWall", reason: "turn_end" }); return false; }
-    if (e.type === "overclocked") { emit({ type: "status_removed", unitId: unit.id, effectType: "overclocked", reason: "turn_end" }); return false; }
+    if (e.type === "suppressed") {
+      emit({
+        type: "status_removed",
+        unitId: unit.id,
+        effectType: "suppressed",
+        reason: "turn_end",
+      });
+      return false;
+    }
+    if (e.type === "shieldWall") {
+      emit({
+        type: "status_removed",
+        unitId: unit.id,
+        effectType: "shieldWall",
+        reason: "turn_end",
+      });
+      return false;
+    }
+    if (e.type === "overclocked") {
+      emit({
+        type: "status_removed",
+        unitId: unit.id,
+        effectType: "overclocked",
+        reason: "turn_end",
+      });
+      return false;
+    }
     return true;
   });
 

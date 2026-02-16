@@ -40,21 +40,28 @@ async function callClaude(systemPrompt: string, userPrompt: string): Promise<str
 
     const args = [
       "--print",
-      "--model", CLAUDE_MODEL,
+      "--model",
+      CLAUDE_MODEL,
       "--no-session-persistence",
-      "--output-format", "text",
+      "--output-format",
+      "text",
     ];
 
+    const { ANTHROPIC_API_KEY: _, ...cleanEnv } = process.env;
     const proc = spawn("claude", args, {
       stdio: ["pipe", "pipe", "pipe"],
-      env: { ...process.env },
+      env: cleanEnv,
     });
 
     let stdout = "";
     let stderr = "";
 
-    proc.stdout.on("data", (d: Buffer) => { stdout += d.toString(); });
-    proc.stderr.on("data", (d: Buffer) => { stderr += d.toString(); });
+    proc.stdout.on("data", (d: Buffer) => {
+      stdout += d.toString();
+    });
+    proc.stderr.on("data", (d: Buffer) => {
+      stderr += d.toString();
+    });
 
     proc.on("close", (code) => {
       if (code !== 0) {
@@ -119,9 +126,9 @@ function gatherRecon(ctx: GameContext): string {
   if (ctx.enemies.length > 0 && validMoves.length > 0) {
     const scored = validMoves.map((m) => {
       const minDist = Math.min(
-        ...ctx.enemies.filter((e) => !e.cloaked).map((e) =>
-          Math.abs(m.x - e.position.x) + Math.abs(m.y - e.position.y)
-        )
+        ...ctx.enemies
+          .filter((e) => !e.cloaked)
+          .map((e) => Math.abs(m.x - e.position.x) + Math.abs(m.y - e.position.y)),
       );
       return { ...m, minDist };
     });
@@ -174,7 +181,7 @@ IMPORTANT: Output ONLY the JSON code block. No other text.`;
 export async function getPlacement(
   units: { name: string; class: UnitClass }[],
   side: "player" | "opponent",
-  prompt: string
+  prompt: string,
 ): Promise<PlacementResponse> {
   const systemPrompt = buildPlacementPrompt(units, side);
 
@@ -202,9 +209,15 @@ function parseAgentResponse(text: string, unitName?: string): AgentResponse {
   const jsonStr = codeBlockMatch ? codeBlockMatch[1]! : text;
   const jsonMatch = jsonStr.match(/\{[\s\S]*\}/);
   if (!jsonMatch) {
-    console.error(`  [cli-agent] WARNING: ${unitName || "unit"} no JSON found, falling back to wait`);
+    console.error(
+      `  [cli-agent] WARNING: ${unitName || "unit"} no JSON found, falling back to wait`,
+    );
     console.error(`  [cli-agent] Raw output: ${text.slice(0, 300)}`);
-    return { thinking: text.slice(0, 200), firstAction: { type: "wait" }, secondAction: { type: "wait" } };
+    return {
+      thinking: text.slice(0, 200),
+      firstAction: { type: "wait" },
+      secondAction: { type: "wait" },
+    };
   }
   try {
     const parsed = JSON.parse(jsonMatch[0]);
@@ -215,7 +228,11 @@ function parseAgentResponse(text: string, unitName?: string): AgentResponse {
     };
   } catch {
     console.error(`  [cli-agent] WARNING: ${unitName || "unit"} JSON parse failed`);
-    return { thinking: "parse error", firstAction: { type: "wait" }, secondAction: { type: "wait" } };
+    return {
+      thinking: "parse error",
+      firstAction: { type: "wait" },
+      secondAction: { type: "wait" },
+    };
   }
 }
 

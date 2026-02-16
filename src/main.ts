@@ -27,9 +27,7 @@ import { generateRandomConfig } from "./training/squads";
 import type { GameState, UnitClass, Unit, UnitAction, UnitConfig, GameConfig } from "./types";
 import { readFileSync } from "fs";
 
-const CLASSES: UnitClass[] = [
-  "sentinel", "specter", "oracle", "striker", "medic", "vector",
-];
+const CLASSES: UnitClass[] = ["sentinel", "specter", "oracle", "striker", "medic", "vector"];
 
 function loadConfig(path: string): GameConfig {
   return JSON.parse(readFileSync(path, "utf-8"));
@@ -47,7 +45,7 @@ async function selectSquad(): Promise<UnitConfig[]> {
   for (let i = 0; i < 3; i++) {
     const input = await ask(`Pick unit ${i + 1} (1-6): `);
     const idx = parseInt(input) - 1;
-    const cls = (idx >= 0 && idx < CLASSES.length) ? CLASSES[idx]! : "sentinel" as UnitClass;
+    const cls = idx >= 0 && idx < CLASSES.length ? CLASSES[idx]! : ("sentinel" as UnitClass);
     const name = await ask(`Name for your ${cls}: `);
     console.log(`\x1b[36m${name || cls}\x1b[0m (${cls.toUpperCase()}) — write prompt:`);
     const prompt = await askMultiline("> ");
@@ -65,7 +63,7 @@ async function runPlacementPhase(
   playerPlacementPrompt: string,
   opponentUnits: UnitConfig[],
   opponentPlacementPrompt: string,
-  interactive: boolean
+  interactive: boolean,
 ): Promise<void> {
   console.log("\n\x1b[1m═══ PLACEMENT PHASE ═══\x1b[0m\n");
 
@@ -74,7 +72,14 @@ async function runPlacementPhase(
     for (const pick of playerUnits) {
       const input = await ask(`Place ${pick.name} (${pick.class}) at x,y: `);
       const [x, y] = input.split(",").map((n) => parseInt(n.trim()));
-      const unit = createUnit(`p-${pick.name}`, pick.name, pick.class, "player", { x: x || 0, y: y || 0 }, pick.prompt);
+      const unit = createUnit(
+        `p-${pick.name}`,
+        pick.name,
+        pick.class,
+        "player",
+        { x: x || 0, y: y || 0 },
+        pick.prompt,
+      );
       const err = placeUnit(state, unit, unit.position);
       if (err) {
         unit.position = { x: playerUnits.indexOf(pick) * 2, y: 0 };
@@ -84,11 +89,22 @@ async function runPlacementPhase(
     }
   } else {
     console.log("Player placing units...");
-    const pp = await getPlacement(playerUnits.map((u) => ({ name: u.name, class: u.class })), "player", playerPlacementPrompt);
+    const pp = await getPlacement(
+      playerUnits.map((u) => ({ name: u.name, class: u.class })),
+      "player",
+      playerPlacementPrompt,
+    );
     for (const p of pp.placements) {
       const pick = playerUnits.find((u) => u.name === p.name);
       if (!pick) continue;
-      const unit = createUnit(`p-${pick.name}`, pick.name, pick.class, "player", p.position, pick.prompt);
+      const unit = createUnit(
+        `p-${pick.name}`,
+        pick.name,
+        pick.class,
+        "player",
+        p.position,
+        pick.prompt,
+      );
       const err = placeUnit(state, unit, unit.position);
       if (err) {
         unit.position = { x: playerUnits.indexOf(pick) * 2, y: 0 };
@@ -99,11 +115,22 @@ async function runPlacementPhase(
   }
 
   console.log("\nOpponent placing units...");
-  const op = await getPlacement(opponentUnits.map((u) => ({ name: u.name, class: u.class })), "opponent", opponentPlacementPrompt);
+  const op = await getPlacement(
+    opponentUnits.map((u) => ({ name: u.name, class: u.class })),
+    "opponent",
+    opponentPlacementPrompt,
+  );
   for (const p of op.placements) {
     const pick = opponentUnits.find((u) => u.name === p.name);
     if (!pick) continue;
-    const unit = createUnit(`o-${pick.name}`, pick.name, pick.class, "opponent", p.position, pick.prompt);
+    const unit = createUnit(
+      `o-${pick.name}`,
+      pick.name,
+      pick.class,
+      "opponent",
+      p.position,
+      pick.prompt,
+    );
     const err = placeUnit(state, unit, unit.position);
     if (err) {
       unit.position = { x: opponentUnits.indexOf(pick) * 2, y: 5 };
@@ -115,30 +142,59 @@ async function runPlacementPhase(
 
 // === Action Helpers ===
 
-function actionToRecord(action: UnitAction): { type: string; ability?: string; target?: { x: number; y: number }; direction?: "N" | "S" | "E" | "W" } {
+function actionToRecord(action: UnitAction): {
+  type: string;
+  ability?: string;
+  target?: { x: number; y: number };
+  direction?: "N" | "S" | "E" | "W";
+} {
   switch (action.type) {
-    case "move": return { type: "move", target: action.target };
-    case "ability": return { type: "ability", ability: action.ability, target: action.target, direction: action.direction };
-    case "wait": return { type: "wait" };
-    default: return { type: "unknown" };
+    case "move":
+      return { type: "move", target: action.target };
+    case "ability":
+      return {
+        type: "ability",
+        ability: action.ability,
+        target: action.target,
+        direction: action.direction,
+      };
+    case "wait":
+      return { type: "wait" };
+    default:
+      return { type: "unknown" };
   }
 }
 
 function executeAction(state: GameState, unit: Unit, action: UnitAction): string | null {
   switch (action.type) {
-    case "move": return moveUnit(state, unit, action.target);
-    case "ability": return useAbility(state, unit, action.ability, action.target, action.direction, action.addendum);
-    case "wait": return null;
-    default: return "Unknown action";
+    case "move":
+      return moveUnit(state, unit, action.target);
+    case "ability":
+      return useAbility(
+        state,
+        unit,
+        action.ability,
+        action.target,
+        action.direction,
+        action.addendum,
+      );
+    case "wait":
+      return null;
+    default:
+      return "Unknown action";
   }
 }
 
 function describeAction(action: UnitAction): string {
   switch (action.type) {
-    case "move": return `move → (${action.target.x},${action.target.y})`;
-    case "ability": return `${action.ability}${action.target ? ` → (${action.target.x},${action.target.y})` : ""}${action.direction ? ` facing ${action.direction}` : ""}`;
-    case "wait": return "wait";
-    default: return "?";
+    case "move":
+      return `move → (${action.target.x},${action.target.y})`;
+    case "ability":
+      return `${action.ability}${action.target ? ` → (${action.target.x},${action.target.y})` : ""}${action.direction ? ` facing ${action.direction}` : ""}`;
+    case "wait":
+      return "wait";
+    default:
+      return "?";
   }
 }
 
@@ -153,7 +209,9 @@ async function executeUnitTurn(
   const ctx = buildGameContext(state, unit, lastRoundLog);
   const sideLabel = unit.side === "player" ? "\x1b[36m" : "\x1b[31m";
 
-  process.stdout.write(`  ${sideLabel}${unit.name}\x1b[0m \x1b[2m(${unit.class} spd:${unit.speed})\x1b[0m thinking...`);
+  process.stdout.write(
+    `  ${sideLabel}${unit.name}\x1b[0m \x1b[2m(${unit.class} spd:${unit.speed})\x1b[0m thinking...`,
+  );
 
   try {
     const t0 = Date.now();
@@ -186,7 +244,14 @@ async function executeUnitTurn(
       actions.push(describeAction(response.secondAction));
     }
 
-    logger.logAction(unit, response.thinking, response.firstAction, err1, response.secondAction, err2);
+    logger.logAction(
+      unit,
+      response.thinking,
+      response.firstAction,
+      err1,
+      response.secondAction,
+      err2,
+    );
 
     const summary = `${sideLabel}${unit.name}\x1b[0m: ${actions.join(" → ")}`;
     const log = `${unit.name}: ${actions.join(" → ")}`;
@@ -220,18 +285,39 @@ async function main() {
     interactive = false;
     console.log(`  Config: ${configPath}`);
     console.log(`  Agent:  ${USE_CLI ? "claude CLI (subscription)" : "API (credits)"}`);
-    console.log(`  ${"\x1b[36m"}Player:${"\x1b[0m"}   ${gameConfig.player.units.map((u) => `${u.name} (${u.class})`).join(" · ")}`);
-    console.log(`  ${"\x1b[31m"}Opponent:${"\x1b[0m"} ${gameConfig.opponent.units.map((u) => `${u.name} (${u.class})`).join(" · ")}`);
+    console.log(
+      `  ${"\x1b[36m"}Player:${"\x1b[0m"}   ${gameConfig.player.units.map((u) => `${u.name} (${u.class})`).join(" · ")}`,
+    );
+    console.log(
+      `  ${"\x1b[31m"}Opponent:${"\x1b[0m"} ${gameConfig.opponent.units.map((u) => `${u.name} (${u.class})`).join(" · ")}`,
+    );
   } else if (USE_CLI) {
     const playerUnits = await selectSquad();
     const opponentUnits: UnitConfig[] = [
-      { name: "Guard", class: "sentinel", prompt: "Advance toward the nearest enemy. Use shield_wall facing the direction with the most enemies." },
-      { name: "Sniper", class: "striker", prompt: "Stay at range. Use precision_shot on the lowest HP enemy. Retreat if enemies close in." },
-      { name: "Field Doc", class: "medic", prompt: "Stay behind Guard. Patch the most injured ally. If all healthy, overclock Sniper." },
+      {
+        name: "Guard",
+        class: "sentinel",
+        prompt:
+          "Advance toward the nearest enemy. Use shield_wall facing the direction with the most enemies.",
+      },
+      {
+        name: "Sniper",
+        class: "striker",
+        prompt:
+          "Stay at range. Use precision_shot on the lowest HP enemy. Retreat if enemies close in.",
+      },
+      {
+        name: "Field Doc",
+        class: "medic",
+        prompt: "Stay behind Guard. Patch the most injured ally. If all healthy, overclock Sniper.",
+      },
     ];
     gameConfig = {
       player: { units: playerUnits, placementPrompt: "Place units strategically." },
-      opponent: { units: opponentUnits, placementPrompt: "Place Guard center front. Sniper back. Field Doc behind Guard." },
+      opponent: {
+        units: opponentUnits,
+        placementPrompt: "Place Guard center front. Sniper back. Field Doc behind Guard.",
+      },
     };
     interactive = true;
   } else {
@@ -239,8 +325,12 @@ async function main() {
     interactive = false;
     console.log("  Config: random squad generation");
     console.log(`  Agent:  ${USE_CLI ? "claude CLI (subscription)" : "API (credits)"}`);
-    console.log(`  ${"\x1b[36m"}Player:${"\x1b[0m"}   ${gameConfig.player.units.map((u) => `${u.name} (${u.class})`).join(" · ")}`);
-    console.log(`  ${"\x1b[31m"}Opponent:${"\x1b[0m"} ${gameConfig.opponent.units.map((u) => `${u.name} (${u.class})`).join(" · ")}`);
+    console.log(
+      `  ${"\x1b[36m"}Player:${"\x1b[0m"}   ${gameConfig.player.units.map((u) => `${u.name} (${u.class})`).join(" · ")}`,
+    );
+    console.log(
+      `  ${"\x1b[31m"}Opponent:${"\x1b[0m"} ${gameConfig.opponent.units.map((u) => `${u.name} (${u.class})`).join(" · ")}`,
+    );
   }
 
   const playerUnits = gameConfig.player.units;
@@ -266,7 +356,14 @@ async function main() {
     configFile: configPath,
   });
 
-  await runPlacementPhase(state, playerUnits, playerPlacementPrompt, opponentUnits, opponentPlacementPrompt, interactive);
+  await runPlacementPhase(
+    state,
+    playerUnits,
+    playerPlacementPrompt,
+    opponentUnits,
+    opponentPlacementPrompt,
+    interactive,
+  );
 
   startPlay(state);
   let lastRoundLog: string[] = [];
@@ -280,12 +377,15 @@ async function main() {
     console.log(`\n  \x1b[1m\x1b[35m═══ ROUND ${state.round} ═══\x1b[0m`);
 
     // Show turn order
-    const orderStr = state.turnStack.map((id) => {
-      const u = state.units.find((u) => u.id === id);
-      if (!u || u.hp <= 0) return null;
-      const color = u.side === "player" ? "\x1b[36m" : "\x1b[31m";
-      return `${color}${u.name}\x1b[0m\x1b[2m(${u.speed})\x1b[0m`;
-    }).filter(Boolean).join(" → ");
+    const orderStr = state.turnStack
+      .map((id) => {
+        const u = state.units.find((u) => u.id === id);
+        if (!u || u.hp <= 0) return null;
+        const color = u.side === "player" ? "\x1b[36m" : "\x1b[31m";
+        return `${color}${u.name}\x1b[0m\x1b[2m(${u.speed})\x1b[0m`;
+      })
+      .filter(Boolean)
+      .join(" → ");
     console.log(`  \x1b[2mOrder:\x1b[0m ${orderStr}\n`);
 
     logger.startTurn(state.round, "player"); // compat
@@ -311,9 +411,7 @@ async function main() {
         if (np) unit.prompt = np;
       }
 
-      const { actionLog, actionSummary } = await executeUnitTurn(
-        state, unit, lastRoundLog, logger
-      );
+      const { actionLog, actionSummary } = await executeUnitTurn(state, unit, lastRoundLog, logger);
 
       roundActions.push(actionSummary);
       roundLog.push(actionLog);

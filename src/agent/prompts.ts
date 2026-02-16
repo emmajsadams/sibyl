@@ -48,16 +48,27 @@ export function buildContextPrompt(ctx: GameContext): string {
   }
 
   if (ctx.allies.length > 0) {
-    lines.push("Allies: " + ctx.allies.map((a) => {
-      const hp = a.hp !== undefined ? `HP:${a.hp}` : a.status;
-      return `${a.name}(${a.class},spd${a.speed}) @(${a.position.x},${a.position.y})→${a.facing} ${hp}`;
-    }).join(" | "));
+    lines.push(
+      "Allies: " +
+        ctx.allies
+          .map((a) => {
+            const hp = a.hp !== undefined ? `HP:${a.hp}` : a.status;
+            return `${a.name}(${a.class},spd${a.speed}) @(${a.position.x},${a.position.y})→${a.facing} ${hp}`;
+          })
+          .join(" | "),
+    );
   }
 
   if (ctx.enemies.length > 0) {
-    lines.push("Enemies: " + ctx.enemies.map((e) =>
-      `${e.name}(${e.class},spd${e.speed}) @(${e.position.x},${e.position.y})→${e.facing} ${e.status}`
-    ).join(" | "));
+    lines.push(
+      "Enemies: " +
+        ctx.enemies
+          .map(
+            (e) =>
+              `${e.name}(${e.class},spd${e.speed}) @(${e.position.x},${e.position.y})→${e.facing} ${e.status}`,
+          )
+          .join(" | "),
+    );
   } else {
     lines.push("No enemies visible.");
   }
@@ -79,7 +90,7 @@ export function buildPlayerPromptSection(unit: Unit): string {
 
 export function buildPlacementPrompt(
   units: { name: string; class: UnitClass }[],
-  side: "player" | "opponent"
+  side: "player" | "opponent",
 ): string {
   const rows = side === "player" ? "0-1 (bottom)" : "4-5 (top)";
   return `Place units on 6x6 grid, rows ${rows}.
