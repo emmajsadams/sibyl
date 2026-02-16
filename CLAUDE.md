@@ -34,6 +34,19 @@ Four steps, repeating:
 
 Pre-commit hook (husky) runs oxlint + tests + tsc automatically.
 
+## Documentation Map
+
+| File | Purpose | Used by |
+|---|---|---|
+| `CLAUDE.md` | Dev cycle, rules, project structure | Claude (auto-loaded as system prompt) |
+| `SPEC.md` | Game design spec — mechanics, classes, abilities | Reference for humans + Claude |
+| `BALANCE.md` | Balance review checklist — subagent prompt | BALANCE step subagent |
+| `REVIEW.md` | Code review checklist — subagent prompt | REVIEW step subagent |
+| `TRAINING.md` | Training data format, events, versioning | Reference |
+| `README.md` | Project overview for GitHub | Humans |
+
+CLAUDE.md orchestrates. BALANCE.md and REVIEW.md are subagent prompts (read by spawned agents during their respective steps). SPEC.md is the source of truth for game design. TRAINING.md documents the data pipeline.
+
 ## Rules
 - **Do NOT run full game simulations unless explicitly asked.**
 - Use `npx tsc --noEmit` to verify changes compile.
