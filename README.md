@@ -75,6 +75,56 @@ src/
 
 Engine is fully separated from presentation — swap `cli/` for a web UI without touching game logic.
 
+## Training Data
+
+Each game run produces training data that captures every event — moves, abilities, damage, agent decisions, and timing.
+
+### File Layout
+
+```
+training/
+├── config.json                    # Auto-incrementing game counter
+├── versions/v0.5.0-0.json        # Versioned game configs (committed)
+├── training-v0.5.0-0.json        # Training output (gitignored)
+└── training-v0.5.0-1.json
+```
+
+- **Configs** (`training/versions/`): Input to each game — squad compositions, prompts, placement. Committed to git.
+- **Training output** (`training/training-*.json`): Full event log. Gitignored. References config by `configId`.
+
+### Random Squads
+
+Run without a config file in API mode to auto-generate random squads:
+
+```bash
+bun run src/main.ts  # picks 3 random classes per side with tactical prompts
+```
+
+### Event Types
+
+| Event | Description |
+|---|---|
+| `game_config` | Full input config: player/opponent sides, agent, config file |
+| `game_start` | Grid size, initial units, turn stack |
+| `turn_start` | Round begins — full unit/trap snapshots, turn order |
+| `unit_placed` | Unit placed during setup |
+| `unit_moved` | Movement with facing update, trap triggers |
+| `ability_used` | Ability attempt (success/fail + error) |
+| `damage_dealt` | Damage with HP after |
+| `healing_done` | Medic heal, heals remaining |
+| `status_applied` | Buff/debuff applied |
+| `status_removed` | Status expired or broken |
+| `unit_killed` | Death — killer, ability |
+| `trap_placed` | Vector trap at position |
+| `trap_triggered` | Unit hit a trap |
+| `breach` | Prompt replacement via Specter |
+| `agent_decision` | LLM thinking + actions + response time (ms) |
+| `denial_blocked` | Vector passive blocked ability |
+| `turn_end` | Round ends — full snapshots |
+| `game_end` | Winner, reason, total turns, survivors |
+
+Schema: `src/training/schema.ts` (Zod). Recorder: `src/training/recorder.ts`.
+
 ## Status
 
 Early prototype. CLI only. See [SPEC.md](./SPEC.md) for the full design doc.
