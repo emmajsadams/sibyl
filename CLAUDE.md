@@ -14,20 +14,20 @@ Four steps, repeating:
 - Logs capture everything — every move, ability, damage, decision
 
 ### 2. BALANCE
-- Spawn a subagent to run the `BALANCE.md` process against the latest training data
+- Spawn a subagent to run the `skills/BALANCE.md` process against the latest training data
 - Subagent analyzes game flow, class balance, ability usage, agent behavior
 - Fixes any issues found (stats, abilities, prompts, agent logic)
 - Re-verifies after fixes
 - Reports back with clear summary of findings and changes
 
 ### 3. REVIEW
-- Spawn a subagent to run the `REVIEW.md` checklist against all changes
+- Spawn a subagent to run the `skills/REVIEW.md` checklist against all changes
 - Reviews correctness, consistency, simplicity, module boundaries, performance
 - Fixes any issues found
 - Reports back with clear summary of all code changes (what changed, why, in which files)
 
 ### 4. PUBLISH
-- Run `./scripts/publish.sh "summary of changes"`
+- Run `./scripts/publish.sh "summary of changes"` (see `skills/PUBLISH.md`)
 - Handles: lint → typecheck → tests → commit → tag → push
 - Version is read from `package.json` — bump it before running
 - Reports back with version number and summary
@@ -40,12 +40,12 @@ Pre-commit hook (husky) runs oxlint + tests + tsc automatically.
 |---|---|---|
 | `CLAUDE.md` | Dev cycle, rules, project structure | Claude (auto-loaded as system prompt) |
 | `SPEC.md` | Game design spec — mechanics, classes, abilities | Reference for humans + Claude |
-| `BALANCE.md` | Balance review checklist — subagent prompt | BALANCE step subagent |
-| `REVIEW.md` | Code review checklist — subagent prompt | REVIEW step subagent |
-| `PUBLISH.md` | Publish checklist — subagent prompt | PUBLISH step subagent |
+| `skills/BALANCE.md` | Balance review checklist — subagent prompt | BALANCE step subagent |
+| `skills/REVIEW.md` | Code review checklist — subagent prompt | REVIEW step subagent |
+| `skills/PUBLISH.md` | Publish checklist — subagent prompt | PUBLISH step subagent |
 | `README.md` | Project overview + training data docs | Humans / GitHub |
 
-CLAUDE.md orchestrates. BALANCE.md and REVIEW.md are subagent prompts (read by spawned agents during their respective steps). SPEC.md is the source of truth for game design.
+CLAUDE.md orchestrates. `skills/` contains subagent prompts (read by spawned agents during their respective steps). SPEC.md is the source of truth for game design.
 
 ## Rules
 - **Do NOT run full game simulations unless explicitly asked.**

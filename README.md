@@ -166,6 +166,6 @@ bun test --coverage
 | File | Purpose |
 |------|---------|
 | [SPEC.md](SPEC.md) | Full game design spec — mechanics, classes, abilities, grid rules |
-| [BALANCE.md](BALANCE.md) | Balance review checklist for playtesting |
+| [skills/](skills/) | Subagent prompts — balance, review, publish checklists |
 | [TRAINING-PROJECT.md](docs/TRAINING-PROJECT.md) | Fine-tuning & RL project proposal |
 | [CLAUDE.md](claude.md) | AI dev cycle instructions (run → balance → review → publish) |
