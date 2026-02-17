@@ -30,8 +30,10 @@ export interface PlacementResponse {
 
 export const CLAUDE_MODEL = "sonnet";
 
-/** Full model identifier for training data provenance */
-export const CLAUDE_MODEL_ID = "claude-sonnet-4-20250514";
+/** Full model identifier for training data provenance.
+ * Pin this to the exact model version — "sonnet" resolves to latest,
+ * but training data needs to know exactly which model generated it. */
+export const CLAUDE_MODEL_ID = "claude-sonnet-4.5-20250514";
 
 /**
  * Run a prompt through `claude` CLI and return the text output.
