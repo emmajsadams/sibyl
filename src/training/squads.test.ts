@@ -46,7 +46,7 @@ describe("generateRandomConfig", () => {
   test("generates different configs on multiple calls", () => {
     // Run multiple times - at least some should differ (probabilistic but very likely)
     const configs = Array.from({ length: 10 }, () => generateRandomConfig());
-    const serialized = configs.map(c => JSON.stringify(c));
+    const serialized = configs.map((c) => JSON.stringify(c));
     const unique = new Set(serialized);
     expect(unique.size).toBeGreaterThan(1);
   });
@@ -56,7 +56,7 @@ describe("generateRandomConfig", () => {
     for (let i = 0; i < 20; i++) {
       const cfg = generateRandomConfig();
       for (const side of [cfg.player, cfg.opponent]) {
-        const names = side.units.map(u => u.name);
+        const names = side.units.map((u) => u.name);
         expect(new Set(names).size).toBe(names.length);
       }
     }

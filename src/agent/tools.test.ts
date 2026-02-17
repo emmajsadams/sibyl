@@ -169,7 +169,9 @@ describe("check_behind", () => {
     enemy.facing = "N";
     const ctx = makeCtx({ unit: u, enemies: [view(enemy)] });
     // From (2,2) we are behind (south of y=4, facing N)
-    const res = JSON.parse(executeTool(ctx, "check_behind", { enemy_id: "E", from_x: 2, from_y: 2 }).output);
+    const res = JSON.parse(
+      executeTool(ctx, "check_behind", { enemy_id: "E", from_x: 2, from_y: 2 }).output,
+    );
     expect(res.behind).toBe(true);
   });
 });
@@ -192,7 +194,9 @@ describe("get_path_options", () => {
     const enemy = createUnit("e1", "E", "sentinel", "opponent", { x: 2, y: 4 }, "");
     enemy.facing = "N"; // back is south
     const ctx = makeCtx({ unit: u, enemies: [view(enemy)] });
-    const res = JSON.parse(executeTool(ctx, "get_path_options", { enemy_id: "E", need_behind: true }).output);
+    const res = JSON.parse(
+      executeTool(ctx, "get_path_options", { enemy_id: "E", need_behind: true }).output,
+    );
     for (const opt of res.options) {
       expect(opt.behind).toBe(true);
     }

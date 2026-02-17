@@ -21,8 +21,14 @@ describe("TrainingRecorder", () => {
 
   test("creates a valid training file on construction", () => {
     const config = {
-      player: { units: [{ name: "Tank", class: "sentinel" as const, prompt: "hold" }], placementPrompt: "place" },
-      opponent: { units: [{ name: "Ghost", class: "specter" as const, prompt: "sneak" }], placementPrompt: "place" },
+      player: {
+        units: [{ name: "Tank", class: "sentinel" as const, prompt: "hold" }],
+        placementPrompt: "place",
+      },
+      opponent: {
+        units: [{ name: "Ghost", class: "specter" as const, prompt: "sneak" }],
+        placementPrompt: "place",
+      },
     };
     const recorder = new TrainingRecorder("test-agent", config);
     TEST_FILES.push(recorder.path);
@@ -36,8 +42,14 @@ describe("TrainingRecorder", () => {
 
   test("records events and flushes to disk", () => {
     const config = {
-      player: { units: [{ name: "A", class: "sentinel" as const, prompt: "p" }], placementPrompt: "p" },
-      opponent: { units: [{ name: "B", class: "specter" as const, prompt: "p" }], placementPrompt: "p" },
+      player: {
+        units: [{ name: "A", class: "sentinel" as const, prompt: "p" }],
+        placementPrompt: "p",
+      },
+      opponent: {
+        units: [{ name: "B", class: "specter" as const, prompt: "p" }],
+        placementPrompt: "p",
+      },
     };
     const recorder = new TrainingRecorder("test-agent", config);
     TEST_FILES.push(recorder.path);
@@ -57,16 +69,25 @@ describe("TrainingRecorder", () => {
 
   test("recorded file passes schema validation", () => {
     const config = {
-      player: { units: [{ name: "A", class: "sentinel" as const, prompt: "p" }], placementPrompt: "p" },
-      opponent: { units: [{ name: "B", class: "specter" as const, prompt: "p" }], placementPrompt: "p" },
+      player: {
+        units: [{ name: "A", class: "sentinel" as const, prompt: "p" }],
+        placementPrompt: "p",
+      },
+      opponent: {
+        units: [{ name: "B", class: "specter" as const, prompt: "p" }],
+        placementPrompt: "p",
+      },
     };
     const recorder = new TrainingRecorder("test-agent", config);
     TEST_FILES.push(recorder.path);
 
     recorder.record({
       type: "damage_dealt",
-      sourceId: "u1", targetId: "u2",
-      amount: 2, ability: "attack", targetHpAfter: 8,
+      sourceId: "u1",
+      targetId: "u2",
+      amount: 2,
+      ability: "attack",
+      targetHpAfter: 8,
     });
 
     const data = readJson(recorder.path);

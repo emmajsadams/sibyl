@@ -371,7 +371,7 @@ describe("moveUnit - edge cases", () => {
     u.statusEffects.push({ type: "fortified" });
     g.units.push(u);
     moveUnit(g, u, { x: 3, y: 2 });
-    expect(u.statusEffects.some(e => e.type === "fortified")).toBe(false);
+    expect(u.statusEffects.some((e) => e.type === "fortified")).toBe(false);
   });
 
   test("suppressed unit can only move 1 tile", () => {
@@ -408,7 +408,7 @@ describe("useAbility - cloak", () => {
     g.units.push(u);
     const err = useAbility(g, u, "cloak");
     expect(err).toBeNull();
-    expect(u.statusEffects.some(e => e.type === "cloaked")).toBe(true);
+    expect(u.statusEffects.some((e) => e.type === "cloaked")).toBe(true);
   });
 
   test("non-specter cannot cloak", () => {
@@ -438,7 +438,7 @@ describe("useAbility - shadow_strike", () => {
     const t = unit("o1", "sentinel", "opponent", { x: 2, y: 3 });
     g.units.push(s, t);
     useAbility(g, s, "shadow_strike", { x: 2, y: 3 });
-    expect(s.statusEffects.some(e => e.type === "cloaked")).toBe(true);
+    expect(s.statusEffects.some((e) => e.type === "cloaked")).toBe(true);
   });
 
   test("rejects non-adjacent target", () => {
@@ -481,7 +481,9 @@ describe("useAbility - breach", () => {
     const t = unit("o1", "sentinel", "opponent", { x: 2, y: 4 });
     t.facing = "N";
     g.units.push(s, t);
-    expect(useAbility(g, s, "breach", { x: 2, y: 4 }, undefined, "hack")).toContain("limit reached");
+    expect(useAbility(g, s, "breach", { x: 2, y: 4 }, undefined, "hack")).toContain(
+      "limit reached",
+    );
   });
 
   test("breach cooldown blocks", () => {
@@ -501,7 +503,9 @@ describe("useAbility - breach", () => {
     const t = unit("o1", "sentinel", "opponent", { x: 2, y: 4 });
     t.facing = "N"; // back is south, attacker at y=5 is north
     g.units.push(s, t);
-    expect(useAbility(g, s, "breach", { x: 2, y: 4 }, undefined, "hack")).toBe("Must be behind the target");
+    expect(useAbility(g, s, "breach", { x: 2, y: 4 }, undefined, "hack")).toBe(
+      "Must be behind the target",
+    );
   });
 
   test("breach requires addendum", () => {
@@ -510,7 +514,9 @@ describe("useAbility - breach", () => {
     const t = unit("o1", "sentinel", "opponent", { x: 2, y: 4 });
     t.facing = "N";
     g.units.push(s, t);
-    expect(useAbility(g, s, "breach", { x: 2, y: 4 })).toBe("Must provide addendum text for Breach");
+    expect(useAbility(g, s, "breach", { x: 2, y: 4 })).toBe(
+      "Must provide addendum text for Breach",
+    );
   });
 });
 
@@ -614,7 +620,7 @@ describe("useAbility - suppressing_fire", () => {
     const hpBefore = t.hp;
     useAbility(g, s, "suppressing_fire", { x: 1, y: 0 });
     expect(t.hp).toBe(hpBefore - 1);
-    expect(t.statusEffects.some(e => e.type === "suppressed")).toBe(true);
+    expect(t.statusEffects.some((e) => e.type === "suppressed")).toBe(true);
   });
 });
 
@@ -662,7 +668,7 @@ describe("useAbility - overclock", () => {
     const err = useAbility(g, m, "overclock", { x: 2, y: 3 });
     expect(err).toBeNull();
     expect(a.hp).toBe(hpBefore - 1);
-    expect(a.statusEffects.some(e => e.type === "overclocked")).toBe(true);
+    expect(a.statusEffects.some((e) => e.type === "overclocked")).toBe(true);
   });
 });
 
@@ -718,7 +724,7 @@ describe("useAbility - shield_wall", () => {
     g.units.push(s);
     const err = useAbility(g, s, "shield_wall", undefined, "N");
     expect(err).toBeNull();
-    expect(s.statusEffects.some(e => e.type === "shieldWall")).toBe(true);
+    expect(s.statusEffects.some((e) => e.type === "shieldWall")).toBe(true);
   });
 
   test("requires direction", () => {
@@ -796,7 +802,7 @@ describe("useAbility - cloak break", () => {
     const t = unit("e1", "sentinel", "opponent", { x: 2, y: 3 });
     g.units.push(s, t);
     useAbility(g, s, "attack", { x: 2, y: 3 });
-    expect(s.statusEffects.some(e => e.type === "cloaked")).toBe(false);
+    expect(s.statusEffects.some((e) => e.type === "cloaked")).toBe(false);
   });
 
   test("using cloak itself does not break cloak", () => {
@@ -804,7 +810,7 @@ describe("useAbility - cloak break", () => {
     const s = unit("s1", "specter", "player", { x: 2, y: 2 });
     g.units.push(s);
     useAbility(g, s, "cloak");
-    expect(s.statusEffects.some(e => e.type === "cloaked")).toBe(true);
+    expect(s.statusEffects.some((e) => e.type === "cloaked")).toBe(true);
   });
 });
 
@@ -859,7 +865,7 @@ describe("cleanupAfterUnitActs", () => {
     u.statusEffects.push({ type: "cloaked", turnsLeft: 2 });
     g.units.push(u);
     cleanupAfterUnitActs(g, u);
-    const cloak = u.statusEffects.find(e => e.type === "cloaked") as any;
+    const cloak = u.statusEffects.find((e) => e.type === "cloaked") as any;
     expect(cloak.turnsLeft).toBe(1);
   });
 
@@ -869,7 +875,7 @@ describe("cleanupAfterUnitActs", () => {
     u.statusEffects.push({ type: "cloaked", turnsLeft: 1 });
     g.units.push(u);
     cleanupAfterUnitActs(g, u);
-    expect(u.statusEffects.some(e => e.type === "cloaked")).toBe(false);
+    expect(u.statusEffects.some((e) => e.type === "cloaked")).toBe(false);
   });
 
   test("removes suppressed", () => {
@@ -878,7 +884,7 @@ describe("cleanupAfterUnitActs", () => {
     u.statusEffects.push({ type: "suppressed" });
     g.units.push(u);
     cleanupAfterUnitActs(g, u);
-    expect(u.statusEffects.some(e => e.type === "suppressed")).toBe(false);
+    expect(u.statusEffects.some((e) => e.type === "suppressed")).toBe(false);
   });
 
   test("removes shieldWall", () => {
@@ -887,7 +893,7 @@ describe("cleanupAfterUnitActs", () => {
     u.statusEffects.push({ type: "shieldWall", direction: "N" });
     g.units.push(u);
     cleanupAfterUnitActs(g, u);
-    expect(u.statusEffects.some(e => e.type === "shieldWall")).toBe(false);
+    expect(u.statusEffects.some((e) => e.type === "shieldWall")).toBe(false);
   });
 
   test("removes overclocked", () => {
@@ -896,7 +902,7 @@ describe("cleanupAfterUnitActs", () => {
     u.statusEffects.push({ type: "overclocked" });
     g.units.push(u);
     cleanupAfterUnitActs(g, u);
-    expect(u.statusEffects.some(e => e.type === "overclocked")).toBe(false);
+    expect(u.statusEffects.some((e) => e.type === "overclocked")).toBe(false);
   });
 
   test("resets movedThisTurn", () => {
@@ -935,7 +941,7 @@ describe("cleanupAfterUnitActs", () => {
     const u = unit("s1", "sentinel", "player", { x: 2, y: 2 });
     g.units.push(u);
     cleanupAfterUnitActs(g, u);
-    expect(u.statusEffects.some(e => e.type === "fortified")).toBe(true);
+    expect(u.statusEffects.some((e) => e.type === "fortified")).toBe(true);
   });
 });
 

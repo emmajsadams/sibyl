@@ -1,5 +1,10 @@
 import { describe, test, expect } from "bun:test";
-import { buildSystemPrompt, buildContextPrompt, buildPlayerPromptSection, buildPlacementPrompt } from "./prompts";
+import {
+  buildSystemPrompt,
+  buildContextPrompt,
+  buildPlayerPromptSection,
+  buildPlacementPrompt,
+} from "./prompts";
 import { createUnit } from "../engine/game";
 import type { GameContext, Unit, UnitView, UnitClass } from "../types";
 import { UNIT_STATS } from "../types";
@@ -8,7 +13,12 @@ function makeUnit(cls: UnitClass, side: "player" | "opponent" = "player"): Unit 
   return createUnit("u1", "TestUnit", cls, side, { x: 2, y: 2 }, "Do stuff");
 }
 
-function makeView(id: string, cls: UnitClass, pos: { x: number; y: number }, overrides: Partial<UnitView> = {}): UnitView {
+function makeView(
+  id: string,
+  cls: UnitClass,
+  pos: { x: number; y: number },
+  overrides: Partial<UnitView> = {},
+): UnitView {
   return {
     id,
     name: id,
@@ -258,7 +268,14 @@ describe("buildContextPrompt", () => {
     const u = makeUnit("sentinel");
     const ctx = makeCtx(u, {
       turnOrder: [
-        { id: "u1", name: "TestUnit", class: "sentinel", side: "player", speed: 1, hasActed: false },
+        {
+          id: "u1",
+          name: "TestUnit",
+          class: "sentinel",
+          side: "player",
+          speed: 1,
+          hasActed: false,
+        },
         { id: "e1", name: "Foe", class: "specter", side: "opponent", speed: 3, hasActed: true },
       ],
     });
