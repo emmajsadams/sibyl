@@ -5,7 +5,10 @@ import type { TrainingEvent, TrainingFile } from "./schema";
 import type { GameState, Unit, GameConfig } from "../types";
 import { readTrainingConfig, writeTrainingConfig } from "./config";
 
-const PKG_PATH = join(import.meta.dirname ?? new URL(".", import.meta.url).pathname, "../../package.json");
+const PKG_PATH = join(
+  import.meta.dirname ?? new URL(".", import.meta.url).pathname,
+  "../../package.json",
+);
 
 function readJson(path: string): any {
   return JSON.parse(readFileSync(path, "utf-8"));

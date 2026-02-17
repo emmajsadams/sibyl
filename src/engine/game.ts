@@ -479,7 +479,8 @@ function abilityBreach(
   const breachCount = unit.breachesUsed ?? 0;
   if (breachCount >= 2) return "Breach limit reached (max 2 per game)";
   // Cooldown: 2-turn cooldown between uses
-  if ((unit.breachCooldown ?? 0) > 0) return `Breach on cooldown (${unit.breachCooldown} turns remaining)`;
+  if ((unit.breachCooldown ?? 0) > 0)
+    return `Breach on cooldown (${unit.breachCooldown} turns remaining)`;
   // Breach replaces the target's prompt — store original for restoration
   const oldPrompt = enemy.prompt;
   if (!enemy.originalPrompt) enemy.originalPrompt = oldPrompt;

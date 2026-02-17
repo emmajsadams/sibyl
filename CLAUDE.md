@@ -27,8 +27,9 @@ Four steps, repeating:
 - Reports back with clear summary of all code changes (what changed, why, in which files)
 
 ### 4. PUBLISH
-- Spawn a subagent to run the `PUBLISH.md` process
-- Lints, tests, compiles, commits, tags, and pushes
+- Run `./scripts/publish.sh "summary of changes"`
+- Handles: lint → typecheck → tests → commit → tag → push
+- Version is read from `package.json` — bump it before running
 - Reports back with version number and summary
 
 Pre-commit hook (husky) runs oxlint + tests + tsc automatically.
