@@ -35,7 +35,7 @@ const tokenEstimates: number[] = [];
 for (const ex of examples) {
   classes[ex.metadata.unitClass] = (classes[ex.metadata.unitClass] || 0) + 1;
   rounds.push(ex.metadata.round);
-  sides[ex.metadata.side]++;
+  sides[ex.metadata.side] = (sides[ex.metadata.side] ?? 0) + 1;
   // Rough token estimate: ~4 chars per token
   const totalChars = ex.messages.reduce((sum, m) => sum + m.content.length, 0);
   tokenEstimates.push(Math.ceil(totalChars / 4));

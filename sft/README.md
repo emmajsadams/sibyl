@@ -5,67 +5,63 @@ Convert SIBYL game data into training examples and fine-tune a small model to pl
 ## Quick Start
 
 ```bash
-cd sft
+# 1. Install Python deps
+cd sft && uv sync && cd ..
 
-# 1. Install JS deps (for converter)
-npm install
+# 2. Convert training data → SFT format
+bun run sft:convert
 
-# 2. Install Python deps (for training)
-uv sync
+# 3. Check dataset stats
+bun run sft:stats
 
-# 3. Convert training data → SFT format
-npm run convert
+# 4. Train (LoRA on Qwen 1.5B, ~10 min on Mac mini)
+bun run sft:train
 
-# 4. Check dataset stats
-npm run stats
-
-# 5. Train (LoRA on Qwen 1.5B, ~10 min on Mac mini)
-npm run train
-
-# 6. Test inference
-uv run python3 infer.py --adapter adapters/ --compare
+# 5. Test inference — compare base vs fine-tuned
+cd sft && uv run python3 infer.py --adapter adapters/ --compare
 ```
 
 ## Commands
 
-### `npm run convert` — Convert training data
+All TypeScript commands run from the repo root via bun:
 
-Reads `../training/training-*.json` and produces `data/sft-train.jsonl`.
+### `bun run sft:convert` — Convert training data
+
+Reads `training/training-*.json` and produces `sft/data/sft-train.jsonl`.
 
 ```bash
 # Winners only (default)
-npx tsx src/convert.ts
+bun run sft/src/convert.ts
 
 # Both sides
-npx tsx src/convert.ts --all-sides
+bun run sft/src/convert.ts --all-sides
 
 # Only v0.5.3+ games
-npx tsx src/convert.ts --min-version 0.5.3
-
-# Custom paths
-npx tsx src/convert.ts --training-dir /path/to/training --output data/custom.jsonl
+bun run sft/src/convert.ts --min-version 0.5.3
 ```
 
-### `npm run stats` — Dataset statistics
+### `bun run sft:stats` — Dataset statistics
 
 Shows class distribution, round distribution, token estimates.
 
-### `npm run train` — LoRA fine-tuning
+### `bun run sft:train` — LoRA fine-tuning
 
 ```bash
 # Defaults: Qwen 1.5B, 5 epochs, LoRA rank 8
-uv run python3 train.py
+cd sft && uv run python3 train.py
 
 # Larger model
-uv run python3 train.py --model mlx-community/Llama-3.2-3B-Instruct-4bit
+cd sft && uv run python3 train.py --model mlx-community/Llama-3.2-3B-Instruct-4bit
 
 # Tune hyperparams
-uv run python3 train.py --epochs 10 --lr 2e-5 --lora-rank 16
+cd sft && uv run python3 train.py --epochs 10 --lr 2e-5 --lora-rank 16
 ```
 
-### `uv run python3 infer.py` — Test inference
+### Inference
 
 ```bash
+cd sft
+
 # Random example, fine-tuned model
 uv run python3 infer.py --adapter adapters/
 
@@ -92,7 +88,7 @@ Output format (chat-completion JSONL):
 {
   "messages": [
     {"role": "system", "content": "SIBYL tactical AI. You control Wraith, a specter..."},
-    {"role": "user", "content": "=== ROUND 3 ===\nYour prompt: \"Cloak and breach...\"\n\nYou: Wraith (specter) at (2,3)..."},
+    {"role": "user", "content": "=== ROUND 3 ===\nYour prompt: ..."},
     {"role": "assistant", "content": "{\"thinking\": \"...\", \"firstAction\": {...}, \"secondAction\": {...}}"}
   ]
 }
@@ -111,13 +107,22 @@ Recommended models (all run on Mac mini M-series):
 
 ### What to Expect
 
-With ~300 winning-side examples (current dataset):
+With ~140 winning-side examples (current dataset):
 - The model will learn the output format (JSON with thinking/actions)
 - It will pick up basic patterns (cloak turn 1, heal wounded allies)
 - It won't play well — too few examples for real tactical reasoning
 - **That's fine** — the goal is learning the pipeline
 
-To improve: run more games with `npx tsx src/main.ts --auto` in the main project, then re-convert and retrain.
+To improve: run more games with `bun run src/main.ts --auto` to build up the dataset, then re-convert and retrain.
+
+## Python Tests
+
+```bash
+cd sft
+uv run pytest           # run tests
+uv run ruff check .     # lint
+uv run ruff format .    # format
+```
 
 ## File Structure
 
@@ -126,10 +131,11 @@ sft/
 ├── src/
 │   ├── convert.ts    # Training data → SFT JSONL
 │   └── stats.ts      # Dataset statistics
+├── tests/            # Python tests (pytest)
 ├── train.py          # MLX LoRA fine-tuning
 ├── infer.py          # Test inference + compare
+├── pyproject.toml    # Python deps (uv)
 ├── data/             # Generated training data (gitignored)
 ├── adapters/         # LoRA adapters (gitignored)
-├── package.json
 └── README.md
 ```
