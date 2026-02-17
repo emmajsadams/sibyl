@@ -55,6 +55,7 @@ interface TrainingFile {
   gameId: string;
   timestamp: string;
   agent: string;
+  model?: string;
   events: TrainingEvent[];
 }
 
@@ -72,6 +73,7 @@ interface SFTExample {
     side: string;
     round: number;
     won: boolean;
+    model?: string;
   };
 }
 
@@ -225,6 +227,7 @@ function processGame(filePath: string, winnersOnly: boolean): SFTExample[] {
             side,
             round: currentTurnStart.turn as number,
             won,
+            model: raw.model,
           },
         });
       } catch {

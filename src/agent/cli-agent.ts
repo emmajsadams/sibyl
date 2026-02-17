@@ -28,7 +28,10 @@ export interface PlacementResponse {
   placements: { name: string; position: { x: number; y: number } }[];
 }
 
-const CLAUDE_MODEL = "sonnet";
+export const CLAUDE_MODEL = "sonnet";
+
+/** Full model identifier for training data provenance */
+export const CLAUDE_MODEL_ID = "claude-sonnet-4-20250514";
 
 /**
  * Run a prompt through `claude` CLI and return the text output.

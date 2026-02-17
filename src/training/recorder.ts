@@ -21,7 +21,7 @@ export class TrainingRecorder {
   private data: TrainingFile;
   private filePath: string;
 
-  constructor(agent: string, gameConfig: GameConfig) {
+  constructor(agent: string, gameConfig: GameConfig, model?: string) {
     const version: string = readJson(PKG_PATH).version;
     const cfg = readTrainingConfig();
     const nextGameId = cfg.nextGameId;
@@ -44,6 +44,7 @@ export class TrainingRecorder {
       gameId,
       timestamp: new Date().toISOString(),
       agent,
+      model,
       events: [],
     };
 

@@ -240,6 +240,7 @@ export const TrainingFile = z.object({
   gameId: z.string(),
   timestamp: z.string(),
   agent: z.string(),
+  model: z.string().optional(),
   events: z.array(TrainingEvent),
 });
 

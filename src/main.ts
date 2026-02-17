@@ -14,6 +14,7 @@ import {
 } from "./engine/game";
 import * as apiAgent from "./agent/agent";
 import * as cliAgent from "./agent/cli-agent";
+import { CLAUDE_MODEL_ID } from "./agent/cli-agent";
 import { renderFullState, renderGameOver } from "./cli/renderer";
 
 // Select agent backend: CLI by default, --api to use API credits instead
@@ -362,7 +363,8 @@ async function main() {
   logger.setSquad("opponent", opponentUnits);
 
   // Training data recorder
-  const recorder = new TrainingRecorder(USE_CLI ? "cli" : "api", gameConfig);
+  const model = USE_CLI ? CLAUDE_MODEL_ID : undefined;
+  const recorder = new TrainingRecorder(USE_CLI ? "cli" : "api", gameConfig, model);
   setTrainingListener((event) => recorder.record(event));
 
   // Record full game config at start
