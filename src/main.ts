@@ -96,9 +96,10 @@ async function runPlacementPhase(
       playerPlacementPrompt,
     );
     // Fallback to default positions if placement parse failed
-    const playerPlacements = pp.placements.length > 0
-      ? pp.placements
-      : playerUnits.map((u, i) => ({ name: u.name, position: { x: i * 2, y: 0 } }));
+    const playerPlacements =
+      pp.placements.length > 0
+        ? pp.placements
+        : playerUnits.map((u, i) => ({ name: u.name, position: { x: i * 2, y: 0 } }));
     if (pp.placements.length === 0) {
       console.log("  ⚠ Placement parse failed, using fallback positions");
     }
@@ -129,9 +130,10 @@ async function runPlacementPhase(
     opponentPlacementPrompt,
   );
   // Fallback to default positions if placement parse failed
-  const opponentPlacements = op.placements.length > 0
-    ? op.placements
-    : opponentUnits.map((u, i) => ({ name: u.name, position: { x: i * 2, y: 5 } }));
+  const opponentPlacements =
+    op.placements.length > 0
+      ? op.placements
+      : opponentUnits.map((u, i) => ({ name: u.name, position: { x: i * 2, y: 5 } }));
   if (op.placements.length === 0) {
     console.log("  ⚠ Placement parse failed, using fallback positions");
   }

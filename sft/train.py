@@ -14,7 +14,7 @@ Options:
   --lr <float>       Learning rate (default: 1e-5)
   --lora-rank <n>    LoRA rank (default: 8)
 
-Requires: pip install mlx mlx-lm
+Requires: uv sync
 """
 
 import argparse
@@ -22,7 +22,6 @@ import json
 import os
 import subprocess
 import sys
-from pathlib import Path
 
 
 def check_deps():

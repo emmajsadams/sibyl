@@ -11,7 +11,7 @@ cd sft
 npm install
 
 # 2. Install Python deps (for training)
-pip install mlx mlx-lm
+uv sync
 
 # 3. Convert training data → SFT format
 npm run convert
@@ -23,7 +23,7 @@ npm run stats
 npm run train
 
 # 6. Test inference
-python3 infer.py --adapter adapters/ --compare
+uv run python3 infer.py --adapter adapters/ --compare
 ```
 
 ## Commands
@@ -54,26 +54,26 @@ Shows class distribution, round distribution, token estimates.
 
 ```bash
 # Defaults: Qwen 1.5B, 5 epochs, LoRA rank 8
-python3 train.py
+uv run python3 train.py
 
 # Larger model
-python3 train.py --model mlx-community/Llama-3.2-3B-Instruct-4bit
+uv run python3 train.py --model mlx-community/Llama-3.2-3B-Instruct-4bit
 
 # Tune hyperparams
-python3 train.py --epochs 10 --lr 2e-5 --lora-rank 16
+uv run python3 train.py --epochs 10 --lr 2e-5 --lora-rank 16
 ```
 
-### `python3 infer.py` — Test inference
+### `uv run python3 infer.py` — Test inference
 
 ```bash
 # Random example, fine-tuned model
-python3 infer.py --adapter adapters/
+uv run python3 infer.py --adapter adapters/
 
 # Compare base vs fine-tuned
-python3 infer.py --adapter adapters/ --compare
+uv run python3 infer.py --adapter adapters/ --compare
 
 # Interactive mode
-python3 infer.py --adapter adapters/ --interactive
+uv run python3 infer.py --adapter adapters/ --interactive
 ```
 
 ## How It Works

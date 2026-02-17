@@ -11,7 +11,7 @@ Options:
   --data <path>      Test data JSONL — picks a random example (default: data/sft-train.jsonl)
   --interactive      Enter board states manually
 
-Requires: pip install mlx mlx-lm
+Requires: uv sync
 """
 
 import argparse
@@ -22,7 +22,7 @@ import sys
 
 def check_deps():
     try:
-        from mlx_lm import load, generate  # noqa: F401
+        from mlx_lm import generate, load  # noqa: F401
     except ImportError:
         print("❌ mlx-lm not installed. Run:")
         print("   pip install mlx mlx-lm")
@@ -70,7 +70,7 @@ def main():
     # Load a random example
     if not args.interactive:
         with open(args.data) as f:
-            examples = [json.loads(l) for l in f if l.strip()]
+            examples = [json.loads(line) for line in f if line.strip()]
         example = random.choice(examples)
         messages = example["messages"]
 
@@ -136,7 +136,10 @@ def main():
 
             board = "\n".join(lines)
             messages = [
-                {"role": "system", "content": "SIBYL tactical AI. You control a unit on a 6x6 grid."},
+                {
+                    "role": "system",
+                    "content": "SIBYL tactical AI. You control a unit on a 6x6 grid.",
+                },
                 {"role": "user", "content": board},
             ]
 
