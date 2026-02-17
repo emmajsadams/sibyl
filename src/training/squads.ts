@@ -23,9 +23,9 @@ const TACTICAL_PROMPTS: Record<UnitClass, string[]> = {
     "Cloak and move behind enemy lines. Target isolated enemies with shadow_strike. Save breach for the most dangerous enemy. Avoid being caught uncloaked.",
   ],
   oracle: [
-    "Use foresight to reveal enemy positions and cloaked units. Stay at max range. Use mind_spike on the highest-threat target. Keep distance from enemies.",
-    "Scan the battlefield with foresight each turn. Focus mind_spike on wounded enemies to secure kills. Stay behind allies and maintain range.",
-    "Use foresight early to give your team intel. Target enemy specters with mind_spike to break cloak. Stay safe at range behind your front line.",
+    "Use scan to reveal enemy prompts and cloaked units. Stay at max range (≤4 tiles for scan). Use recalibrate on wounded allies to buff them. Keep distance from enemies and avoid adjacent vectors.",
+    "Scan priority targets each turn to reveal their strategy. Use recalibrate on your damage dealer to boost effectiveness. Stay behind allies and maintain range. Never get adjacent to enemy vectors.",
+    "Scan early to give your team intel on enemy prompts. Target enemy specters with scan to track them after cloak. Use recalibrate on allies who need tactical adjustments. Stay safe at range behind your front line.",
   ],
   striker: [
     "Stay at maximum range. Use precision_shot on the most wounded enemy to secure kills. If no one is wounded, target the enemy medic. Never move adjacent to enemies.",
