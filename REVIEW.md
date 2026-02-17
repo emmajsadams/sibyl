@@ -40,6 +40,11 @@ Run this review on all staged/changed files before committing. Fix issues before
 - [ ] Training emitter is the ONLY bridge between engine and training — engine calls `emit()`, never imports recorder
 - [ ] Types in `src/types/` are shared; module-specific types stay in their module
 
+### Test Coverage
+- [ ] New logic has corresponding tests
+- [ ] `bun test --coverage` shows ≥70% function coverage
+- [ ] No test files deleted without reason
+
 ### Performance & Safety
 - [ ] No synchronous file I/O in hot paths (per-unit-turn game loop)
 - [ ] LLM calls have bounded `max_tokens`

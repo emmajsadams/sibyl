@@ -103,4 +103,114 @@ describe("simulate_move", () => {
     expect(res.enemies).toHaveLength(1);
     expect(res.enemies[0].name).toBe("E");
   });
+
+  test("rejects out of bounds", () => {
+    const u = createUnit("p1", "X", "sentinel", "player", { x: 0, y: 0 }, "");
+    const ctx = makeCtx({ unit: u });
+    const res = JSON.parse(executeTool(ctx, "simulate_move", { target_x: -1, target_y: 0 }).output);
+    expect(res.error).toContain("Out of bounds");
+  });
+
+  test("sentinel shows losesFortify", () => {
+    const u = createUnit("p1", "X", "sentinel", "player", { x: 2, y: 2 }, "");
+    const ctx = makeCtx({ unit: u });
+    const res = JSON.parse(executeTool(ctx, "simulate_move", { target_x: 3, target_y: 2 }).output);
+    expect(res.losesFortify).toBe(true);
+  });
+
+  test("striker shows precShotReduced", () => {
+    const u = createUnit("p1", "X", "striker", "player", { x: 2, y: 2 }, "");
+    const ctx = makeCtx({ unit: u });
+    const res = JSON.parse(executeTool(ctx, "simulate_move", { target_x: 3, target_y: 2 }).output);
+    expect(res.precShotReduced).toBe(true);
+  });
+
+  test("shows behind status for enemies", () => {
+    const u = createUnit("p1", "X", "sentinel", "player", { x: 2, y: 2 }, "");
+    const enemy = createUnit("e1", "E", "striker", "opponent", { x: 3, y: 2 }, "");
+    enemy.facing = "E"; // back is west, attacker moving to x=2 is west
+    const ctx = makeCtx({ unit: u, enemies: [view(enemy)] });
+    const res = JSON.parse(executeTool(ctx, "simulate_move", { target_x: 2, target_y: 2 }).output);
+    const e = res.enemies.find((e: any) => e.name === "E");
+    expect(e?.behind).toBe(true);
+  });
+});
+
+describe("check_behind", () => {
+  test("correctly identifies behind position", () => {
+    const u = createUnit("p1", "X", "specter", "player", { x: 2, y: 2 }, "");
+    const enemy = createUnit("e1", "E", "sentinel", "opponent", { x: 2, y: 4 }, "");
+    enemy.facing = "N"; // back is south, attacker at y=2 is south
+    const ctx = makeCtx({ unit: u, enemies: [view(enemy)] });
+    const res = JSON.parse(executeTool(ctx, "check_behind", { enemy_id: "E" }).output);
+    expect(res.behind).toBe(true);
+    expect(res.behindTiles.length).toBeGreaterThan(0);
+  });
+
+  test("not behind when in front", () => {
+    const u = createUnit("p1", "X", "specter", "player", { x: 2, y: 5 }, "");
+    const enemy = createUnit("e1", "E", "sentinel", "opponent", { x: 2, y: 4 }, "");
+    enemy.facing = "N"; // back is south, attacker at y=5 is north (front)
+    const ctx = makeCtx({ unit: u, enemies: [view(enemy)] });
+    const res = JSON.parse(executeTool(ctx, "check_behind", { enemy_id: "E" }).output);
+    expect(res.behind).toBe(false);
+  });
+
+  test("returns error for unknown enemy", () => {
+    const u = createUnit("p1", "X", "specter", "player", { x: 2, y: 2 }, "");
+    const ctx = makeCtx({ unit: u, enemies: [] });
+    const res = JSON.parse(executeTool(ctx, "check_behind", { enemy_id: "nobody" }).output);
+    expect(res.error).toContain("not found");
+  });
+
+  test("uses from_x/from_y override", () => {
+    const u = createUnit("p1", "X", "specter", "player", { x: 0, y: 0 }, "");
+    const enemy = createUnit("e1", "E", "sentinel", "opponent", { x: 2, y: 4 }, "");
+    enemy.facing = "N";
+    const ctx = makeCtx({ unit: u, enemies: [view(enemy)] });
+    // From (2,2) we are behind (south of y=4, facing N)
+    const res = JSON.parse(executeTool(ctx, "check_behind", { enemy_id: "E", from_x: 2, from_y: 2 }).output);
+    expect(res.behind).toBe(true);
+  });
+});
+
+describe("get_path_options", () => {
+  test("finds reachable positions in range of enemy", () => {
+    const u = createUnit("p1", "X", "sentinel", "player", { x: 2, y: 2 }, ""); // mv 2, range 1
+    const enemy = createUnit("e1", "E", "striker", "opponent", { x: 3, y: 3 }, "");
+    const ctx = makeCtx({ unit: u, enemies: [view(enemy)] });
+    const res = JSON.parse(executeTool(ctx, "get_path_options", { enemy_id: "E" }).output);
+    expect(res.options.length).toBeGreaterThan(0);
+    // All options should be in range
+    for (const opt of res.options) {
+      expect(opt.dist).toBeLessThanOrEqual(1);
+    }
+  });
+
+  test("need_behind filters to behind positions only", () => {
+    const u = createUnit("p1", "X", "specter", "player", { x: 2, y: 2 }, ""); // mv 3
+    const enemy = createUnit("e1", "E", "sentinel", "opponent", { x: 2, y: 4 }, "");
+    enemy.facing = "N"; // back is south
+    const ctx = makeCtx({ unit: u, enemies: [view(enemy)] });
+    const res = JSON.parse(executeTool(ctx, "get_path_options", { enemy_id: "E", need_behind: true }).output);
+    for (const opt of res.options) {
+      expect(opt.behind).toBe(true);
+    }
+  });
+
+  test("returns error for unknown enemy", () => {
+    const u = createUnit("p1", "X", "specter", "player", { x: 2, y: 2 }, "");
+    const ctx = makeCtx({ unit: u, enemies: [] });
+    const res = JSON.parse(executeTool(ctx, "get_path_options", { enemy_id: "nobody" }).output);
+    expect(res.error).toContain("not found");
+  });
+});
+
+describe("unknown tool", () => {
+  test("returns error", () => {
+    const u = createUnit("p1", "X", "sentinel", "player", { x: 0, y: 0 }, "");
+    const ctx = makeCtx({ unit: u });
+    const res = executeTool(ctx, "nonexistent", {});
+    expect(res.output).toContain("Unknown tool");
+  });
 });

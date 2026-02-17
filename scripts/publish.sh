@@ -17,14 +17,9 @@ echo "→ Type checking..."
 npx tsc --noEmit
 echo "  ✅ Types clean"
 
-# 3. Tests (skip if bun not available)
-if command -v bun &>/dev/null; then
-  echo "→ Running tests..."
-  bun test
-  echo "  ✅ Tests passed"
-else
-  echo "→ Skipping tests (bun not installed, use: npm test)"
-fi
+# 3. Tests + coverage check
+echo "→ Running tests with coverage check..."
+bash scripts/check-coverage.sh
 
 # 4. Check for uncommitted changes
 if [ -z "$(git status --porcelain)" ]; then
