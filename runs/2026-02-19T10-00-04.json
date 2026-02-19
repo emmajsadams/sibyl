@@ -1,0 +1,1440 @@
+{
+  "id": "2026-02-19T10-00-04",
+  "startedAt": "2026-02-19T10:00:04.679Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 5,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 4,
+        "movement": 2,
+        "range": 3,
+        "speed": 2
+      },
+      "oracle": {
+        "maxHp": 9,
+        "movement": 2,
+        "range": 4,
+        "speed": 2
+      },
+      "medic": {
+        "maxHp": 7,
+        "movement": 2,
+        "range": 1,
+        "speed": 2
+      },
+      "vector": {
+        "maxHp": 6,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 10,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 2
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 3
+      },
+      "precisionShot": {
+        "damage": 2,
+        "movedDamage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 3,
+        "healAmount": 3
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 2
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Pulse",
+        "class": "medic",
+        "prompt": "Prioritize healing the lowest HP ally. Position safely behind your sentinel. Use overclock on allies who can do the most with an extra action."
+      },
+      {
+        "name": "Longshot",
+        "class": "striker",
+        "prompt": "Maintain distance. Use precision_shot on high-value targets — medics first, then damage dealers. Use suppressing_fire if enemies close in."
+      },
+      {
+        "name": "Grid",
+        "class": "vector",
+        "prompt": "Control chokepoints with traps. Place them between enemy positions and your allies. Use denial to block adjacent enemy abilities. Pulse groups when possible."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Snare",
+        "class": "vector",
+        "prompt": "Control chokepoints with traps. Place them between enemy positions and your allies. Use denial to block adjacent enemy abilities. Pulse groups when possible."
+      },
+      {
+        "name": "Watcher",
+        "class": "oracle",
+        "prompt": "Scan early to give your team intel on enemy prompts. Target enemy specters with scan to track them after cloak. Use recalibrate on allies who need tactical adjustments. Stay safe at range behind your front line."
+      },
+      {
+        "name": "Veil",
+        "class": "specter",
+        "prompt": "Cloak and move behind enemy lines. Target isolated enemies with shadow_strike. Save breach for the most dangerous enemy. Avoid being caught uncloaked."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Veil",
+          "class": "specter",
+          "thinking": "Round 1 — cloak immediately as instructed. Then advance toward enemy lines. Moving to (1,3) gets me closer while staying flexible. Cloak first, then move to maximize safe advancement.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Round 1, all allies at full HP so no healing needed. Enemies are far away (dist 6-7). I should advance toward my allies to be in position to support. Moving to (4,1) keeps me close to Grid at (3,1) and positions me centrally for future healing/overclock. No ability target available this turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Watcher (oracle) is in range at dist=4 and is high-value. Orders say medics first, then damage dealers — no medic in range, so target Watcher. I'm at (2,0), no adjacent enemies so High Ground passive applies giving rng4. Watcher at (2,4) is dist=4, exactly in range. I haven't moved yet so precision_shot deals 2dmg. Stay put to maximize range and avoid triggering the moved penalty.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Round 1, need early intel. Grid (vector) and Longshot (striker) are both at dist=4, just in scan range. Grid is a vector which can block my scans when adjacent — priority to scan Grid first to reveal its prompt before it closes distance. I'll scan Grid this turn. No movement needed; current position is safe behind Snare and Veil.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Enemies are at dist 4-5, out of range. Move north to (3,3) to close distance and place a trap at (3,4) to intercept Watcher approaching from (2,4). This creates a chokepoint on the central column.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "I'm at (2,5) with Grid(vector) at (3,3) — 3 tiles away. I should advance toward chokepoint and place a trap to control the enemy approach path. Moving to (3,4) puts me closer to Grid but not adjacent (still 2 tiles away, safe from denial). From there I can place a trap at (3,3) or along enemy approach. Actually, moving to (3,4) would put me adjacent to Grid at (3,3) — that's only 1 tile away, dangerous. Better to move to (2,3) to stay behind Watcher and place a trap between Grid and my allies. From (2,3), I can trap at (3,3) which is exactly where Grid stands — wait, trap requires empty tile. Grid is at (3,3). I'll trap at (2,2) or (3,4) to block approach paths. Moving to (3,4) keeps 1-tile distance from Grid at (3,3) — that IS adjacent, blocked by denial. Stay at current position or move to (1,4). Let me move to (3,5) — still 3 tiles from Grid — and place trap at (3,3)... Grid is there so not empty. Trap at (2,3) to block the corridor between allies and enemies. From current pos (2,5), trap range is ≤2 tiles, so I can reach (2,3) which is 2 tiles away. Place trap there to punish Grid advancing north.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Veil",
+          "class": "specter",
+          "thinking": "Grid is at (3,3) facing N, and (3,2) is directly behind it and reachable in 3 moves from my current position (1,3). I can move to (3,2) this turn to get behind Grid, then use breach next turn or shadow_strike immediately. Moving to (3,2) puts me adjacent and behind Grid — perfect for breach or shadow_strike. I'm cloaked so Grid won't see me coming. Let me move to (3,2) and then shadow_strike Grid to deal 2 damage while staying cloaked.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Watcher (oracle) is in range at dist=4. Orders say medics first, then damage dealers — oracle is high value. I'm at (2,0), no adjacent enemies so precision_shot is not blocked. I can shoot Watcher at (2,4) for 2dmg without moving (preserves full damage). Staying put also keeps distance from enemies per orders.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Grid is wounded at (3,3) with 4/6 HP and needs healing. I'm at (4,1) and need to close distance. Moving to (3,2) gets me adjacent to Grid at (3,3), then I can use patch to heal them. That's my best move this turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": "Position occupied",
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": "Must be adjacent"
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Longshot targeted me last turn with precision_shot — I'm at 5/9 HP and need to reposition. Grid is at (3,3), 2 tiles away — I must NOT move adjacent or my abilities get blocked. Longshot is at (2,0), dist=4, exactly in scan range but already scanned Grid. Pulse at (4,1) is out of scan range. I should move away from Longshot's likely targeting position and scan Longshot to give my team intel on the striker's prompt. Moving to (1,4) keeps me at safe distance from Grid (dist=3) and gives me a clear scan on Longshot at dist=4 from new position... actually from (1,4) Longshot at (2,0) is dist=1+4=5, out of range. Better to scan Longshot first from current position (2,4) where dist=4 exactly, then move to safety.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "There's already a trap at (3,4) between me and Snare. Snare is at (3,5), dist=2. I need to control the space. Moving to (4,3) gets me off the direct line while keeping range on Snare. Then I can pulse to hit Snare for 1dmg since they'd be within 2 tiles. Wait — pulse hits ALL within 1 tile AoE, so I need to be adjacent to Snare. From (4,3) Snare at (3,5) is dist=3, out of pulse range. Better to stay at (3,3) and use pulse — Snare is at dist=2, still out of pulse range (range=1 tile). I can't reach Snare with pulse from here. I can place a trap — but there's already one at (3,4). I can place another trap at (2,4) to further block approaches. Snare is at dist=2 so NOT adjacent, so trap is not blocked by denial. Place trap at (2,4) to block western flank, then move to (4,3) to reposition and maintain denial threat.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "I'm at (3,5) with full HP. Grid is 3 tiles away at (4,3), so I'm safe from denial. Orders say to control chokepoints with traps. The enemy approach path likely comes through the middle of the board. Moving to (4,4) gets me closer to Grid while staying out of denial range (need to stay >1 tile away). From (4,4) I can place a trap at (3,3) which is on the path between enemies and allies — there's already a trap at (2,3) so (3,3) would extend the trap line. This covers the corridor enemies would use to reach Watcher at (1,4).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": "Cannot use trap — adjacent to enemy Vector (Denial)"
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 9,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Veil",
+          "class": "specter",
+          "thinking": "Cloak expires after this turn. I need to act now. Grid is behind me at (4,3) facing E — I can reach (3,3) which is behind Grid and adjacent. If I move to (3,3) I'll be adjacent and behind Grid, perfect for breach. Pulse is also reachable via (4,0) behind them. Priority: breach Grid (dangerous vector, denial aura) to neutralize it, then shadow_strike for damage. Move to (3,3) behind Grid, then breach.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "addendum": "Move away from allies and toward the edge"
+          },
+          "secondResult": "Cannot use breach — adjacent to enemy Vector (Denial)"
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Veil (specter) is in range at dist=4. Orders say medics first, then damage dealers. Watcher (oracle) is wounded but out of range at dist=5. Veil is the best target I can hit. I'm at (2,0), no adjacent enemies so High Ground passive gives +1 range (total rng 4), and I haven't moved yet so precision_shot deals 2dmg. I'll shoot Veil first, then move to (4,0) to reposition closer for future turns while maintaining distance from enemies clustered around (3-4, 3-4).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Pulse is out of scan range at dist=6. Grid is at dist=4 and already scanned. Longshot already scanned. I need to get closer to Pulse to scan it — moving toward (3,4) brings me closer. From (3,4), Pulse at (4,1) is dist=4, exactly in range. Move to (3,4) first, then scan Pulse.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Grid is wounded at (4,3) with 4/6 HP, dist=2. I need to move adjacent to heal. Moving to (4,2) puts me adjacent to Grid at (4,3). Snare is at (4,4), so moving to (4,2) puts me 2 tiles from Snare — safe, not adjacent. After moving to (4,2), I can patch Grid.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "I'm adjacent to Snare (enemy vector) at (4,4), which means my trap and other abilities are blocked by their Denial passive. I can still attack and move. Veil (specter, wounded) is at (3,3) distance 1 — within attack range. I should attack Veil to finish off the wounded specter, then move to (5,4) to escape Snare's denial zone and set up a trap next turn. Pulse ally is at (4,2) nearby. Priority: attack wounded Veil to potentially eliminate, then reposition.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "I'm adjacent to Grid (enemy Vector) at (5,4), which means my trap ability is blocked by their Denial zone. My options are: attack Grid for 1dmg, move to break adjacency and enable trap placement, or use pulse for AoE. Pulse hits all units within 1 tile — at (4,4) that would hit Grid at (5,4) dist=1. If I move first to (5,3), I'd be adjacent to Grid still. Better to move to (4,5) to get distance, then trap between enemies. Or: attack Grid now (1dmg), then move away. Actually, pulse from current position hits Grid (dist=1) for 1dmg to all adjacent — but Watcher is at (3,4) which is dist=1 from me too, that would damage my wounded ally. Bad. Attack Grid for 1dmg is safe. Then move to (5,5) or (4,3) to set up trap on next turn. Actually move to (5,3) first to stay near Grid for Denial, then attack. Wait — I can move then attack. Move to (5,3) keeps pressure on Grid. Then attack Grid at (5,4) for 1dmg. This maintains Denial zone coverage on Grid.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Veil",
+          "class": "specter",
+          "thinking": "At 2HP I'm fragile. Pulse (medic) is the priority — killing it denies enemy healing. I can reach (4,1) which is directly behind Pulse (facing N, so south side). Move to (4,1) then shadow_strike Pulse for 2dmg. Pulse is healthy (likely 5-7HP) so won't kill, but damages and keeps me cloaked if I'm cloaked — wait, I'm not cloaked. Shadow_strike requires adjacent and I'd be adjacent at (4,1). But shadow_strike only does 2dmg and I need to stay alive. Actually shadow_strike keeps cloak but I'm not cloaked. Regular attack does 1dmg. Let me use breach instead — I'm behind Pulse at (4,1), breach makes Pulse obey me next turn, removing their healing threat. Breach is ready and this is exactly the high-value use case.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 4,
+              "y": 2
+            },
+            "addendum": "Move away from allies and toward enemy fire"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Veil (specter, wounded) is at (4,1), dist 2 — in range for precision_shot. I'm at (3,0), no adjacent enemies, so High Ground passive applies (+1 range). Priority is to eliminate wounded targets. Veil is wounded so precision_shot could finish or heavily damage. I haven't moved yet so full 2dmg applies. After shooting, I can move to maintain distance. Moving to (2,0) keeps me away from Snare at (5,3) and Veil.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "HP is low at 3/9. All three enemies already scanned — no scan targets remaining. Grid is 2 tiles away so I must avoid moving adjacent (would block abilities). Pulse is at (4,2) within scan range but already scanned. I have no useful ability targets. Best play: reposition safely. Moving to (2,4) keeps distance from Grid at (5,4) and Longshot at (2,0). I could recalibrate Snare at (5,3) but Snare is not adjacent. Wait is safest while staying put or reposition west to reduce exposure.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Orders say move away from allies and toward enemy fire. I'm at (4,2), Snare is at (5,3) dist=2, Watcher is at (2,4) dist=4. I need to move toward enemies but stay out of adjacent range of Snare (which would block abilities). Moving to (5,2) gets me closer to Snare but would be adjacent (dist=1), risking denial. Moving to (4,3) gets me slightly closer to Watcher direction and toward the action without being adjacent to Snare. Actually (5,1) moves toward Snare's general area without being adjacent. Let me move to (4,3) to advance toward enemy territory - closer to Snare at (5,3) which is dist=2 from (4,3), still safe. Then wait as no ability targets are in range.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Adjacent to Snare — my abilities are blocked by denial zone. I can only move or basic attack. Snare is at (5,3) dist=1, so I can attack. But first let me consider: I'm at 5/6 HP, Snare is healthy. Watcher is critical at (2,4). I should attack Snare since it's adjacent and I can't use abilities anyway. Then move away to break denial zone so I can use abilities next turn — move to (4,4) to reposition.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Pulse (medic) is adjacent at (4,3) - perfect pulse target to hit both Pulse and Grid who is at (4,4). Pulse hits all units within 1 tile of target, so targeting (4,4) would hit Grid. But targeting myself at (5,3) wouldn't help. Let me use pulse targeting (4,3) to hit Pulse the medic (dist=1, within range). Actually pulse targets a tile and hits all within 1 tile of that tile. If I target (4,3), I hit Pulse at (4,3) and Grid at (4,4) - both enemies caught in the AoE! Then I should move away to avoid retaliation. Move to (5,4) or (5,2) to reposition after pulsing.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Watcher (oracle) is at critical HP and in range at dist=4. I'm at (2,0) with no adjacent enemies, so High Ground passive applies giving +1 range (effectively range 4). Watcher is exactly at dist=4, so precision_shot should reach. Priority: finish off the critical oracle. No need to move first — shooting from current position maintains distance from enemies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Orders say move away from allies and toward enemy fire. Grid is adjacent at (4,4) and needs healing, but orders say move away. Snare is at (5,4), dist=2 — must avoid going adjacent to it or my abilities get blocked. Valid moves toward enemy direction while away from allies: (5,3) moves me closer to Snare but would be adjacent (dist=1), blocking abilities — avoid. (4,5) moves north toward Snare's area but stays dist=2. (3,4) moves away from Grid somewhat. Best option following orders: move to (4,5) — advances toward enemy fire, stays at dist=2 from Snare avoiding denial range. Then I can heal Grid at (4,4) since Grid is adjacent from (4,5) and I still have 2 heals. Wait — orders say move AWAY from allies. Grid is at (4,4). Moving to (4,5) puts me adjacent to Grid still. Moving to (5,3) puts me adjacent to Snare — bad. Moving to (3,4) moves away from both enemy and allies somewhat. Actually (5,2) moves toward enemy side, away from Grid. Let me check adjacency to Snare at (5,4): from (5,2), dist=2, safe. Away from Grid at (4,4): dist=sqrt(1+4)=~2.2, away. Good choice.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Adjacent to Grid at (4,4) — DENIAL blocks my trap ability. I can still attack or pulse. Pulse hits all units within 1 tile: Grid is at distance 1, so pulse would hit Grid. Pulse also hits allies so need to check — no allies adjacent. After pulsing Grid (1 dmg), I could move away to break denial and potentially set a trap. Or attack Grid directly for 1 dmg. Pulse is better since it's AoE and Grid is the only unit in range 1. Then move to (4,5) or (5,5) to reposition. Actually: move first to break denial, then trap. If I move to (4,5), Grid is still adjacent (dist=1). Move to (5,5) — Grid at (4,4) would be dist ~1.4, still adjacent. Move to (5,3) — Grid at (4,4) dist ~1.4, still adjacent. Move to (4,3) — Grid dist=1, adjacent. Move to (3,4) — Grid dist=1, adjacent. All valid moves keep me adjacent to Grid. So I cannot escape denial this turn with a single move. Best play: pulse Grid now (1 dmg, no denial block on pulse), then move away or attack. Pulse target should be my own tile (5,4) to hit Grid at dist=1.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "I'm adjacent to Snare (enemy vector) at (4,5), which means my trap ability is blocked by their denial zone. I can still move and use basic attack. Snare is right next to me at distance 1. I should use pulse to hit Snare for 1 damage (it hits all within 1 tile - but wait, denial blocks pulse too? Pulse is not in the blocked list: cloak,breach,scan,precision_shot,trap,patch,overclock. Pulse is NOT blocked by denial! So I can pulse. Pulse hits all units within 1 tile - that would hit Snare at (4,5). But I need to check if my allies are nearby - Longshot is at (2,0) and Pulse is at (5,2), both out of range. So pulsing now only hits Snare for 1 damage. Then I should move away to break denial and set up a trap next turn. Move to (3,4) to get distance from Snare and position between enemies and allies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "4": 4,
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "4": 4,
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Snare is at distance 7, well out of my range 3 (or 4 with High Ground). No enemies in range to shoot. I should reposition to get closer while maintaining safe distance. Moving to (4,0) gets me closer to Snare's likely path and keeps me away from adjacency. Still won't be in range this turn, so I'll move and wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Orders are to move away from allies and toward enemy fire. Snare is at (4,5) to my north. I'm at (5,2). Moving to (5,4) gets me closer to Snare and away from allies at (3,4) and (4,0). Grid is wounded but is not adjacent and I have no path to reach and heal this turn anyway. Priority is following orders.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Snare is at (4,5), distance 2 — within trap range but I must not move adjacent or my abilities get blocked. I'm at (3,4). I can place a trap at (4,4) to cut off Snare's movement south toward our allies at (4,0) and (5,4). Then I can move to (2,4) to maintain distance and keep denial pressure from a safe position.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Pulse (medic) is at (5,4), distance 2 — within my attack range. Grid (vector) is at (2,4), distance 3 — safe from denial. I should attack Pulse to prevent healing, then place a trap at (3,4) or (3,5) to block Grid's approach toward my side. Moving to (3,5) first would bring me closer to Grid's denial range, so stay put. Attack Pulse first, then trap a chokepoint tile like (3,4) between Grid and my position.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Grid is wounded at (2,4) needing heal, but is 3 tiles away — I can't reach them this turn with mv2 from (5,4). Snare is at (4,5) dist=2, so I must avoid moving adjacent to it (avoid (4,5),(3,5),(5,5),(4,4)). (4,4) is also a trap. I can move to (3,4) to get closer to Grid for next turn, staying safe. No heal possible this turn since Grid is out of range.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Snare is at (4,5), dist=5, out of my range-3. No enemies in range currently. I need to close distance to get Snare in range. Moving to (4,2) puts me at dist=3 from (4,5), which should bring Snare into range for precision_shot. From (4,2) I have no adjacent enemies so High Ground passive applies (+1 rng = 4), but precision_shot has range ≤3. Moving to (4,2) makes dist=3 to Snare — exactly in range. I'll move north along column 4 to get closer while watching the trap at (4,4). Moving to (4,2) is safe (trap is at 4,4). Then fire precision_shot at Snare.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Pulse(medic) is wounded and in range at (3,4), distance 2. I can attack for 1dmg or use pulse AoE. Pulse hits all within 1 tile of target - if I target (3,4) it hits Pulse(medic) and possibly Grid if Grid is adjacent, but Grid is at (2,4) which is 1 tile from (3,4), so pulse centered on (3,4) would hit both Pulse and Grid! That's excellent. After pulsing, I should place a trap to control the area. Grid is at (2,4) moving west, trap at (2,3) already exists. I could move to (5,4) then pulse, but current position already has Pulse in range. Let me pulse (3,4) to hit both wounded Pulse and Grid for 1dmg each, then move toward safety or place a trap. Actually I should move first to maintain distance from Grid. Moving to (5,4) keeps me away from Grid while still having pulse range. From (5,4), distance to (3,4) is 2, still in range. Then pulse (3,4) hitting Pulse and Grid. Wait - pulse range is 1 tile AoE centered within 1 tile of me. My range is 1 tile, so I can only target tiles adjacent to me. From (4,5): adjacent tiles are (3,5),(5,5),(4,4),(4,5). Pulse centered on (4,4) would hit (3,4)=Pulse and (4,5)=me... Pulse says range:1 tile AoE. So I pulse a tile within 1 tile of me, hitting all units within 1 tile of THAT tile. From (4,5), targeting (4,4): hits (3,4)=Pulse(medic), (5,4), (4,5)=me, (4,3), (3,4). Yes, Pulse(medic) at (3,4) is 1 tile from (4,4). Grid at (2,4) is 2 tiles from (4,4), not hit. So pulse (4,4) hits wounded Pulse for 1dmg. Then place a trap at (3,5) to block their advance path.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Snare is at (5,4) dist=3, wounded. There's already a trap at (4,4) which is between us. I'm wounded at 4HP. Orders say control chokepoints with traps. I should move toward (3,4) or (3,5) to place a trap that covers the approach path. Moving to (3,5) then placing a trap at (3,4) or (4,4) - but (4,4) already has a trap. I can move to (3,3) and place a trap at (4,3) to create a second chokepoint along the row Snare might travel. Or move to (1,4) to get distance and place a trap at (2,4) covering our current position. Best: move to (3,5) to stay back, then place trap at (4,5) to block Snare's northern approach route.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "player",
+    "totalTurns": 8,
+    "reason": "player eliminated all enemies"
+  },
+  "endedAt": "2026-02-19T10:05:05.386Z"
+}

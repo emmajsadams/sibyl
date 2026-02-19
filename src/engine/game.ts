@@ -472,12 +472,14 @@ function abilityBreach(
   if (!target) return "Must specify target";
   const enemy = getUnitAt(state, target);
   if (!enemy || enemy.side === unit.side) return "No enemy at target";
-  if (distance(unit.position, enemy.position) > BALANCE.abilities.breach.range) return `Must be within ${BALANCE.abilities.breach.range} tiles`;
+  if (distance(unit.position, enemy.position) > BALANCE.abilities.breach.range)
+    return `Must be within ${BALANCE.abilities.breach.range} tiles`;
   if (!isBehind(unit.position, enemy)) return "Must be behind the target";
   if (!addendum) return "Must provide addendum text for Breach";
   // Cap: Specter can breach at most N times per game
   const breachCount = unit.breachesUsed ?? 0;
-  if (breachCount >= BALANCE.abilities.breach.maxUses) return `Breach limit reached (max ${BALANCE.abilities.breach.maxUses} per game)`;
+  if (breachCount >= BALANCE.abilities.breach.maxUses)
+    return `Breach limit reached (max ${BALANCE.abilities.breach.maxUses} per game)`;
   // Cooldown between uses
   if ((unit.breachCooldown ?? 0) > 0)
     return `Breach on cooldown (${unit.breachCooldown} turns remaining)`;
@@ -548,7 +550,9 @@ function abilityPrecisionShot(state: GameState, unit: Unit, target?: Position): 
       ? 1
       : 0); // High Ground passive
   if (distance(unit.position, enemy.position) > range) return "Out of range";
-  const baseDmg = unit.movedThisTurn ? BALANCE.abilities.precisionShot.movedDamage : BALANCE.abilities.precisionShot.damage;
+  const baseDmg = unit.movedThisTurn
+    ? BALANCE.abilities.precisionShot.movedDamage
+    : BALANCE.abilities.precisionShot.damage;
   const dmg = applyDamage(enemy, baseDmg);
   const friendly = enemy.side === unit.side;
   state.log.push(
@@ -615,7 +619,8 @@ function abilityPatch(state: GameState, unit: Unit, target?: Position): string |
   if (!ally || ally.side !== unit.side) return "No ally at target";
   if (distance(unit.position, ally.position) > 1) return "Must be adjacent";
   const usedHeals = unit.healsUsed || 0;
-  if (usedHeals >= BALANCE.abilities.patch.maxUses) return `No heals remaining (max ${BALANCE.abilities.patch.maxUses} per game)`;
+  if (usedHeals >= BALANCE.abilities.patch.maxUses)
+    return `No heals remaining (max ${BALANCE.abilities.patch.maxUses} per game)`;
   const healed = Math.min(BALANCE.abilities.patch.healAmount, ally.maxHp - ally.hp);
   ally.hp += healed;
   unit.healsUsed = usedHeals + 1;
@@ -642,7 +647,9 @@ function abilityOverclock(state: GameState, unit: Unit, target?: Position): stri
   ally.hp -= BALANCE.abilities.overclock.selfDamage;
   const effect = { type: "overclocked" as const };
   ally.statusEffects.push(effect);
-  state.log.push(`${unit.name} overclocks ${ally.name} (-${BALANCE.abilities.overclock.selfDamage} HP, double ability next turn)`);
+  state.log.push(
+    `${unit.name} overclocks ${ally.name} (-${BALANCE.abilities.overclock.selfDamage} HP, double ability next turn)`,
+  );
   emit({
     type: "damage_dealt",
     sourceId: unit.id,
