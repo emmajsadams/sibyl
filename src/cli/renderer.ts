@@ -26,7 +26,7 @@ const C = {
 };
 
 function hpBar(hp: number, max: number, width = 10): string {
-  const filled = Math.round((hp / max) * width);
+  const filled = Math.max(0, Math.min(width, Math.round((hp / max) * width)));
   const empty = width - filled;
   const color = hp / max > 0.6 ? C.green : hp / max > 0.25 ? C.yellow : C.red;
   return `${color}${"█".repeat(filled)}${C.dim}${"░".repeat(empty)}${C.reset}`;
