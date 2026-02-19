@@ -38,10 +38,10 @@ export const BALANCE: BalanceConfig = {
   unitStats: {
     specter: { maxHp: 5, movement: 3, range: 1, speed: 3 },
     striker: { maxHp: 4, movement: 2, range: 3, speed: 2 },
-    oracle: { maxHp: 9, movement: 3, range: 4, speed: 3 },
+    oracle: { maxHp: 10, movement: 3, range: 4, speed: 3 },
     medic: { maxHp: 9, movement: 2, range: 1, speed: 2 },
     vector: { maxHp: 6, movement: 2, range: 2, speed: 1 },
-    sentinel: { maxHp: 10, movement: 2, range: 1, speed: 1 },
+    sentinel: { maxHp: 11, movement: 2, range: 1, speed: 1 },
   },
   abilities: {
     attack: { damage: 1 },
@@ -49,7 +49,7 @@ export const BALANCE: BalanceConfig = {
     breach: { maxUses: 2, cooldown: 2, duration: 3, range: 2 },
     cloak: { duration: 3 },
     precisionShot: { damage: 2, movedDamage: 1 },
-    scan: { damage: 2 },
+    scan: { damage: 3 },
     suppressingFire: { damage: 1 },
     patch: { maxUses: 4, healAmount: 3 },
     overclock: { selfDamage: 1 },
