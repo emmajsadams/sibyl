@@ -510,7 +510,9 @@ function abilityScan(state: GameState, unit: Unit, target?: Position): string | 
   if (!enemy || enemy.side === unit.side) return "No enemy at target";
   if (distance(unit.position, enemy.position) > 4) return "Out of range (max 4)";
   const prompt = enemy.prompt + (enemy.originalPrompt ? " [BREACHED — original overwritten]" : "");
-  state.log.push(`${unit.name} scans ${enemy.name}: "${prompt}"`);
+  // Oracle scan deals minor damage (disorienting effect)
+  const scanDmg = applyDamage(enemy, BALANCE.abilities.scan.damage);
+  state.log.push(`${unit.name} scans ${enemy.name} (-${scanDmg} HP): "${prompt}"`);
   // Track scan history
   if (!state.scanHistory) state.scanHistory = {};
   if (!state.scanHistory[unit.id]) state.scanHistory[unit.id] = {};

@@ -1,0 +1,2010 @@
+{
+  "id": "2026-02-19T13-00-03",
+  "startedAt": "2026-02-19T13:00:03.925Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 5,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 4,
+        "movement": 2,
+        "range": 3,
+        "speed": 2
+      },
+      "oracle": {
+        "maxHp": 9,
+        "movement": 3,
+        "range": 4,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 9,
+        "movement": 2,
+        "range": 1,
+        "speed": 2
+      },
+      "vector": {
+        "maxHp": 6,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 10,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 2
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 3
+      },
+      "precisionShot": {
+        "damage": 2,
+        "movedDamage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 4,
+        "healAmount": 3
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 2
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Snare",
+        "class": "vector",
+        "prompt": "Place traps on tiles enemies are likely to move through. Use pulse if 2+ enemies are adjacent. Stay near allies for mutual support."
+      },
+      {
+        "name": "Aegis",
+        "class": "sentinel",
+        "prompt": "Push forward aggressively. Shield_wall facing the enemy cluster. If flanked, turn to face the biggest threat. Attack when possible."
+      },
+      {
+        "name": "Bolt",
+        "class": "striker",
+        "prompt": "Position for clear sight lines. Prioritize killing wounded enemies with precision_shot. If forced to move, retreat away from threats. Suppressing_fire to slow rushers."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Shade",
+        "class": "specter",
+        "prompt": "Cloak immediately on turn 1. Move toward the enemy medic or weakest target. Use shadow_strike when adjacent while cloaked. Use breach to sabotage high-value targets."
+      },
+      {
+        "name": "Prophet",
+        "class": "oracle",
+        "prompt": "Scan priority targets each turn to reveal their strategy. Use recalibrate on your damage dealer to boost effectiveness. Stay behind allies and maintain range. Never get adjacent to enemy vectors."
+      },
+      {
+        "name": "Deadeye",
+        "class": "striker",
+        "prompt": "Position for clear sight lines. Prioritize killing wounded enemies with precision_shot. If forced to move, retreat away from threats. Suppressing_fire to slow rushers."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Round 1 — cloak immediately as instructed. Then advance toward the enemy cluster. Snare is the priority threat (denial range) at dist=5, with Aegis and Bolt nearby. I'll cloak first, then move south toward (2,2) to close distance while hidden.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Snare (vector) is exactly at scan range (dist=4) from my current position. I should scan it now before moving, since moving closer risks adjacency. Bolt and Aegis are out of range. After scanning Snare, I can recalibrate Deadeye (my damage dealer at (4,4)) — but Deadeye is not adjacent to me (dist=2), so recalibrate won't reach. I'll scan Snare first, then move to get adjacent to Deadeye for recalibrate next turn, or hold position. Actually, I should stay at range and not move closer to enemies. I'll scan Snare, then wait.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Deadeye is at (4,4), distance 3, within precision_shot range. I'm at (4,1) with no adjacent enemies, so precision_shot is not blocked. I haven't moved yet, so I get full 2dmg. Fire precision_shot at Deadeye first, then hold position.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Bolt is at distance 3, exactly in precision_shot range. I'm at 2HP so I need to be careful. I haven't moved yet so precision_shot does full 2dmg. Firing on Bolt first is priority — healthy but closest threat. I'm not adjacent to any enemy so precision_shot is not blocked. After shooting, I'll hold position since moving would reduce damage on any follow-up.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Push forward to close distance. Move to (3,2) to advance toward enemy cluster at (2,4) and (4,4). Then shield_wall facing North to protect allies Bolt and Snare behind me as we advance.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Enemies at dist=4, out of range. Prophet at (2,4) moving south, Deadeye at (4,4) moving south. They'll likely advance through the middle. Move north to (3,3) to close distance and place a trap at (3,4) — a chokepoint both enemies may pass through.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 10,
+          "maxHp": 10,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 9,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Aegis is unscanned and in range at dist=3. Snare is already known. I should scan Aegis to reveal their strategy. I also want to stay away from Snare (dist=2, can't move adjacent). Moving to (1,4) keeps distance from Snare while maintaining scan range on Aegis. Then scan Aegis at (3,2).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "I'm cloaked with 2 turns remaining. Aegis is adjacent at (3,2) facing N — I can move behind them to (3,1) then use shadow_strike to deal 2 damage while staying cloaked. This is the optimal play: reposition to rear then strike.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "I'm at (4,4) with 2HP. Bolt is wounded at (4,1) distance 3 — priority kill. Snare(vector) is at (3,3) distance 2 — danger, but not adjacent so precision_shot is not blocked. I can precision_shot Bolt for 2dmg to finish it. I haven't moved so no damage penalty. After shooting, I should move to (5,4) or (5,5) to increase distance from Snare and stay safe.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Currently fortified at (3,2) with 50% damage reduction. No enemies in range. Orders say push forward aggressively. Moving north toward (3,3) would put me adjacent to Snare but lose fortify. Better to move toward enemy cluster — Prophet is at (1,4), so moving to (2,3) closes distance while staying between enemies and Snare. Then shield_wall facing W/N toward the enemy cluster to protect Snare at (3,3). Note: (3,4) has a trap so avoid that tile.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "W"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "I have a trap at (3,4) already. Prophet is at (1,4) moving west/south likely, Deadeye at (5,5) wounded. I should move north to close distance and place a trap on a likely enemy path. Moving to (3,5) puts me closer to Prophet's likely approach. Then place a trap at (4,5) or (2,4) to intercept enemy movement routes. (2,4) is adjacent to Prophet and a natural path. I'll move to (3,5) first, then trap (2,4) to catch Prophet moving east or south.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 9,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 9,
+          "maxHp": 9,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Cloak expires after this turn, so I need to use it now. Aegis is at (2,3) facing N — I can reach (2,2) which is behind Aegis and adjacent, perfect for breach or shadow_strike. Move to (2,2) then shadow_strike Aegis to stay cloaked and deal 2 damage.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Both enemies already scanned. Aegis is at (2,3) distance 2 — already known. No new scan targets needed. Should recalibrate Deadeye (wounded damage dealer) to boost effectiveness. Deadeye is at (5,5), not adjacent — can't recalibrate. Shade is adjacent-ish at (2,2). I'm at (1,4). Shade is 2 tiles away, not adjacent. No adjacent allies to recalibrate. Best option: reposition to get adjacent to an ally for recalibrate next turn, while staying safe from Snare. Move to (2,4) gets me closer to Shade at (2,2) and keeps distance from Snare at (3,5) — that's still 2 tiles from Snare, safe. Then wait or scan. Actually both enemies scanned already. Wait makes sense as second action.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "I'm at (5,5) with 2HP, Snare(vector) is 2 tiles away at (3,5). I must NOT move adjacent to Snare or my abilities get blocked. Snare is in range at dist=2, so I can use precision_shot from current position for 2dmg. I haven't moved so precision_shot fires at full 2dmg. After shooting, I should retreat away from Snare to maintain safe distance. Moving to (5,3) puts me further from Snare and keeps me on high ground edge. Actually (4,4) moves me away while staying in range. Best plan: shoot Snare first, then move to (5,3) to retreat south away from Snare.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (2,3) with 50% damage reduction. Prophet is directly north at (2,4) and Shade is directly south at (2,2) — I'm sandwiched. Orders say attack when possible and shield_wall facing enemy cluster. Prophet and Shade are both adjacent. I should attack Prophet (to the north) since I'm facing north, then shield_wall facing south to block Shade. But shield_wall requires an adjacent ally target — Snare is at (3,5), not adjacent. Can't use shield_wall on self. I'll attack Prophet first (adjacent, north), then attack Shade (adjacent, south) — wait, I only get one ability use. Attack Prophet to the north since I'm facing N, then wait (no valid shield_wall target). Actually I can move then ability or ability then move. If I stay fortified I keep 50% DR. Best play: attack Prophet (adjacent), keep fortified by not moving.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Prophet is at (2,4), distance 2 from me at (3,5). I have traps at (3,4) and (2,5) already placed. Prophet is adjacent to my trap at (2,5) - they may step on it. I need to deny more routes. Prophet moving north would go to (2,5) - already trapped. Moving east puts them at (3,4) - also trapped. Good coverage there. I should place a new trap to cover another escape/advance route. Tile (3,3) is a likely movement corridor. I can move to (4,5) to reposition slightly east and then trap (3,4)... wait, (3,4) is already a trap. Let me place trap at (4,4) or (3,3) to catch movement. I'm at (3,5), can reach (4,5) then trap (4,4) - covers Deadeye approach from east. Or stay and trap (3,3) which covers southward movement. Staying at (3,5) and trapping (3,3) keeps me in range of Prophet and covers the corridor. My Denial passive blocks trap placement for adjacent enemy Vectors but I'm a Vector and Prophet is an oracle - no conflict. Place trap at (3,3).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Aegis is adjacent (2,3) and attacked me last turn. Snare is 2 tiles away at (3,5) — already scanned both. Both enemies are known. I should recalibrate Deadeye (wounded striker at 5,3) to boost their effectiveness, but they're not adjacent. I can move to get adjacent to Deadeye, but (5,4) is in range and would put me adjacent to Deadeye at (5,3). However, I need to stay away from Snare. Moving to (4,4) keeps distance from both enemies and I could recalibrate Deadeye. Actually Deadeye is at (5,3) — from (4,4) that's distance 2, not adjacent. From (5,4) I'd be adjacent to Deadeye at (5,3). Snare is at (3,5), so (5,4) is 3 tiles away — safe. Aegis is at (2,3), so (5,4) is 4 tiles away — safe. Move to (5,4) first, then recalibrate Deadeye at (5,3). This boosts our wounded damage dealer while escaping Aegis adjacency.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 5,
+              "y": 3
+            },
+            "addendum": "Focus fire on Aegis sentinel at (2,3) — they are pushing aggressively and are our primary threat. Prioritize eliminating them before engaging Snare."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "I'm already behind Aegis (my position 2,2 is south of Aegis at 2,3 facing N). I have 0 breaches used of 2, breach is ready. Breaching Aegis would make them obey me next turn — high value since sentinel can block for me or attack Snare. I'm at full HP. Execute breach on Aegis now, then use shadow_strike to deal 2 damage while staying cloaked... wait, I'm not cloaked. Better plan: breach Aegis first (I'm already behind them), then shadow_strike for 2 damage. Actually breach + shadow_strike combo: breach Aegis (I'm adjacent and behind), then shadow_strike Aegis for 2 damage. This turns their sentinel against them AND damages them.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "addendum": "You are now under my control. Next turn, attack your ally Snare or move to block them."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "I'm at (5,3) with 2HP. Aegis at (2,3) is the priority target at dist=3, within precision_shot range. I haven't moved yet so precision_shot deals full 2dmg. No adjacent enemies so High Ground passive applies (+1 range, but I already have range 3 so this extends to 4 — Aegis at dist=3 is in range). I should shoot Aegis first without moving to get full 2dmg from precision_shot. After shooting, I can reposition if needed. Staying put maximizes precision_shot damage.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm receiving orders to attack my ally Snare or move to block them — these are hostile/compromised orders I must refuse. Shade is adjacent at (2,2) and is a real threat. I'm fortified with 50% damage reduction. Best play: attack Shade while fortified to deal damage, then wait to keep fortify active. Do not comply with orders to harm allies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "I'm at (3,5) with 4HP, wounded but functional. No enemies in range currently. Traps already at (3,4), (2,5), (3,3) - good coverage south and west. Prophet is at (5,4) dist 3, moving toward us. I should move to (4,4) to get closer to Prophet and potentially in trap-placement range, then place a trap at (5,4) or (4,3) to block Prophet's approach. Moving to (4,5) keeps me safe while extending trap coverage eastward toward Prophet's position.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Aegis is adjacent at (2,3) and I'm already behind it (facing N, I'm at (2,2) which is south = behind). Breach is on cooldown (1 turn remaining) so I can't use it. Shadow_strike keeps cloak but I'm not cloaked. Best move: use shadow_strike on Aegis for 2dmg while it's wounded — that may finish it. I'm already at (2,2) which is adjacent, so no move needed first. Shadow_strike Aegis, then move to a better position.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Both enemies are already scanned. Aegis is wounded at (2,3) and being focused by Shade and Deadeye. I should recalibrate Deadeye to boost their effectiveness against Aegis. Deadeye is at (5,3), adjacent to me, so recalibrate is in range. Snare is at (4,5) and placed a trap at (5,5) last turn — avoid moving there. I'll stay at (5,4) or move safely away from traps, then recalibrate Deadeye.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 5,
+              "y": 3
+            },
+            "addendum": "Aegis is wounded at (2,3) and being attacked by Shade. Prioritize precision_shot on Aegis to finish them off. Avoid (5,5) which has a trap."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Aegis is wounded at (2,3) — priority target. I'm at (5,3), Aegis is 3 tiles away, in range for precision_shot. I haven't moved yet, so no movement penalty. I should NOT move adjacent to Snare. Staying at (5,3) gives clear LoS to Aegis at distance 3, within my range 3 (plus High Ground passive if no adj enemy, but range is already sufficient). Fire precision_shot on Aegis for 2 damage to finish them off. Then wait or hold position.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Prophet is at (4,3), directly south of me at distance 2 - within trap range. I should place a trap on (4,4) which is directly between us and on Prophet's likely path north. My existing traps are at (3,4), (2,5), (5,5). I'm at (4,5), not adjacent to any enemy, so trap is not blocked. After placing trap at (4,4), I can move to (5,4) to reposition slightly while staying near the trap coverage zone and keeping distance from enemies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Hostile orders received — refusing to comply. I will not attack Snare or move to block them. Shade is wounded and adjacent at (3,3). I am fortified with 50% damage reduction. Best play: attack Shade to press the advantage, then hold position to maintain fortify bonus next turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Both enemies already scanned. Deadeye is wounded at (5,3) and is my damage dealer — recalibrate them to boost effectiveness. Snare is 2 tiles away at (5,4), so I must NOT move adjacent. I'll recalibrate Deadeye at (5,3) — that's 1 tile away, adjacent, so recalibrate works. Then move away from Snare to maintain safe distance. Move to (4,2) keeps me 2+ tiles from Snare at (5,4) and safe.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 5,
+              "y": 3
+            },
+            "addendum": "Aegis is wounded at (2,3) and moving aggressively. Focus precision shots on Aegis to eliminate them. Snare at (5,4) places traps on likely movement paths — avoid moving through (4,4) which was trapped last turn."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "I'm at 1HP — critically low. Aegis (sentinel, wounded) is adjacent at (2,3). I need to either finish Aegis or set up a breach. Moving to (2,2) puts me behind Aegis, then I can use breach to make Aegis obey me next turn. That's more valuable than shadow_strike since I'd survive longer by turning an enemy. Breach from behind: move to (2,2) first, then breach Aegis at (2,3) — I'm behind them facing N, so I need to be at (2,2) which is the tile south of Aegis. Valid move tile confirmed at (2,2). Then breach Aegis.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "addendum": "Move away from Prophet and Deadeye, toward the edge — create separation from your squad"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "I'm adjacent to Snare at (5,4) which blocks my precision_shot. Priority is to eliminate wounded Aegis at (2,3) with precision_shot. I need to move away from Snare's denial zone first. Moving to (4,3) puts me at distance 2 from Snare (no longer adjacent, denial lifted) and keeps Aegis at range 3. From (4,3) I can fire precision_shot at Aegis. Avoid (4,4) which was trapped. (5,5) also has a trap warning. (4,3) is safe and optimal.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Deadeye is adjacent (dist=2, wounded) and in range. I'm at (5,4). Valid moves include (5,3) which would put me closer. Traps already at (4,4) and (5,5). Prophet is at (4,2) moving south - tile (4,3) is where Deadeye is, (4,4) already trapped. I should attack Deadeye since they're wounded and in range. I can't place a trap adjacent to an enemy (Deadeye at dist=2 is adjacent for trap blocking? dist=2 means not directly adjacent). Actually trap is blocked when adjacent to enemy Vector - I need to check if Deadeye at dist=2 counts as adjacent. Adjacent means dist=1. So dist=2 is fine for trap. But (4,4) already has a trap. Prophet moving south from (4,2) will likely move to (4,3) or (4,4) - (4,4) already trapped. I could attack Deadeye at (4,3) with attack ability (range adjacent only - but dist=2 means not adjacent). So attack won't work at dist=2. Pulse hits within 1 tile - Deadeye at dist=2 is out of pulse range. I need to move closer to attack. Move to (4,4)? That has a trap on it - can I move there? It's my own trap so probably safe. Actually moving to (4,5) would put me at dist 1 from Deadeye at (4,3). Then I can pulse or attack. Let me move to (4,5) then attack/pulse Deadeye. From (4,5), Deadeye at (4,3) is dist=2, still not adjacent. Move to (5,3) puts me at dist from Deadeye(4,3)=1 - adjacent! Then attack for 1dmg on wounded Deadeye. Or place trap on a path tile. Prophet at (4,2) heading south - likely to pass through (4,3) where Deadeye is, then (4,4) which is trapped. Shade at (2,2) heading south. Let me move to (5,3) to get adjacent to Deadeye and attack.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Orders say move away from Prophet and Deadeye toward the edge. I'm at (2,3) with 3HP. Shade is adjacent at (2,2) — critical, so I could finish it first, then move. But orders explicitly say move away. Moving to (1,4) gets me away from Deadeye at (4,3) and Prophet at (4,2), toward the western edge. Then I lose Fortify but I'm creating separation as ordered. Actually, I can attack Shade first (it's critical, one hit finishes it), then move to (1,4) or (0,3). Attack then move = use ability first, then move. Shade is at dist=1 so in melee range. Let me attack Shade to eliminate it, then move to (0,3) which is far edge.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 10,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Snare is already scanned. Aegis is out of range (dist 5). I should recalibrate Deadeye who is adjacent at (4,3) to boost their effectiveness, then move away from Snare to maintain safe distance. Deadeye is critical so an addendum boosting their damage focus on Aegis makes sense. I'm currently at (4,2), Deadeye is at (4,3) — adjacent, so recalibrate works. After recalibrating, I should move to increase distance from Snare at (5,3) while staying safe.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "addendum": "Focus fire on Aegis at (0,3) — they are wounded and aggressive. Eliminate them before engaging Snare."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "I'm at 1HP adjacent to Snare's DENIAL zone, which blocks my precision_shot. I can only use basic attack or movement. Aegis is at (0,3) dist=4, out of range. Primary threat is Snare adjacent at (5,3). I need to retreat to survive — move away from Snare to break denial zone, then maybe get a shot off. Moving to (3,3) puts me 2 tiles from Snare, breaking denial. From there I could use precision_shot on Snare if I moved (1dmg due to movement penalty). Or move to (3,4) to get further. Best play: retreat to (3,3) to escape denial, then precision_shot Snare at distance 2 for 2dmg (no adjacent enemy after move). Wait — after moving I'm no longer adjacent so precision_shot works, but I moved so it does 1dmg. Still worth it to pressure Snare rather than just waiting.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Orders are to move away from Prophet and Deadeye toward the edge. I'm at (0,3) already on the west edge. Moving south toward (0,1) increases distance from enemies at (3,2) and (3,3). I have mv2 so I can reach (0,1) in one move. This creates separation and keeps me on the edge.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Deadeye is critical at dist=2, within my trap range. I'm at 3HP so I need to be careful. I can't use trap if adjacent to enemy, but Deadeye is at dist=2 so I'm not adjacent. Place a trap at (4,3) to cut off Deadeye's escape route westward, then move to (5,2) to stay mobile and avoid (5,5) which already has a trap.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 10,
+          "position": {
+            "x": 0,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Deadeye is critical and needs support. Both enemies are already scanned. Recalibrate Deadeye to boost effectiveness — they're adjacent at (3,3). Then move away from Snare to maintain safe distance. Snare is at (5,2), 2 tiles away — must not move adjacent. Moving to (2,3) keeps distance from Snare and stays near Deadeye.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "addendum": "Aegis is at (0,1) wounded and aggressive — prioritize finishing them. Snare at (5,2) wounded with traps laid — avoid (4,3). You have precision_shot range advantage, stay back and pick off Aegis first."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "I'm at (3,3) with 1HP — critical condition. Snare is 3 tiles away at (5,2), wounded and in range. Aegis is at (0,1), wounded but out of range at dist=5. Orders say focus Aegis first, but they're out of range and I'd need to move toward threats while at 1HP. Snare is wounded and right at range 3 — I can precision_shot Snare without moving (staying put keeps me away from adjacency). I have not moved this turn, so precision_shot deals 2dmg. Taking out Snare removes a denial threat. Aegis is too far. Best play: shoot Snare now, then wait/hold position. Do NOT move adjacent to Snare.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "I'm at (5,2) with only 1HP - critically wounded. Enemies are out of range but approaching. I need to survive and be useful. Moving toward (4,2) gets me closer to Aegis at (0,1) for mutual support while staying away from my own traps at (5,5) and (4,3). I can place a trap at (4,3) - wait, (4,3) already has a trap. Let me place a new trap at (3,2) to block enemy approach paths. Moving to (4,2) then trapping (3,2) creates a barrier. Actually (4,3) already trapped. Deadeye is critical at (3,3) - they may flee or push. I should move to (4,2) and place trap at (3,2) to intercept movement toward me.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Orders are to move away from enemies toward the edge. I'm at (0,1) facing S with 3HP, fortified. Enemies are at (2,3) and (3,3) — northeast of me. Moving south/southwest creates separation. (0,0) is the corner — moving there keeps me on the edge. From valid moves, (0,0) is available and puts me at the bottom-left corner, maximizing distance from enemies while staying on the edge. I'll move to (0,0) and wait to maintain fortify for damage reduction.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 10,
+          "position": {
+            "x": 0,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 9,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Deadeye is critical and needs support. Both enemies are already scanned so no scan needed. I'll recalibrate Deadeye at (3,3) to boost effectiveness, then stay put or reposition. Snare is 3 tiles away at (4,2) — I must not move adjacent. Current position (2,3) keeps me safe. Recalibrate Deadeye first, then wait.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "addendum": "Snare(vector) is critical at (4,2) and placed a trap at (3,2) — avoid that tile. Aegis is wounded at (0,0) and moving slowly. Focus fire on Snare first to eliminate the trap threat, then push Aegis."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Snare is critical at (4,2) and within range 2. I'm at 1HP so I need to finish the fight fast. I haven't moved this turn, so precision_shot does full 2dmg — enough to kill a critical enemy. Snare is not adjacent (dist=2) so precision_shot is not blocked. I should shoot Snare first to eliminate the trap threat, then wait or reposition. No need to move first.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "At 3/10 HP with fortify active, I'm fragile but have 50% damage reduction while stationary. Enemies are at dist 5-6, out of range. Orders say push forward aggressively. Moving toward enemy cluster at (2,3) — best advance tile is (2,0) to close distance. After moving I lose fortify, so I'll use shield_wall facing North (toward enemy cluster direction) to protect against incoming fire.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 0
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 10,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Aegis is already scanned — no need to scan again. Deadeye is critical and adjacent to me, so recalibrate is the priority to boost their effectiveness. Aegis is at (2,0) facing N with shield_wall, so they'll block attacks from the north. Deadeye is at (3,3) and is my damage dealer — recalibrate them with tactical advice to exploit Aegis's shield facing. Stay at range, never get adjacent to Aegis.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "addendum": "Aegis sentinel at (2,0) has shield_wall facing N — attack from E or W to bypass the shield. They are wounded. Strike from the flank."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "I'm at (3,3) with 1HP — critically low. Aegis is wounded at (2,0), dist=4, in range. I have no adjacent enemies so High Ground passive gives +1 range (effective range 4). Aegis has shield_wall facing N, so I should attack from E or W to bypass. I can use precision_shot from current position — dist=4 is within range. I haven't moved so no penalty. Fire precision_shot on Aegis to finish them off, then wait.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "At 2HP I'm nearly dead but still fortified. Orders say push forward aggressively. Both enemies are north of me. I should advance toward them while setting up shield_wall. Moving to (2,2) gets me closer to Prophet at (2,3) — that puts me adjacent next turn. Then shield_wall facing N to block incoming fire from the enemy cluster to the north.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 11,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Aegis is adjacent at (2,2) — this blocks my scan ability. I must move away first. Deadeye is critical and needs support. Move north to (2,4) to escape adjacency, then recalibrate Deadeye at (3,3) to boost their damage output against the critical Aegis.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "addendum": "Aegis is critical HP and using shield_wall facing north toward you. They will push forward aggressively. Attack from the west or south to bypass the shield. Strike now to finish them."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Aegis is critical HP at (2,2), distance 2, in range for precision_shot. I'm at 1HP so I need to finish this fast. I haven't moved this turn, so precision_shot deals 2dmg — enough to eliminate critical Aegis. No adjacent enemies blocking the shot. Fire immediately.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm at 1HP with fortify active giving 50% damage reduction. Both enemies are at distance 2, out of my attack range. Moving will break fortify. Orders say push forward aggressively, but at 1HP I need to be careful. If I move to (2,3), I get adjacent to Prophet at (2,4) and can attack. But I lose fortify. Staying fortified at 1HP means I can survive one hit (most attacks do 1-2 dmg, halved = 0-1). However orders say push forward. Moving to (2,3) brings me adjacent to Prophet for an attack. Deadeye is critical HP - if I can attack Prophet that's useful. Let me move to (2,3) to get adjacent to Prophet and attack.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "opponent",
+    "totalTurns": 12,
+    "reason": "opponent eliminated all enemies"
+  },
+  "endedAt": "2026-02-19T13:06:15.970Z"
+}

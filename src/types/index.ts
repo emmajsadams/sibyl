@@ -12,6 +12,7 @@ export interface BalanceConfig {
     breach: { maxUses: number; cooldown: number; duration: number; range: number };
     cloak: { duration: number };
     precisionShot: { damage: number; movedDamage: number };
+    scan: { damage: number };
     suppressingFire: { damage: number };
     patch: { maxUses: number; healAmount: number };
     overclock: { selfDamage: number };
@@ -48,6 +49,7 @@ export const BALANCE: BalanceConfig = {
     breach: { maxUses: 2, cooldown: 2, duration: 3, range: 2 },
     cloak: { duration: 3 },
     precisionShot: { damage: 2, movedDamage: 1 },
+    scan: { damage: 1 },
     suppressingFire: { damage: 1 },
     patch: { maxUses: 4, healAmount: 3 },
     overclock: { selfDamage: 1 },
