@@ -1,0 +1,1629 @@
+{
+  "id": "2026-02-19T20-00-03",
+  "startedAt": "2026-02-19T20:00:03.895Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 4,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 4,
+        "movement": 2,
+        "range": 2,
+        "speed": 2
+      },
+      "oracle": {
+        "maxHp": 10,
+        "movement": 3,
+        "range": 4,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 9,
+        "movement": 2,
+        "range": 1,
+        "speed": 2
+      },
+      "vector": {
+        "maxHp": 6,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 11,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 2
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 3
+      },
+      "precisionShot": {
+        "damage": 2,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 3
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 4,
+        "healAmount": 3
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Warden",
+        "class": "sentinel",
+        "prompt": "Hold the front line. Position between allies and enemies. Use shield_wall toward incoming threats. Attack adjacent enemies."
+      },
+      {
+        "name": "Deadeye",
+        "class": "striker",
+        "prompt": "Maintain distance. Use precision_shot on high-value targets — medics first, then damage dealers. Use suppressing_fire if enemies close in."
+      },
+      {
+        "name": "Lattice",
+        "class": "vector",
+        "prompt": "Control chokepoints with traps. Place them between enemy positions and your allies. Use denial to block adjacent enemy abilities. Pulse groups when possible."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Bolt",
+        "class": "striker",
+        "prompt": "Position for clear sight lines. Prioritize killing wounded enemies with precision_shot. If forced to move, retreat away from threats. Suppressing_fire to slow rushers."
+      },
+      {
+        "name": "Lens",
+        "class": "oracle",
+        "prompt": "Scan priority targets each turn to reveal their strategy. Use recalibrate on your damage dealer to boost effectiveness. Stay behind allies and maintain range. Never get adjacent to enemy vectors."
+      },
+      {
+        "name": "Remedy",
+        "class": "medic",
+        "prompt": "Prioritize healing the lowest HP ally. Position safely behind your sentinel. Use overclock on allies who can do the most with an extra action."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Round 1: I'm at (3,4) with both Warden and Deadeye at exactly range 4. Priority is to scan a high-value target to reveal their strategy. Deadeye (striker) is the biggest threat — scan them first. Then recalibrate Bolt (striker ally at (5,4)) to boost their damage output. I should not move since I'm already in a good position with range on two enemies and no adjacent vectors.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 5,
+              "y": 4
+            },
+            "addendum": "Priority target: Deadeye (striker) at (3,0). Focus fire to eliminate quickly. Warden (sentinel) at (2,1) may have shield abilities — engage Deadeye first."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "All enemies are out of range (closest is Lens at dist=4, my max range is 3+1=4 with High Ground passive if no adjacent enemy). Moving north toward Lens. From (3,2) I'd be at dist=2 from Lens - within range. Let me move to (3,2) to get Lens in range, then precision_shot.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "All enemies are out of range from current position (5,4). Deadeye is at (3,2) dist=4, just outside my range of 3. I need to move closer. Moving to (5,2) brings me closer but Deadeye at (3,2) would still be dist=2 from there — within range 3. Let me check: from (5,2) to (3,2) is Manhattan dist=2, which is within precision_shot range of 3. That gives me a clear shot at Deadeye who is critical. Moving to (5,2) first, then precision_shot Deadeye at (3,2).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "Lens is wounded at 9/10 HP and is 2 tiles away at (3,4). I can move to (3,5) to get adjacent to Lens, then patch them. Enemies are far away so no threat this turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "No enemies in range yet. Advance to (2,3) to hold the front line between allies at (2,0) and enemies clustered around (3,4)-(5,2). Staying in place after moving loses Fortify, but positioning is critical. Move toward center to intercept incoming threats next turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Round 1, enemies are all far away (dist 5-6). I need to advance and set traps in chokepoints between enemy positions and my ally Warden at (2,3). Moving to (2,2) puts me closer to the action and lets me place a trap at (3,2) or (2,3) to catch enemies advancing south. I'll move to (2,2) first, then place a trap at (3,2) which is a likely approach path from Bolt at (5,2) and Lens at (3,4).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 11,
+          "maxHp": 11,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 10,
+          "maxHp": 10,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 9,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Warden is at (2,3) dist=2, in scan range. Lattice is at (2,2) dist=3, also in range but is a vector — scanning it reveals its trap strategy. Foresight shows Lattice set a trap at (3,2) last turn, so I should avoid that tile. Warden just waited, so it's the better scan target to reveal its next move. I'm at (3,4), Warden is 2 tiles away — safe from Lattice adjacency. Scan Warden to deal 1 damage and reveal its prompt. Then I can recalibrate Bolt (striker at (5,2)) but that's adjacent-only range so too far. Stay put and scan.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "All allies are at full HP, so no healing needed. Enemies are out of range. I should reposition to stay behind our sentinel Warden for safety, while staying close enough to heal allies if they take damage. Moving to (2,4) keeps me near the oracle at (3,4) and positions me behind the sentinel at (2,3). Then wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Lattice (vector) is at distance 3, exactly at my max range. I'm not adjacent to Lattice so precision_shot is not blocked. I should fire precision_shot on Lattice now before moving, since moving would reduce damage to 1. Lattice is healthy so 2 damage is better. After shooting, I can reposition to maintain distance and keep high ground advantage.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Remedy is 2 tiles away at (2,4) - within range for pulse or attack. My trap is already at (3,2). I should move north to (2,3) to get adjacent to Remedy, activating Denial to block her abilities, then pulse to hit Remedy (and potentially Lens at dist 3 from new position). Actually moving to (2,3) puts me adjacent to Remedy at (2,4) - Denial blocks patch. Then pulse from (2,3) hits everything within 1 tile: Remedy at (2,4) and ally Warden at (2,3)... wait, Warden is at (2,3) so I can't move there. Move to (3,3) instead - dist to Remedy becomes 2, Lens at (3,4) is dist 1! Pulse from (3,3) would hit Lens at (3,4) for 1 dmg. That's valuable. But I'm at 4/6 HP so engaging close is risky. Move to (3,3), pulse hitting Lens adjacent at (3,4).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Remedy is adjacent at (2,4) - I can attack it directly. I'm fortified so I should avoid moving to keep 50% damage reduction. Attack Remedy this turn while holding position.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 11,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 9,
+          "maxHp": 10,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "I'm adjacent to Lattice (vector) which blocks my scan ability. I need to move away first to break the denial zone, then scan a target. Moving to (4,4) puts me at distance 2 from Lattice, clearing denial. From (4,4) I can scan Lattice to reveal its prompt. Warden is already scanned. Priority: escape denial zone, then scan Lattice.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "Lens is wounded at 9/10 HP and is 2 tiles away. I need to move adjacent to Lens to heal. Moving to (3,4) puts me adjacent to Lens at (4,4) and keeps me away from Lattice's denial range at (3,3) — wait, (3,4) is adjacent to (3,3) diagonally but not orthogonally, dist=1 from Lattice. Actually dist from (3,4) to (3,3) is 1 — that's adjacent, which would block my abilities. Better to move to (3,5) — dist from (3,5) to (3,3) is 2, safe. From (3,5), Lens at (4,4) is dist=2, not adjacent. Hmm. Let me check (3,4): adjacent to Lattice at (3,3)? Yes, dist=1, blocked. What about staying at (2,4) — Lens is at (4,4), dist=2, not adjacent. I can't reach Lens this turn without getting adjacent to Lattice or not being adjacent to Lens. Valid moves include (3,5) which is dist=2 from Lens — still not adjacent. The only way to be adjacent to Lens at (4,4) would be (3,4),(4,3),(4,5),(5,4) — none of these are in my valid move list except (3,4) which puts me adjacent to Lattice. I'll move to (3,5) to reposition closer to Lens for next turn, and use overclock on Warden... no, overclock is for allies. I'm adjacent to Warden (enemy). No adjacent allies currently. I'll move to (3,5) and wait — safe positioning for next turn to heal Lens.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Lattice (vector) is critical and 2 tiles away at (3,3). I'm at (5,3) with no adjacent enemies, so High Ground passive gives me range 4. Lattice is in range at dist=2. I can fire precision_shot for 2 damage to eliminate the critical Lattice. I have not moved, so full 2dmg applies. After killing Lattice, I can stay put or reposition. Let me fire precision_shot at Lattice first to finish them off, then wait or hold position.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (2,3) with 50% damage reduction. All enemies are at distance 3, none in attack range. Orders say hold the front line and position between allies and enemies. Moving to (3,3) advances toward enemies while staying between them and our backline. Then I'll use shield_wall facing East toward the incoming threats (Bolt at (5,3), Lens at (4,4), Remedy at (3,5)). Wait — if I move I lose Fortify. Better to stay put and shield_wall East to protect allies behind me from eastern threats.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "E"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 11,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 9,
+          "maxHp": 10,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Warden is already scanned — prompt known. I should recalibrate Bolt (striker) to boost damage effectiveness, then stay safe. Bolt is at (5,3), adjacent to me at (4,4)? Distance is 1+1=2, not adjacent. Recalibrate requires adjacent only. I need to move adjacent to Bolt first. Bolt is at (5,3). Moving to (5,4) puts me adjacent to Bolt (distance 1). Then recalibrate Bolt. This keeps me away from Warden at (2,3) and I won't be adjacent to any enemy vectors.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 5,
+              "y": 3
+            },
+            "addendum": "Warden at (2,3) used shield_wall facing East last turn. Approach from North or South to avoid shield. Attack from flank."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "Lens is wounded at 9/10 HP and needs healing. I need to get adjacent to Lens at (5,4). My valid moves include (4,4) which puts me distance 1 from Lens - that's adjacent. I'll move to (4,4) then heal Lens.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Warden is at (2,3), distance 3, within precision_shot range. I'm at (5,3) facing North, no adjacent enemies so High Ground passive gives +1 range. Warden used shield_wall facing East last turn — attacking from my current position (East of Warden) risks hitting the shield. I should move North to (5,5) or stay and use suppressing_fire to slow Warden instead. Actually, orders say attack from flank (North or South). Moving to (5,5) doesn't change my East-of-Warden angle much. Better to fire now: precision_shot at Warden deals 2dmg. The shield_wall from last turn may have expired — shields typically last one turn. Even if shield is still up facing East, I can try suppressing_fire to slow Warden's advance. But precision_shot for 2dmg is the better play to weaken Warden. I haven't moved so no movement penalty. Fire precision_shot at Warden, then move to (5,5) to maintain distance.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (2,3) with 50% damage reduction. Closest enemy is Remedy at (4,4) dist=3, then Lens at (5,4) dist=4. My orders are to hold the front line and position between allies and enemies. Moving to (3,3) advances toward enemies while staying between them and allies, and I can use shield_wall facing East to block incoming damage from that direction. There's a trap at (3,2) so I'll avoid that. Moving to (3,3) and shield_wall East covers Remedy and Lens threats.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 11,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 10,
+          "maxHp": 10,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Warden is already scanned — prompt known. I should recalibrate Bolt (our striker, the main damage dealer) to boost effectiveness. Bolt is at (5,5), adjacent to me at (5,4). I'll recalibrate Bolt first, then stay put or reposition. No need to scan Warden again. Stay at range, never adjacent to enemy vectors.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 5,
+              "y": 5
+            },
+            "addendum": "Priority target: Warden sentinel at (3,3). Use precision_shot on Warden each turn. Warden will shield_wall facing E — approach from N or S to avoid shield. Coordinate with allies to focus fire."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "All allies are at full HP, so no healing needed. I have 1 heal left but no wounded targets. Bolt the striker could benefit from overclock to get 2 abilities, but I need to be adjacent. Bolt is at (5,5), I'm at (4,4) - that's diagonal, not adjacent. I could move to (4,5) or (5,3) to get adjacent to Bolt or stay safe. Moving to (4,5) puts me adjacent to Bolt at (5,5)? Distance from (4,5) to (5,5) is 1 - yes adjacent. Then I can overclock Bolt for 2 abilities next turn. The enemy Warden is at (3,3), dist 2 from me currently, so moving to (4,5) keeps distance. Overclock is good value on striker who can deal damage.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Warden is at (3,3), dist=4, out of my range-3 precision_shot. I have 2 ability uses (overclocked) but no enemies in range. I need to close distance. Moving to (3,5) gets me closer but Warden is still dist=4 from there. Moving to (4,4) puts me at dist=1+1=2 from (3,3)... wait: |4-3|+|4-3|=2, so dist=2, in range. But moving may reduce precision_shot to 1dmg. Better to move to (3,5): dist=|3-3|+|5-3|=2, in range, and no adjacent enemy so High Ground passive gives +1 rng. From (3,5) I can use precision_shot twice on Warden (overclocked). But I moved so precision_shot deals 1dmg each. Still worth it to get 2 shots in. Actually (4,4): dist=2, in range. Same situation. Let me pick (3,5) — directly north of Warden, avoids his East-facing shield, and I can shoot twice.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (3,3) with 50% damage reduction. Bolt is at (3,5) distance 2 — moving to (3,4) puts me adjacent to engage. But moving loses fortify. Enemies are all to the north. If I move to (3,4) I can attack Bolt next turn or use shield_wall to protect allies. Actually, staying fortified is valuable at 6/11 HP. Let me hold position and use shield_wall facing North to protect allies behind me from Bolt at (3,5). Wait + shield_wall toward N to intercept damage to allies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 11,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 10,
+          "maxHp": 10,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Warden is already scanned and wounded. Bolt is going to precision_shot Warden this turn, and Remedy is overclocking someone. I should recalibrate Bolt to boost their damage output. Bolt is at (3,5), I'm at (5,4) — that's distance 3, not adjacent. I need to move closer to recalibrate. Moving to (4,4) puts me adjacent to (3,5)? No: dist from (4,4) to (3,5) = sqrt(1+1) = ~1.4, so yes adjacent (diagonal counts). But valid moves include (4,4). From (4,4) I can recalibrate Bolt at (3,5). This keeps me safe (Warden is at (3,3), not adjacent to me at (4,4)). Let me move to (4,4) then recalibrate Bolt.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 5
+            },
+            "addendum": "Warden at (3,3) is wounded and will use shield_wall facing North. Precision shot from the side or after shield drops. Prioritize finishing the Warden this round."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "Bolt is at (3,5) with 3/4 HP, adjacent to my position at (4,5) — I can patch Bolt now. I have 1 heal remaining, and Bolt is the only wounded ally. Lens is at full HP so no healing needed there. After healing Bolt, I'll wait since I'm already in a safe rear position.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Warden is wounded at (3,3), distance 2, in range for precision_shot. I'm at (3,5) with no adjacent enemies, so High Ground passive gives +1 range (not needed here). I haven't moved, so precision_shot deals full 2 damage. Warden is wounded — 2 damage should finish it. No movement needed, just fire.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "I'm at (3,3) with 5/11 HP, fortified (50% dmg reduction). Enemies: Bolt at (3,5) dist=2, Lens at (4,4) dist=2. No enemies in melee range. I should advance to get adjacent to an enemy. Moving to (3,4) puts me adjacent to Bolt at (3,5) - I can then attack. This advances the front line and lets me deal damage while still being able to use shield_wall if needed.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 11,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 10,
+          "maxHp": 10,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Warden is adjacent at (3,4) — scan is blocked when adjacent to enemy. I already have Warden's prompt. I should move away to maintain range and then recalibrate Bolt (our striker/damage dealer) to boost effectiveness. Moving to (5,4) keeps me safe and at range. Then recalibrate Bolt at (3,5) — but range is adjacent only, so from (5,4) Bolt at (3,5) is distance 3, out of recalibrate range. Better to move to (4,3) — Bolt is at (3,5), distance is 2+1=3, still too far. Move to (5,5) — Bolt at (3,5) is distance 2, still not adjacent. I need to be adjacent to Bolt to recalibrate. Bolt is at (3,5). Adjacent positions: (2,5),(4,5),(3,4),(3,6). From current (4,4) with mv3, I can reach (4,5) — that's adjacent to Bolt. Then recalibrate Bolt to focus on Warden.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": "Position occupied",
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 5
+            },
+            "addendum": "Priority: attack Warden sentinel at (3,4) — they are wounded and planning to attack you. Use precision_shot on Warden to finish them off."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Warden is adjacent at (3,4) — precision_shot is blocked when adjacent to an enemy. Must use basic attack instead. Warden is wounded, so attack may finish them. I'm at 3HP so staying put is fine since Warden acts after me this round. Use attack on Warden, then wait.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses left). Bolt is wounded at 3HP but I can't heal. Warden is at dist=2, not adjacent so no threat to abilities. I should use overclock on Bolt (striker) since they're wounded and adjacent at (3,5) - giving them 2 abilities could let them deal more damage. Then I'll wait or reposition. Bolt is adjacent to me at (3,5) and I'm at (4,5), so overclock is valid (adjacent). This will cost me 1HP but Bolt getting 2 actions is valuable.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (3,4) with 50% damage reduction. Two enemies adjacent: Bolt (wounded striker) at (3,5) and Lens (oracle) at (4,4). Priority is to attack Bolt since they're wounded and finishing them reduces incoming damage. I should stay in place to keep fortify active. Attack Bolt first, then shield_wall toward the east to protect against Lens and Remedy.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 4
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 11,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 10,
+          "maxHp": 10,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Warden is adjacent at (3,4) — scan is blocked when adjacent to enemy. I already have Warden's prompt from a previous scan anyway. I should move away to maintain range and then recalibrate Bolt (critical striker at (3,5)) to boost their effectiveness. Moving to (5,4) keeps me safe and in range. Then recalibrate Bolt at (3,5) — but that's distance 2, recalibrate is adjacent only. Let me check: from (5,4), Bolt at (3,5) is dist=sqrt(4+1)=~2.2, not adjacent. From (5,5), Bolt at (3,5) is dist=2, still not adjacent. I need to be adjacent to Bolt to recalibrate. Bolt is at (3,5). Adjacent would be (2,5),(4,5),(3,4),(3,3) — but (4,5) has Remedy, (3,4) has Warden. I can't reach Bolt this turn while staying safe. Best play: move to (5,4) to escape Warden's adjacency, then wait. That gets me out of melee range and Warden's shield_wall was facing E last turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Warden is adjacent at (3,4) — precision_shot is blocked when adjacent to enemy. I'm overclocked with 2 ability uses. I have 1HP so I need to be careful. Best play: move away from Warden to break adjacency, then use precision_shot to finish them off while wounded. Move to (3,3) puts me 1 tile away but still adjacent. Move to (2,4) gives distance. Actually, valid moves show (3,3) is available — that's 1 tile south of Warden, still adjacent. Move to (2,5) — that's 1 tile west, still adjacent. Move to (2,4) is valid and puts me at dist=1 from (3,4) still. I need dist > 1 to use precision_shot. Valid moves: [1,5],[2,4],[2,5],[3,3],[4,4],[5,5]. From (2,4): dist to Warden (3,4) = 1, still adjacent. From (1,5): dist to Warden = sqrt(4+1)=~2.2, not adjacent! Move to (1,5) breaks adjacency, then precision_shot Warden from range 2. I'm overclocked so I get 2 ability uses — move to (1,5), then precision_shot Warden twice to guarantee kill.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses left). Bolt is at 1/4 HP and needs healing but I can't heal. Bolt is at dist=3, not adjacent. Warden enemy is at dist=2. I should move toward Bolt to potentially use overclock next turn, but Bolt is at (1,5) and I'm at (4,5). Best move is toward Bolt: move to (2,5) to close distance to 1 (adjacent). Then I could overclock Bolt next turn. For now, move toward Bolt and wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "I'm at (3,4) with only 3HP, fortified (50% dmg reduction). All enemies are within 2-3 tiles but none adjacent. I should stay fortified to keep damage reduction - moving would lose it. Remedy is at (2,5) distance 2, Lens at (5,4) distance 2. I can use shield_wall to protect allies from the west where Bolt and Remedy are threatening. Staying put preserves fortify passive. I'll shield_wall toward W to block incoming damage to allies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 4
+            },
+            "direction": "W"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 11,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 10,
+          "maxHp": 10,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 9,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Warden is already scanned and wounded. Bolt is critical and about to precision_shot Warden. I should recalibrate Bolt to boost their effectiveness on this kill shot. But Bolt is at (1,5) and recalibrate is adjacent-only — too far. Instead, I can scan Warden again to deal 1 more damage and push them closer to death, helping Bolt finish them. Warden is at (3,4), distance 2, within scan range. I'll stay at (5,4) to maintain distance from Warden (not adjacent, so scan isn't blocked). Recalibrating Remedy or Bolt isn't possible from here. Best play: scan Warden for 1 damage, then wait.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "Bolt is critical at 1/4 HP and adjacent to me at (1,5). I have 0 heals left so I cannot patch. I can use overclock on Bolt to give them 2 abilities next turn — at 1 HP they need to act fast before dying. I should move away from Warden who is at dist=2 to stay safe, but overclock requires adjacency. Bolt is currently adjacent at (1,5). I'll overclock Bolt first (taking 1 dmg myself, going to 7/9 HP), then move away from Warden to safety.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "I'm at 1HP so survival is critical. I'm fortified (50% dmg reduction) which is my only protection. Lens is 2 tiles away to the east - if I move I lose fortify. I should stay put and use shield_wall facing east toward Lens to protect allies. No adjacent enemies to attack.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "direction": "E"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 11,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 10,
+          "maxHp": 10,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 0,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "opponent",
+    "totalTurns": 10,
+    "reason": "opponent eliminated all enemies"
+  },
+  "endedAt": "2026-02-19T20:04:45.527Z"
+}
