@@ -618,7 +618,7 @@ function abilityPatch(state: GameState, unit: Unit, target?: Position): string |
   if (distance(unit.position, ally.position) > 1) return "Must be adjacent";
   const usedHeals = unit.healsUsed || 0;
   if (usedHeals >= 3) return "No heals remaining (max 3 per game)";
-  const healed = Math.min(2, ally.maxHp - ally.hp);
+  const healed = Math.min(3, ally.maxHp - ally.hp);
   ally.hp += healed;
   unit.healsUsed = usedHeals + 1;
   state.log.push(

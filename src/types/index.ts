@@ -37,10 +37,10 @@ export const UNIT_STATS: Record<UnitClass, UnitStats> = {
   specter: { maxHp: 5, movement: 3, range: 1, speed: 3 },
   // Striker: mid-speed sniper — reduced HP to create counterplay opportunities
   striker: { maxHp: 4, movement: 2, range: 3, speed: 2 },
-  // Oracle: buffed HP so it doesn't melt to 2 precision shots
-  oracle: { maxHp: 8, movement: 2, range: 4, speed: 2 },
-  // Medic: mid-speed — heals after initial damage lands
-  medic: { maxHp: 6, movement: 2, range: 1, speed: 2 },
+  // Oracle: buffed HP for survivability; scan is info-only so needs to stay alive
+  oracle: { maxHp: 9, movement: 2, range: 4, speed: 2 },
+  // Medic: buffed HP to survive focus fire; heals scale with durability
+  medic: { maxHp: 7, movement: 2, range: 1, speed: 2 },
   // Vector: slow — places traps AFTER seeing where everyone moved
   vector: { maxHp: 6, movement: 2, range: 2, speed: 1 },
   // Sentinel: slowest — positions last, reactive tank
