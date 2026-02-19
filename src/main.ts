@@ -23,6 +23,7 @@ const USE_CLI = !USE_API;
 const { getUnitAction, getPlacement } = USE_CLI ? cliAgent : apiAgent;
 import { ask, askMultiline, close } from "./cli/input";
 import { GameLogger } from "./logger";
+import { BALANCE } from "./types";
 import { TrainingRecorder } from "./training/recorder";
 import { setTrainingListener, emit as emitTraining } from "./training/emitter";
 import { generateRandomConfig } from "./training/squads";
@@ -427,7 +428,7 @@ async function main() {
 
   startPlay(state);
   let lastRoundLog: string[] = [];
-  const MAX_ROUNDS = 20;
+  const MAX_ROUNDS = BALANCE.maxRounds;
 
   // Show initial state
   console.log(renderFullState(state));

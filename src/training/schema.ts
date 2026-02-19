@@ -241,6 +241,7 @@ export const TrainingFile = z.object({
   timestamp: z.string(),
   agent: z.string(),
   model: z.string().optional(),
+  balance: z.any().optional(), // BalanceConfig snapshot — all tunable game parameters
   events: z.array(TrainingEvent),
 });
 

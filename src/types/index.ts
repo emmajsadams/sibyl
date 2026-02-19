@@ -1,3 +1,64 @@
+// === Balance Config (all tunable game parameters) ===
+// Snapshotted into every training file for full reproducibility.
+
+export interface BalanceConfig {
+  version: string; // package.json version
+  grid: { width: number; height: number };
+  maxRounds: number;
+  unitStats: Record<UnitClass, UnitStats>;
+  abilities: {
+    attack: { damage: number };
+    shadowStrike: { damage: number };
+    breach: { maxUses: number; cooldown: number; duration: number; range: number };
+    cloak: { duration: number };
+    precisionShot: { damage: number; movedDamage: number };
+    suppressingFire: { damage: number };
+    patch: { maxUses: number; healAmount: number };
+    overclock: { selfDamage: number };
+    trap: { damage: number };
+    pulse: { damage: number };
+  };
+}
+
+// Current balance values — the single source of truth.
+// Change these to tune the game; they'll be recorded with every match.
+
+import { readFileSync } from "fs";
+import { join } from "path";
+
+const _pkg = JSON.parse(
+  readFileSync(join(import.meta.dirname ?? ".", "../../package.json"), "utf-8"),
+);
+
+export const BALANCE: BalanceConfig = {
+  version: _pkg.version,
+  grid: { width: 6, height: 6 },
+  maxRounds: 20,
+  unitStats: {
+    specter: { maxHp: 5, movement: 3, range: 1, speed: 3 },
+    striker: { maxHp: 4, movement: 2, range: 3, speed: 2 },
+    oracle: { maxHp: 9, movement: 2, range: 4, speed: 2 },
+    medic: { maxHp: 7, movement: 2, range: 1, speed: 2 },
+    vector: { maxHp: 6, movement: 2, range: 2, speed: 1 },
+    sentinel: { maxHp: 10, movement: 2, range: 1, speed: 1 },
+  },
+  abilities: {
+    attack: { damage: 1 },
+    shadowStrike: { damage: 2 },
+    breach: { maxUses: 2, cooldown: 2, duration: 3, range: 2 },
+    cloak: { duration: 3 },
+    precisionShot: { damage: 2, movedDamage: 1 },
+    suppressingFire: { damage: 1 },
+    patch: { maxUses: 3, healAmount: 3 },
+    overclock: { selfDamage: 1 },
+    trap: { damage: 2 },
+    pulse: { damage: 1 },
+  },
+};
+
+// Legacy alias — code that imports UNIT_STATS still works
+export const UNIT_STATS = BALANCE.unitStats;
+
 // === Game Config (input to a game) ===
 
 export interface UnitConfig {
@@ -32,20 +93,7 @@ export interface UnitStats {
   speed: number; // 1-3, determines turn order (higher = acts first)
 }
 
-export const UNIT_STATS: Record<UnitClass, UnitStats> = {
-  // Specter: fastest — assassin strikes first, breach lands before target acts
-  specter: { maxHp: 5, movement: 3, range: 1, speed: 3 },
-  // Striker: mid-speed sniper — reduced HP to create counterplay opportunities
-  striker: { maxHp: 4, movement: 2, range: 3, speed: 2 },
-  // Oracle: buffed HP for survivability; scan is info-only so needs to stay alive
-  oracle: { maxHp: 9, movement: 2, range: 4, speed: 2 },
-  // Medic: buffed HP to survive focus fire; heals scale with durability
-  medic: { maxHp: 7, movement: 2, range: 1, speed: 2 },
-  // Vector: slow — places traps AFTER seeing where everyone moved
-  vector: { maxHp: 6, movement: 2, range: 2, speed: 1 },
-  // Sentinel: slowest — positions last, reactive tank
-  sentinel: { maxHp: 10, movement: 2, range: 1, speed: 1 },
-};
+// UNIT_STATS is now derived from BALANCE.unitStats (see top of file)
 
 export interface Unit {
   id: string;

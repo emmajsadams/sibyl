@@ -8,12 +8,12 @@ import type {
   GameContext,
   UnitView,
 } from "../types";
-import { UNIT_STATS as Stats } from "../types";
+import { UNIT_STATS as Stats, BALANCE } from "../types";
 import { emit } from "../training/emitter";
 import { TrainingRecorder } from "../training/recorder";
 
-const GRID_WIDTH = 6;
-const GRID_HEIGHT = 6;
+const GRID_WIDTH = BALANCE.grid.width;
+const GRID_HEIGHT = BALANCE.grid.height;
 
 // === Factory ===
 
@@ -266,15 +266,15 @@ export function moveUnit(state: GameState, unit: Unit, target: Position): string
   );
   let triggeredTrap = false;
   if (trap) {
-    unit.hp -= 2;
+    unit.hp -= BALANCE.abilities.trap.damage;
     state.traps = state.traps.filter((t) => t !== trap);
-    state.log.push(`${unit.name} triggered a trap! (-2 HP)`);
+    state.log.push(`${unit.name} triggered a trap! (-${BALANCE.abilities.trap.damage} HP)`);
     triggeredTrap = true;
     emit({
       type: "trap_triggered",
       unitId: unit.id,
       position: { ...target },
-      damage: 2,
+      damage: BALANCE.abilities.trap.damage,
       unitHpAfter: unit.hp,
     });
     if (unit.hp <= 0) {
@@ -289,7 +289,7 @@ export function moveUnit(state: GameState, unit: Unit, target: Position): string
     to: { ...target },
     newFacing: unit.facing,
     triggeredTrap,
-    trapDamage: triggeredTrap ? 2 : undefined,
+    trapDamage: triggeredTrap ? BALANCE.abilities.trap.damage : undefined,
   });
 
   // Remove fortified
@@ -389,7 +389,7 @@ function abilityBasicAttack(state: GameState, unit: Unit, target?: Position): st
   if (enemy.id === unit.id) return "Cannot attack self";
   if (isCloaked(enemy)) return "Cannot target cloaked unit";
   if (distance(unit.position, enemy.position) > 1) return "Must be adjacent";
-  const dmg = applyDamage(enemy, 1);
+  const dmg = applyDamage(enemy, BALANCE.abilities.attack.damage);
   const friendly = enemy.side === unit.side;
   state.log.push(
     `${unit.name} attacks ${enemy.name} (-${dmg} HP)${friendly ? " [FRIENDLY FIRE]" : ""}`,
@@ -413,7 +413,7 @@ function abilityShadowStrike(state: GameState, unit: Unit, target?: Position): s
   const enemy = getUnitAt(state, target);
   if (!enemy || enemy.side === unit.side) return "No enemy at target";
   if (distance(unit.position, enemy.position) > 1) return "Must be adjacent";
-  const dmg = applyDamage(enemy, 2);
+  const dmg = applyDamage(enemy, BALANCE.abilities.shadowStrike.damage);
   state.log.push(`${unit.name} shadow strikes ${enemy.name} (-${dmg} HP)`);
   emit({
     type: "damage_dealt",
@@ -472,22 +472,22 @@ function abilityBreach(
   if (!target) return "Must specify target";
   const enemy = getUnitAt(state, target);
   if (!enemy || enemy.side === unit.side) return "No enemy at target";
-  if (distance(unit.position, enemy.position) > 2) return "Must be within 2 tiles";
+  if (distance(unit.position, enemy.position) > BALANCE.abilities.breach.range) return `Must be within ${BALANCE.abilities.breach.range} tiles`;
   if (!isBehind(unit.position, enemy)) return "Must be behind the target";
   if (!addendum) return "Must provide addendum text for Breach";
-  // Cap: Specter can breach at most 2 times per game
+  // Cap: Specter can breach at most N times per game
   const breachCount = unit.breachesUsed ?? 0;
-  if (breachCount >= 2) return "Breach limit reached (max 2 per game)";
-  // Cooldown: 2-turn cooldown between uses
+  if (breachCount >= BALANCE.abilities.breach.maxUses) return `Breach limit reached (max ${BALANCE.abilities.breach.maxUses} per game)`;
+  // Cooldown between uses
   if ((unit.breachCooldown ?? 0) > 0)
     return `Breach on cooldown (${unit.breachCooldown} turns remaining)`;
   // Breach replaces the target's prompt — store original for restoration
   const oldPrompt = enemy.prompt;
   if (!enemy.originalPrompt) enemy.originalPrompt = oldPrompt;
   enemy.prompt = addendum;
-  enemy.breachTurnsLeft = 3; // fades after 3 of the target's turns
+  enemy.breachTurnsLeft = BALANCE.abilities.breach.duration;
   unit.breachesUsed = breachCount + 1;
-  unit.breachCooldown = 2; // can't breach again for 2 turns
+  unit.breachCooldown = BALANCE.abilities.breach.cooldown;
   state.log.push(`${unit.name} breaches ${enemy.name}'s prompt! (replaced, fades in 3 turns)`);
   emit({ type: "breach", attackerId: unit.id, targetId: enemy.id, oldPrompt, newPrompt: addendum });
   return null;
@@ -495,9 +495,7 @@ function abilityBreach(
 
 function abilityCloak(unit: Unit): string | null {
   if (unit.class !== "specter") return "Only Specter can use Cloak";
-  // turnsLeft tracks how many individual unit-turns until cloak expires
-  // 3 = lasts longer to be more useful
-  const effect = { type: "cloaked" as const, turnsLeft: 3 };
+  const effect = { type: "cloaked" as const, turnsLeft: BALANCE.abilities.cloak.duration };
   unit.statusEffects.push(effect);
   emit({ type: "status_applied", unitId: unit.id, effect, source: "cloak" });
   return null;
@@ -550,7 +548,7 @@ function abilityPrecisionShot(state: GameState, unit: Unit, target?: Position): 
       ? 1
       : 0); // High Ground passive
   if (distance(unit.position, enemy.position) > range) return "Out of range";
-  const baseDmg = unit.movedThisTurn ? 1 : 2;
+  const baseDmg = unit.movedThisTurn ? BALANCE.abilities.precisionShot.movedDamage : BALANCE.abilities.precisionShot.damage;
   const dmg = applyDamage(enemy, baseDmg);
   const friendly = enemy.side === unit.side;
   state.log.push(
@@ -578,7 +576,7 @@ function abilitySuppressingFire(state: GameState, unit: Unit, target?: Position)
   for (const tile of tiles) {
     const hit = getUnitAt(state, tile);
     if (hit && hit.id !== unit.id) {
-      const dmg = applyDamage(hit, 1);
+      const dmg = applyDamage(hit, BALANCE.abilities.suppressingFire.damage);
       hit.statusEffects.push({ type: "suppressed" });
       const friendly = hit.side === unit.side;
       state.log.push(
@@ -617,12 +615,12 @@ function abilityPatch(state: GameState, unit: Unit, target?: Position): string |
   if (!ally || ally.side !== unit.side) return "No ally at target";
   if (distance(unit.position, ally.position) > 1) return "Must be adjacent";
   const usedHeals = unit.healsUsed || 0;
-  if (usedHeals >= 3) return "No heals remaining (max 3 per game)";
-  const healed = Math.min(3, ally.maxHp - ally.hp);
+  if (usedHeals >= BALANCE.abilities.patch.maxUses) return `No heals remaining (max ${BALANCE.abilities.patch.maxUses} per game)`;
+  const healed = Math.min(BALANCE.abilities.patch.healAmount, ally.maxHp - ally.hp);
   ally.hp += healed;
   unit.healsUsed = usedHeals + 1;
   state.log.push(
-    `${unit.name} patches ${ally.name} (+${healed} HP) [${3 - usedHeals - 1} heals left]`,
+    `${unit.name} patches ${ally.name} (+${healed} HP) [${BALANCE.abilities.patch.maxUses - usedHeals - 1} heals left]`,
   );
   emit({
     type: "healing_done",
@@ -630,7 +628,7 @@ function abilityPatch(state: GameState, unit: Unit, target?: Position): string |
     targetId: ally.id,
     amount: healed,
     targetHpAfter: ally.hp,
-    healsRemaining: 3 - usedHeals - 1,
+    healsRemaining: BALANCE.abilities.patch.maxUses - usedHeals - 1,
   });
   return null;
 }
@@ -641,15 +639,15 @@ function abilityOverclock(state: GameState, unit: Unit, target?: Position): stri
   const ally = getUnitAt(state, target);
   if (!ally || ally.side !== unit.side) return "No ally at target";
   if (distance(unit.position, ally.position) > 1) return "Must be adjacent";
-  ally.hp -= 1;
+  ally.hp -= BALANCE.abilities.overclock.selfDamage;
   const effect = { type: "overclocked" as const };
   ally.statusEffects.push(effect);
-  state.log.push(`${unit.name} overclocks ${ally.name} (-1 HP, double ability next turn)`);
+  state.log.push(`${unit.name} overclocks ${ally.name} (-${BALANCE.abilities.overclock.selfDamage} HP, double ability next turn)`);
   emit({
     type: "damage_dealt",
     sourceId: unit.id,
     targetId: ally.id,
-    amount: 1,
+    amount: BALANCE.abilities.overclock.selfDamage,
     ability: "overclock",
     targetHpAfter: ally.hp,
   });
@@ -675,7 +673,7 @@ function abilityPulse(state: GameState, unit: Unit): string | null {
     (u) => u.hp > 0 && u.id !== unit.id && distance(u.position, unit.position) <= 1,
   );
   for (const target of affected) {
-    const dmg = applyDamage(target, 1);
+    const dmg = applyDamage(target, BALANCE.abilities.pulse.damage);
     state.log.push(`${unit.name}'s Pulse hits ${target.name} (-${dmg} HP)`);
     emit({
       type: "damage_dealt",
