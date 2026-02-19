@@ -361,7 +361,7 @@ describe("moveUnit - edge cases", () => {
     g.traps.push({ position: { x: 3, y: 2 }, owner: "o1", side: "opponent" });
     const hpBefore = u.hp;
     moveUnit(g, u, { x: 3, y: 2 });
-    expect(u.hp).toBe(hpBefore - 2);
+    expect(u.hp).toBe(hpBefore - 1);
     expect(g.traps).toHaveLength(0);
   });
 
@@ -585,10 +585,10 @@ describe("useAbility - precision_shot", () => {
 
   test("high ground passive extends range when no adjacent enemies", () => {
     const g = createGame();
-    const s = unit("s1", "striker", "player", { x: 0, y: 0 }); // range 3
-    const t = unit("e1", "sentinel", "opponent", { x: 4, y: 0 }); // dist 4
+    const s = unit("s1", "striker", "player", { x: 0, y: 0 }); // range 2
+    const t = unit("e1", "sentinel", "opponent", { x: 3, y: 0 }); // dist 3 (range 2 + high ground 1)
     g.units.push(s, t);
-    const err = useAbility(g, s, "precision_shot", { x: 4, y: 0 });
+    const err = useAbility(g, s, "precision_shot", { x: 3, y: 0 });
     expect(err).toBeNull();
   });
 

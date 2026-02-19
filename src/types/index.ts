@@ -36,8 +36,8 @@ export const BALANCE: BalanceConfig = {
   grid: { width: 6, height: 6 },
   maxRounds: 20,
   unitStats: {
-    specter: { maxHp: 5, movement: 3, range: 1, speed: 3 },
-    striker: { maxHp: 4, movement: 2, range: 3, speed: 2 },
+    specter: { maxHp: 4, movement: 3, range: 1, speed: 3 },
+    striker: { maxHp: 4, movement: 2, range: 2, speed: 2 },
     oracle: { maxHp: 10, movement: 3, range: 4, speed: 3 },
     medic: { maxHp: 9, movement: 2, range: 1, speed: 2 },
     vector: { maxHp: 6, movement: 2, range: 2, speed: 1 },
@@ -53,7 +53,7 @@ export const BALANCE: BalanceConfig = {
     suppressingFire: { damage: 1 },
     patch: { maxUses: 4, healAmount: 3 },
     overclock: { selfDamage: 1 },
-    trap: { damage: 2 },
+    trap: { damage: 1 },
     pulse: { damage: 1 },
   },
 };
