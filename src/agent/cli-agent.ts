@@ -39,6 +39,8 @@ export const CLAUDE_MODEL_ID = "claude-sonnet-4.5-20250514";
  * Run a prompt through `claude` CLI and return the text output.
  * Uses stdin pipe to avoid shell argument length limits.
  */
+const CLAUDE_TIMEOUT_MS = 120_000; // 2 minutes per CLI call
+
 async function callClaude(systemPrompt: string, userPrompt: string): Promise<string> {
   return new Promise((resolve, reject) => {
     const fullPrompt = `<system>\n${systemPrompt}\n</system>\n\n${userPrompt}`;
@@ -60,6 +62,15 @@ async function callClaude(systemPrompt: string, userPrompt: string): Promise<str
 
     let stdout = "";
     let stderr = "";
+    let settled = false;
+
+    const timer = setTimeout(() => {
+      if (!settled) {
+        settled = true;
+        proc.kill("SIGKILL");
+        reject(new Error(`claude CLI timed out after ${CLAUDE_TIMEOUT_MS / 1000}s`));
+      }
+    }, CLAUDE_TIMEOUT_MS);
 
     proc.stdout.on("data", (d: Buffer) => {
       stdout += d.toString();
@@ -69,6 +80,9 @@ async function callClaude(systemPrompt: string, userPrompt: string): Promise<str
     });
 
     proc.on("close", (code) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
       if (code !== 0) {
         reject(new Error(`claude CLI exited ${code}: ${stderr.slice(0, 500)}`));
       } else {
@@ -77,6 +91,9 @@ async function callClaude(systemPrompt: string, userPrompt: string): Promise<str
     });
 
     proc.on("error", (err) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
       reject(new Error(`Failed to spawn claude CLI: ${err.message}`));
     });
 

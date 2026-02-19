@@ -106,9 +106,7 @@ async function runPlacementPhase(
     }
     const placedPlayerNames = new Set<string>();
     for (const p of playerPlacements) {
-      const pick = playerUnits.find(
-        (u) => u.name.toLowerCase() === p.name?.toLowerCase(),
-      );
+      const pick = playerUnits.find((u) => u.name.toLowerCase() === p.name?.toLowerCase());
       if (!pick) {
         console.error(`  ⚠ Placement name "${p.name}" doesn't match any player unit, skipping`);
         continue;
@@ -162,9 +160,7 @@ async function runPlacementPhase(
   }
   const placedOpponentNames = new Set<string>();
   for (const p of opponentPlacements) {
-    const pick = opponentUnits.find(
-      (u) => u.name.toLowerCase() === p.name?.toLowerCase(),
-    );
+    const pick = opponentUnits.find((u) => u.name.toLowerCase() === p.name?.toLowerCase());
     if (!pick) {
       console.error(`  ⚠ Placement name "${p.name}" doesn't match any opponent unit, skipping`);
       continue;
