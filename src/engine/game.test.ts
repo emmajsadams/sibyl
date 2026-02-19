@@ -638,10 +638,10 @@ describe("useAbility - patch", () => {
     expect(m.healsUsed).toBe(1);
   });
 
-  test("heal cap at 3", () => {
+  test("heal cap at 4", () => {
     const g = createGame();
     const m = unit("m1", "medic", "player", { x: 2, y: 2 });
-    m.healsUsed = 3;
+    m.healsUsed = 4;
     const a = unit("a1", "sentinel", "player", { x: 2, y: 3 });
     a.hp = a.maxHp - 3;
     g.units.push(m, a);
