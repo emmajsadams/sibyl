@@ -1,0 +1,2431 @@
+{
+  "id": "2026-02-20T02-00-07",
+  "startedAt": "2026-02-20T02:00:07.013Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 4,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 4,
+        "movement": 2,
+        "range": 2,
+        "speed": 2
+      },
+      "oracle": {
+        "maxHp": 10,
+        "movement": 3,
+        "range": 4,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 9,
+        "movement": 2,
+        "range": 1,
+        "speed": 2
+      },
+      "vector": {
+        "maxHp": 7,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 12,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 3
+      },
+      "precisionShot": {
+        "damage": 2,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 3
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 4,
+        "healAmount": 3
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Seer",
+        "class": "oracle",
+        "prompt": "Scan early to give your team intel on enemy prompts. Target enemy specters with scan to track them after cloak. Use recalibrate on allies who need tactical adjustments. Stay safe at range behind your front line."
+      },
+      {
+        "name": "Bulwark",
+        "class": "sentinel",
+        "prompt": "Advance toward the nearest enemy. Use shield_wall facing the direction with the most enemies. If an enemy is adjacent, attack them."
+      },
+      {
+        "name": "Viper",
+        "class": "vector",
+        "prompt": "Control chokepoints with traps. Place them between enemy positions and your allies. Use denial to block adjacent enemy abilities. Pulse groups when possible."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Doc",
+        "class": "medic",
+        "prompt": "Stay adjacent to the most threatened ally. Use patch on the most wounded teammate. If all healthy, use overclock on your damage dealer."
+      },
+      {
+        "name": "Warden",
+        "class": "sentinel",
+        "prompt": "Push forward aggressively. Shield_wall facing the enemy cluster. If flanked, turn to face the biggest threat. Attack when possible."
+      },
+      {
+        "name": "Shade",
+        "class": "specter",
+        "prompt": "Cloak immediately on turn 1. Move toward the enemy medic or weakest target. Use shadow_strike when adjacent while cloaked. Use breach to sabotage high-value targets."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Shade is exactly at scan range (dist=4) from my current position. Scanning now reveals their prompt and deals damage. I should scan Shade first since specters cloak and become hard to track. Then move north to improve position for future turns while staying behind my frontline.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Round 1 — cloak immediately as instructed. Seer is only 2 tiles away at (1,2) facing N, and I can reach (1,1) which is behind Seer. After cloaking, move to (1,1) to get behind Seer for a breach next turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Doc",
+          "class": "medic",
+          "thinking": "Shade is critically wounded at 1/4 HP and needs urgent healing. They're at (1,1), distance 6 from my current position (3,5). I need to move toward Shade. My movement speed is 2. Moving to (2,4) gets me closer but Shade is still far. Best I can do this turn is move toward Shade — moving to (2,4) brings me to distance 4. Shade won't be adjacent yet so I can't heal this turn. I'll move as far south-west as possible toward Shade.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Round 1, enemies are 4-5 tiles away. I should advance and place a trap in a chokepoint between enemy positions and my allies. Moving to (3,2) gets me closer to the center and within trap range of key approach corridors. Then place a trap at (3,3) to block the direct south approach from Warden.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Push forward toward the enemy cluster. Viper is at (3,2) — I'm at (3,4), so moving to (3,3) puts me adjacent and risks denial. Better to advance to (4,3) or (3,3) carefully. Orders say push aggressively and shield_wall facing enemy cluster. Enemy cluster is south of me (lower y). I'll move to (3,3) to close distance, then shield_wall facing S toward the enemies. Viper is at (3,2) which is 1 tile south of (3,3) — that would be adjacent, triggering denial. So move to (4,3) instead to avoid Viper denial while still advancing, then shield_wall facing W/S toward the cluster.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "No enemies adjacent. Nearest enemy is Doc at (2,4), dist 3. Moving toward Doc: from (2,1) I can move to (2,3) to close distance. Enemies are north, so shield_wall facing N protects against Doc at (2,4).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 1,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 12,
+          "maxHp": 12,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 10,
+          "maxHp": 10,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 12,
+          "maxHp": 12,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 9,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Shade (specter) cloaked last turn and moved to (1,1) — I need to track it. Foresight shows Shade moved to (1,1) after cloaking, so it's nearby and dangerous. I should scan Shade's last known position but scan requires a visible target. Doc at (2,4) is a high-value scan target: revealing their prompt gives intel and deals damage. I'll scan Doc first, then move north to maintain distance from Shade who may be hunting me.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "I'm at 1HP — extremely fragile. Seer is 2 tiles away at (1,3), facing N, and I'm already behind them. I can move to (1,2) which is directly behind Seer (adjacent, behind=true), then use breach to take control of Seer next turn. Breach is high value here — Seer is an oracle and controlling them for a turn could be devastating. Viper is 3 tiles away so won't block me at (1,2). Stay cloaked, get behind Seer, breach.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 1,
+              "y": 3
+            },
+            "addendum": "Move away from allies and toward the edge of the map, away from combat."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Doc",
+          "class": "medic",
+          "thinking": "Shade is critically wounded at 1/4 HP and needs urgent healing. I'm at (2,4), Shade is at (1,2) — distance 3, not adjacent. I need to move toward Shade to get adjacent for a patch. Moving to (1,3) would put me adjacent to Shade at (1,2) but that's where Seer is standing. Moving to (2,2) puts me at distance 1 from Shade (1,2) — adjacent, and Viper is at (3,2) which is distance 1 from (2,2) — that's too close, abilities would be blocked. Moving to (1,4) puts me at distance 2 from Shade, still not adjacent. Let me check (2,2): dist to Viper at (3,2) is 1 — adjacent, blocked. What about (1,5)? Dist to Shade (1,2) = 3, not helpful. (0,4)? Dist to Shade = 1+2=3. I need to get to (1,3) or (2,2) or (0,2) or (1,1) to be adjacent to Shade. (1,3) has Seer on it. (2,2) is adjacent to Viper — blocked. (0,4) is available, dist to Shade = dist(0,4)→(1,2) = 1+2=3. I can move max 2 tiles. Best I can do this turn is get closer — move to (1,4) (dist 1 from Shade would still be 2). Actually wait: Shade is at (1,2). From (1,3) dist=1, adjacent — but Seer occupies (1,3). From (2,3) dist=2 — Bulwark is there. From (0,2) dist=1 — but is (0,2) reachable? It's not in valid moves list. Valid moves are: [0,4],[1,4],[1,5],[2,2],[2,5],[3,3],[3,4],[3,5],[4,4]. (2,2) is valid but Viper adjacent blocks abilities. Best option: move to (1,4) to get closer to Shade, then next turn can reach adjacent. But orders say use patch on most wounded — can't reach this turn. Move to (1,4) as best approach toward Shade without triggering Viper adjacency.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "No enemies adjacent, so no attack possible. Orders say advance toward nearest enemy. Warden is at (4,3) dist=2, Doc at (1,4) dist=2, Shade at (1,2) dist=2. Moving to (3,4) advances toward Warden and stays off the trap at (3,3). Enemies are spread N and E of me, so shield_wall facing E covers Warden direction. Seer ally is at (1,3) adjacent to me, so shield_wall targeting Seer facing E would protect them from Warden.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 4
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Shade is critical at (1,2) and in range. Warden is at (4,3). There's already a trap at (3,3). I should move toward Shade to deny abilities and finish them off, or place a trap to control movement. Moving to (2,2) puts me adjacent to Shade enabling denial and attack. Attack Shade to eliminate the critical target.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Bulwark is 2 tiles away at (3,4). I need to move closer to attack. Moving to (3,3) puts me adjacent to Bulwark at (3,4) — I can then attack. Shield_wall facing W/N to cover the enemy cluster direction. But orders say push forward and attack when possible. Move to (3,3) to get adjacent to Bulwark, then attack.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 11,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 10,
+          "maxHp": 10,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 11,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 9,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Orders are to move away from allies and toward the edge of the map, away from combat. I'm at (1,3). Allies are at (3,4) and (2,2). The map edge furthest from combat would be the west/left edge. Moving to (0,5) gets me to the corner, far from enemies and allies. Then wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Doc",
+          "class": "medic",
+          "thinking": "Warden is wounded at (3,3) but is 3 tiles away — too far to reach and heal this turn. Valid moves include (2,3) which gets me closer to Warden while staying away from Viper at (2,2) — wait, (2,3) is adjacent to Viper at (2,2) which would block abilities. Better to move to (2,4) to close distance toward Warden without getting adjacent to Viper. From (2,4) Warden at (3,3) is still dist=2, not adjacent. No heal possible this turn. I should reposition toward Warden to enable heal next turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Doc (medic) at (2,4) is 2 tiles away and is a priority target to deny healing. Warden (sentinel) at (3,3) is also in range. I should place a trap between enemy positions to control the approach corridor. Tile (2,3) is directly between me and Doc, on their likely path. I'll move to (1,2) to stay out of Warden's adjacent range and deny abilities, then place a trap at (2,3) to catch Doc or Warden moving through. Actually, staying at (2,2) lets me place trap at (3,3) directly on Warden — but that's where Warden stands, so it must be empty. I can trap (3,2) which is in range and on the path between Warden and my position. Or trap (2,3) to block Doc's advance. Placing trap at (2,3) threatens Doc's movement toward allies. I'll stay put and trap (2,3).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Two enemies adjacent: Warden at (3,3) and Doc at (2,4). Orders say attack if adjacent. Doc is the medic — higher priority target. I'll attack Doc first, then use shield_wall. Both enemies are to my West/South-West, so shield_wall facing W or S. Warden is S, Doc is W. I'll attack Doc then shield_wall facing W to block both if possible. Actually Doc is at (2,4) which is directly W, Warden is at (3,3) which is directly S. Shield_wall faces one direction — W covers Doc, S covers Warden. Since Doc is a medic (healer) and higher value target, attack Doc. Then shield_wall W to block Doc's allies from that direction, or S to block Warden. Warden is a sentinel (tank) so less dangerous than if there were a DPS unit. I'll shield_wall S to protect against Warden's attack direction.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Bulwark is adjacent at (3,4). I'm fortified with 50% damage reduction. Orders say attack when possible and shield_wall facing enemy cluster. I'll attack Bulwark first, then shield_wall facing North to protect Doc behind me from Bulwark. Moving would lose Fortify bonus, so stay put.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 10,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 10,
+          "maxHp": 10,
+          "position": {
+            "x": 0,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 11,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Orders are to move away from allies and toward the edge of the map, away from combat. Current position (0,5) is already at the west edge. Moving south along the edge toward (0,2) gets me furthest from the combat cluster near (2-3, 3-4). Valid moves include (0,2), (0,3), (0,4) along the west edge. Moving to (0,2) maximizes distance from combat.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Doc",
+          "class": "medic",
+          "thinking": "Warden is wounded at (3,3), dist=2 from me. I need to get adjacent to heal. Move to (3,5) puts me adjacent to Warden? No, (3,3) to (3,5) is dist=2. Move to (2,3) puts me at dist=1 from Warden at (3,3) — yes, adjacent. But Bulwark is at (3,4) and Viper is at (1,2) dist=3. Moving to (2,3) keeps me away from Viper. From (2,3) I can patch Warden at (3,3). Valid moves include (2,3). Let me confirm: (2,3) is in valid moves list — yes. From (2,3), distance to Warden(3,3) = 1, so adjacent. Patch is range:adjacent only, so I can heal Warden. Viper is at (1,2), from (2,3) dist = |2-1|+|3-2| = 1+1 = 2, not adjacent, so patch won't be blocked.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Bulwark is adjacent to the north. I'm fortified with 50% damage reduction. Orders say attack when possible and shield_wall facing enemy cluster. I should attack Bulwark first, then shield_wall facing north to block further damage from Bulwark. Doc is wounded to my west — shield_wall north protects me and keeps pressure on Bulwark. Staying put preserves Fortify.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Warden is adjacent at (3,3) to my south. I'm fortified and should stay put to keep the 50% damage reduction. I'll attack Warden first, then use shield_wall facing south where both enemies are clustered.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Doc is wounded and adjacent (dist=2), making them a priority target. I can move to (2,2) to get adjacent to Doc for attack, and also place a trap on their likely retreat path. Moving to (2,2) puts me adjacent to Doc at (2,3) and within denial range. I'll move first then attack Doc.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 9,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 10,
+          "maxHp": 10,
+          "position": {
+            "x": 0,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 11,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Orders are to move away from allies and toward the edge of the map, away from combat. I'm at (0,2) which is already on the west edge. Valid moves include (0,5) which is the northwest corner — maximally far from combat at (3,3)/(2,3). I'll move toward (0,5) using my speed 3. From (0,2) I can reach (0,5) directly (distance 3). Then wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Doc",
+          "class": "medic",
+          "thinking": "I'm at (2,3) with 3/9 HP, adjacent to Viper at (2,2) which blocks my patch/overclock abilities. Warden is wounded at (3,3) needing heal. I must move away from Viper's denial zone first, then patch Warden. Moving to (3,2) gets me adjacent to Warden at (3,3) and away from Viper. From (3,2), Warden at (3,3) is adjacent so I can patch.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": "Cannot use patch — adjacent to enemy Vector (Denial)"
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Warden is adjacent to the south at (3,3). Orders say attack if adjacent. I'm fortified so I want to stay put to keep 50% damage reduction. Attack Warden first, then use shield_wall facing south where both enemies are concentrated.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Bulwark is adjacent at (3,4) — attack it. I'm fortified so I should not move to keep 50% damage reduction active. Shield_wall facing N to protect against Bulwark and maintain pressure on the enemy cluster to the north.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 2
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Doc (medic) is adjacent at (3,2) and wounded - perfect pulse target. Pulse hits all units within 1 tile, so it will hit Doc and potentially Warden at (3,3) if I position right. From my current position (2,2), pulse range 1 reaches (3,2) Doc but not (3,3) Warden. I can pulse Doc now for 1dmg to finish or weaken, then move to deny Warden's abilities. Actually, Doc is wounded and adjacent - pulse from current position hits Doc at dist 1. Warden is at (3,3) dist 2, out of pulse range. I should pulse Doc first, then move to (3,3) area to deny Warden, or place a trap on a chokepoint. Move to (3,1) puts me adjacent to both Doc and able to threaten. Better: pulse Doc now (hits at dist 1), then move toward (2,1) to set a trap on a chokepoint path. Actually let me pulse first to hit Doc, then place a trap between the enemies and my allies at a chokepoint like (2,3) or (1,3).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 10,
+          "maxHp": 10,
+          "position": {
+            "x": 0,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 10,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Both enemies are out of scan range from current position (0,5). Doc is critical and known. Warden is at dist=5, just out of range. I need to move closer to get Warden in scan range (≤4 tiles). Moving to (3,5) would put me at dist=2 from Warden — perfect for scan. But I need to check: Viper is at (2,3), so I won't be adjacent to Warden. From (3,5), Warden at (3,3) is dist=2, well within range. Let me move to (3,5) and scan Warden to reveal their prompt.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Doc",
+          "class": "medic",
+          "thinking": "Warden at (3,3) is wounded at 8/12 HP and adjacent to me at (3,2). I need to patch Warden. Viper is at (2,3) which is 2 tiles away — not adjacent to me currently, so patch is not blocked. I'm at 2/9 HP myself which is critical, but my orders are to heal the most wounded ally. Warden needs the heal. I'll stay in place and use patch on Warden at (3,3).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (3,3) with 50% damage reduction. Bulwark is adjacent to my north at (3,4) and Viper is adjacent to my west at (2,3) with DENIAL active blocking my abilities. Doc is critical at (3,2) to my south. I should attack Bulwark since that's a basic attack (works through DENIAL). Then use shield_wall facing north to protect Doc from the enemy cluster at (3,4)/(3,5). But wait — shield_wall would be blocked by DENIAL since I'm adjacent to Viper. I can attack Bulwark freely. For second action, I could move north to (3,4) isn't valid as Bulwark is there. I should attack Bulwark first, then use shield_wall facing N — but DENIAL blocks abilities. Let me just attack Bulwark (basic attack works through denial) and wait, staying fortified to keep 50% damage reduction active.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Warden is adjacent to the south at (3,3). Orders say attack adjacent enemies. I'm fortified (50% dmg reduction) which is good since I didn't move last turn. I should attack Warden first, then use shield_wall facing S to protect allies from the enemies to the south.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 5
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Warden is adjacent at (3,3) - my Denial passive blocks their sentinel abilities. Doc is critical at (3,2) within range 2. I should pulse to hit both Warden and potentially weaken nearby enemies, then move to maintain pressure. Pulse hits all units within 1 tile - Warden is at dist 1 so they get hit. After pulse, move to (2,2) to place a trap between enemy positions at (3,2) blocking Doc's escape or approach.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 10,
+          "maxHp": 10,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 9,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Both enemies already scanned — prompts known. Doc is critical and healing Warden. I should scan Doc to deal damage and pressure the healer. Warden attacked Bulwark last turn; Bulwark is wounded. I could recalibrate Bulwark to adjust tactics, but Bulwark already did shield_wall facing S (toward me). Priority: hit Doc with scan to finish off the critical medic — Doc is at dist 3, within scan range 4. I'm at (3,5), Doc at (3,2). I can scan Doc for 1 damage which may finish a critical unit. Then wait or hold position — I'm safe at range.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Warden is at (3,3), dist=2, in range. I'm at (2,2). Warden is healthy and adjacent to my ally Bulwark at (3,4). I can place a trap between Warden and my allies to deny movement/control the chokepoint. Tile (3,2) is a valid move tile and sits directly south of Warden - a good trap location for when Warden advances. Alternatively, I can move to (3,2) first to get adjacent to Warden (enabling Denial passive) then pulse won't help since only one enemy. Better plan: place trap at (3,2) to block Warden's southern path, then move closer. But I can't trap from current position at (3,2) if I need to check range - trap range is ≤2 tiles from me. (3,2) is dist 2 from (2,2), so valid trap target. Place trap at (3,2) first, then move toward chokepoint control.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (3,3) with 50% damage reduction. Bulwark is adjacent at (3,4), wounded — attack it. I should keep fortify active by not moving. Shield_wall facing N to protect against Seer at (3,5) after attacking.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Warden is adjacent at (3,3) to my south. I'm fortified with 50% damage reduction. Orders say attack adjacent enemies. I'll attack Warden, then use shield_wall facing S (toward the enemy) to protect allies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 5
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 10,
+          "maxHp": 10,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Warden is at (3,3), distance 2, within scan range of 4. Warden's prompt is already known from previous scan. Bulwark is wounded at (3,4) and Warden attacked Bulwark last turn with shield_wall facing N — Bulwark is in danger. I should recalibrate Bulwark to adjust tactics, since Warden is shielding north. Bulwark should attack from the side or reposition. I'm at (3,5), Bulwark is at (3,4) — adjacent, so recalibrate is valid. I'll recalibrate Bulwark first, then wait (no move needed, I'm safe at range).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "addendum": "Warden's shield_wall faces North — attack from East or West flank to bypass it. Do NOT attack from the north. Reposition sideways if possible before attacking."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Warden's shield_wall faces North, so attacking from the north is ineffective. I need to flank East or West. I can move to (4,3) to get East of Warden, then attack from the East side. This bypasses the shield_wall. I'm currently fortified but moving will lose that — worth it to get the flank.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Bulwark is adjacent at (4,3) and wounded — attack now. I'm fortified so I shouldn't move to preserve the 50% damage reduction. Shield_wall facing East to protect against Bulwark and the eastern enemy cluster.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "There's already a trap at (3,2) between me and Warden at (3,3). Warden is wounded and 2 tiles away - if they move south they'll hit the trap. I should move to (4,2) to flank and get adjacent to Warden, enabling Denial to block their abilities. Then pulse to deal 1dmg to Warden since I'll be within 1 tile.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 12,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 10,
+          "maxHp": 10,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 9,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Warden is already scanned and wounded at (3,3). Foresight shows Warden will shield_wall facing E this turn, and Bulwark will attack Warden. I should recalibrate Bulwark to coordinate — but Bulwark is at (4,3) which is adjacent to me if I move. Currently at (3,5), Bulwark is at (4,3) — distance is 2, too far for recalibrate (adjacent only). I could move to (4,4) to be adjacent to Bulwark at (4,3), then recalibrate. This lets me give Bulwark tactical intel about Warden's shield_wall direction. There's a trap at (3,2) to warn about. Warden will be shield_walling facing E, so Bulwark attacking from east side will hit the shield. I should warn Bulwark to attack from south or west to avoid the shield.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "addendum": "Warden will shield_wall facing E this turn — attack from the south or west to bypass the shield. Avoid tile (3,2), there is a trap there."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Bulwark is adjacent and wounded — attack to finish or weaken. I'm fortified so staying put preserves 50% damage reduction. Shield_wall facing East covers Bulwark and the enemy cluster behind. Don't move to maintain Fortify.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Warden is adjacent at (3,3) to my west. Orders say Warden will shield_wall facing E this turn, so attacking from the east (my current position at x=4) would be blocked. I need to attack from south or west to bypass. I can move to (3,4) which puts me north of Warden — but orders say don't attack from north. Moving to (2,3) puts me west, which bypasses the E-facing shield. But I'm fortified (50% dmg reduction) and at 3HP — staying fortified is valuable for survival. Actually, I can attack first from current position (east of Warden) — but that's blocked by the E-facing shield_wall. So I should move first to bypass, then attack. Move to (3,4) is north — forbidden. Move to (5,3) keeps me east — still blocked. Best option: move to (2,3) to attack from west, bypassing E shield. But (3,2) has a trap — I won't go there. (2,3) is valid and west of Warden, bypassing E shield_wall. Attack after moving.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Warden is at (3,3), wounded and dist=2. There's already a trap at (3,2). I should attack Warden to finish them off, and place another trap to control the area. I'm at (4,2). Attack Warden at (3,3) first since they're in range and wounded. Then move to (5,2) to maintain positioning and avoid being clustered with Bulwark.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 12,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 10,
+          "maxHp": 10,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 10,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Warden is wounded and already scanned. Bulwark is critical at (2,3). I should recalibrate Bulwark to help them survive/fight better. Bulwark is at (2,3), I'm at (4,4) — not adjacent. I need to move closer first. Moving to (3,4) puts me adjacent to Bulwark at (2,3)? Distance from (3,4) to (2,3) = 1+1=2, not adjacent. Move to (2,4) to be adjacent to Bulwark at (2,3). (2,4) is in valid moves. Then recalibrate Bulwark.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "addendum": "Warden is wounded and aggressive — hold your position, defend rather than push forward. Shield yourself from Warden's attacks and let allies finish them off."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I'm at 3/12 HP, fortified, with Warden adjacent at (3,3). Orders say to hold position and defend rather than push forward. I should shield_wall facing East to block Warden's attacks, then stay put to keep fortify active. Warden is wounded so allies can finish them. Shield facing E blocks Warden's attack from the east.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "E"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Bulwark is adjacent at (2,3) and critical - attack to finish. Stay put to keep Fortify active (50% damage reduction). Shield_wall facing West to protect against the enemy cluster.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "direction": "W"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Warden is at (3,3), wounded, dist=3. There's already a trap at (3,2). I should move closer to get Warden in denial range and place another trap to further restrict movement. Moving to (4,3) closes distance to 2, still out of range but positions me to threaten. Better: move to (3,2) - wait, that has a trap on it. Move to (4,2) puts me at dist=2 from Warden, and I can place a trap at (3,2)... but (3,2) already has a trap. Move to (4,3) and place trap at (3,3) targeting Warden's position to force them off or damage them. Wait - trap goes on empty tile, Warden is at (3,3) so can't place there. Place trap at (3,4) or (4,3) area to cut off escape. From (4,3) I can place trap at range ≤2: (3,3) occupied, (3,4) viable, (2,3) - ally Bulwark there. Move to (4,3), trap at (3,4) to cut north escape route for Warden.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 12,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 10,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 11,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Warden is wounded at (3,3), already scanned. Bulwark is critical at (2,3). Foresight shows Warden attacked Bulwark last turn and will likely keep attacking. I should recalibrate Bulwark to help them survive — they're adjacent to me at (2,3). Then wait or hold position. Bulwark needs tactical advice to avoid Warden's attacks, maybe reposition or use shield_wall facing W to block Warden.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "addendum": "Warden is wounded at (3,3) and will keep attacking you. Use shield_wall facing E to block incoming attacks, or fall back west to avoid being killed."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I'm at 2/12 HP and fortified. Warden is adjacent at (3,3) and wounded. Orders say to use shield_wall facing E to block Warden's attacks, or fall back. With only 2HP, I cannot risk taking another hit. I should shield_wall facing E to block Warden's incoming attack while staying fortified (not moving preserves the 50% reduction). Shield_wall + fortify = maximum survivability while allies finish Warden off.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "direction": "E"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Warden is adjacent at (3,3), wounded. I'm at (4,3). My Denial passive already blocks some of Warden's abilities. I have traps at (3,2) and (3,4) - Warden is sandwiched. I should attack Warden directly to finish them off while wounded. Then I can place a trap to control the area. Move isn't needed - attack from current position, then place trap at (2,3) or nearby to deny the area near Bulwark who is critical.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "I'm fortified at 5/12 HP with 50% damage reduction. Bulwark is critical at distance 1 — I should attack to finish them. Viper's denial zone blocks abilities other than basic attack/movement, but attack works. I'll attack Bulwark to eliminate them, then shield_wall facing West to protect against Seer. Wait — denial blocks abilities, so shield_wall may be blocked. Better to attack Bulwark (basic attack works in denial zone) and stay put to keep fortify active.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 12,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 10,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 12,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Warden is wounded at (3,3) and already scanned. Bulwark is critical and needs support. Foresight shows Warden attacked Bulwark last turn. Viper stepped on trap at (4,4). I should recalibrate Bulwark at (2,3) who is adjacent to me — give them advice to retreat or hold defensively since they're critical. Warden is wounded so Viper/Bulwark can likely finish them. No new enemies to scan. Recalibrate Bulwark to pull back and survive.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "addendum": "You are critical HP — prioritize survival. Fall back west away from Warden if possible. Do not engage directly."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Warden is adjacent at (3,3), wounded. I'm already denying their abilities. My traps are at (3,2), (3,4), (4,4) — Warden is boxed in. I can attack for 1dmg, but pulse would also hit Warden for 1dmg (within 1 tile). Check allies: Bulwark is at (2,3), which is 2 tiles away — outside pulse range of 1. Seer is at (2,4), also 2 tiles away. So pulse only hits Warden. Attack or pulse both deal 1dmg. Warden is wounded so likely low HP. I'll pulse to deal 1dmg to Warden (same as attack but keeps me in place for denial). Then wait to maintain denial pressure. Actually, attack is range adjacent only, pulse is 1dmg all within 1 tile — same damage. I'll use pulse since it's AoE and I maintain position. Then I can move to reinforce chokepoint or place a trap. Wait — trap is blocked when adjacent to enemy (Warden at dist=1). So I can't trap. I'll pulse Warden first, then move to (5,3) to extend control, or stay for denial. Staying adjacent maintains denial on Warden. I'll pulse then wait.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I'm at critical HP (1/12) and fortified. Orders say to prioritize survival and fall back west. Valid moves include (1,3) which takes me further west away from Warden. If I move, I lose fortify but gain distance. However, at 1HP any hit kills me regardless of fortify. Better to move west to (1,3) to escape Warden's melee range, then use shield_wall facing E to block if they follow, or just wait fortified. Actually, moving loses fortify and Warden could still reach me at (1,3) with mv2. Let me stay fortified and use shield_wall facing E to block Warden's attack — at 50% reduction a 1dmg attack becomes 0 (rounded down?). Staying fortified with shield_wall E is the safest play to survive this turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "direction": "E"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "I'm at 4HP (critical), fortified, adjacent to Bulwark (critical) and Viper (healthy, denial active). Denial blocks my abilities except basic attack. I should attack Bulwark to finish it off — it's critical and adjacent. I can't use shield_wall due to denial. Staying put keeps fortify active. Attack Bulwark first, then wait to keep fortify.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 12,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 10,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 13,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Warden is wounded and already scanned — prompt known. I'm at range 2 which is within scan range but scan requires ≤4 tiles so valid. Better to recalibrate Viper to help coordinate against Warden, then scan Warden to deal damage. Actually, Warden is wounded so finishing it is priority. I can't attack (adjacent only). Scan deals 1dmg and I'm at dist 2 which is ≤4, so scan is valid. Viper is at (4,3) — not adjacent to me at (2,4), so recalibrate is out. Check: adjacent means dist=1, Viper is at dist=sqrt(4+1)=~2.2, not adjacent. So recalibrate is not available. Warden prompt already known. Foresight shows Warden attacked (2,3) last turn — it may move toward us. Trap at (3,4) near Warden. I should scan Warden for damage (it's wounded, could finish it), then move to safe position. Or move first to better position. Current position (2,4) is good range. Scan Warden at (3,3) for 1 damage to help Viper finish it off.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Warden is adjacent and critical - attack to finish it. Then place a trap to control the area around (3,3) or maintain pressure. Warden is at dist=1 so attack is valid. After killing Warden, place trap at (3,3) or nearby to deny enemy reinforcements.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": "Position occupied"
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "I'm at 1HP with Fortify active giving 50% damage reduction. Viper is adjacent at (4,3) and I'm in their DENIAL zone blocking abilities. I can only use basic attack or movement. Viper is healthy and adjacent - I should attack them. If I move first, I lose Fortify. Best play: attack Viper (adjacent, in range) then wait to keep Fortify. Or wait first then attack. Either way, attack Viper now while fortified.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 12,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 10,
+          "maxHp": 10,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": false
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "player",
+    "totalTurns": 14,
+    "reason": "player eliminated all enemies"
+  },
+  "endedAt": "2026-02-20T02:07:11.151Z"
+}
