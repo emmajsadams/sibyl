@@ -45,7 +45,7 @@ export const BALANCE: BalanceConfig = {
   },
   abilities: {
     attack: { damage: 1 },
-    shadowStrike: { damage: 2 },
+    shadowStrike: { damage: 1 },
     breach: { maxUses: 2, cooldown: 2, duration: 3, range: 2 },
     cloak: { duration: 3 },
     precisionShot: { damage: 2, movedDamage: 1 },

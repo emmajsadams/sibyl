@@ -544,13 +544,7 @@ function abilityPrecisionShot(state: GameState, unit: Unit, target?: Position): 
   if (!enemy) return "No unit at target";
   if (enemy.id === unit.id) return "Cannot target self";
   if (isCloaked(enemy)) return "Cannot target cloaked unit";
-  const range =
-    unit.range +
-    (getLivingUnits(state).filter(
-      (u) => u.side !== unit.side && distance(u.position, unit.position) === 1,
-    ).length === 0
-      ? 1
-      : 0); // High Ground passive
+  const range = unit.range; // High Ground passive removed for balance (v0.5.1)
   if (distance(unit.position, enemy.position) > range) return "Out of range";
   const baseDmg = unit.movedThisTurn
     ? BALANCE.abilities.precisionShot.movedDamage
