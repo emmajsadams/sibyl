@@ -49,7 +49,7 @@ export const BALANCE: BalanceConfig = {
     breach: { maxUses: 2, cooldown: 2, duration: 3, range: 2 },
     cloak: { duration: 3 },
     precisionShot: { damage: 2, movedDamage: 1 },
-    scan: { damage: 3 },
+    scan: { damage: 2 },
     suppressingFire: { damage: 1 },
     patch: { maxUses: 4, healAmount: 3 },
     overclock: { selfDamage: 1 },
