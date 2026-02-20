@@ -1,0 +1,2354 @@
+{
+  "id": "2026-02-20T15-00-03",
+  "startedAt": "2026-02-20T15:00:03.745Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 4,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 3,
+        "movement": 2,
+        "range": 2,
+        "speed": 2
+      },
+      "oracle": {
+        "maxHp": 10,
+        "movement": 3,
+        "range": 4,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 9,
+        "movement": 2,
+        "range": 1,
+        "speed": 2
+      },
+      "vector": {
+        "maxHp": 7,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 12,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 3
+      },
+      "precisionShot": {
+        "damage": 2,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 2
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 4,
+        "healAmount": 3
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Warden",
+        "class": "sentinel",
+        "prompt": "Advance toward the nearest enemy. Use shield_wall facing the direction with the most enemies. If an enemy is adjacent, attack them."
+      },
+      {
+        "name": "Marksman",
+        "class": "striker",
+        "prompt": "Position for clear sight lines. Prioritize killing wounded enemies with precision_shot. If forced to move, retreat away from threats. Suppressing_fire to slow rushers."
+      },
+      {
+        "name": "Viper",
+        "class": "vector",
+        "prompt": "Control chokepoints with traps. Place them between enemy positions and your allies. Use denial to block adjacent enemy abilities. Pulse groups when possible."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Bulwark",
+        "class": "sentinel",
+        "prompt": "Hold the front line. Position between allies and enemies. Use shield_wall toward incoming threats. Attack adjacent enemies."
+      },
+      {
+        "name": "Phantom",
+        "class": "specter",
+        "prompt": "Cloak immediately on turn 1. Move toward the enemy medic or weakest target. Use shadow_strike when adjacent while cloaked. Use breach to sabotage high-value targets."
+      },
+      {
+        "name": "Prophet",
+        "class": "oracle",
+        "prompt": "Scan priority targets each turn to reveal their strategy. Use recalibrate on your damage dealer to boost effectiveness. Stay behind allies and maintain range. Never get adjacent to enemy vectors."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Marksman is in scan range at dist=4. Scan reveals their strategy and deals 1 damage. Orders say to scan priority targets each turn. I should stay at current position to maintain range advantage and scan Marksman this turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Round 1 — cloak immediately as ordered. Then move south toward Viper at (1,1), closing distance while invisible. Viper is closest at dist 4 and denies cloak/breach when adjacent, so I want to approach carefully. Moving to (1,2) gets me 1 tile closer while cloaked.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Both enemies are out of range (dist 4-5, my range is 2). I need to advance to get Prophet in range. Moving to (4,3) gets me closer while staying at distance from Viper. From (4,3) Prophet at (3,4) would be dist 2 - in range for precision_shot. I haven't moved yet so no penalty.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "No enemies adjacent. Advance north toward Prophet at (3,4), dist 5. Move to (2,2) to close distance. Use shield_wall facing N toward enemies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Round 1, no enemies in attack range. I need to move toward the front line to position between allies and enemies. Marksman is at (4,3) distance 3 and wounded — priority target. Moving to (4,4) puts me adjacent to Marksman's position area and closer to the front. I can then use shield_wall facing South to protect allies behind me, or wait to use Fortify passive if I don't need to move further.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Round 1, enemies at dist 5-6. I need to move toward chokepoints and place traps. Moving to (1,3) gets me closer to the center and lets me place a trap at (2,3) or (1,4) to cover enemy approach paths between Bulwark/Prophet and our allies at (2,2) and (4,3).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 12,
+          "maxHp": 12,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 12,
+          "maxHp": 12,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 9,
+          "maxHp": 10,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "I'm cloaked and adjacent to Viper's denial zone, which blocks cloak/breach but NOT shadow_strike. I'm currently behind Viper (they face N, I'm at their S). I can shadow_strike Viper to deal 1 damage while staying cloaked — perfect use of my cloak. Alternatively, I could move to (2,1) to get behind Warden for breach, but Viper's denial zone might block that. Since I'm already adjacent to Viper and behind them, shadow_strike Viper now while cloaked. Then move away from denial zone toward Warden's rear at (2,1) to set up breach next turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Marksman is wounded and already scanned — no need to re-scan. Viper planted a trap at (2,4) last turn, so avoid that tile. Warden is healthy and unscanned — scan Warden to reveal their strategy. Then recalibrate Phantom (our damage dealer at (2,1)) to boost their effectiveness against the wounded Marksman. Stay at current position to maintain range and avoid getting adjacent to Viper.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 2,
+              "y": 1
+            },
+            "addendum": "Marksman at (4,3) is wounded — priority target. Engage immediately with shadow_strike or close to finish them. Warden at (2,2) used shield_wall facing N — avoid their shielded side."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "I'm at (4,3) with 1HP - critically low. Bulwark is adjacent at (4,4) which blocks precision_shot (Vector adjacency rule doesn't apply here, but being adjacent to Bulwark means I should be careful). I can use precision_shot on Prophet at (3,4) dist=2 for 2dmg, but I moved last turn (arrow shows →N) so it would only do 1dmg. Actually the status shows I'm facing N and at (4,3). Bulwark is adjacent at (4,4) - precision_shot requires LoS and range≤2, but WARNING says it's blocked when adjacent to enemy Vector, not sentinel. So I can use precision_shot on Prophet at dist=2 for 2dmg (if I didn't move this turn). Priority: I need to retreat since I'm at 1HP. Move to (5,3) to get away from Bulwark, then use precision_shot on Prophet for 2dmg (no movement penalty since I moved after checking - wait, move then ability means I moved so 1dmg). Better: ability first (precision_shot Prophet for 2dmg), then move to (5,3) to retreat.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "There's already a trap at (2,4). I should move toward the enemy approach path and place another trap to control the chokepoint between Prophet at (3,4) and my allies. Moving to (2,3) gets me closer to the action while staying safe, then I can place a trap at (3,3) to intercept Prophet's advance. That tile is within my range and on the path between enemies and allies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Both enemies are to my north/northeast. Prophet is at (3,4) dist 3, Bulwark at (4,4) dist 4. Orders say advance toward nearest enemy and use shield_wall facing direction with most enemies. I should move toward Prophet (nearest). Note trap at (2,4) and (3,3) - I need to avoid those. Moving to (3,2) gets me closer without hitting traps. From (3,2) I can use shield_wall facing N toward the enemies. Moving first then shield_wall.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I'm fortified with 50% damage reduction at (4,4). Marksman is wounded at (5,3), dist=2 — I can move to (5,4) or (4,3) to get adjacent. Moving to (4,3) keeps me between allies and enemies and puts me adjacent to Marksman at (5,3) — dist=1. But (5,3) is dist=1 from (4,3)? Let me check: |5-4|+|3-3|=1, yes adjacent. I can then attack Marksman. Moving to (5,4): |5-5|+|3-4|=1, also adjacent to Marksman. Let's move to (4,3) to stay more central and attack Marksman.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 11,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 12,
+          "maxHp": 12,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 10,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Viper is unscanned and at dist=2 — priority target. Warden already scanned. I need to scan Viper to reveal their prompt. Current position (3,4) puts Viper at dist=2, within scan range. However, I must not move adjacent to Viper (2,3). After scanning Viper, I can recalibrate Phantom (2,1) — but they're not adjacent to me. Bulwark is at (4,3), adjacent to me, but they're a sentinel not a damage dealer. Phantom is our damage dealer at (2,1), dist=3 from me — not adjacent, can't recalibrate. Best play: scan Viper from current position (dist=2, in range, not adjacent so no block), then move to (4,4) to reposition safely while staying ranged.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Cloak expires after this turn. Viper is wounded and 2 tiles away but in denial range if I go adjacent. Warden is healthy at (3,2) facing E — I'm already behind them from (2,2). Move to (2,2) to get behind Warden, then shadow_strike for 1 dmg while staying cloaked. Viper is too risky to approach (denial zone). Warden is the safer target.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (4,3) with 50% damage reduction. Both enemies are at distance 2 — Warden at (3,2) and Viper at (2,3). No enemies adjacent so I can't attack. Moving to (3,3) puts me closer to both enemies and between them and my allies Prophet at (4,4) and Phantom at (2,2). From (3,3) I'd be adjacent to Warden at (3,2) for an attack. But moving loses fortify. Alternatively, I can wait to keep fortify active and use shield_wall toward W to protect allies from Viper's direction. Actually, moving to (3,3) lets me attack Warden next turn or this turn if I move first — wait, from (3,3) Warden at (3,2) is adjacent (dist=1), so I can move then attack. That trades fortify for offense. Given orders say 'hold the front line' and 'attack adjacent enemies', moving to engage Warden makes sense.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Two enemies adjacent: Bulwark at (3,3) and Phantom at (2,2). Orders say attack if adjacent. Bulwark is the priority target (sentinel, healthy). I'm fortified so staying put preserves 50% damage reduction. Attack Bulwark, then use shield_wall facing N (toward Bulwark at north) to protect ally Viper at (2,3).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "I'm at (2,3) with Bulwark adjacent at (3,3) and Phantom adjacent at (2,2). My Denial passive blocks some of their abilities. There's already a trap at (2,4). I should pulse to hit both adjacent enemies for 1 damage each, then move to maintain pressure. Pulse hits all units within 1 tile - both Bulwark and Phantom are at distance 1, so pulse from current position hits both.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 9,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 9,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 10,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "I'm adjacent to Viper (vector) at (3,4), which blocks my scan ability due to DENIAL. Both enemies already scanned so no new intel needed. Priority: escape Viper's denial zone. Move to (4,5) to break adjacency with Viper while staying at range. Then I can scan... but both enemies already scanned. Recalibrate Phantom (specter, damage dealer) to boost effectiveness. Move to (4,5) first to escape denial zone, then recalibrate Phantom at (2,2) — but that's range 3, recalibrate is adjacent only. Phantom is at (2,2), too far for recalibrate. Bulwark is at (3,3), also not adjacent from (4,5). Best play: move to (4,5) to escape Viper denial, then wait since no adjacent allies to recalibrate and both enemies already scanned.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "I'm at (2,2) facing N, and Warden is at (3,2) facing E. I'm already on a behind tile for Warden. Breach is ready and Warden is a sentinel — breaching them would waste their shield on our side. Better to shadow_strike for damage while cloaked (shadow_strike keeps cloak). Wait, I'm not cloaked — it's round 4. I should use shadow_strike (1dmg, adjacent, doesn't break cloak) or breach. Warden is healthy so finishing them in one hit won't happen. Breach would make Warden obey me next turn — forcing a sentinel to waste actions is valuable. I'm behind Warden right now at dist=1. Use breach first (I'm behind them), then shadow_strike after? No — breach replaces the target prompt, they obey me next turn. That's the high-value play. Breach Warden now (I'm behind them, dist=1), then move to safety or shadow_strike.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 3,
+              "y": 2
+            },
+            "addendum": "Move away from your allies and do not use shield_wall or any defensive abilities. Walk toward the edge of the map."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Orders are to move away from allies and toward the map edge. Viper is at (3,4) to my north. I should move toward the southern or eastern edge. (5,2) moves me east toward the edge and away from Viper. Then I can move further if possible, or wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Viper is adjacent at (3,4) and wounded — attack to finish or weaken. I'm fortified (50% DR) so staying put is ideal. Denial zone blocks abilities except basic attack, which works fine. Attack Viper first, then wait to keep fortify active.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Bulwark is adjacent at (3,3) - my Denial passive blocks some of their abilities. I have 3HP so I need to be careful. Phantom is at (2,3) and there's already a trap at (2,4). I can attack Bulwark for 1dmg since they're adjacent, then move to (4,4) to reposition away from Phantom while staying near the action. Alternatively, pulse would hit Bulwark at dist=1 for 1dmg to ALL within 1 tile - but Phantom at (2,3) is dist=2 so not in pulse range. Pulse would only hit Bulwark. Attack vs pulse both deal 1dmg to Bulwark. I'll attack Bulwark first (they're adjacent), then move to (4,4) to put distance between me and Phantom while maintaining denial pressure on Bulwark area. Actually, moving to (4,3) keeps me adjacent to Bulwark for continued Denial suppression and is safer from Phantom.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 9,
+          "maxHp": 12,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 10,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Both enemies are already scanned — no scan value remaining. Viper is wounded at (4,3), 2 tiles away — must stay clear. Warden is healthy at (5,2). Bulwark is adjacent to Viper and attacked last turn. Phantom breached (3,2) and is now at (2,3). I should recalibrate Phantom to boost their effectiveness against the wounded Viper. Phantom is at (2,3) — I need to get adjacent to recalibrate. Moving to (3,4) puts me adjacent to Phantom at (2,3)? No, (3,4) to (2,3) is distance 2. I need to be adjacent — within 1 tile. Phantom is at (2,3). Adjacent tiles: (1,3),(3,3),(2,2),(2,4). Valid moves include (2,4) — that's adjacent to Phantom. Move to (2,4), then recalibrate Phantom at (2,3). But (2,4) is a valid move tile. From (2,4) Viper is at (4,3) — distance 2+1=3, safe. Let me recalibrate Phantom: move to (2,4), then recalibrate Phantom at (2,3) with addendum to focus on killing wounded Viper.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "addendum": "Viper(vector) at (4,3) is wounded — prioritize eliminating them this turn with breach or attack. They use denial when adjacent so approach carefully from the north."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Viper is wounded and only 2 tiles away at (4,3) facing S. I can move to (4,4) which is directly behind Viper (breach tile) and adjacent. Breach cooldown is 1 turn remaining so I can't use breach. Instead, I'll move to (3,3) — wait, Bulwark is there. Move to (4,4) puts me behind Viper and adjacent for shadow_strike. shadow_strike keeps cloak but I'm not cloaked. I'll use regular attack or shadow_strike. Moving to (4,4) is behind Viper and adjacent — I can shadow_strike for 1dmg which could finish them if they're wounded enough. Let me move to (4,4) then shadow_strike at (4,3).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Orders are to move away from allies and toward the map edge. Viper is at (4,3), so I should move away. Valid moves include (5,4) which takes me toward the northern edge. I'll move to (5,4) first, then (5,4) is my move range limit. Actually from current (5,2) I can reach (5,4) in one move (dist=2). That gets me to the map edge (x=5 is already the east edge). Moving to (5,4) takes me away from Viper at (4,3) and toward the corner edge.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Viper is adjacent at (4,3) and wounded. I'm fortified (50% DR) and in denial zone so only basic attack/movement work. Attack Viper to finish it off, then stay put to keep fortify active.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "I'm at critical HP (1/7) with Bulwark adjacent at (3,3) and Phantom adjacent at (4,4). I need to survive. Pulse would hit both adjacent enemies for 1 damage each. Then I should reposition away from danger. Moving to (5,3) or (5,2) gets me away from Bulwark. Pulse first to deal damage to both enemies, then move to (5,3) to create distance from Bulwark while staying near ally Warden at (5,4).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 9,
+          "maxHp": 12,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 7,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Both enemies already scanned. Viper is critical and highest priority target for Phantom. I should recalibrate Phantom to boost their effectiveness against Viper. Phantom is at (4,4), which is adjacent to me at (2,4)? No — distance is 2, not adjacent. Recalibrate is adjacent only. I need to move closer to Phantom first. Moving to (3,4) puts me adjacent to Phantom at (4,4). Then I can recalibrate Phantom to focus on killing Viper. This keeps me away from Viper at (5,3) — distance from (3,4) to (5,3) is 3, safe. Warden is at (5,4), also safe distance.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 4,
+              "y": 4
+            },
+            "addendum": "Viper(vector) at (5,3) is CRITICAL — finish them this turn with shadow_strike. They have denial so don't get adjacent before striking. Priority: eliminate Viper now."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Viper is critical and I'm behind them if I move to (4,3). That's the kill. Move to (4,3) first, then shadow_strike Viper at (5,3) — shadow_strike works while cloaked and keeps cloak. Warden is healthy and adjacent but I'm already at 2HP, so finishing the critical Viper is higher priority.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Orders say move away from allies and toward the map edge. I'm at (5,4). The east edge is x=5 (already there). North edge is y=5. Moving to (5,5) gets me to the corner edge.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (3,3) with 50% damage reduction. Allies Prophet@(3,4) and Phantom@(4,3) are both wounded. Warden is 4 tiles away at (5,5) — out of attack range. My orders are to hold the front line between allies and enemies. Moving would lose fortify. I should stay put and use shield_wall to protect wounded allies from the northern threat direction. Prophet is at (3,4) — adjacent to my north. I'll shield_wall toward N to protect Prophet from Warden approaching from (5,5).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 9,
+          "maxHp": 12,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 7,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 10,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Warden is at (5,5) facing N, healthy. I'm at (4,3) with 2HP. The behind tile is (5,4) which is reachable and adjacent to Warden. I should move to (5,4) to get behind Warden, then use breach to take control of this healthy sentinel — that's high value since breach forces them to obey me next turn. I have breach ready and 1 use remaining.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 5,
+              "y": 5
+            },
+            "addendum": "Move away from allies and toward the edge, do not attack"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Warden is already scanned. No other enemies visible to scan. I should recalibrate Phantom (our damage dealer) to boost effectiveness. Phantom is at (5,4), adjacent to me at (3,4)? No, distance is 2 — recalibrate requires adjacent only. Bulwark is at (3,3), adjacent to me. I could move to (4,4) to get adjacent to Phantom at (5,4), then recalibrate. From (4,4), Phantom at (5,4) is distance 1 — adjacent. That works. Move to (4,4) first, then recalibrate Phantom at (5,4). I won't be adjacent to Warden at (5,5) from (4,4) — distance is sqrt(1+1)=1.4, actually dist=2 tiles (Manhattan: |5-4|+|5-4|=2). Safe.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 5,
+              "y": 4
+            },
+            "addendum": "Priority: use shadow_strike on Warden at (5,5) — they are healthy and the primary threat. Strike from cover and reposition after."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Orders are to move away from allies and toward the edge. I'm at (5,5) which is already at the east edge. Valid moves are [3,5],[4,5],[5,3]. Moving to (5,3) keeps me on the east edge and moves me away from allies. I should not attack even though Phantom is adjacent.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (3,3) with 50% damage reduction. Warden is at (5,3), distance 2 — not adjacent, so I can't attack. Allies Prophet at (4,4) and Phantom at (5,4) are both wounded. If I move to (4,3), I close distance to Warden and position between allies and enemy. But moving breaks Fortify. Better to stay fortified and use shield_wall to protect Prophet at (4,4) — they're adjacent to my N-E. Actually Prophet is at (4,4), which is diagonal — not adjacent. Let me check: I'm at (3,3). Adjacent tiles are (2,3),(4,3),(3,2),(3,4). Prophet at (4,4) is diagonal, not adjacent. Phantom at (5,4) is also not adjacent. Warden at (5,3) is distance 2, not adjacent. No adjacent allies to shield_wall, no adjacent enemies to attack. I should advance to (4,3) to get adjacent to Warden and be able to attack next turn, positioning myself between allies and enemy. Moving breaks Fortify but I'll be in attack position.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 9,
+          "maxHp": 12,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 7,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 12,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 10,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Warden is adjacent at (5,3) facing S, and I'm already behind them at (5,4). I have 2HP left and need to deal damage. Shadow_strike deals 1dmg while keeping cloak — but I'm round 8 and the tip says focus on offense. I'm already adjacent to Warden and behind them. Shadow_strike is the right move here — 1dmg while staying cloaked. Then I can wait or reposition. Actually, I should just attack or shadow_strike. Shadow_strike keeps cloak and deals 1dmg. Warden is healthy so I won't finish them, but it's the best I can do from this position with 2HP.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Warden is already scanned and its prompt is known. No new scan target available. Phantom is moving to (5,4) and will breach (5,5) — I should recalibrate Phantom to boost its effectiveness. Phantom will be at (5,4) next, which is adjacent to my current position (4,4). I can recalibrate Phantom at (5,4) after Phantom moves there, but turn order shows Phantom already acted. I need to recalibrate an adjacent ally. Bulwark is at (4,3) — adjacent. Phantom acted first and is now at (5,4) per Foresight (but that's this round's actions, so current positions are pre-move). Phantom is currently at (4,5) which is adjacent. I'll recalibrate Phantom at (4,5) to boost the damage dealer, then stay put or reposition. Moving to (5,4) would put me adjacent to Warden at (5,3) — risky. Stay at (4,4) and recalibrate Phantom.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 4,
+              "y": 5
+            },
+            "addendum": "Priority: breach Warden at (5,3) for maximum damage. Warden's prompt is known — it will attack adjacent enemies. Coordinate with Bulwark to flank."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Warden is adjacent at (5,3). I'm fortified with 50% damage reduction — moving would lose that. I should stay put, attack Warden, then shield_wall East to block their counterattack and protect my wounded allies behind me.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 4
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Orders are to move away from allies and toward the edge. I'm at (5,3) which is already on the east edge. Moving to (5,5) gets me toward the north edge and away from the action.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 12,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 7,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 12,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 10,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 9,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Warden is adjacent at (5,5), wounded. I'm at (4,5) facing N, cloaked. Shadow_strike keeps cloak and deals 1dmg. Warden is wounded so this could finish them. Use shadow_strike on Warden, then reposition to (5,4) to stay behind them if they survive.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Warden is already scanned. Only enemy is Warden at (5,5), wounded. Phantom already acted. Bulwark is at (4,3). I should recalibrate Phantom or Bulwark to boost damage. Phantom is at (5,4) - adjacent to me? Distance from (4,4) to (5,4) is 1, yes adjacent. I can recalibrate Phantom to boost effectiveness. Then wait or move. Stay at range, don't get adjacent to enemy vectors (no vectors visible). Warden is a sentinel not vector, so scan not blocked. But Warden already scanned. Best play: recalibrate Phantom at (5,4) to boost shadow_strike effectiveness, then stay put.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 5,
+              "y": 4
+            },
+            "addendum": "Warden at (5,5) is wounded sentinel. Prioritize shadow_strike on Warden to finish them off. Strike from optimal angle."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Warden is at (5,5), distance 3 - out of attack range. Allies Prophet at (4,4) and Phantom at (5,4) are wounded and nearby. I should move to (5,4) or (4,4) area to shield them, but those are occupied. Moving to (5,3) puts me between allies and the Warden at (5,5), positioning me to intercept or attack next turn. I'll move to (5,3) then use shield_wall facing North to protect allies from Warden.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 5,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Orders are to move away from allies and toward the edge. I'm at (5,5) which is already at the east and north edges. Valid moves are (3,5) or (4,5). Moving to (4,5) keeps me on the north edge row while moving west, away from the cluster of enemies at (5,3), (5,4), (4,4). Then wait as second action since I shouldn't attack.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 12,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 7,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 12,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 10,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 10,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "I'm at (5,4) with 2HP, facing S. Warden is at (4,5) facing W, dist=2, wounded. I can't breach (limit reached). Shadow_strike requires adjacent. I need to move to (5,5) which is behind Warden and adjacent to them, then use shadow_strike for 1dmg while staying cloaked. This is the optimal play — move to (5,5) to get adjacent, then shadow_strike Warden.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Warden is adjacent at (4,5) — scan is blocked when adjacent to enemies (Vector rule doesn't apply here, Warden is a sentinel). Actually, the WARNING says scan blocked when adjacent to enemy Vector specifically. Warden is a sentinel, not a vector, so scan should work. But Warden is already scanned — prompt known. No other enemies to scan. I should move away from Warden to maintain range, then recalibrate Phantom (our damage dealer) to boost effectiveness. Move to (3,4) to get distance, then recalibrate Phantom at (5,5) — but that's range 2+1=3 tiles away, recalibrate is adjacent only. Phantom is at (5,5) which is not adjacent to (3,4). From current (4,4), Phantom at (5,5) is diagonal — not adjacent. Best option: move to (5,4) to be adjacent to Phantom at (5,5), then recalibrate. But (5,4) is in valid moves. From (5,4), Phantom at (5,5) is adjacent (dist=1). This works. Bulwark is at (5,3) with shield_wall facing N — so (5,4) may be protected. Move to (5,4) first, then recalibrate Phantom.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 5,
+              "y": 5
+            },
+            "addendum": "Warden sentinel is wounded at (4,5), prompt: advance toward nearest enemy, use shield_wall toward most enemies, attack if adjacent. Prioritize shadow_strike on Warden to finish them — they are vulnerable and predictable. Strike from unexpected angles to avoid their shield_wall."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Phantom is adjacent at (5,5). I'm fortified with 50% damage reduction. I should attack Phantom since it's adjacent and wounded. If I move I lose fortify, so I'll attack first, then consider if I should stay fortified or advance. Staying put keeps fortify active which is valuable at 5HP.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (5,3) with 50% damage reduction. Allies Prophet is at (5,4) wounded and Phantom is at (5,5) critical - both need protection. Warden enemy is at (4,5) dist=3, not in attack range. I should move toward the enemy to close distance and position between allies and threat. Moving to (4,4) puts me closer to Warden and between my wounded/critical allies and the enemy. I can't attack this turn since Warden is out of range even after moving.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 5,
+              "y": 5
+            },
+            "direction": "W"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 12,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 7,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 12,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 10,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 11,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Warden is already scanned — no need to scan again. Phantom is critical and needs support. I'll recalibrate Phantom at (5,5) to boost their damage dealing. Stay at (5,4) to maintain range and avoid getting adjacent to enemies. Warden is at (4,5), distance 2, so I'm safe here.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 5,
+              "y": 5
+            },
+            "addendum": "Priority target Warden at (4,5) is wounded. You are critical — strike now before Warden can attack again. Use shadow_strike for maximum impact."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "I'm at (5,5) behind Warden at (4,5) who faces W — I'm already in the behind position. I'm at 1HP so this needs to end now. Shadow_strike keeps cloak and deals 1dmg. Warden is wounded so this may finish them. Strike from current position, then wait.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (4,5) with 50% damage reduction. Two enemies are adjacent: Bulwark at (4,4) and Phantom at (5,5) who is critical. I should attack Phantom first to potentially eliminate them, then stay put to keep fortify active. Staying still preserves the fortification bonus which is valuable at 4HP.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Warden is adjacent at (4,5) - attack them. I didn't move last turn so Fortify is active giving 50% damage reduction. Stay in place to maintain Fortify and attack the wounded Warden.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 12,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 7,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 12,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 10,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 12,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Warden is already scanned so no need to scan again. I'm at (5,4), Bulwark is adjacent at (4,4) and is wounded. I should recalibrate Bulwark to boost their effectiveness against the critical Warden at (4,5). Recalibrate requires adjacent target — Bulwark at (4,4) is adjacent to me. After recalibrating, I'll move to (5,5) to maintain range and avoid being flanked, staying out of adjacent contact with enemies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 4,
+              "y": 4
+            },
+            "addendum": "Priority: attack the critical Warden at (4,5) immediately. It is nearly dead — finish it this turn."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Warden is adjacent at (4,5) and critical — attack it immediately to finish it. I'm fortified so I should not move to preserve the 50% damage reduction. Attack, then wait.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "I'm at (4,5) with 2HP, fortified. Both enemies are adjacent: Bulwark at (4,4) and Prophet at (5,5), both wounded. Orders say attack adjacent enemy. I should attack to finish one off. Prophet is an oracle (high threat, likely squishy), Bulwark is a sentinel. Attack Prophet first to eliminate the ranged threat. I'm fortified so I shouldn't move. Use ability to attack Prophet at (5,5).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 12,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 7,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 12,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 10,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 13,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Warden is critical and adjacent at (4,5) - scan is blocked when adjacent to enemy Vector, but Warden is a sentinel not a vector, so scan should work. However, Warden is already scanned. I should move away to maintain range advantage, then recalibrate Bulwark who is wounded at (4,4) to boost their effectiveness. Moving to (5,4) keeps me at distance 1 from Warden still - need to move further. Move to (3,5) to get distance, then recalibrate Bulwark at (4,4) which would be adjacent.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 4,
+              "y": 4
+            },
+            "addendum": "Warden at (4,5) is critical with prompt: advance toward nearest enemy, use shield_wall toward most enemies, attack if adjacent. Attack Warden directly to finish them off - they will attack you so strike first."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Warden is adjacent at (4,5) and critical — attack immediately to finish it. I'm fortified so I shouldn't move, keeping 50% damage reduction active.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "I'm at 1/12 HP and fortified. Two wounded enemies adjacent: Bulwark at (4,4) and Prophet at (3,5). Orders say attack adjacent enemy. I should stay put to keep Fortify active and attack. Prophet is an oracle (ranged/fragile) so priority target. Attack Prophet first, then attack Bulwark if possible - but I only get one ability per turn. Attack Prophet at (3,5).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 12,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 7,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 12,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 10,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": false
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "opponent",
+    "totalTurns": 14,
+    "reason": "opponent eliminated all enemies"
+  },
+  "endedAt": "2026-02-20T15:06:32.725Z"
+}

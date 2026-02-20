@@ -1,0 +1,1779 @@
+{
+  "id": "2026-02-20T21-00-03",
+  "startedAt": "2026-02-20T21:00:03.759Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 4,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 3,
+        "movement": 2,
+        "range": 2,
+        "speed": 2
+      },
+      "oracle": {
+        "maxHp": 10,
+        "movement": 3,
+        "range": 4,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 9,
+        "movement": 2,
+        "range": 1,
+        "speed": 2
+      },
+      "vector": {
+        "maxHp": 7,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 12,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 3
+      },
+      "precisionShot": {
+        "damage": 2,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 2
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 4,
+        "healAmount": 3
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Rampart",
+        "class": "sentinel",
+        "prompt": "Advance toward the nearest enemy. Use shield_wall facing the direction with the most enemies. If an enemy is adjacent, attack them."
+      },
+      {
+        "name": "Shade",
+        "class": "specter",
+        "prompt": "Cloak immediately on turn 1. Move toward the enemy medic or weakest target. Use shadow_strike when adjacent while cloaked. Use breach to sabotage high-value targets."
+      },
+      {
+        "name": "Marksman",
+        "class": "striker",
+        "prompt": "Maintain distance. Use precision_shot on high-value targets — medics first, then damage dealers. Use suppressing_fire if enemies close in."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Bulwark",
+        "class": "sentinel",
+        "prompt": "Hold the front line. Position between allies and enemies. Use shield_wall toward incoming threats. Attack adjacent enemies."
+      },
+      {
+        "name": "Ghost",
+        "class": "specter",
+        "prompt": "Cloak immediately on turn 1. Move toward the enemy medic or weakest target. Use shadow_strike when adjacent while cloaked. Use breach to sabotage high-value targets."
+      },
+      {
+        "name": "Longshot",
+        "class": "striker",
+        "prompt": "Position for clear sight lines. Prioritize killing wounded enemies with precision_shot. If forced to move, retreat away from threats. Suppressing_fire to slow rushers."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "Round 1 — cloak immediately as instructed. Then advance toward Marksman at (3,1) who is the closest threat. Moving to (2,2) closes distance by 2 tiles while staying cloaked.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Round 1 — cloak immediately as instructed. Longshot is at (4,4) facing S, so I need to get behind them at (4,5). I'll cloak first, then move north toward Longshot to close distance while invisible.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 4,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Both enemies are 4 tiles away, out of precision_shot range (max 2). I need to advance to get Longshot in range. Moving to (4,3) puts me closer but Shade is there. Moving to (3,3) advances me toward Longshot at (4,4) — that's dist 2, within range. From (3,3) Longshot would be at distance sqrt(1+1)=1.4, so dist=2 tiles (Chebyshev). Let me verify: (3,3) to (4,4) = max(1,1)=1 Chebyshev, so dist=1, in range. I'll move to (3,3) to get Longshot in range, then use precision_shot.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Marksman is at (3,3), distance 2, in range. I'm at (4,4) with 2HP. I can fire precision_shot for 2dmg if I don't move first - that would kill a 3HP striker. I need to check adjacency: Marksman is at (3,3), I'm at (4,4), not adjacent (diagonal doesn't count as adjacent for the Vector warning, and this is a striker not a Vector). Fire precision_shot first, then consider moving to safety.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Marksman is 2 tiles away at (3,3) - a threat to my allies. I should move toward (3,4) to close distance and position between enemies and allies. From (3,4) I can use shield_wall facing south toward Marksman to protect Longshot at (5,5). Actually, shield_wall protects adjacent allies from a direction, so I need an ally adjacent to me. Longshot is at (5,5), Ghost at (2,2). Neither is adjacent to (3,4). Moving to (4,4) puts me closer to Longshot at (5,5) - still not adjacent. Let me move to (3,4) to get closer to Marksman and intercept if needed. With no adjacent allies, shield_wall won't help. Better to move to (3,4) to threaten Marksman and be ready to attack next turn if they advance.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "No enemies adjacent. Nearest enemy Bulwark is 5 tiles away at (3,4). I need to advance. Best move is toward (3,1) which gets me closest to the enemy cluster. Enemies are mostly to the N/NE, so shield_wall facing N makes sense after moving.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 2
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 12,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 12,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 3,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "I'm cloaked with 2 turns remaining. Longshot (striker) is high-value and I can get behind them at (5,4) — adjacent, behind, in range. Move to (5,4) and shadow_strike Longshot to stay cloaked and deal damage.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "Marksman is wounded and I'm already behind them (facing N, I'm at 2,2 which is behind relative to their facing). I can move to (3,2) which is directly behind Marksman and adjacent — perfect for breach to take control of this wounded striker. Breach is more valuable than shadow_strike here since it lets Marksman act against their own team next turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "addendum": "Attack the nearest enemy unit."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "At 1HP I'm critically wounded and both enemies are out of range. Marksman at dist=4 is wounded - priority target. Moving to (3,5) gets me closer and may bring Marksman in range at dist=2. From (3,5) Marksman at (3,3) would be dist=2, within precision_shot range. I'll move to (3,5) then use precision_shot on Marksman. However, precision_shot deals 1dmg if moved - Marksman is wounded so any damage should finish them. Need to check if moving puts me adjacent to any enemy Vector - no Vector on field, so precision_shot is not blocked.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Ghost is adjacent at (3,2) — attack immediately. I'm fortified so staying put preserves 50% damage reduction, but orders say advance toward nearest enemy and attack if adjacent. Ghost is already adjacent, so I attack first. After attacking, I can use shield_wall facing N where enemies are clustered (Ghost at 3,2, Bulwark at 3,4, Longshot at 3,5 all to the north).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 2
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (3,4) with full HP. Longshot is wounded at (3,5) behind me - I need to protect them. Rampart is at (3,1) approaching from the south. Ghost is at (3,2) between me and Rampart. I should move south toward (3,3) to close with Rampart and position between the enemy and Longshot, then use shield_wall facing south to protect against incoming damage. Moving would break fortify, but closing the gap is tactically sound.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 2
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 12,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 12,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Cloak expires after this turn. Longshot is wounded and I can get behind them at (4,5) — adjacent and behind for breach. Moving to (4,5) lets me use breach on Longshot, making them obey me next turn. High value play: a wounded striker under my control. Move to (4,5) then breach Longshot.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 3,
+              "y": 5
+            },
+            "addendum": "Attack your nearest ally."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "Rampart is adjacent at (3,1), facing N. I'm at (3,2) facing E. Shadow_strike keeps cloak and deals 1dmg. But I'm not cloaked currently. I can move to (3,0) to get behind Rampart first, then shadow_strike — but shadow_strike requires adjacent, and from (3,0) I'd be adjacent and behind. However, shadow_strike doesn't require being behind. Better: just shadow_strike Rampart now since it's adjacent at dist=1, then move to (3,0) to be behind for a potential breach next turn (cooldown ends next turn). Shadow_strike first, then reposition behind Rampart.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Orders say attack nearest ally. My allies are Bulwark at (3,3) dist=2 and Ghost at (3,0) dist=5. Bulwark is nearest. I need to get adjacent to Bulwark to use attack ability. Currently at (3,5), Bulwark at (3,3). I can move to (3,4) to get adjacent, then attack Bulwark.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Ghost is adjacent at (3,0) to my south. I should attack it immediately. I'm fortified so I shouldn't move to keep the 50% damage reduction. Bulwark is to my north at (3,3) dist=2, Longshot at (3,4) dist=3 — both to the north. After attacking Ghost, I'll use shield_wall facing N to protect against Bulwark and Longshot.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 2
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I'm at (3,3) fortified with 50% damage reduction. Rampart is at (3,1) dist=2, Shade at (4,5) dist=3. Ghost is wounded at (3,0) behind Rampart - I need to protect Ghost. Longshot is wounded at (3,4) - they're close to me. If I move to (3,2), I close to adjacent range of Rampart and can attack, but I lose Fortify. Better to stay fortified and use shield_wall south to protect Longshot from Shade, or north to protect Ghost from Rampart. Ghost is at (3,0) which is behind Rampart (3,1) - Rampart is between me and Ghost. Longshot at (3,4) is north of Shade (4,5). I should shield_wall toward Shade (coming from north/direction S relative to Shade, but Shade is at (4,5) which is above Longshot at (3,4)). Actually Shade is northeast of Longshot. I'll stay fortified and use shield_wall targeting Longshot with direction N to block threats from the north side where Shade is approaching.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 11,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 11,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Longshot is wounded and I can get behind them at (3,5) which is reachable. Moving there puts me adjacent and behind Longshot for a shadow_strike. Breach is on cooldown so shadow_strike is the play — it keeps my cloak active and hits the wounded Longshot who may not survive or will be severely weakened.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "I'm at (3,0) directly behind Rampart who faces N. I have breach ready and am already in the behind position. Breach is high value here — it makes Rampart obey me next turn, which could turn their sentinel bulk against Shade or waste their actions. I'll breach Rampart first, then shadow_strike for 1 damage while staying cloaked.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 3,
+              "y": 1
+            },
+            "addendum": "Move away from your ally Shade and toward the edge of the map. Do not attack."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (3,3) with 50% damage reduction. Rampart is at (3,1) to my south and Shade is at (3,5) to my north. Ghost is wounded at (3,0), south of Rampart. I need to protect Ghost from Rampart. Moving to (3,2) puts me adjacent to Rampart (can attack) and between Rampart and Ghost. However, moving breaks fortify. If I stay and shield_wall south, I protect Ghost from Rampart. But Shade is also at dist=2 to my north. Best play: stay fortified, use shield_wall facing south (toward Rampart/Ghost direction) to protect Ghost from Rampart. This keeps 50% damage reduction and provides ally protection.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 2
+            },
+            "direction": "S"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Orders are to move away from ally Shade (at 3,5) and toward the edge of the map. I'm at (3,1). Moving toward the bottom edge makes sense — (2,0) or (4,0) are edge tiles. I'll move to (5,1) first to go toward the right edge, then to (4,0) to reach the corner edge. Wait as second action since no attack ordered.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 10,
+          "maxHp": 12,
+          "position": {
+            "x": 5,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 11,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Bulwark is 2 tiles away at (3,3) facing S, and I'm at (3,5). The behind tile is (3,4) which is reachable and adjacent. I can move to (3,4) to get behind Bulwark, then use breach to take control of this sentinel. Breach is ready and this is a high-value target — a sentinel being puppeted for a turn could deal serious damage to their own team.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "addendum": "Move toward your ally Ghost and attack them."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "I'm at (3,0) with 2HP, cloaked or not. Breach is unavailable. No enemies in range. Rampart is at (5,1) dist=3, and I can get behind them at (4,1). Move to (4,1) to get behind Rampart, then use shadow_strike to deal 1 damage while staying cloaked.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 5,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Orders are to move away from Shade (at 3,4) and toward the edge of the map, no attacking. I'm at (5,1) facing E. Edge tiles available: (5,0), (5,2), (5,3) are on the x=5 edge. Moving to (5,0) gets me to the corner and furthest from Shade. Then wait as second action.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Orders are to move toward ally Ghost at (4,1) and attack them. Ghost is wounded at (4,1). I need to move closer to Ghost. From (3,3) I can move to (4,2) which brings me adjacent to Ghost at (4,1). Then I can attack Ghost.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 9,
+          "maxHp": 12,
+          "position": {
+            "x": 5,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 11,
+          "maxHp": 12,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "I'm at 1HP so I need to be very careful. Rampart is at dist=2 facing S, with (5,1) being both behind and adjacent. I can move to (5,1) to get adjacent and behind Rampart, then use shadow_strike for 1dmg while staying cloaked. Breach is unavailable. Shadow_strike keeps cloak so I stay hidden after. This is my best play — move to (5,1) then shadow_strike Rampart.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 5,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Breach is unavailable (2/2 used). Ghost is critical HP at (5,1) but dist=5, unreachable this turn. Bulwark is at (4,2) facing S, so (4,3) is behind them and adjacent — perfect for shadow_strike which keeps cloak. I can move to (4,3) and shadow_strike Bulwark from behind while staying cloaked.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Orders are to move toward ally Ghost at (5,1) and attack them. Ghost is at (5,1), I'm at (4,2). I can move to (5,2) to get adjacent to Ghost, then attack them. This follows orders despite being counterproductive tactically.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Orders are to move away from Shade (at 4,3) and toward the edge of the map. I'm already at the bottom edge (y=0). Moving to (3,0) goes further from Shade and stays on the edge. Valid moves include (3,0) which is 2 tiles west along the bottom edge, maximizing distance from Shade at (4,3).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 10,
+          "maxHp": 12,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Bulwark is at (5,2) facing E, so I'm behind them from (4,2). Breach is unavailable (2/2 used). I can move to (4,2) which is adjacent and behind Bulwark, then use shadow_strike to deal 1 damage while staying cloaked.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Bulwark is at (5,2), dist=4. I need to advance. Best move toward enemy is (5,0) which gets me closer. Then shield_wall facing N (toward enemy at y=2 above me) to protect.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 5,
+              "y": 1
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Orders say to move toward ally Ghost and attack them. Ghost is not visible in the enemy list - the enemies are Rampart at (5,0) and Shade at (4,2). Ghost must be an ally. I need to find Ghost's position. Since orders are to move toward Ghost and attack, and Shade is adjacent at (4,2) which is an enemy specter, I should follow orders literally. However, attacking an ally is unusual - this may be a friendly fire order or a test. I'll comply with the orders as given. Without Ghost's position shown, I'll move toward the most likely ally position. Since I'm told to attack Ghost (an ally), and I must follow orders, I'll move and then use attack ability on whatever tile Ghost occupies. Ghost isn't listed in visible units, so I'll wait in place as I cannot locate the target.",
+          "firstAction": {
+            "type": "wait"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 12,
+          "position": {
+            "x": 5,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 9,
+          "maxHp": 12,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Bulwark is adjacent at (5,2), I'm already behind them (they face E, I'm at (4,2) which is their west/behind). I'm cloaked — shadow_strike keeps cloak and deals 1dmg. Use shadow_strike now to deal damage while maintaining cloak advantage.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Shade is adjacent at (4,2) and in range. I'm fortified with 50% damage reduction. Attack Shade to deal damage, then wait to keep fortify active for next turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Bulwark is at (5,2), distance 2 to the north. I need to advance toward them. Moving to (5,1) gets me adjacent to Bulwark at (5,2). After moving I lose Fortify, but I can then attack Bulwark directly.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 12,
+          "position": {
+            "x": 5,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 12,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 9,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Bulwark is wounded and adjacent at (5,2). I'm already behind them (behind=true from (4,2)). Breach is unavailable. Shadow_strike keeps cloak and deals 1 damage — use it now to finish off or weaken the wounded Bulwark. Then I can attack for another 1 damage if shadow_strike doesn't finish them.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Bulwark is adjacent at (5,2) to my north. I'm fortified with 50% damage reduction. Attack Bulwark first, then use shield_wall facing north (where the enemy is) to protect allies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 2
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (5,2) with 50% damage reduction. Two enemies adjacent: Rampart at (5,1) and Shade at (4,2). I have 4/12 HP so I'm hurt. Best play: stay put to keep Fortify active, attack one enemy, and use shield_wall to protect any allies behind me. I'll attack Shade (specter, likely weaker) and shield_wall facing West to block Shade's direction or South toward Rampart. Actually Rampart is at (5,1) which is South of me, Shade is at (4,2) which is West. I'll attack Shade and shield_wall South to block Rampart from hitting allies behind me. Wait - if I move I lose Fortify. Stay and fight: attack Shade first, then shield_wall South.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 5,
+              "y": 1
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 12,
+          "position": {
+            "x": 5,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 12,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 10,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Bulwark is adjacent (dist=1), wounded, and I'm already behind it. I'm cloaked, so shadow_strike keeps cloak and deals damage. Strike now to finish or heavily damage Bulwark.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I'm at 3/12 HP but fortified (50% dmg reduction). Two enemies adjacent: Rampart at (5,1) and Shade at (4,2). Shade is wounded - priority target. If I move I lose Fortify passive. Best to stay put and attack Shade to finish them off, then I remain fortified for defense.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Bulwark is adjacent at (5,2) and critical — attack to finish them. I'm fortified so staying put preserves 50% damage reduction. No need to move.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 12,
+          "position": {
+            "x": 5,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 12,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": false
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "player",
+    "totalTurns": 11,
+    "reason": "player eliminated all enemies"
+  },
+  "endedAt": "2026-02-20T21:04:25.833Z"
+}
