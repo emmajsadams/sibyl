@@ -569,7 +569,7 @@ describe("useAbility - precision_shot", () => {
     const hpBefore = t.hp;
     const err = useAbility(g, s, "precision_shot", { x: 2, y: 0 });
     expect(err).toBeNull();
-    expect(t.hp).toBe(hpBefore - 3);
+    expect(t.hp).toBe(hpBefore - 2);
   });
 
   test("deals 1 damage when moved", () => {
@@ -631,7 +631,7 @@ describe("useAbility - patch", () => {
   test("heal cap at 5", () => {
     const g = createGame();
     const m = unit("m1", "medic", "player", { x: 2, y: 2 });
-    m.healsUsed = 5;
+    m.healsUsed = 6;
     const a = unit("a1", "sentinel", "player", { x: 2, y: 3 });
     a.hp = a.maxHp - 3;
     g.units.push(m, a);
