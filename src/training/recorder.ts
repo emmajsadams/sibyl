@@ -3,6 +3,7 @@ import { readFileSync } from "fs";
 import { join } from "path";
 import type { TrainingEvent, TrainingFile } from "./schema";
 import type { GameState, Unit, GameConfig } from "../types";
+import { BALANCE } from "../types";
 import { readTrainingConfig, writeTrainingConfig } from "./config";
 
 const PKG_PATH = join(
@@ -45,6 +46,7 @@ export class TrainingRecorder {
       timestamp: new Date().toISOString(),
       agent,
       model,
+      balance: BALANCE,
       events: [],
     };
 

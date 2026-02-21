@@ -361,7 +361,7 @@ describe("moveUnit - edge cases", () => {
     g.traps.push({ position: { x: 3, y: 2 }, owner: "o1", side: "opponent" });
     const hpBefore = u.hp;
     moveUnit(g, u, { x: 3, y: 2 });
-    expect(u.hp).toBe(hpBefore - 2);
+    expect(u.hp).toBe(hpBefore - 1);
     expect(g.traps).toHaveLength(0);
   });
 
@@ -420,7 +420,7 @@ describe("useAbility - cloak", () => {
 });
 
 describe("useAbility - shadow_strike", () => {
-  test("deals 2 damage to adjacent enemy", () => {
+  test("deals 1 damage to adjacent enemy", () => {
     const g = createGame();
     const s = unit("s1", "specter", "player", { x: 2, y: 2 });
     const t = unit("o1", "sentinel", "opponent", { x: 2, y: 3 });
@@ -428,7 +428,7 @@ describe("useAbility - shadow_strike", () => {
     const hpBefore = t.hp;
     const err = useAbility(g, s, "shadow_strike", { x: 2, y: 3 });
     expect(err).toBeNull();
-    expect(t.hp).toBe(hpBefore - 2);
+    expect(t.hp).toBe(hpBefore - 1);
   });
 
   test("does not break cloak", () => {
@@ -569,7 +569,7 @@ describe("useAbility - precision_shot", () => {
     const hpBefore = t.hp;
     const err = useAbility(g, s, "precision_shot", { x: 2, y: 0 });
     expect(err).toBeNull();
-    expect(t.hp).toBe(hpBefore - 2);
+    expect(t.hp).toBe(hpBefore - 3);
   });
 
   test("deals 1 damage when moved", () => {
@@ -583,22 +583,12 @@ describe("useAbility - precision_shot", () => {
     expect(t.hp).toBe(hpBefore - 1);
   });
 
-  test("high ground passive extends range when no adjacent enemies", () => {
+  test("high ground passive removed — range 3 is out of range", () => {
     const g = createGame();
-    const s = unit("s1", "striker", "player", { x: 0, y: 0 }); // range 3
-    const t = unit("e1", "sentinel", "opponent", { x: 4, y: 0 }); // dist 4
+    const s = unit("s1", "striker", "player", { x: 0, y: 0 }); // range 2
+    const t = unit("e1", "sentinel", "opponent", { x: 3, y: 0 }); // dist 3, out of range 2
     g.units.push(s, t);
-    const err = useAbility(g, s, "precision_shot", { x: 4, y: 0 });
-    expect(err).toBeNull();
-  });
-
-  test("no high ground when adjacent enemy", () => {
-    const g = createGame();
-    const s = unit("s1", "striker", "player", { x: 0, y: 0 }); // range 3
-    const adj = unit("e2", "specter", "opponent", { x: 1, y: 0 });
-    const t = unit("e1", "sentinel", "opponent", { x: 4, y: 0 }); // dist 4
-    g.units.push(s, adj, t);
-    expect(useAbility(g, s, "precision_shot", { x: 4, y: 0 })).toBe("Out of range");
+    expect(useAbility(g, s, "precision_shot", { x: 3, y: 0 })).toBe("Out of range");
   });
 
   test("cannot target cloaked unit", () => {
@@ -625,23 +615,23 @@ describe("useAbility - suppressing_fire", () => {
 });
 
 describe("useAbility - patch", () => {
-  test("heals adjacent ally 2HP", () => {
+  test("heals adjacent ally 3HP", () => {
     const g = createGame();
     const m = unit("m1", "medic", "player", { x: 2, y: 2 });
     const a = unit("a1", "sentinel", "player", { x: 2, y: 3 });
-    a.hp = a.maxHp - 3;
+    a.hp = a.maxHp - 4;
     g.units.push(m, a);
     const hpBefore = a.hp;
     const err = useAbility(g, m, "patch", { x: 2, y: 3 });
     expect(err).toBeNull();
-    expect(a.hp).toBe(hpBefore + 2);
+    expect(a.hp).toBe(hpBefore + 3);
     expect(m.healsUsed).toBe(1);
   });
 
-  test("heal cap at 3", () => {
+  test("heal cap at 4", () => {
     const g = createGame();
     const m = unit("m1", "medic", "player", { x: 2, y: 2 });
-    m.healsUsed = 3;
+    m.healsUsed = 4;
     const a = unit("a1", "sentinel", "player", { x: 2, y: 3 });
     a.hp = a.maxHp - 3;
     g.units.push(m, a);

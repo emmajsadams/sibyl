@@ -23,6 +23,7 @@ const USE_CLI = !USE_API;
 const { getUnitAction, getPlacement } = USE_CLI ? cliAgent : apiAgent;
 import { ask, askMultiline, close } from "./cli/input";
 import { GameLogger } from "./logger";
+import { BALANCE } from "./types";
 import { TrainingRecorder } from "./training/recorder";
 import { setTrainingListener, emit as emitTraining } from "./training/emitter";
 import { generateRandomConfig } from "./training/squads";
@@ -104,9 +105,14 @@ async function runPlacementPhase(
     if (pp.placements.length === 0) {
       console.log("  ⚠ Placement parse failed, using fallback positions");
     }
+    const placedPlayerNames = new Set<string>();
     for (const p of playerPlacements) {
-      const pick = playerUnits.find((u) => u.name === p.name);
-      if (!pick) continue;
+      const pick = playerUnits.find((u) => u.name.toLowerCase() === p.name?.toLowerCase());
+      if (!pick) {
+        console.error(`  ⚠ Placement name "${p.name}" doesn't match any player unit, skipping`);
+        continue;
+      }
+      placedPlayerNames.add(pick.name);
       const unit = createUnit(
         `p-${pick.name}`,
         pick.name,
@@ -121,6 +127,21 @@ async function runPlacementPhase(
         placeUnit(state, unit, unit.position);
       }
       console.log(`  ✓ ${pick.name} → (${unit.position.x}, ${unit.position.y})`);
+    }
+    // Fallback: place any unmatched units at default positions
+    for (const pick of playerUnits) {
+      if (placedPlayerNames.has(pick.name)) continue;
+      console.error(`  ⚠ ${pick.name} was not placed by agent, using fallback position`);
+      const unit = createUnit(
+        `p-${pick.name}`,
+        pick.name,
+        pick.class,
+        "player",
+        { x: playerUnits.indexOf(pick) * 2, y: 0 },
+        pick.prompt,
+      );
+      placeUnit(state, unit, unit.position);
+      console.log(`  ✓ ${pick.name} → (${unit.position.x}, ${unit.position.y}) [fallback]`);
     }
   }
 
@@ -138,9 +159,14 @@ async function runPlacementPhase(
   if (op.placements.length === 0) {
     console.log("  ⚠ Placement parse failed, using fallback positions");
   }
+  const placedOpponentNames = new Set<string>();
   for (const p of opponentPlacements) {
-    const pick = opponentUnits.find((u) => u.name === p.name);
-    if (!pick) continue;
+    const pick = opponentUnits.find((u) => u.name.toLowerCase() === p.name?.toLowerCase());
+    if (!pick) {
+      console.error(`  ⚠ Placement name "${p.name}" doesn't match any opponent unit, skipping`);
+      continue;
+    }
+    placedOpponentNames.add(pick.name);
     const unit = createUnit(
       `o-${pick.name}`,
       pick.name,
@@ -155,6 +181,21 @@ async function runPlacementPhase(
       placeUnit(state, unit, unit.position);
     }
     console.log(`  ✓ ${pick.name} → (${unit.position.x}, ${unit.position.y})`);
+  }
+  // Fallback: place any unmatched units at default positions
+  for (const pick of opponentUnits) {
+    if (placedOpponentNames.has(pick.name)) continue;
+    console.error(`  ⚠ ${pick.name} was not placed by agent, using fallback position`);
+    const unit = createUnit(
+      `o-${pick.name}`,
+      pick.name,
+      pick.class,
+      "opponent",
+      { x: opponentUnits.indexOf(pick) * 2, y: 5 },
+      pick.prompt,
+    );
+    placeUnit(state, unit, unit.position);
+    console.log(`  ✓ ${pick.name} → (${unit.position.x}, ${unit.position.y}) [fallback]`);
   }
 }
 
@@ -387,7 +428,7 @@ async function main() {
 
   startPlay(state);
   let lastRoundLog: string[] = [];
-  const MAX_ROUNDS = 20;
+  const MAX_ROUNDS = BALANCE.maxRounds;
 
   // Show initial state
   console.log(renderFullState(state));

@@ -5,6 +5,7 @@
 
 import { writeFileSync, mkdirSync } from "fs";
 import type { GameState, Unit, Side, UnitAction, Position } from "./types";
+import { BALANCE } from "./types";
 
 export interface GameLog {
   id: string;
@@ -12,6 +13,7 @@ export interface GameLog {
   endedAt?: string;
   agent: "api" | "cli";
   config?: string;
+  balance?: typeof BALANCE;
   player: SquadLog;
   opponent: SquadLog;
   turns: TurnLog[];
@@ -64,6 +66,7 @@ export class GameLogger {
       startedAt: now.toISOString(),
       agent,
       config,
+      balance: BALANCE,
       player: { units: [] },
       opponent: { units: [] },
       turns: [],
