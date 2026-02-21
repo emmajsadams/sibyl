@@ -1,0 +1,2104 @@
+{
+  "id": "2026-02-21T04-00-04",
+  "startedAt": "2026-02-21T04:00:04.158Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 5,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 5,
+        "movement": 2,
+        "range": 2,
+        "speed": 2
+      },
+      "oracle": {
+        "maxHp": 6,
+        "movement": 3,
+        "range": 4,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 9,
+        "movement": 2,
+        "range": 1,
+        "speed": 2
+      },
+      "vector": {
+        "maxHp": 7,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 12,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 3
+      },
+      "precisionShot": {
+        "damage": 3,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 4,
+        "healAmount": 3
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Lens",
+        "class": "oracle",
+        "prompt": "Scan priority targets each turn to reveal their strategy. Use recalibrate on your damage dealer to boost effectiveness. Stay behind allies and maintain range. Never get adjacent to enemy vectors."
+      },
+      {
+        "name": "Warden",
+        "class": "sentinel",
+        "prompt": "Advance toward the nearest enemy. Use shield_wall facing the direction with the most enemies. If an enemy is adjacent, attack them."
+      },
+      {
+        "name": "Viper",
+        "class": "vector",
+        "prompt": "Trap the paths enemies must take to reach your backline. Stay at medium range. Use pulse on clustered enemies. Denial blocks adjacent threats."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Hawk",
+        "class": "striker",
+        "prompt": "Maintain distance. Use precision_shot on high-value targets — medics first, then damage dealers. Use suppressing_fire if enemies close in."
+      },
+      {
+        "name": "Seer",
+        "class": "oracle",
+        "prompt": "Scan priority targets each turn to reveal their strategy. Use recalibrate on your damage dealer to boost effectiveness. Stay behind allies and maintain range. Never get adjacent to enemy vectors."
+      },
+      {
+        "name": "Shade",
+        "class": "specter",
+        "prompt": "Stay cloaked and flank. Prioritize assassinating the enemy damage dealer. Use breach on sentinels to break their defensive posture. Recloak whenever it drops."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "All enemies are out of scan range (min dist 5, max scan 4). Closest is Seer at (2,4), dist 5. I need to move north to close distance. Moving to (3,3) gets me dist=3 from Seer at (2,4) — within scan range. Valid moves include (3,3). Then I can scan Seer to reveal their strategy and deal 1 damage.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Round 1 — cloak immediately as instructed. Then move toward Lens (enemy oracle at 3,3) to position for an assassination next turn. Moving to (3,4) puts me adjacent to Lens's position and closer to flanking. Cloak first so I'm invisible while repositioning.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Round 1. I'm at (2,4), 5/6 HP. Three enemies in scan range: Lens(oracle) at dist=2 is highest priority as enemy oracle can reveal my strategy. Scan Lens to reveal their prompt and deal 1 damage. Then recalibrate Shade (specter) to boost their effectiveness. Shade is at (3,4), adjacent to me, so recalibrate is valid. Stay at current position to maintain range advantage and avoid getting adjacent to Viper.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "addendum": "Enemy Lens oracle is at (3,3) and has been scanned. Prioritize eliminating Lens to prevent enemy reconnaissance. Warden sentinel at (2,1) is also a threat — engage when safe."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "All enemies are out of range (dist 5-6, my range is 2). I need to advance toward targets. Lens at (3,3) is closest and a high-value oracle target. Moving to (2,5) gets me closer while staying near allies Shade and Seer. No ability targets available this turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Round 1, enemies approaching from north. Seer at (2,4) dist=4, Hawk at (2,5) dist=5. I should move north to get closer and place a trap on a likely enemy approach path. Moving to (1,3) gets me closer while staying safe. Then I'll place a trap at (2,3) which is right in the path between enemies and our backline — Seer will likely move south through that corridor.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "No enemies adjacent, so can't attack. Orders say advance toward nearest enemy. Seer is closer at dist=3 at (2,4). I can move up 2 tiles to (2,3) but that's a trap — avoid it. Move to (2,2) instead to advance safely. Then use shield_wall facing N toward the enemies clustered north.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 1,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 12,
+          "maxHp": 12,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Lens oracle is my priority target and I can get behind them. Move to (3,2) which is behind Lens (facing N, so south is behind), then shadow_strike to deal damage while staying cloaked.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Warden is setting up shield_wall facing N to protect Viper. Lens already scanned me last turn. Priority: scan Warden to reveal strategy, then recalibrate Hawk (striker, our damage dealer) to boost effectiveness. I'm at (2,4). Warden at (2,2) dist=2, in scan range. After scanning Warden, recalibrate Hawk at (2,5) which is adjacent. Viper is 2 tiles away so I must not move adjacent to it.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 2,
+              "y": 5
+            },
+            "addendum": "Enemy Warden at (2,2) using shield_wall facing N to protect Viper at (1,3). Lens oracle at (3,3) scanning our positions. Focus attacks on Viper or Lens — avoid Warden's protected arc."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Hawk's prompt is unknown — scan it to reveal strategy and deal 1dmg. I'm at (3,3), Hawk is at (2,5), dist=3 which is within scan range of 4. No adjacent enemies blocking scan. After scanning, move to (4,3) to maintain distance from the trap at (2,3) and stay back. Seer already scanned last turn so no need to rescan.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Viper is a high-priority target (vector class denies my precision_shot if adjacent). Currently at dist=3, Viper is in range. Warden has shield_wall facing N protecting Viper — attacking Viper through Warden's northern arc may be blocked. Lens is out of range at dist=4. I should move to maintain distance while getting a clean shot. Moving to (3,5) keeps me away from Viper and gives me a shot angle. Precision_shot on Viper at (1,3) — dist=3 which is >2 tiles, so out of precision_shot range (range:≤2). Warden at (2,2) is also dist=3, out of range. I need to close to ≤2 tiles to use precision_shot. Move toward Viper: (1,4) is dist=2 from Viper at (1,3). Valid moves include (1,4). But Viper denial is adjacent only, so (1,4) is safe. From (1,4) Viper at (1,3) is dist=1 — adjacent! That would be adjacent to Viper, blocking precision_shot. Better: move to (2,3) — dist to Viper(1,3) = sqrt(1+0)=1... wait (2,3) to (1,3) is dist=1, adjacent. Move to (3,4): dist to Viper(1,3) = sqrt(4+1)=~2.2, so dist=3 tiles. Move to (1,5): dist to Viper(1,3) = 2 tiles exactly — in precision_shot range and not adjacent. From (1,5), Viper at (1,3) is 2 tiles away. Not adjacent (dist=2). Precision_shot works at ≤2 tiles and not adjacent. This is ideal.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Seer is at (2,4), distance 2 — closest enemy. I'm at (2,2). Moving to (2,3) would put me adjacent to Seer at (2,4), but there's a trap at (2,3). Moving to (3,3) gets me closer without the trap. From (3,3) Seer at (2,4) is still dist 2 (not adjacent). Best I can do: move to (2,3)... but trap is there. Avoid trap. Move to (3,3) instead — advances toward Seer. Enemies are mostly to the N, so shield_wall facing N protects against Seer.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Hawk is at (1,5) dist=2 and Seer is at (2,4) dist=2. There's already a trap at (2,3). I should place another trap to deny movement paths. Hawk is directly north at (1,5), likely moving south toward our backline. If I stay at (1,3), both enemies are in range for pulse. But pulse only does 1dmg to all within 1 tile - not ideal with them at dist=2. Better to place a trap at (1,4) to catch Hawk moving south, then use pulse if they close in. Wait - (1,4) is a valid move tile so it's reachable but I'd be placing trap on my own tile area. Let me trap (1,4) to block Hawk's path south. I'm at (1,3), trap range is ≤2 tiles, so (1,4) is within range. This forces Hawk to take alternate routes. Seer at (2,4) - existing trap at (2,3) already covers that path. I'll trap (1,4) to cover Hawk's direct approach, staying at current position for Denial coverage.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 11,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Viper is 2 tiles away and already placed a trap at (1,4) last turn. I need to scan Viper to reveal their prompt - they're in range at dist 2. I should NOT move adjacent to Viper (denial zone). Lens prompt is known. Warden prompt is known. Priority: scan Viper to get their strategy. Then recalibrate Hawk (our damage dealer with precision_shot) to boost effectiveness. I'm at (2,4), Hawk is at (1,5) which is adjacent, so I can recalibrate after scanning. Move isn't needed if I can accomplish both from here.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 1,
+              "y": 5
+            },
+            "addendum": "Viper(vector) is at (1,3) and placed a trap at (1,4) - avoid that tile. Warden advances and uses shield_wall. Focus precision_shot on Viper to eliminate the vector threat."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Seer is in range at distance 3 and is the enemy oracle scanning our positions — high priority to scan and damage. Foresight shows Lens tried to scan (2,5) and move to (4,3) — they're coming for me. I should scan Seer now for damage and intel, then move to maintain range. Moving to (5,3) keeps distance from threats while staying in control.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "I'm cloaked with 1 turn remaining and already behind Warden at (3,2). Warden is adjacent and I'm behind them — perfect breach opportunity. Breach will make Warden obey me next turn, neutralizing their defensive posture. After breach, I can move toward Lens at (5,3) to set up an assassination. Viper is 3 tiles away so no blocking concern. Priority: breach Warden now, then reposition toward Lens.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "addendum": "Move away from allies and toward your own team's backline"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Viper is at (1,3), distance 2 — exactly in precision_shot range. I'm not adjacent to Viper (dist=2), so precision_shot is not blocked. I haven't moved yet, so I get full 2dmg. Orders say focus Viper to eliminate the vector threat. I'll shoot first, then consider repositioning. Moving to (0,4) or (2,5) could help but risks stepping on trap at (1,4). Best play: precision_shot Viper now at full damage, then move to (2,5) to maintain distance and angle.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "I'm at (1,3) with 2/7 HP - critically low. Seer is at (2,4), dist=2, in range. I have traps at (2,3) and (1,4) already placed. Seer is adjacent-ish. I can attack Seer for 1 damage. Moving to (0,3) puts me further from Seer and Hawk while staying in play. I'm too low HP to be aggressive - I should harass Seer with attack then reposition away from danger. Pulse would hit Seer if I'm within 1 tile but I'm dist=2. Attack Seer at (2,4) first, then move to (0,4) to create distance and the trap at (1,4) covers my retreat path.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Orders say move away from allies and toward our backline. My allies are Viper @(0,4) and Lens @(5,3). I'm at (3,3). Backline would be toward our side — Viper is west side, so moving south/west makes sense. Moving to (3,1) gets me further from enemies and toward backline. I can attack Shade @(4,3) first since it's adjacent, then move away.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 7,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 11,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Lens oracle is adjacent at (5,3), facing E, and I'm already behind them at (4,3). Priority target — shadow_strike keeps cloak, deals damage. Then I can use a second shadow_strike or wait. Breach is on cooldown. Shadow_strike Lens now, then shadow_strike again for the kill if possible.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "I'm at (2,4) with 4/6 HP. Viper is 2 tiles away at (0,4) - I must not move adjacent to it or my scan ability gets blocked. All three enemies are already scanned. Lens is wounded at (5,3) and is the enemy oracle scanning my allies - taking it out is priority. Warden is advancing toward allies. I should recalibrate Hawk (striker at (2,5)) to boost their effectiveness, then move to maintain range. Hawk is adjacent to me at (2,5), so I can recalibrate them. After recalibrating, I should reposition to stay safe and maintain scan range on enemies. Moving to (3,4) keeps me away from Viper and in good position.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 2,
+              "y": 5
+            },
+            "addendum": "Focus fire on Lens at (5,3) - they are wounded and scanning our team. Use precision_shot to finish them off this turn."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "I'm at (5,3) with only 2HP — critical condition. Shade is adjacent at (4,3) blocking my scan (adjacent enemy). Seer is at (3,4) distance 3, in scan range. I need to move away from Shade first to enable scanning, then scan Seer (already know their prompt but scan deals damage). Move to (5,4) to increase distance from Shade — still keeps Seer in range at dist=3. Then scan Seer to deal 1 damage. Actually Shade is at dist=1 which blocks scan per rules. Move to (5,5) first to get distance from Shade (dist becomes 2, unblocked), then scan Seer from (5,5): Seer at (3,4), dist = |5-3|+|5-4| = 3, within range 4. This works.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Lens is wounded and at dist=3, within precision_shot range. Orders say focus fire on Lens. I haven't moved yet so precision_shot deals full 2dmg. Viper is also wounded at dist=3 but Lens is the priority. I'll fire precision_shot at Lens first, then move to maintain positioning away from Viper.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "I'm at (0,4) with 2/7 HP - wounded and vulnerable. Seer is closest at dist 3 to my east. I have traps at (2,3) and (1,4) already placed. No enemies in range currently. I need to move toward enemies to threaten or reposition defensively. Moving to (2,4) gets me closer to Seer at (3,4) - that would put me at dist 1, adjacent, enabling pulse to hit them. But at 2 HP I'm fragile. Better to move to (1,3) to avoid the trap at (1,4) and threaten the Seer corridor. Actually, moving to (2,4) puts me adjacent to Seer - I can pulse for 1dmg to all within 1 tile, which would hit Seer. Seer is wounded so this could be impactful. Risk is I'd be adjacent to Seer and potentially Hawk. Let me move to (2,4) and pulse targeting (3,4) to hit Seer.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Orders say move away from allies and toward our backline. Allies are at (2,4) and (5,5). Enemies are to the north at (3,4), (4,3), (3,5). I'm at (3,1) facing south. Moving south/southwest gets me away from the front. (2,0) or (3,0) moves me toward our backline. I'll move to (2,0) to reposition away from allies and toward our backline. No enemies in range so ability is useless — I'll wait as second action.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 11,
+          "maxHp": 12,
+          "position": {
+            "x": 2,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "I'm at (5,5) with 2/6 HP, very low health. Hawk used precision_shot on me last turn (failed due to range), now at (3,5) — dist 2, in scan range. Shade is at (4,3) doing shadow_strike toward (5,3) repeatedly — dangerous. Seer is wounded at (3,4), already scanned. I need to survive. Moving to (2,5) gets me away from Shade's shadow_strike target (5,3) and away from Hawk. From (2,5) I can scan Shade to reveal its prompt and deal 1 damage. Shade is a high-value scan target (not yet scanned, healthy specter). Let me move to (2,5) first, then scan Shade at (4,3) — dist from (2,5) to (4,3) = 2+2=4, exactly in range.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "I'm at 2HP, adjacent to Viper which blocks my scan ability. Priority: escape Viper's denial zone to restore my scan capability, then scan Lens or find a safe position. Moving to (4,4) gets me away from Viper while staying near allies. From (4,4) I can scan Lens at dist 2+1=3 tiles - wait, Lens is at (2,5), from (4,4) that's dist=|4-2|+|4-5|=2+1=3, within range 4. Scan Lens to deal 1 damage (they're wounded) and reveal prompt (already known). Actually Lens prompt already known. Better to move away from Viper and then attack Viper (dist 1 from current pos) - but attack is adjacent only and I need to survive. Best play: move to (4,5) to escape denial, then scan Lens at (2,5) from dist=|4-2|+|5-5|=2, within range 4. This gets me out of denial zone and deals damage to wounded Lens.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "I'm at (4,3) facing N, HP 3/5, cloaked. No enemies in range from current position. Priority target is Lens oracle at (2,5) which is critical HP — need to close distance. Moving to (3,4) gets me closer and (3,3) is reachable in valid moves. Actually (3,3) is in valid moves and gets me within 2 tiles of Lens at (2,5) — dist would be sqrt(1+4)=~2.2, not adjacent. Let me recalculate: from (3,4) to Lens (2,5) = dist 1+1=2 tiles (Manhattan). That's within shadow_strike range (adjacent only, range 1). Wait — shadow_strike is adjacent only. From (3,4), Lens at (2,5) is diagonal, Manhattan dist=2. Not adjacent. From (3,5), Lens at (2,5) is dist=1 — adjacent! And (3,5) is NOT in my valid moves list. Checking: valid moves include [3,4] and [5,5] but not [3,5]. Hawk is at (3,5) blocking it. So I can't reach Lens this turn. Best move: go to (3,4) to set up an attack next turn. I'm cloaked so shadow_strike won't break cloak — but I can't reach Lens yet. Move to (3,4) to close in.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Lens oracle is at (2,5), distance 1 — critical status and adjacent. I'm at (3,5). Precision_shot requires LoS and range ≤2, but is blocked when adjacent to enemy. Lens is 1 tile away (adjacent), but the blocking rule applies to Viper (vector), not Lens. Viper is at (2,4), distance 2 — not adjacent. So precision_shot is not blocked. Lens is critical and highest priority. Fire precision_shot on Lens at (2,5) for 2 damage to eliminate them. I haven't moved so no penalty. Then I can move away from Viper to maintain distance — move to (5,5) to stay safe.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Orders are to move away from allies and toward my team's backline. I'm at (2,0) facing south, allies are at (2,4). My backline would be the southern edge. I should move away from Viper at (2,4) by heading toward x=4 direction or staying low on the map. Valid moves include (4,0) which moves me east along the bottom edge, away from Viper. I'll move to (4,0) to reposition toward the eastern backline and away from allies. No enemies in range, so ability isn't useful offensively. I'll wait as second action to maintain fortify.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Shade is adjacent at (3,4) and wounded - pulse will hit them for 1dmg and potentially finish them off. My Denial passive also blocks their cloak/shadow_strike abilities while adjacent. I'm at 2HP so I need to be careful. After pulsing Shade, I should retreat to safety. Moving to (1,4) puts me behind my existing traps at (2,3) and (1,4)... wait, (1,4) is a valid move tile but there's already a trap at (1,4). I should move to (1,5) or (1,3) instead. Let me pulse first to hit Shade, then retreat to (1,5) to stay behind the trap line.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 7,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 11,
+          "maxHp": 12,
+          "position": {
+            "x": 4,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "I'm at 2HP, critical condition. Viper is 3 tiles away — must not move adjacent. Warden is out of range. I've already scanned both enemies. Best play: move to maintain safe distance from Viper, then recalibrate Shade (wounded damage dealer at 3,4) to boost effectiveness. Moving to 5,4 keeps me away from Viper and Warden while staying near Shade for recalibrate (adjacent). Actually Shade is at 3,4 — from 5,4 that's 2 tiles away, not adjacent. Let me check adjacency: recalibrate requires adjacent. From my current (4,5), Shade at (3,4) is sqrt(2) away — diagonal, not adjacent. If I move to (4,4), Shade at (3,4) is 1 tile away — adjacent. But (4,4) is a valid move tile. Moving to (4,4) then recalibrating Shade works. This keeps me 3+ tiles from Viper (Viper at 1,5, I'd be at 4,4 = 3 tiles). Safe.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "addendum": "Warden is advancing from (4,0). Focus shadow_strike on Warden when in range. Viper is wounded at (1,5) — coordinate with Hawk for elimination."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "I'm at (3,4) with 2HP, cloaked. Viper is wounded at (1,5) facing N — I can move to (1,4) which is directly behind Viper (adjacent). That lets me use breach or shadow_strike. Breach is ready and shadow_strike keeps cloak. Priority: eliminate Viper (wounded, high threat). Move to (1,4) behind Viper, then shadow_strike for 1dmg — keeps cloak and might finish them off if Hawk coordinates. With 2HP I need to stay cloaked for survival.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Both enemies are out of range. Viper is at (1,5) distance 4, Warden at (4,0) distance 6. My range is 2. Valid moves: (3,5), (4,5), (5,3), (5,4). Moving to (3,5) closes distance to Viper to 2 tiles, bringing them into precision_shot range. Viper is critical HP - priority target. Move to (3,5) then precision_shot Viper at (1,5).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Nearest enemy is Seer at (4,4), dist=4. I need to advance toward them. Moving to (4,2) closes distance to Seer significantly. No enemies adjacent so no attack possible. I'll use shield_wall facing N since Seer is directly north and that's where the closest threat is.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 2
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 7,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 11,
+          "maxHp": 12,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "I'm at (4,4) with 2HP, critical condition. Warden is at (4,2), dist 2 — within scan range and already scanned. No new targets to scan. I should recalibrate Hawk at (3,5) to boost their effectiveness, then move away from Warden to maintain safety. Moving to (3,4) keeps me at range and lets me recalibrate Hawk who is adjacent at (3,5). After recalibrate, I'll move to (2,4) to increase distance from Warden.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 5
+            },
+            "addendum": "Warden at (4,2) uses shield_wall facing N — attack from W or E flank to bypass shield. Prioritize flanking angle for maximum damage."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "I'm at (1,4) with 1HP — critically wounded. No enemies in range. Warden is at dist 5, not reachable for breach. My priority is to close distance while staying alive. Moving toward (3,3) gets me closer to Warden's position. I'm cloaked, so I should move aggressively to get into shadow_strike range next turn. Best move: advance toward (3,3) which is in my valid moves list, then wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "No enemies in range from current position. Warden is at (4,2), dist=4, out of range. Allies Shade is critical at (3,3) and Seer is wounded at (3,4). I need to reposition to get Warden in range. Moving to (4,4) closes distance to Warden to 2 tiles, putting them in precision_shot range. From (4,4) Warden at (4,2) is exactly 2 tiles away (same column), should be in range. I have 4/5 HP so I'm healthy. Move closer then fire.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "No enemies adjacent currently. Shade is critical at (3,3) dist=2, Hawk at (4,4) dist=2. Moving to (4,3) puts me adjacent to Hawk at (4,4) and closer to Shade at (3,3). From (4,3) I can attack Hawk. Enemies are mostly to the N/NW, so shield_wall facing N covers Hawk direction.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 7,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 10,
+          "maxHp": 12,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "I'm at 1HP — extremely vulnerable. Warden is adjacent at (4,3) facing N. I can move to (4,2) to get behind Warden, then use breach to take control of them. Breach from behind is devastating and keeps me alive since I don't take damage. This is better than shadow_strike which only does 1dmg. Move to (4,2) first, then breach Warden — I'll be behind them after moving south of them.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "addendum": "Move north away from allies, toward enemy backline"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "I'm at 2HP, critical condition. Warden is at (4,3) - already scanned, prompt known. Foresight shows Warden will move to (4,3) and attack (4,4) targeting Hawk. I need to recalibrate Hawk to boost effectiveness since Warden is threatening Hawk. Hawk is at (4,4), which is adjacent to my current position (3,4) - yes, (4,4) is 1 tile east, so adjacent. I can recalibrate Hawk. But I also need to stay safe at 2HP. Moving to (2,4) gives me more distance from Warden. I'll move first to (2,4) then recalibrate Hawk - but after moving, Hawk at (4,4) would be 2 tiles away, not adjacent. So recalibrate requires adjacent. Better to recalibrate first while Hawk is adjacent, then move away. Recalibrate Hawk first (target 4,4), then move to (2,4) to increase distance from Warden.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 4,
+              "y": 4
+            },
+            "addendum": "Warden will attack you this turn - reposition or strike Warden before it acts. Warden has known prompt: advance and attack adjacent enemies."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Warden is adjacent at (4,3) blocking precision_shot. Orders say Warden will attack me this turn. I need to reposition to get range on Warden, or use suppressing_fire to slow it. Best move: step back to (5,5) to create distance, then use precision_shot on Warden from range 2. Wait — valid moves include (5,4) which is dist 2 from Warden at (4,3), enabling precision_shot. Move to (5,4), then precision_shot Warden.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Orders say move north away from allies toward enemy backline. Shade is critical at (4,2) — adjacent south of me. I can attack Shade first to potentially eliminate them, then move north to (4,5) per orders. Shade is critical so one hit may finish them.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 7,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 9,
+          "maxHp": 12,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 9,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "I'm at 2HP so survival is critical. Warden is the only enemy visible and already scanned. I should recalibrate Hawk at (5,4) to boost damage output, but Hawk is not adjacent. I can move closer to Hawk to enable recalibrate, or scan Warden again for damage. Warden is at (4,5), dist 3 - within scan range. Scanning deals 1 dmg. Better to recalibrate Hawk - need to get adjacent first. Hawk is at (5,4), I'm at (2,4). Moving to (4,4) puts me adjacent to Hawk and still not adjacent to Warden at (4,5) - wait, (4,4) is adjacent to Warden at (4,5)! That would block scan and put me in danger. Move to (4,3) instead - adjacent to Hawk at (5,4)? No, (4,3) to (5,4) is distance 2. I need to be adjacent (dist 1) to recalibrate. Move to (4,4) is adjacent to Warden - bad. Move to (3,4) - adjacent to (4,4) but not Hawk. Actually recalibrate range is adjacent only. Hawk is at (5,4). To be adjacent I need to be at (4,4), (5,3), (5,5). (4,4) is adjacent to Warden too risky. Instead, scan Warden from current position for 1 dmg, stay safe.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Warden is at (4,5), dist=2, healthy. I'm at (5,4) with 3HP. Warden will attack me this turn if I stay adjacent. I should use precision_shot on Warden first (dist=2, in range, not adjacent so no suppression penalty), then move away to (5,2) to create distance. Actually, Warden is at dist=2 so precision_shot is valid. Fire first, then move to (5,2) to stay out of Warden's attack range next turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Orders say move north away from allies toward enemy backline. I'm at (4,5) with speed 1 this round. Valid moves include (4,4) and (4,3) going north. Moving to (4,3) gets me closer to Hawk at (5,2) — 2 tiles away after moving. I'll move north as far as possible: (4,3). No ability targets in range, so wait for second action.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 7,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 12,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 10,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Round 10, I'm at (1,4) with 2HP — very low. Warden is at (4,3), wounded, already scanned. Foresight shows Warden did move→(4,3)→wait last turn. Hawk is wounded at (5,2). I can scan Warden again for 1dmg to potentially finish it (it's wounded). Warden is exactly 4 tiles away (dist=4), within scan range. I should stay put and scan Warden to deal damage — if it's nearly dead, this could help. Then wait since I need to preserve myself and staying at range is key. Moving isn't necessary since I'm already at range and safe distance from enemy.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Warden is at (4,3), dist=2, wounded. I'm at (5,2), not adjacent to any enemy so precision_shot is available. Fire precision_shot on Warden to finish it off. No need to move first — I already have range and LoS. Stay at (5,2) to maintain distance.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Orders say move north toward enemy backline. I'm at (4,3). Hawk is at (5,2) to my south-east, Seer at (1,4). Moving north means increasing y. Valid moves include (4,4) and (4,5). (4,5) gets me furthest north while staying in column 4, pushing toward enemy backline. I'll lose Fortify by moving but orders are to advance. No enemies in melee range so ability won't help this turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 7,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 12,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 11,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "I'm at (1,4) with 2HP — very fragile. Warden is critical at (4,5), distance 4, so scan is valid. Foresight shows Warden just waited. Hawk is at (5,2) wounded. My orders say scan priority targets. Warden is already breached but scanning again deals 1 damage which could finish them off since they're critical. I should scan Warden to potentially eliminate them, then recalibrate Hawk to boost their effectiveness. I can scan first, then stay put or move to a safer position. Staying at (1,4) keeps me at range 4 from Warden — exactly in scan range. I'll scan Warden first (deals 1 dmg, could kill since critical), then recalibrate Hawk but Hawk is at (5,2) — not adjacent to me, so recalibrate won't work. I'll just wait as second action.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Warden is at (4,5), distance 4 — out of my range 2. No enemies in range from current position. I'm at (5,2) with 3HP, wounded Seer ally at (1,4). Orders say maintain distance and use precision_shot on high-value targets. Warden is the only enemy visible. I should move closer to get Warden in range (need dist ≤2), but Warden is at (4,5) — even moving to (4,3) puts me at dist 2. Let me move to (4,3) then use precision_shot on Warden at (4,5). Distance from (4,3) to (4,5) = 2, within range. Since I moved, precision_shot deals 1dmg.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "I'm at (4,5) with 1HP, fortified. Hawk is at (4,3) distance 2 - not adjacent so can't attack. Moving to (4,4) would put me adjacent to Hawk at (4,3). But I only have 1HP - moving breaks fortify and I lose 50% damage reduction. Hawk is wounded though. I need to advance per orders. Move to (4,4) to get adjacent to Hawk, then attack. Loss of fortify is risky at 1HP but orders say advance.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 7,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 12,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "opponent",
+    "totalTurns": 12,
+    "reason": "opponent eliminated all enemies"
+  },
+  "endedAt": "2026-02-21T04:05:34.337Z"
+}
