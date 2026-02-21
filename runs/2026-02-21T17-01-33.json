@@ -1,0 +1,2274 @@
+{
+  "id": "2026-02-21T17-01-33",
+  "startedAt": "2026-02-21T17:01:33.220Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 5,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 5,
+        "movement": 2,
+        "range": 2,
+        "speed": 2
+      },
+      "oracle": {
+        "maxHp": 6,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 9,
+        "movement": 2,
+        "range": 1,
+        "speed": 2
+      },
+      "vector": {
+        "maxHp": 7,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 12,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 3
+      },
+      "precisionShot": {
+        "damage": 3,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 4,
+        "healAmount": 3
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Rampart",
+        "class": "sentinel",
+        "prompt": "Push forward aggressively. Shield_wall facing the enemy cluster. If flanked, turn to face the biggest threat. Attack when possible."
+      },
+      {
+        "name": "Hawk",
+        "class": "striker",
+        "prompt": "Maintain distance. Use precision_shot on high-value targets — medics first, then damage dealers. Use suppressing_fire if enemies close in."
+      },
+      {
+        "name": "Grid",
+        "class": "vector",
+        "prompt": "Control chokepoints with traps. Place them between enemy positions and your allies. Use denial to block adjacent enemy abilities. Pulse groups when possible."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Watcher",
+        "class": "oracle",
+        "prompt": "Scan priority targets each turn to reveal their strategy. Use recalibrate on your damage dealer to boost effectiveness. Stay behind allies and maintain range. Never get adjacent to enemy vectors."
+      },
+      {
+        "name": "Patch",
+        "class": "medic",
+        "prompt": "Prioritize healing the lowest HP ally. Position safely behind your sentinel. Use overclock on allies who can do the most with an extra action."
+      },
+      {
+        "name": "Hawk",
+        "class": "striker",
+        "prompt": "Stay at maximum range. Use precision_shot on the most wounded enemy to secure kills. If no one is wounded, target the enemy medic. Never move adjacent to enemies."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Grid(vector) is exactly at dist=4, which is the scan range limit. I need to move closer to scan it. Moving to (4,3) puts me at dist=2 from Grid at (4,1), well within scan range. After moving, I can scan Grid to reveal its strategy. I must avoid getting adjacent to Grid - at (4,3) I'm 2 tiles away, safe. Ally Hawk is at (5,4) and is my primary damage dealer, so after scanning I should recalibrate Hawk next turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Patch",
+          "class": "medic",
+          "thinking": "Round 1, all allies at full HP so no healing needed. Enemies are far away. I should position safely and wait - moving toward my allies to be ready to heal/overclock next turn. Moving to (3,4) keeps me near Watcher and closer to the group while staying back from enemies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "No enemies in range from current position. Closest enemy is Grid at dist 4 - need to close to range 2. Moving to (5,2) gets me closer to Grid at (4,1) but still dist 3. Moving to (5,3) puts me at dist 3 from Grid. None of my valid moves get me within range 2 of any enemy. Best move is toward Grid at (5,2) to position for next turn, while staying away from adjacency.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "All enemies are at dist 7, well out of my range 2. Orders say maintain distance. I should advance cautiously toward the center to get within range of high-value targets (Patch the medic is priority). Moving to (1,1) gets me closer while staying diagonal/flexible. No ability possible this turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Round 1, opening position. I'm at (4,1) with Hawk at (5,2) and Watcher at (4,3) both within range 2. Orders say to place traps between enemy positions and allies. Moving to (4,2) puts me adjacent to both Hawk (5,2) and Watcher (4,3), enabling Denial to block their abilities. But I should place a trap first on a chokepoint before closing distance. If I move to (4,2) I'd be adjacent to enemies and my Denial passive would suppress key abilities. Let me place a trap at (4,3) to hit Watcher... wait, trap requires empty tile and range ≤2. Watcher is AT (4,3) so I can't place trap there. Place trap at (3,3) as a chokepoint between Patch and the frontline - but that's at distance 3 from current pos, out of trap range. Trap range is ≤2 tiles. From (4,1), within 2 tiles I can reach (4,3) which is occupied, so valid trap spots: (3,1),(3,2),(4,0),(4,2),(5,0),(5,1),(5,2-occupied),(2,1),(3,0). Best chokepoint: (4,2) or (3,2) to block enemy advance. Then move toward denial position. Place trap at (3,2) to cover the lane, then move to (4,2) to enable Denial on Hawk and Watcher.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Enemies are all at distance 5, out of range. Orders say push forward aggressively and shield_wall facing enemy cluster. Enemy cluster is to the N/NE. I'll move to (2,2) to advance, then shield_wall facing N to protect allies Hawk@(1,1) and Grid@(4,2) from the northern enemy cluster.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 1,
+              "y": 1
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 12,
+          "maxHp": 12,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Patch",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 9,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Grid's DENIAL is blocking my abilities while adjacent. I must move away first. Moving to (3,3) breaks adjacency with Grid at (4,2) and keeps me at distance 3 from Rampart. From (3,3) I can scan Rampart (dist=2) since Grid's denial won't apply after moving. Hawk ally is at (5,2) — recalibrate could help but scan on unscanned Rampart is higher priority.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "I'm adjacent to Grid (vector) at (4,2), which means precision_shot is blocked by denial zone. I need to move away from Grid to escape the denial zone, then use precision_shot. Valid moves include (5,4), (5,3), (4,3) which increase distance from Grid. Moving to (5,4) puts me at distance 2 from Grid (still in range for precision_shot) and gets me out of adjacent/denial range. From (5,4), Grid at (4,2) is distance 3 — out of my range 2. Let me check (4,3): dist to Grid=(4,2) is 1 tile, still adjacent. (5,3): dist to Grid is sqrt(1+1)=~1.4, still adjacent diagonally. Actually dist is Chebyshev or Manhattan? Using Manhattan: (5,3) to (4,2) = 1+1=2, so that's distance 2, out of denial (which requires adjacent=dist 1). From (5,3), Grid at (4,2) is dist 2, within my range 2 for precision_shot. No enemies are wounded so I should target... Grid is the vector causing denial, priority target. From (5,3) I can precision_shot Grid at (4,2), dist=2, no movement penalty if I move first then shoot — wait, I moved so precision_shot does 1dmg if moved. Still worth it to remove denial. Let me move to (5,3) first, then precision_shot Grid.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Patch",
+          "class": "medic",
+          "thinking": "All allies are at full HP, so no healing needed. Grid(vector) is 3 tiles away so I need to stay clear of adjacent range. Watcher is adjacent at (3,3) and already acted this round. I should consider overclock on Hawk or Watcher for next round's benefit. Moving to (4,4) keeps me safe from Grid while repositioning. Better: move to (4,4) then overclock Hawk at (5,3) — but dist from (4,4) to (5,3) is 2, not adjacent. From current (3,4), Watcher is at (3,3) which is adjacent! I can overclock Watcher now. But Watcher already acted this round — overclock gives 2 abilities NEXT turn, so it's still useful. Grid is at (4,2), dist 3, so not blocking abilities. Overclock Watcher at (3,3) now, then move to safe position.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "All enemies are out of range (dist 4-6, max range 2). Priority target is Patch (medic) at (2,4), dist 4. I need to close distance. Moving to (1,3) gets me to dist 3 from Patch — still out of range. Best move is toward (3,1) to close on Watcher/Patch cluster, but trap at (3,2) is a hazard. Move to (1,3) puts me at dist 3 from Patch at (2,4) — still one short. Move to (3,1) is available and gets me closer to the enemy cluster without hitting the trap. From (3,1): Patch at (2,4) = dist 3, Watcher at (3,3) = dist 2 — in range! Move to (3,1) then precision_shot Watcher at (3,3).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Watcher and Patch are both at dist=2 to my north. Orders say push forward and shield_wall facing enemy cluster. Trap at (3,2) blocks that tile. I can move to (2,3) to advance toward Patch at (2,4) — that gets me adjacent. Then shield_wall facing N toward the enemy cluster (Watcher at 3,3, Patch at 2,4).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "I'm at (4,2) with two enemies in range: Hawk at (5,3) and Watcher at (3,3). There's already a trap at (3,2). My denial passive is blocking adjacent enemy abilities - Watcher at dist 2 is just outside denial range. I should move to (4,3) to get adjacent to both Hawk and Watcher, enabling denial on both and potentially setting up a pulse hit. From (4,3) I'd be adjacent to Hawk at (5,3) dist=1 and Watcher at (3,3) dist=1 - that's a 2-unit pulse opportunity. Move to (4,3) then pulse to hit both enemies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 11,
+          "maxHp": 12,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Patch",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 9,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "I'm adjacent to Grid's denial zone which blocks my abilities. I need to move away first. Grid is at (4,3) - I should move to (3,4) or (3,2) to break adjacency. Moving to (3,4) keeps distance from Rampart too. Then with overclocked I get 2 ability uses - scan enemy Hawk at (3,1) since their prompt is unknown, and recalibrate ally Hawk at (5,3) to boost damage. After moving to (3,4): Grid is at (4,3) dist=sqrt(1+1)=1.4, still adjacent. Better to move to (2,2) - Grid dist=sqrt(4+1)=2.2, not adjacent. From (2,2): Hawk enemy at (3,1) dist=sqrt(1+1)=1.4 ≤4, scannable. But Rampart at (2,3) is dist=1, adjacent - still threatening. Let me move to (1,4) - Grid dist=sqrt(9+1)=3.2 not adjacent, Rampart dist=sqrt(1+1)=1.4 not adjacent. From (1,4): enemy Hawk at (3,1) dist=sqrt(4+9)=3.6 ≤4, scannable. Then scan Hawk and recalibrate ally Hawk at (5,3) - but (5,3) dist from (1,4)=sqrt(16+1)=4.1 > adjacent only. Recalibrate is adjacent only. Ally Patch is at (2,4), dist from (1,4)=1, adjacent. Recalibrate Patch instead, or scan Hawk and attack. With 2 ability uses: scan enemy Hawk at (3,1), then recalibrate Patch at (2,4) to boost healing effectiveness.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "secondResult": "Out of range (max 4)"
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "I'm adjacent to Grid (vector) at (4,3), which means my precision_shot is blocked by denial zone. I need to move away first. Valid moves include (5,5), (5,4), (5,2), (5,1), (4,4), (4,2), (3,3). Moving to (3,3) puts me at dist=1 from Rampart at (2,3) — too close. Moving to (4,4) keeps distance from Grid. But orders say stay at max range and never move adjacent to enemies. Grid is at (4,3), so (4,4) would be adjacent diagonally — need to check. Best option: move to (5,5) to escape denial zone, then I'm no longer adjacent to Grid. From (5,5), Grid at (4,3) is dist=sqrt(1+4)=~2.2, so range 2 tiles — Grid would be in range. But precision_shot needs LoS and range ≤2. From (5,5) to (4,3): dx=1, dy=2, dist=3 — out of range still. Rampart at (2,3) is dist=3+2=5 from (5,5) — out of range. Hawk at (3,1) from (5,5): dx=2,dy=4 — out of range. So after moving, no targets in range except maybe Grid. From (5,4): Grid at (4,3) is dx=1,dy=1=dist ~1.4, adjacent diagonally. From (5,2): Grid at (4,3) is dx=1,dy=1=dist~1.4. None of my valid moves put enemies other than Grid in range ≤2. Since all enemies out of range after moving, I should move away from Grid's denial zone to (5,5) or (5,4) and wait. Moving to (5,5) maximizes distance from Grid.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Patch",
+          "class": "medic",
+          "thinking": "Watcher is at (1,4) adjacent to me at (2,4) and critically low at 3/6 HP - patch them first. Then move to (1,3) or stay - actually I'm already adjacent to Watcher so I can heal immediately. After healing, I should consider positioning. Rampart is at (2,3) dist=1 but it's an ally sentinel - wait, Rampart is listed as ENEMY. I'm adjacent to enemy Rampart but Grid (vector) is 3 away so abilities aren't blocked. I can still use patch. Heal Watcher at (1,4) first, then move to (1,3) to get behind Rampart or stay safe.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "All enemies are out of range (dist 5-6, max range 2). Orders say maintain distance. I should reposition to get closer to high-value targets (Watcher oracle at dist 5, Patch medic at dist 6) while staying safe. Moving to (3,3) gets me closer to the northern enemies without stepping on the trap at (3,2). From (3,3) enemies are still out of range but I'm better positioned. Wait as second action.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "No enemies in range. Hawk is at (5,5) dist=3, approaching from northeast. I have a trap at (3,2) already. I should move northeast toward Hawk to close distance, or place a trap on an approach path. Moving to (4,4) gets me closer to Hawk and I can place a trap at (5,4) or (5,3) to block Hawk's approach toward my allies. Actually, moving to (5,4) puts me adjacent to Hawk at (5,5) - that would enable denial and attack. Let me move to (4,4) first then place trap at (5,4) to intercept Hawk's southward movement toward allies at (3,3) and (2,3).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Watcher is at (1,4) dist 2 — close threat. I'm at (2,3) facing N, fortified. Orders say push forward and shield_wall facing enemy cluster. Enemies are mostly to my NW (Watcher@1,4, Patch@1,5). If I move to (2,4), Watcher at (1,4) is adjacent — I can attack. Moving to (2,4) loses fortify but gets me in melee range of Watcher. Attack Watcher, then shield_wall W to protect against that cluster.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 11,
+          "maxHp": 12,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Patch",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 9,
+          "maxHp": 9,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Rampart is adjacent (dist=1) and attacked me last turn. I need to back away. Hawk(striker,E) at (3,3) is unscanned and in range 3 — priority scan target. Move away from Rampart first to avoid being adjacent, then scan enemy Hawk to reveal their strategy. Moving to (0,4) keeps me away from Grid (which is at 4,4, so 4 tiles away — safe) and away from Rampart. From (0,4), Hawk at (3,3) is dist=4, still in scan range.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Grid(vector) is at (4,4), distance 2, and is the only enemy in range. Orders say to target the most wounded enemy, but all are healthy, and there's no enemy medic. Grid is the closest threat and in range. I must not move adjacent to Grid. I can fire precision_shot from current position (5,5) at Grid(4,4) — distance is 2, within range, and I haven't moved so full 2dmg. Stay put and shoot.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "All enemies are at distance 4, out of my range 2. Orders say maintain distance and use precision_shot on medics first. Patch is the medic at (1,5). Moving toward Patch: from (3,3), I can move to (2,3) which gets me closer. From (2,3) Patch at (1,5) is still dist 3, out of range. Let me check: move to (2,4) — wait, that's occupied by Rampart at (2,4). Move to (3,4) gets me closer to Watcher at (0,4) dist 3, still out of range. Move to (2,3): Patch (1,5) dist = |2-1|+|3-5|=1+2=3, still out. Best approach: move to (2,3) toward Patch, then no ability in range. Or move toward (1,3): not in valid moves. Valid moves show [2,3] is available. From (2,3) still can't reach anyone. I should move closer to Patch. (2,3) is my best option to approach Patch while maintaining some distance. Wait with no targets in range after moving — I'll move to (2,3) to close on Patch for next turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Patch",
+          "class": "medic",
+          "thinking": "Watcher at (0,4) is closest wounded ally (dist=2, HP:5/6). I can move to (0,5) or closer to reach adjacent. Moving to (0,5) puts me at dist=1 from Watcher at (0,4) — that's adjacent. Then I can patch Watcher. Hawk at (5,5) is further away (dist=4) and lower HP (4/5), but I can't reach them this turn. Prioritize the reachable heal. No enemies adjacent so patch is not blocked.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Watcher is at (0,4) distance 2 — closest threat. Orders say push forward and shield_wall facing enemy cluster. Enemies are to my west (Watcher at 0,4, Patch at 0,5). I should move toward them and shield_wall facing W to protect allies from that cluster. Moving to (1,4) puts me closer to Watcher. My ally Hawk is at (2,3). Shield_wall W from (1,4) would cover adjacent allies from western enemies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 4
+            },
+            "direction": "W"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "I'm at (4,4) with only 2/7 HP - critically low. Hawk is adjacent at (5,5) distance 2. I need to survive. Moving to (3,5) gets me further from Hawk while staying near allies. Then I should place a trap to deter pursuit - (4,5) would be between me and Hawk, blocking their path. My Denial passive is already blocking adjacent enemies. Priority: survive by retreating and laying a trap on my escape route.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 11,
+          "maxHp": 12,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Patch",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 9,
+          "maxHp": 9,
+          "position": {
+            "x": 0,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Rampart is adjacent at (1,4) - I must move away first since scan is blocked when adjacent to enemy Vector... wait, Grid is the Vector, not Rampart. But Rampart is adjacent and I need to avoid being attacked. Foresight shows Rampart moved to (1,4) and used shield_wall facing W - so Rampart is right next to me. I should move away to maintain range. Moving to (2,4) puts me closer to enemies. Better to move to (1,5) or (2,5) to get distance while keeping Hawk(striker) at (2,3) in scan range. Actually, I already have Rampart and Hawk's prompts. Grid at (3,5) is distance 4 - out of scan range from current position. I should move to get Grid in range (need dist ≤ 4 from new position). From (2,5), Grid at (3,5) is dist 1 - in range. But I need to avoid getting adjacent to Grid (vector) since that blocks scan. Grid is at (3,5), so (2,5) is adjacent - scan would be blocked. Move to (1,5) instead - Grid dist is 3, in range for scan. Also gets me away from Rampart. From (1,5) I can scan Grid at (3,5): dist = |3-1|+|5-5| = 2, wait that's distance 2, in range. And (1,5) is not adjacent to Grid. Perfect.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Watcher (oracle) is in range at dist=3 from my current position. Orders say medics first, then damage dealers. Watcher is an oracle, not a medic, but Patch (medic) is out of range at dist=4. I can hit Watcher with precision_shot (2dmg, range≤2 tiles) — wait, dist=3 means it's outside precision_shot range of 2. Let me reconsider: precision_shot range is ≤2 tiles, but Watcher is at dist=3. So Watcher is NOT in precision_shot range from current position. I need to move closer. Moving to (2,4) gets me to dist=2 from Watcher at (1,5) — Manhattan distance = |2-1|+|4-5|=1+1=2, in range. Or move to (1,3): dist to Watcher = |1-1|+|3-5|=0+2=2, in range. Let me move to (2,4) to close distance to Watcher while staying away from enemies. From (2,4), Watcher at (1,5) is dist=2, in precision_shot range. I haven't moved more than needed so precision_shot does full 2dmg (only 1dmg if moved — wait, the penalty applies if I moved this turn). I need to shoot first, then move, OR accept 1dmg. Better to shoot first from current position but Watcher is at dist=3, out of range. Alternatively: move to (1,3) first (dist to Watcher becomes 2), then shoot for 1dmg (moved penalty). Or shoot Watcher isn't possible without moving. Best: move to (2,4), then precision_shot Watcher for 1dmg (moved penalty applies). Actually orders say maintain distance — Watcher at (1,5) is close. Moving to (2,4) keeps distance. Let me do that.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Grid is critical and at distance 2 — within precision_shot range. I haven't moved so no penalty. Take the shot to secure the kill. Stay at current position to avoid moving adjacent to Grid.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Patch",
+          "class": "medic",
+          "thinking": "Watcher at (1,5) is wounded (5/6 HP) and adjacent to me at (0,5) - dist=1, so I can heal them. I have 1 heal remaining. Rampart is at (1,4) dist=2 from me - patch/overclock blocked when adjacent to enemy, but Rampart is not adjacent to me (dist=2). I need to check if Watcher is adjacent: I'm at (0,5), Watcher at (1,5) - that's distance 1, adjacent. I can patch Watcher. After healing Watcher (5→6, full HP restored partially... wait Watcher is 5/6 so needs 1HP, patch gives 2HP capped at max). Hawk striker ally at (5,5) is 4/5 HP but dist=5, unreachable. Priority: heal Watcher who is adjacent. Then consider moving toward safety or positioning. Rampart enemy sentinel is at (1,4) - I should stay away. Moving to (0,4) or (0,3) keeps me away from enemies. I'll heal Watcher first, then move to (0,4) to stay behind/safe.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Two enemies in melee range: Watcher at (1,5) and Patch at (0,4). Orders say push aggressively and attack when possible. Fortified gives 50% damage reduction but I need to move to engage properly. Watcher is the higher-threat oracle. Attack Watcher first, then shield_wall facing N to protect ally Hawk at (2,4) from enemy cluster to the north/east.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 4
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 11,
+          "maxHp": 12,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Patch",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 9,
+          "maxHp": 9,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Foresight shows Rampart will attack me and Hawk striker will use precision_shot on me. I'm at (1,5) and Rampart is adjacent at (1,4) — that's dangerous. I need to move away from Rampart first to avoid adjacency (which also blocks scan). Moving to (3,5) gets me away from both enemies and keeps range open. Then I can scan Hawk striker at (2,4) — dist from (3,5) to (2,4) is ~1.4 tiles, well within range 4. Both enemies are already scanned actually. I should recalibrate ally Hawk striker at (5,5) to boost their effectiveness against the enemy striker who prioritizes medics. Move to (3,5) first to escape Rampart adjacency, then recalibrate ally Hawk at (5,5) — but that's dist 2 from (3,5), not adjacent. Ally Hawk is at (5,5), from (3,5) that's distance 2, too far for recalibrate (adjacent only). From (2,5) ally Hawk at (5,5) is dist 3, still too far. No valid recalibrate target reachable. Both enemies already scanned. I'll move away from Rampart to (3,5) and wait, since no useful ability targets are in range after moving.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Patch",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0/3 remaining). I'm at (0,4) facing S, with Rampart enemy adjacent at (1,4) and Hawk enemy at (2,4). My passive Triage shows Hawk ally at 4/5 HP and Watcher at 5/6 HP, both wounded but neither adjacent. I can't heal. Overclock is blocked when adjacent to enemy Vector — but Rampart is a sentinel, not a Vector, so overclock should be available. However, no ally is adjacent to me to overclock. I should move to a safer position away from the enemies and consider positioning. Moving to (0,5) gets me further from enemies while staying on the board. From there I could potentially overclock if an ally moves adjacent, but no ally is adjacent now. Best play: move to (0,5) to get away from Rampart, then wait since no ability targets are available.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Watcher (oracle) is highest priority as support unit at dist=2, within precision_shot range. I haven't moved, so I get full 2dmg. Fire precision_shot on Watcher at (3,5). Then I can move to maintain distance or stay put. Patch is at dist=3 which is out of my range=2. I'll stay at current position to keep options open next turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Both enemies are out of range (Hawk at dist 4, Rampart at dist 5). My max range is 2. Valid moves are (4,4), (4,5), (5,3), (5,4). Moving to (4,4) gets me closer but Hawk at (2,4) would still be dist 2 away - exactly in range! That's within precision_shot range of 2. I need to check: from (4,4), distance to Hawk at (2,4) = |4-2| + |4-4| = 2. That's in range! And I won't be adjacent (dist=2, not 1). Orders say target most wounded - both are healthy, so target Hawk (striker is more threatening). Move to (4,4) then precision_shot Hawk.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (1,4) with 50% damage reduction. Patch is at (0,5) distance 2 - if I move to (0,4) I'd be adjacent. But orders say push forward aggressively toward enemy cluster (Hawk at 4,4, Watcher at 3,5). Moving to (2,3) or (2,5) gets me closer. Ally Hawk is at (2,4) wounded - I should shield_wall to protect them. If I move to (2,5) I'm adjacent to Hawk at (2,4) and can shield_wall facing E toward enemy Hawk. But I lose fortify by moving. Enemy Patch at (0,5) is healthy and nearby - threat. Best: move to (1,5) to get adjacent to Patch and closer to Watcher, then shield_wall E to protect ally Hawk from enemy Hawk.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 4
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 11,
+          "maxHp": 12,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Patch",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 9,
+          "maxHp": 9,
+          "position": {
+            "x": 0,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "I'm at 2HP, critical condition. Foresight shows enemy Hawk used precision_shot on me last turn — I survived but I'm nearly dead. Both targets already scanned. I should recalibrate our allied Hawk at (4,4) to boost effectiveness against the wounded enemy Hawk. I need to stay safe — move away from enemies first, then recalibrate. Moving to (4,5) keeps me adjacent to allied Hawk at (4,4) for recalibrate while moving slightly away from the enemy cluster. Enemy Rampart is at (1,5) facing E with shield_wall — not an immediate threat to me. Enemy Hawk at (2,4) is wounded and targeted precision_shot at me. I need to survive and support.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 4,
+              "y": 4
+            },
+            "addendum": "Priority target: enemy Hawk at (2,4) is wounded — finish it with precision attacks. Enemy Rampart at (1,5) is using shield_wall facing East — approach from North or South to bypass shield."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Watcher is critical — priority target. Distance is 3 from current position (2,4). My range for precision_shot is ≤2 tiles, so Watcher at dist=3 is out of precision_shot range. Hawk is at dist=2, in range. Orders say medics first, then damage dealers — but Watcher (oracle) is critical and could go down with one shot if I can get in range. Patch (medic) is at (0,5) dist=3, also out of precision_shot range. I need to move closer to Watcher to finish it off. Moving to (3,5) gets me adjacent to Watcher at (4,5) — dist=1, but precision_shot is blocked when adjacent. Moving to (3,4) puts me at dist=1 from Hawk (4,4) — also blocks precision_shot. Best option: move to (2,5) — Watcher at (4,5) is dist=2, in range for precision_shot. Hawk at (4,4) is dist=2 still in range. Watcher is critical, so precision_shot (2dmg) should eliminate it. I won't have moved this turn so no damage penalty. Use precision_shot on Watcher.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Patch",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses left). Allied Hawk is wounded at (4,4) but dist=5, not adjacent. Enemy Rampart is adjacent at (1,5). I cannot heal, cannot reach Hawk this turn. My valid moves are (0,3), (0,4), (1,4). Moving to (1,4) gets me closer to allied Hawk while staying away from enemies. No overclock targets are adjacent. Best play: move toward allied Hawk to position for future support, then wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Hawk is wounded and in range at (2,5), distance 3. I'm at (4,4) and haven't moved, so precision_shot does full 2dmg. No adjacent enemies blocking. Fire at Hawk to finish it.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Patch is adjacent at (1,4) - priority target. I'm fortified so I have 50% damage reduction. Attack Patch immediately. After attacking, I can shield_wall facing South to block the enemy cluster direction, protecting my wounded ally Hawk at (2,5).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 5
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 11,
+          "maxHp": 12,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Patch",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Enemy Hawk is wounded and at distance 3 (in range). I'm at (4,4) and haven't moved, so precision_shot does full 2dmg. Priority orders say finish the wounded Hawk. I'll use precision_shot on Hawk at (2,5) without moving to maximize damage. No need to move since target is already in range.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Patch (medic) is the priority target at dist=2, in range for precision_shot. I haven't moved this turn so precision_shot deals full 2dmg. Patch is at (1,4), dist=2 from my position (2,5). I should shoot Patch first (medics are highest priority per orders), then consider position. Staying at (2,5) keeps distance from Hawk at (4,4) dist=3. No movement needed — fire precision_shot on Patch, then wait or reposition.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Patch",
+          "class": "medic",
+          "thinking": "Patch is exhausted (0/3 remaining). Ally Hawk at (4,4) is wounded but out of range and I can't heal anyway. Enemy Rampart is adjacent at (1,5) - this blocks my overclock ability too. I need to move away from Rampart to safely use overclock, or just reposition. Moving to (2,4) or (3,4) gets me away from Rampart. My friendly Rampart sentinel is at (1,5) - wait, that's the enemy Rampart. I should move toward ally Hawk at (4,4) to potentially overclock them next turn. Moving to (3,4) gets me closer to ally Hawk (dist would be 1) and away from enemy Rampart. From (3,4) I could overclock ally Hawk next turn. Let me move to (3,4) first, then check if I can overclock ally Hawk - Hawk is at (4,4), dist from (3,4) = 1, so adjacent. I can overclock! But wait - overclock is blocked when adjacent to enemy Vector... the enemy here is Rampart sentinel, not Vector. So overclock should be available from (3,4).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Enemies are at dist 3-4, out of attack range. Orders say push forward aggressively. Moving to (2,4) closes distance toward the enemy cluster at (3,4)/(4,4) while staying near ally Hawk at (2,5). From (2,4) I can shield_wall facing E to protect against the enemy cluster. Ally Hawk is wounded and needs cover.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 5
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 11,
+          "maxHp": 12,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Patch",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 9,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "I'm overclocked with 2 ability uses. Enemy Hawk at (2,5) is wounded — priority target. I'm at (4,4), dist=3 to Hawk which is out of precision_shot range (≤2). Rampart at (2,4) is healthy and dist=2, in range. I should use both precision_shot uses on Rampart since Hawk is out of range. Stay put to avoid moving closer to enemies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Patch",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses left). My allied Hawk at (4,4) has 3/5 HP and is wounded. I can use overclock on allied Hawk to give them 2 abilities next turn - they're adjacent at (4,4). Rampart is adjacent at (2,4) and is an enemy, which would block patch/overclock if I stay at (3,4). Let me check: overclock is blocked when adjacent to enemy Vector - Rampart is a sentinel not a Vector, so overclock should be fine. I'll use overclock on allied Hawk at (4,4) to boost their damage output. Then I should move away from Rampart to stay safe.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Patch (medic) is priority but out of range at dist 4. Hawk (striker) is in range at dist 3. I'm at (2,5), can move to (3,4) to get closer to Patch while maintaining distance from Hawk, or stay and shoot Hawk. Orders say medics first, but Patch is out of range. I moved last action (arrow shows →N), so precision_shot would do 1dmg if I moved. Better to stay at (2,5) and use precision_shot on Hawk for 2dmg (no move penalty) — Hawk is wounded and a threat. Rampart is nearby at (2,4) covering south.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (2,4) with 7/12 HP. Enemy Hawk is at (4,4) dist=2, out of melee range. I need to move closer to attack. Moving to (3,4) puts me adjacent to enemy Hawk at (4,4), enabling attack. Ally Hawk is at (2,5) wounded - I should shield_wall facing E to protect against the enemy cluster at (4,4)/(4,3). Move to (3,4) first, then shield_wall facing E to cover ally Hawk from eastern threats.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 5
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Patch",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 10,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Patch",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses left). Ally Hawk at (4,4) is wounded at 2/5 HP but I cannot heal. I could use overclock on Hawk to let them act twice, which could be impactful. Hawk is adjacent to me at (4,4) - I'm at (4,3), so that's 1 tile away, within adjacent range. Overclock costs me 1 HP (5→4) but gives Hawk 2 abilities next turn. With Hawk at 2HP already wounded, this is risky but could help finish off wounded Rampart. Enemies not in my attack range. I'll use overclock on Hawk then move to (5,3) to stay safe and away from Rampart at (3,4).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "I'm at (4,4) with 1HP, Rampart is adjacent at (3,4) which blocks precision_shot. I need to move away first. Moving to (4,5) keeps distance and I can then use precision_shot on Rampart (dist=1 from new pos, but still adjacent... let me check). From (4,5), Rampart at (3,4) is dist=sqrt(1+1)=1.4, which is within range 2 but not adjacent. Actually adjacent means directly next to (sharing a side), so (4,5) to (3,4) is diagonal - not adjacent! That frees precision_shot. With overclocked I get 2 ability uses. Move to (4,5), then precision_shot Rampart twice to finish it off (it's wounded).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Hawk is critical and at distance 2 — perfect range for precision_shot (2 dmg). I haven't moved yet so full damage applies. I'm at (2,5), Hawk at (4,5), not adjacent so precision_shot is not blocked. Fire first to potentially eliminate Hawk, then consider repositioning.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Patch is at (5,3), distance 3, out of melee range. Orders say push forward aggressively. Moving to (4,4) closes distance to 2 from Patch and avoids trap at (5,4). After moving I lose fortify, but I'll be adjacent to Patch next turn. Hawk is wounded at (1,5) - too far to shield. I'll move toward Patch and use shield_wall facing East to cover approach.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 5,
+              "y": 4
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 12,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Patch",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 9,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 11,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Patch",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses left). Both enemies are out of melee range. Rampart is at (4,4) dist=2, wounded but I can't heal. I'm at 5/9 HP myself. No allies adjacent to overclock. Best play is to move closer to Rampart to potentially overclock next turn when positioned adjacently, while staying safe. Moving to (5,4) keeps me near Rampart at (4,4) which would be adjacent, but Rampart is an enemy sentinel - I should stay back. Move to (4,3) to be adjacent to Rampart's position area but that's risky. Actually Rampart is an ENEMY. I should look for ally positions - Patch(medic) is somewhere, but no ally positions given. I'll move to (5,4) to reposition slightly, then wait since no useful ability targets are in range.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Patch is at dist=5, out of range (max 2). No enemies in range from current position. Valid moves include (3,5) which closes distance. Moving to (3,5) gets me closer but still won't reach range 2 to Patch at (5,4) — dist would be ~2.8, still out of range. Best move is toward Patch to try to get in range next turn. Move to (3,5) reduces dist. No shot available this turn, so move and wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Patch is adjacent at (5,4) — easy attack. I'm fortified with 50% damage reduction, which is great defensively. Attacking Patch first is the priority since they're wounded and in range. After attacking, I should shield_wall facing East to protect against any counterattack from that direction.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 5
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 12,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Patch",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 9,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 12,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Patch (medic) is at distance 3, which is within precision_shot range (≤2 tiles... wait, dist=3 but recon says inRange:true). I'm at (3,5) and Patch is at (5,4). I haven't moved this turn, so precision_shot deals full 2dmg. Target the wounded medic with precision_shot to eliminate or finish them off.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Patch",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses left). I'm at 3/9 HP and adjacent to enemy Rampart at (4,4). I need to retreat to safety. Move to (5,5) to get away from Rampart, then use overclock on Rampart (our sentinel ally) if adjacent - but Rampart is at (4,4) and after moving to (5,5) distance becomes 2, out of adjacent range. Better to move to (5,3) to put distance. Actually, I should check if overclock on Rampart is useful before moving. Rampart is adjacent at (4,4) now. I can overclock Rampart first (taking 1 dmg, going to 2HP) then move away. Overclock gives Rampart 2 abilities next turn which could be very impactful for a sentinel. But I'd drop to 2HP which is risky. Alternatively just move away to safety. With only 3HP and enemies adjacent, retreating is safer. Move to (5,5) to escape Rampart's melee range, then wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Patch is at (5,5), distance 2 to my north-east. I'm at (4,4) fortified. Orders say push forward and attack when possible. If I move to (5,4), I'll be adjacent to Patch at (5,5) and can attack. Moving costs fortify but lets me engage. Hawk is wounded at (3,5) - shield_wall facing N after moving could protect Hawk too, but attack is priority since Patch is wounded and we can finish them.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 12,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Patch",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 9,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "player",
+    "totalTurns": 13,
+    "reason": "player eliminated all enemies"
+  },
+  "endedAt": "2026-02-21T17:08:20.864Z"
+}
