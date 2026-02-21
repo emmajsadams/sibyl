@@ -569,7 +569,7 @@ describe("useAbility - precision_shot", () => {
     const hpBefore = t.hp;
     const err = useAbility(g, s, "precision_shot", { x: 2, y: 0 });
     expect(err).toBeNull();
-    expect(t.hp).toBe(hpBefore - 2);
+    expect(t.hp).toBe(hpBefore - 3);
   });
 
   test("deals 1 damage when moved", () => {
