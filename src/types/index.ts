@@ -38,7 +38,7 @@ export const BALANCE: BalanceConfig = {
   unitStats: {
     specter: { maxHp: 5, movement: 3, range: 1, speed: 3 },
     striker: { maxHp: 5, movement: 2, range: 2, speed: 2 },
-    oracle: { maxHp: 6, movement: 3, range: 4, speed: 3 },
+    oracle: { maxHp: 6, movement: 3, range: 3, speed: 3 },
     medic: { maxHp: 9, movement: 2, range: 1, speed: 2 },
     vector: { maxHp: 7, movement: 2, range: 2, speed: 1 },
     sentinel: { maxHp: 12, movement: 2, range: 1, speed: 1 },
