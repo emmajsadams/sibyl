@@ -615,16 +615,16 @@ describe("useAbility - suppressing_fire", () => {
 });
 
 describe("useAbility - patch", () => {
-  test("heals adjacent ally 3HP", () => {
+  test("heals adjacent ally 4HP", () => {
     const g = createGame();
     const m = unit("m1", "medic", "player", { x: 2, y: 2 });
     const a = unit("a1", "sentinel", "player", { x: 2, y: 3 });
-    a.hp = a.maxHp - 4;
+    a.hp = a.maxHp - 5;
     g.units.push(m, a);
     const hpBefore = a.hp;
     const err = useAbility(g, m, "patch", { x: 2, y: 3 });
     expect(err).toBeNull();
-    expect(a.hp).toBe(hpBefore + 3);
+    expect(a.hp).toBe(hpBefore + 4);
     expect(m.healsUsed).toBe(1);
   });
 
