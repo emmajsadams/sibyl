@@ -12,8 +12,9 @@ import { UNIT_STATS as Stats, BALANCE } from "../types";
 import { emit } from "../training/emitter";
 import { TrainingRecorder } from "../training/recorder";
 
-const GRID_WIDTH = BALANCE.grid.width;
-const GRID_HEIGHT = BALANCE.grid.height;
+// Read dynamically so --grid override works at runtime
+const GRID_WIDTH = () => BALANCE.grid.width;
+const GRID_HEIGHT = () => BALANCE.grid.height;
 
 // === Factory ===
 
@@ -45,7 +46,7 @@ export function createUnit(
 
 export function createGame(): GameState {
   return {
-    grid: { width: GRID_WIDTH, height: GRID_HEIGHT },
+    grid: { width: GRID_WIDTH(), height: GRID_HEIGHT() },
     units: [],
     traps: [],
     round: 0,
@@ -77,7 +78,7 @@ export function getUnitStatus(unit: Unit): UnitStatus {
 }
 
 export function isValidPosition(pos: Position): boolean {
-  return pos.x >= 0 && pos.x < GRID_WIDTH && pos.y >= 0 && pos.y < GRID_HEIGHT;
+  return pos.x >= 0 && pos.x < GRID_WIDTH() && pos.y >= 0 && pos.y < GRID_HEIGHT();
 }
 
 export function isOccupied(state: GameState, pos: Position): boolean {
@@ -219,7 +220,7 @@ function unitToView(target: Unit, viewer: Unit): UnitView {
 // === Placement ===
 
 export function placeUnit(state: GameState, unit: Unit, pos: Position): string | null {
-  const validRows = unit.side === "player" ? [0, 1] : [GRID_HEIGHT - 2, GRID_HEIGHT - 1];
+  const validRows = unit.side === "player" ? [0, 1] : [GRID_HEIGHT() - 2, GRID_HEIGHT() - 1];
   if (!validRows.includes(pos.y)) return "Invalid row for placement";
   if (!isValidPosition(pos)) return "Position out of bounds";
   if (isOccupied(state, pos)) return "Position occupied";

@@ -336,6 +336,23 @@ async function main() {
   console.log("\x1b[0m");
 
   const AUTO = process.argv.includes("--auto");
+
+  // --grid WxH to override map size (e.g. --grid 8x8)
+  const gridArg = process.argv.find((a) => a.startsWith("--grid=") || a === "--grid");
+  if (gridArg) {
+    const val = gridArg.includes("=")
+      ? gridArg.split("=")[1]
+      : process.argv[process.argv.indexOf(gridArg) + 1];
+    const match = val?.match(/^(\d+)x(\d+)$/i);
+    if (!match) {
+      console.error("  Invalid --grid format. Use WxH, e.g. --grid 8x8");
+      process.exit(1);
+    }
+    BALANCE.grid.width = parseInt(match[1]!);
+    BALANCE.grid.height = parseInt(match[2]!);
+    console.log(`  Grid override: ${BALANCE.grid.width}x${BALANCE.grid.height}`);
+  }
+
   const configPath = process.argv.filter((a) => !a.startsWith("--"))[2];
   let gameConfig: GameConfig;
   let interactive: boolean;

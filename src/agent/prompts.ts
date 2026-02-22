@@ -1,4 +1,4 @@
-import { UNIT_STATS, type GameContext, type Unit, type UnitClass } from "../types";
+import { UNIT_STATS, BALANCE, type GameContext, type Unit, type UnitClass } from "../types";
 
 const CLASS_DESCRIPTIONS: Record<UnitClass, string> = {
   sentinel: `SENTINEL (Tank) | 10HP, mv2, melee | Abilities: attack(1dmg, range:adjacent only), shield_wall(block dmg to adj allies from dir NSEW, range:adjacent ally), intercept(protect ally, range:≤2 tiles, uses move+ability) | Passive: Fortify(50% dmg reduction if didn't move)`,
@@ -10,7 +10,7 @@ const CLASS_DESCRIPTIONS: Record<UnitClass, string> = {
 };
 
 export function buildSystemPrompt(unit: Unit): string {
-  return `SIBYL tactical AI. You control one unit on a 6x6 grid. Coords (x,y), (0,0)=bottom-left.
+  return `SIBYL tactical AI. You control one unit on a ${BALANCE.grid.width}x${BALANCE.grid.height} grid. Coords (x,y), (0,0)=bottom-left.
 
 ${CLASS_DESCRIPTIONS[unit.class]}
 
@@ -206,8 +206,9 @@ export function buildPlacementPrompt(
   units: { name: string; class: UnitClass }[],
   side: "player" | "opponent",
 ): string {
-  const rows = side === "player" ? "0-1 (bottom)" : "4-5 (top)";
-  return `Place units on 6x6 grid, rows ${rows}.
+  const h = BALANCE.grid.height;
+  const rows = side === "player" ? `0-1 (bottom)` : `${h - 2}-${h - 1} (top)`;
+  return `Place units on ${BALANCE.grid.width}x${h} grid, rows ${rows}.
 Units: ${units.map((u) => `${u.name}(${u.class})`).join(", ")}
 
 Respond JSON:
