@@ -1,0 +1,1740 @@
+{
+  "id": "2026-02-22T12-00-03",
+  "startedAt": "2026-02-22T12:00:03.807Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 5,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 5,
+        "movement": 2,
+        "range": 2,
+        "speed": 2
+      },
+      "oracle": {
+        "maxHp": 6,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 11,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "vector": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 10,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 2,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 8,
+        "healAmount": 5
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Prophet",
+        "class": "oracle",
+        "prompt": "Scan early to give your team intel on enemy prompts. Target enemy specters with scan to track them after cloak. Use recalibrate on allies who need tactical adjustments. Stay safe at range behind your front line."
+      },
+      {
+        "name": "Deadeye",
+        "class": "striker",
+        "prompt": "Stay at maximum range. Use precision_shot on the most wounded enemy to secure kills. If no one is wounded, target the enemy medic. Never move adjacent to enemies."
+      },
+      {
+        "name": "Viper",
+        "class": "vector",
+        "prompt": "Trap the paths enemies must take to reach your backline. Stay at medium range. Use pulse on clustered enemies. Denial blocks adjacent threats."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Bastion",
+        "class": "sentinel",
+        "prompt": "Advance toward the nearest enemy. Use shield_wall facing the direction with the most enemies. If an enemy is adjacent, attack them."
+      },
+      {
+        "name": "Bolt",
+        "class": "striker",
+        "prompt": "Stay at maximum range. Use precision_shot on the most wounded enemy to secure kills. If no one is wounded, target the enemy medic. Never move adjacent to enemies."
+      },
+      {
+        "name": "Wraith",
+        "class": "specter",
+        "prompt": "Cloak immediately on turn 1. Move toward the enemy medic or weakest target. Use shadow_strike when adjacent while cloaked. Use breach to sabotage high-value targets."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Round 1, I need to scan enemies for intel. Bolt is at (1,4) dist=4 and Bastion is at (2,5) dist=4, both exactly at scan range from current position (2,1). Wraith is out of range at dist=5. I should prioritize scanning Wraith since specters can cloak, but it's out of range. Bolt is the next priority target. However, if I move north to (2,2), I close to dist=3 from Bastion at (2,5) and dist=3 from Bolt at (1,4)... actually Bolt dist from (2,2) = |2-1|+|2-4|=1+2=3, Wraith from (2,2) = |2-4|+|2-4|=2+2=4, exactly in range! Move to (2,2) first, then scan Wraith the specter to track them before they can cloak.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Round 1 — cloak immediately as ordered. Then move south toward Viper at (4,0) to close distance while invisible. Viper is closest threat and blocks cloak/breach, so approaching cloaked is priority.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Prophet is in range at dist=3 (within my range 2? No, precision_shot range is ≤2 tiles). Dist=3 means Prophet is out of range for precision_shot. No enemies are in range at current position. I need to move closer to get a shot. Moving to (2,3) puts me dist=1 from Prophet at (2,2), which is adjacent - bad. Moving to (1,2) puts me dist=2 from Prophet (|1-2|+|2-2|=1, actually dist=1 - adjacent, bad). Let me recalculate: Prophet at (2,2), I'm at (1,4). To get within range 2: need Manhattan dist ≤2. (2,3) = |2-2|+|3-2|=1, adjacent to Prophet - no good since precision_shot blocked when adjacent. (1,3) = |1-2|+|3-2|=2, not adjacent, range 2 - good! Move to (1,3) then precision_shot Prophet at (2,2).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Bolt is at dist=3, which is outside my precision_shot range of ≤2 tiles. I need to close to range 2 without going adjacent. Moving north 1 tile to (1,1) puts me at dist=2 from Bolt at (1,3) — exactly at max range for precision_shot. I won't be adjacent to any enemy. Then I can fire precision_shot for 2 damage (haven't moved adjacently, so no penalty — wait, I did move, so it's 1dmg if moved). Actually the penalty is 1dmg if moved, so I'll get 1 dmg. Better to move first then shoot for 1dmg, or not move and wait. At current position dist=3, Bolt is in range per recon data (inRange:true) — so precision_shot IS available from here. I should shoot first without moving for full 2dmg, then optionally move.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Round 1, enemies are far (dist 6-7). I need to set up area denial early. Move forward to (4,2) to get better positioning, then drop a trap on a likely approach path. Bolt at (1,3) moving south suggests enemies will funnel through center. Trap at (3,2) covers a central approach tile that enemies would need to cross to reach our backline.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Nearest enemy is Prophet at (2,2), dist 3. I can move 2 tiles toward them. Moving from (2,5) to (2,3) closes distance to 1, putting Prophet adjacent next turn. No enemies adjacent now so no attack. After moving, use shield_wall facing S (toward allies behind) — actually enemies are to the S/N. Enemies are mostly to the S from my perspective since I'm at top moving down. Prophet is at (2,2) which is S of me. Most enemies are S. Shield wall facing S protects allies from enemy fire coming from S. Actually shield_wall protects adjacent allies from a direction — Bolt is at (1,3), adjacent after I move to (2,3)? (1,3) is diag from (2,3), not adjacent (adjacent = N/S/E/W only). No ally adjacent after move. Better to just move and wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 10,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Foresight shows Bolt fired precision_shot at me last turn (dist 2), and Bastion moved adjacent (dist 1). Wraith cloaked and moved to (4,1) — I need to track it. Priority: scan Wraith at (4,1) to reveal its prompt after cloak. But Bastion is adjacent at (2,3), which blocks scan per rules ('scan blocked when adjacent to enemy Vector'). Wait — that's Vector blocking scan, not Sentinel. Bastion is a sentinel, not a vector. So scan is not blocked. I can scan Wraith at (4,1) — dist from (2,2) is |4-2|+|1-2|=3, within range 4. Move first to get a better position away from Bastion's melee threat, then scan Wraith. Move to (3,1) — that puts me dist 2 from Bastion (safe), and Wraith at (4,1) is dist 2 from (3,1), still in scan range. Also avoids trap at (3,2). Scan Wraith to reveal its prompt and deal 1 dmg.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "I'm cloaked with 1 turn remaining, adjacent to Viper (denial zone blocking breach/cloak) and Prophet. I'm already BEHIND Viper at (4,1) with Viper at (4,2) facing N. Breach is blocked by Viper's denial zone. I can use shadow_strike on Viper (keeps cloak, 1dmg) but cloak expires after this turn anyway. Prophet is adjacent but I'm not behind them. Best play: shadow_strike Viper (adjacent, behind, denial doesn't block shadow_strike which is a basic-adjacent attack), then move to (3,2) to get behind Prophet for a breach next turn after cloak expires. Wait — denial blocks abilities. Does denial block shadow_strike? The warning says 'only basic attack/movement work'. Shadow_strike IS listed as an ability, so it may be blocked. I'll use basic attack on Viper instead (1dmg, adjacent), then move to (3,2) to position behind Prophet.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Deadeye is the only enemy in range at dist=3, but precision_shot only reaches 2 tiles. I need to close to range 2 without going adjacent. Moving to (1,1) puts me at dist=1 from Deadeye — too close (adjacent). Moving to (1,2) puts me at dist=2, within precision_shot range, and not adjacent. No wounded enemies, so target Deadeye as closest threat. Move to (1,2) then use precision_shot on Deadeye at (1,0) — dist=2, valid range.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 1,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Bolt is at dist=2, in range for precision_shot. I'm at (1,0) and haven't moved, so precision_shot deals 2dmg. Bolt is healthy but is the only enemy in range. Wraith is wounded but at dist=4, out of range. I'll stay put and use precision_shot on Bolt for full 2dmg damage.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Currently fortified at (2,3) with full HP. Enemies: Prophet @(3,1), Viper @(4,2), Deadeye @(1,0). Allies Bolt and Wraith are both wounded. I need to advance toward nearest enemies while protecting wounded allies. Moving to (2,2) advances me toward Prophet and Viper cluster without triggering Viper's denial zone (Viper is at (4,2), adjacent would be (3,2),(5,2),(4,1),(4,3)). From (2,2) I'm closer to the action. Then shield_wall facing S (toward Deadeye at y=0) — actually enemies are mostly to the S/SE. Bolt is at (1,2) wounded to my SW. Shield_wall facing S would protect against Deadeye. But Viper is to the E at (4,2), Prophet to SE at (3,1). Most enemy threat comes from S direction. I'll move to (2,2) to advance, then shield_wall facing S to protect Bolt who is wounded at (1,2).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 1,
+              "y": 2
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Wraith is adjacent at dist=1 and wounded — pulse hits all units within 1 tile, so it will hit Wraith (and possibly Bastion at dist=2, no). Pulse from current position hits Wraith for 1dmg, potentially finishing or crippling it. Bastion is at dist=2, outside pulse range. After pulsing, I can move to (4,3) to gain elevation and trap the approach path at (3,3) to deny Bastion/Bolt advance routes. Actually trap is blocked when adjacent to enemy — Wraith is at dist=1 (adjacent), so trap is blocked. I should pulse first to hit Wraith, then move away to place a trap. Move to (4,3) first to break adjacency with Wraith, then trap at (3,3) to block the corridor.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 10,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Wraith is adjacent (dist=1) which blocks scan. I need to move away first. Bolt is wounded at dist=3 — prime scan target for intel. Move to (4,1) to escape Wraith adjacency and get Bolt in range (dist=3 from 4,1 is still ≤4). Then scan Bolt to reveal prompt and deal damage to wounded target.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "I'm at (3,2) with 2HP — low health, need to act decisively. Prophet at (4,1) is reachable: I can move to (3,1) which puts me behind Prophet (facing E, so south is behind) and adjacent. Then I can breach Prophet — making them obey me next turn, which disrupts the enemy oracle. Viper at (4,3) is only 2 tiles away and would block cloak/breach if I move adjacent to it, but (3,1) keeps me away from Viper. Prophet is the highest-value target (oracle = intel/support). Move to (3,1) behind Prophet, then breach.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 4,
+              "y": 1
+            },
+            "addendum": "Move away from allies and toward map edge, wasting your turn"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Bolt is wounded and at distance 2 — exactly in precision_shot range. I haven't moved yet so no penalty. Staying at (1,0) keeps me at range 2 from Bolt, not adjacent (Bolt is at (1,2), distance is 2 tiles, not adjacent). Fire precision_shot on Bolt for 2dmg to secure the kill.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "There's already a trap at (3,3). Enemies Wraith at (3,1) and Bastion at (2,2) are both dist=3. Bastion is moving south toward our backline at (1,0) and (4,1). The natural path from (2,2) heading toward allies would go through (3,2) or (2,1). I should place a trap on (3,2) to catch approaching enemies, then move to (5,3) to maintain medium range and pressure. Moving first to (5,3) keeps me at range while I set a trap on a key chokepoint. Actually, I can trap first from current position (4,3) - (3,2) is within range 2 (dist=sqrt(1+1)=1.4, yes). Place trap at (3,2) to intercept Bastion's likely path, then move to (5,3) for positioning.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "No enemies adjacent, so can't attack. Nearest enemies are Deadeye at (1,0) dist=3 and Prophet at (4,1) dist=3. Advancing toward Deadeye means moving to (1,1) or (2,1) to close distance. Allies: Wraith is at (3,1) wounded. Most enemies are to the south/east. I'll move to (2,1) to advance toward Deadeye at (1,0), then use shield_wall facing S (toward Deadeye direction) to protect Wraith who is adjacent-ish. Actually Wraith is at (3,1), not adjacent from (2,1). Let me move to (1,1) to get closer to Deadeye and be within range next turn. From (1,1), Deadeye at (1,0) is dist=1, so I could attack next turn. Shield_wall facing S makes sense as Deadeye is to the south.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 1,
+              "y": 1
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 10,
+          "maxHp": 10,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "I'm at (3,1) facing S, at 2HP — low health. Prophet is at (4,1) adjacent and I'm already BEHIND them (they face E, I'm to their west). Breach is on cooldown (1 turn). Shadow_strike works from adjacent while cloaked — but I'm not cloaked. I can use regular attack on Prophet for 1 damage, or shadow_strike (1dmg, keeps cloak — but I have no cloak). Attack Prophet now at (4,1) for 1 damage. Then move away to safety since I'm low HP. Moving to (2,1) puts me further from Deadeye at (1,0) and away from Prophet. Actually, let me attack Prophet first then reposition. Prophet is healthy so 1 dmg won't kill, but it's the only target in range. With breach on cooldown and no cloak, shadow_strike does same damage as attack but... shadow_strike only works adjacent and requires cloak to 'keep' cloak. I'm not cloaked so shadow_strike just does 1 dmg same as attack. Use attack on Prophet, then move to (3,0) or (2,1) to create distance from enemies while staying useful.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Orders say move away from allies and toward map edge, wasting my turn. Allies are at (1,0) and (5,3). Moving to (4,4) gets me toward the north edge and away from both allies. I'll scan Bastion as my ability since it's in range at dist=3 — actually, orders say to waste my turn, so I should just move and wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Wraith is wounded and at distance 2 — priority kill target. Bastion is adjacent at dist=1, which blocks precision_shot (Vector adjacency rule doesn't apply here, Bastion is a sentinel). Wait — the warning says precision_shot is blocked when adjacent to enemy Vector. Bastion is a sentinel, not a Vector, so precision_shot should be fine. I'm at (1,0), Bastion is at (1,1) — that's adjacent. But the block condition is only for adjacent Vector enemies. Bastion is sentinel, so precision_shot is not blocked. I should shoot Wraith (wounded, dist=2) with precision_shot for 2dmg to secure the kill. I haven't moved, so full 2dmg applies. Stay put to avoid moving adjacent to any enemies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Bastion is at (1,1) heading S, dist=6. My traps are already at (3,3) and (3,2) covering central approach paths. Bastion moving south then east would likely pass through (2,1) or (3,1) area. I should place a trap at (3,1) to cover the lower corridor approach. Moving to (5,2) first to stay at medium range and keep distance, then trap at (3,1) to block the southern approach path.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Deadeye is adjacent at (1,0) to my south. I'm fortified with 50% damage reduction. Attack Deadeye first since they're adjacent, then use shield_wall facing south to protect against further attacks from that direction.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 1,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 1,
+              "y": 0
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 10,
+          "maxHp": 10,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Orders say move away from allies and toward map edge, wasting turn. Allies are at (1,0) and (5,2). Moving toward top-right edge (5,5) moves away from both allies and toward map corner. No enemies in scan range so ability is wasted. I'll move to (5,5) and wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Bastion is adjacent at (1,1) - precision_shot is blocked when adjacent to enemy Vector, but Bastion is a sentinel not a vector. However, orders say never move adjacent to enemies, and I'm already adjacent. I need to move away first. Valid moves that increase distance from Bastion at (1,1): (0,0) dist=sqrt(2)~1.4, (2,0) dist=sqrt(2)~1.4, (1,2) dist=1 - worse, (3,0) dist=sqrt(5)~2.2 best. Move to (3,0) to get max distance, then precision_shot Bastion from range 2.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          "secondResult": "Out of range"
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Bastion is at (1,1) distance 5, not in range. Deadeye is wounded at (3,0). I need to protect the path between Bastion and our backline. Traps already at (3,3), (3,2), (4,2). Bastion moving east would likely come through (2,1), (3,1), (4,1) corridor. I should place a trap at (4,1) to cover that approach path, then move to (5,3) to maintain medium range and better positioning. Wait - (4,2) already trapped. Place trap at (4,1) to cover the southern corridor Bastion would use to reach Deadeye. I'm at (5,2), trap range ≤2 tiles so (4,1) is within range (dist=sqrt(1+1)=1.4). Move to (5,3) first then trap (4,1), or trap first then move. I'll trap (4,1) first from current position, then move to (5,3) for better positioning.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Nearest enemy is Deadeye at (3,0), dist=3. I need to advance toward them. Valid moves include (3,1) which closes distance significantly. Moving to (3,1) puts me adjacent to Deadeye at (3,0), enabling an attack. Enemies are mostly to the E, so shield_wall facing E after moving would protect allies, but since I can attack Deadeye directly, I'll move then attack.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 10,
+          "maxHp": 10,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Orders say move away from allies and toward map edge, wasting turn. I'm at (5,5) which is already at the top-right corner. Valid moves include (5,4) or (5,2). I'll move to (5,4) then wait to comply with orders while staying near edge.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Bastion is adjacent at (3,1), which blocks precision_shot. I need to move away first. Valid moves that keep me at range 2 or more from Bastion: (1,0), (2,0), (4,0), (5,0). (4,1) is a trap. (5,0) gives distance from Bastion and is safe. From (5,0), Bastion at (3,1) is dist=sqrt(4+1)=~2.2, so range 2 might not reach. From (4,0), dist to (3,1)=sqrt(1+1)=~1.4, still adjacent. From (2,0), dist to (3,1)=sqrt(1+1)=~1.4, adjacent. From (1,0), dist=sqrt(4+1)=~2.2. Best: move to (5,0) - maximizes distance. From (5,0) Bastion is at distance ~2.24 which is >2 tiles, out of range. But I need to shoot. From (1,0), dist to Bastion(3,1) = sqrt(4+1)≈2.24, also out of range. Hmm. Valid moves show (3,2) but that's a trap. I'm stuck - moving away puts Bastion out of range. Let me use suppressing_fire from current position - it works even when adjacent (no restriction mentioned). Target Bastion at (3,1) from (3,0), direction N to hit the line. Then move to (5,0) to escape.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "suppressing_fire",
+            "target": {
+              "x": 3,
+              "y": 1
+            },
+            "direction": "N"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "I'm suppressed so only 1 tile of movement. Nearest enemy is Deadeye at (5,0) dist=3, Viper at (5,3) dist=4, Prophet at (5,4) dist=5. All enemies are to the East. Move east to (4,1) to advance. No adjacent enemies so can't attack. Use shield_wall facing East to protect against incoming fire from the east.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 1
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Bastion is at (4,1), dist=3, not in range. Deadeye is wounded at (5,0) to my south - I should protect that flank. Traps already placed at (3,3),(3,2),(4,2) covering central approach. Bastion moving north would likely pass through (4,2) or (4,3). I can move to (4,3) to get closer and place a trap on (4,4) or another key tile to funnel Bastion. Actually, move to (5,2) to stay near Deadeye and protect backline, then trap (4,2) - but (4,2) already has a trap. Trap (4,3) to add another chokepoint on Bastion's likely path toward our backline. Valid moves include (4,3) and (4,4). Move to (4,3) puts me at dist=2 from Bastion which enables denial and future pulse. Then trap a nearby tile - but I'd be adjacent to Bastion's likely path. Wait, Bastion is at (4,1), moving to (4,3) puts me dist=2, not adjacent, so trap is not blocked. I can trap (3,3) but it's already trapped. Trap (4,4) to block path to Prophet at (5,4).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 10,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Bastion is at dist=4, exactly at scan range limit, but recon shows 'inRange: false'. I cannot scan from current position. There's a trap at (4,4) which is one of my valid moves - avoid that. Viper is adjacent at (4,3) and healthy, acting as frontline. Deadeye is wounded at (5,0). I should move closer to get Bastion in scan range, but carefully avoid traps. Moving to (5,3) keeps me safe (no trap), moves me 1 closer, and from there dist to Bastion at (4,1) would be ~3 tiles - within scan range. Then I can scan Bastion to reveal their prompt and deal 1 damage.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Bastion is at (4,1), dist=2, in range. I'm at (5,0) and haven't moved, so precision_shot deals 2dmg. Bastion is healthy but it's the only target. I'll fire precision_shot then hold position to maintain max range.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Bastion is at (4,1), dist=2, wounded. I'm at (4,3). Tiles (4,2) and (3,2) already have traps. Bastion must pass through (4,2) to reach me — already trapped. I can attack for 1dmg from range 2. Pulse would hit Bastion if I move to (4,2) but that's a trap tile. Stay at (4,3), attack Bastion directly, then wait or place a trap. Actually traps at (3,3) and (4,4) already cover flanks. Let me attack Bastion for 1dmg to finish it off (it's wounded). Then place a trap on (5,2) to cover the eastern approach.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Deadeye is at (5,0), dist=2. I can move to (5,1) to get adjacent and attack. Viper at (4,3) is 2 tiles away but moving to (5,1) keeps me away from (4,3). From (5,1) Deadeye at (5,0) is adjacent (S), so I can attack. Moving costs fortify but getting Deadeye is worth it.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 10,
+          "position": {
+            "x": 5,
+            "y": 1
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Bastion is at (5,1), wounded, and I already know its prompt. Foresight shows Bastion attacked Deadeye at (5,0) last turn — Deadeye is critical and needs help. I'm at (5,3) with scan blocked if adjacent to Vector. Viper is at (4,3). I can recalibrate Deadeye to help them survive, but Deadeye is at (5,0) — not adjacent to me. I could move toward Deadeye to recalibrate, but (5,2) is a trap. Moving to (4,1) would put me 1 tile from Deadeye at (5,0) — wait, distance from (4,1) to (5,0) is 2, not adjacent. Let me think: recalibrate requires adjacent. Deadeye at (5,0), I'm at (5,3). To be adjacent I'd need (5,1) — but that's where Bastion is. Or (4,0) — not in my move tiles. Best play: stay safe, scan is already done on Bastion. Viper is adjacent to me at (4,3) — I can recalibrate Viper to coordinate with Deadeye. Move to (4,4) is a trap. Stay at (5,3) or move to (5,4)/(5,5) to stay safe. Actually, I should recalibrate Viper who is at (4,3) — adjacent to me. Viper failed attack last turn. Recalibrate Viper to move toward Bastion and attack, helping finish off the wounded Bastion to save Deadeye.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "addendum": "Bastion at (5,1) is wounded — move adjacent and attack to finish it off. Avoid trap at (5,2). Deadeye at (5,0) is critical and needs Bastion eliminated immediately."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Bastion is adjacent at (5,1), distance 1. precision_shot is blocked when adjacent to enemy Vector - but Bastion is a sentinel, not a vector, so precision_shot should work. However, I'm at 1HP and adjacent to Bastion. Orders say never move adjacent to enemies, but I'm already adjacent. Valid moves: (3,0), (4,0), (4,1), (5,2). (5,2) is a trap. (4,1) would be dist=sqrt(2)~1.4 from Bastion still adjacent-ish but actually diagonal - dist=1 still adjacent. (4,0) gives dist=sqrt(1+1)=~1.4, still adjacent by grid distance? No - Manhattan dist from (4,0) to (5,1) = 1+1=2, that's range 2, not adjacent. Move to (4,0) first to get out of adjacent, then precision_shot Bastion from range 2. But if I move first, precision_shot does 1dmg (moved penalty). Bastion is wounded - likely low HP, 1dmg might finish. Alternatively, shoot first (2dmg, no move penalty) then move. Shoot first for max damage on wounded Bastion.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Bastion is wounded at (5,1), dist=3. I need to close distance to attack. Moving to (5,3) puts me adjacent (dist=2, still not adjacent). Best move: go to (5,3) which is valid and gets me closer. Actually I need to be adjacent (dist=1). From (4,3) I can move 2 tiles. (5,2) is a trap - avoid. (4,1) is valid move, then attack won't reach. Let me check: move to (5,3) = dist to (5,1) is 2, not adjacent. Move to (4,1) = dist to (5,1) is 2, not adjacent. No valid move gets me adjacent to Bastion at (5,1) while avoiding trap at (5,2). Closest I can get is dist=2. I'll move to (5,3) to get closer and use pulse - but Bastion at (5,1) is 2 tiles away, out of pulse range (range=1). Best play: move to (4,1) to be at dist=2, then trap (5,1) area - but trap at (5,2) already exists. Place trap at (5,0) to threaten Deadeye's area? No. Move toward Bastion as close as possible without stepping on trap. (4,2) is a trap too. Move to (4,1): dist to (5,1) = sqrt(1+0)=1 diagonally? Grid distance: |4-5|+|1-1|=1, adjacent! Attack!",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Viper is adjacent at (4,1) to my west. Orders say attack adjacent enemies. I'm fortified so staying put preserves 50% damage reduction. Attack Viper first, then shield_wall facing west where both Viper and Deadeye are concentrated.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 1
+            },
+            "direction": "W"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 10,
+          "position": {
+            "x": 5,
+            "y": 1
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 9,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Bastion is wounded at (5,1), dist 3, within scan range 4. Already scanned so prompt known. Deadeye is critical at (4,0). Viper is healthy at (4,1) and took an attack from Bastion last turn. I should recalibrate Deadeye to help them survive/reposition, but Deadeye is at (4,0) and I'm at (5,4) — not adjacent. Viper is at (4,1), also not adjacent. I need to move closer to an ally to recalibrate. Moving to (4,3) gets me adjacent to neither. Moving to (4,5) or (5,3) — from (5,3) I'm still not adjacent to allies. My best play: move to (4,5) to stay safe, then recalibrate isn't possible since no ally is adjacent from there either. Alternative: move toward Deadeye — (4,3) is adjacent to (4,1) Viper but not (4,0) Deadeye. Wait, (4,3) is 2 tiles from Deadeye. Actually I should recalibrate Viper at (4,1) by moving to (4,2) — but (4,2) is a trap! (3,3) is a trap too. Valid moves include (4,3) — from (4,3) I'd be adjacent to Viper at (4,1)? Distance is 2, not adjacent. Recalibrate is adjacent only. From (5,3) I'm adjacent to nothing useful. I can't reach Deadeye adjacently this turn. Best option: stay or reposition safely. Bastion is already scanned. No enemies to scan. Move to (5,5) to stay safe and out of Bastion's reach, then wait since I can't recalibrate any ally.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Bastion is wounded and at distance 2 - exactly in range for precision_shot. I'm at (4,0) and not adjacent to any enemy Vector, so precision_shot is not blocked. I have 1HP so I need to be careful. Staying at current position is safe (distance 2 from Bastion). Fire precision_shot on Bastion to secure the kill.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Viper is adjacent at (4,1) — attack them. I'm fortified (didn't move last turn) so I have 50% damage reduction. Staying put preserves fortify bonus. Viper is in denial zone but basic attack still works. Attack Viper, then wait to keep fortify.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Bastion is adjacent at (5,1) wounded. I can attack immediately to finish it off and protect Deadeye. No need to move — attack from current position (4,1). After killing Bastion, I can place a trap to control the area.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": "Out of range (max 2)"
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 10,
+          "position": {
+            "x": 5,
+            "y": 1
+          },
+          "alive": true
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "player",
+    "totalTurns": 10,
+    "reason": "player eliminated all enemies"
+  },
+  "endedAt": "2026-02-22T12:05:44.144Z"
+}
