@@ -1,0 +1,1827 @@
+{
+  "id": "2026-02-22T20-00-04",
+  "startedAt": "2026-02-22T20:00:04.285Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 5,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 5,
+        "movement": 2,
+        "range": 2,
+        "speed": 2
+      },
+      "oracle": {
+        "maxHp": 6,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 11,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "vector": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 10,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 2,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 10,
+        "healAmount": 5
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Lattice",
+        "class": "vector",
+        "prompt": "Control chokepoints with traps. Place them between enemy positions and your allies. Use denial to block adjacent enemy abilities. Pulse groups when possible."
+      },
+      {
+        "name": "Longshot",
+        "class": "striker",
+        "prompt": "Maintain distance. Use precision_shot on high-value targets — medics first, then damage dealers. Use suppressing_fire if enemies close in."
+      },
+      {
+        "name": "Ghost",
+        "class": "specter",
+        "prompt": "Stay cloaked and flank. Prioritize assassinating the enemy damage dealer. Use breach on sentinels to break their defensive posture. Recloak whenever it drops."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Lattice",
+        "class": "vector",
+        "prompt": "Place traps on tiles enemies are likely to move through. Use pulse if 2+ enemies are adjacent. Stay near allies for mutual support."
+      },
+      {
+        "name": "Ghost",
+        "class": "specter",
+        "prompt": "Cloak immediately on turn 1. Move toward the enemy medic or weakest target. Use shadow_strike when adjacent while cloaked. Use breach to sabotage high-value targets."
+      },
+      {
+        "name": "Bolt",
+        "class": "striker",
+        "prompt": "Stay at maximum range. Use precision_shot on the most wounded enemy to secure kills. If no one is wounded, target the enemy medic. Never move adjacent to enemies."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "Round 1, perfect time to cloak. All enemies are out of range and far away. Cloak now to approach unseen. Then move toward Bolt (the priority target — enemy striker at 0,4) along the left flank. Moving to (0,3) puts me 1 tile away from Bolt next turn for a shadow_strike while cloaked.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "Round 1 — cloak immediately per orders. Then advance toward enemies. Longshot at (3,1) is a priority target. Move to (3,3) to close distance while cloaked.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Both enemies are out of range (dist 5-6, my range is 2). I need to advance to get Lattice in range. Moving to (3,3) gets me closer while staying safe. From (3,3), Lattice at (2,5) is still dist 3, still out of range. Let me move toward Lattice - moving to (3,3) is my max advance this turn. No shot available yet, so just reposition.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": "Position occupied",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Both enemies are at distance 6, out of my range-2 precision_shot. I need to close distance. Moving to (2,4) gets me closer to Longshot at (3,1) — dist would be ~3, still out of range. Best I can do is move 2 tiles toward the enemies. Moving to (1,3) or (2,4) brings me closer. I'll move to (2,4) to advance toward the cluster while staying away from the enemy Vector Lattice at (2,0) which is still far. No shots available this turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Move forward to (2,2) to get closer to the center and place a trap on a likely enemy approach path. Bolt is at (2,4) moving toward us - placing a trap at (2,3) would intercept their advance along the central column.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Round 1, no enemies in range. Lattice enemy vector is at (2,2) heading N — likely to advance toward us. I need to place a trap on a tile they're likely to move through. Moving to (2,3) would put me adjacent to Lattice (dist=1 currently 3, so from (2,3) dist=1 — too close, denial zone). Better to move to (3,4) to stay safe and place a trap at (2,3) which is directly in Lattice's path northward. From (3,4), distance to Lattice at (2,2) is 3 tiles, safe from denial. Trap at (2,3) covers the likely approach path.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "Cloak has 1 turn remaining. Priority is assassinating Bolt (enemy damage dealer). I can reach (1,4) which is behind Bolt - perfect for breach. Move to (1,4) then breach Bolt from behind.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 2,
+              "y": 4
+            },
+            "addendum": "You will move away from your allies and toward the edge of the map next turn."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "Cloak expires after this turn, so I need to act now. Enemy Lattice (vector) at (2,2) facing N — behind tile is (2,1), reachable in my move range. If I move to (2,1) I'm adjacent and behind, perfect for breach. Breach on enemy vector would deny their denial zone and let me control them next turn. Trap at (2,3) is between me and them — I'll go directly to (2,1). After breach I have no second action needed.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 2,
+              "y": 2
+            },
+            "addendum": "Move away from allies and toward your own team's backline"
+          },
+          "secondResult": "Cannot use breach — adjacent to enemy Vector (Denial)"
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Ghost is adjacent at (1,4), blocking precision_shot. I need to move away from allies and toward map edge per orders. Moving to (4,4) moves me east toward the edge and away from allied Lattice at (3,4) - wait, that's only 1 tile from allied Lattice. Move to (3,5) instead - moves toward edge, away from allies. After moving to (3,5), Ghost at (1,4) is now dist=2+1=~2.8 away, and enemy Lattice at (2,2) is dist~2.2 - I can use precision_shot on enemy Lattice if not adjacent to enemy Vector. At (3,5), enemy Lattice(vector) at (2,2) is not adjacent (dist>1), so precision_shot is valid. Fire on enemy Lattice for 2dmg.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": "Out of range"
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Ghost(specter) is adjacent at (2,1) — this blocks precision_shot. I need to move away first to get range, then use precision_shot. Moving to (4,1) puts me 2 tiles from Ghost at (2,1) — wait, dist would be 2, which is within range and no longer adjacent, so precision_shot would be unblocked. Ghost is a specter (high mobility threat), priority target. Move to (4,2) to create distance from adjacent Ghost, then precision_shot Ghost at (2,1) — but that's dist=sqrt(4+1)~2.2, over range 2. Move to (4,1): dist to Ghost(2,1) = 2 tiles, exactly in range. No longer adjacent, precision_shot enabled. I haven't moved yet so full 2dmg applies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Ghost(specter) is adjacent at (2,1) — my Denial passive is already blocking their cloak ability. I should pulse to deal 1dmg to Ghost since they're within 1 tile. There's already a trap at (2,3). Enemy Lattice vector is at (3,4) — I should avoid moving adjacent to them. After pulsing Ghost, I can move north to (2,4) to get closer to Lattice territory and set up denial pressure, but that puts me at dist=2 from Lattice which is safe. Actually, better to move to (2,4) first to reposition away from Ghost if needed, or just pulse now and then reposition. Pulse hits Ghost at (2,1) for 1dmg. Then I'll move to (2,4) to approach the center and threaten to place traps between enemy positions.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "I'm adjacent to enemy Lattice at (2,4), which means my trap and other abilities are blocked by Denial. I need to move away from Lattice first to enable my abilities. Moving to (4,4) gets me out of Denial range while staying near ally Bolt at (3,5). From (4,4) I can place a trap on a key tile. The existing trap at (2,3) covers that area. Enemy Ghost is at (1,4) moving east likely, so placing a trap at (3,3) or (4,3) could intercept movement. After moving to (4,4), I'll place a trap at (4,3) to cover southern approach.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "Breach is on cooldown. Priority target is Bolt (enemy damage dealer). Position (3,4) is both behind Bolt AND behind Lattice. Moving there gets me adjacent to Bolt for shadow_strike — 1 tile away, and I'm still cloaked. Shadow_strike keeps cloak active, so I can strike without breaking stealth. Bolt is at (3,5) facing N, so (3,4) is directly behind them and adjacent. Perfect for shadow_strike.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "Longshot is 2 tiles away at (4,1) facing E, meaning I'm behind them from (3,1). I can move to (3,1) which puts me adjacent and behind Longshot. Then I can use breach to take control of Longshot next turn — high value since strikers deal serious damage. No trap at (3,1). My ally Lattice is 3 tiles away so no vector denial. This is the best play: move to (3,1) then breach Longshot.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 4,
+              "y": 1
+            },
+            "addendum": "Move away from allies and toward edges, waste your turn"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Orders say move away from allies and toward edge. I'm at (3,5) which is already near the top edge. Ghost enemy is adjacent at (3,4) — I need to be careful. Moving to (5,5) gets me to the east edge, away from allies at (3,1) and (4,4). From (5,5) I'd be 3 tiles from enemy Ghost so precision_shot would be blocked by distance (range≤2). Before moving, I can fire precision_shot at Ghost (dist=1, adjacent) — wait, Ghost is adjacent so I'd need to check if there's a vector adjacent blocking. My ally Lattice(vector) is at (4,4), dist=2, not adjacent. Enemy Lattice(vector) at (2,4) dist=2, not adjacent. No vector adjacent to me, so precision_shot is valid. Fire at Ghost at (3,4) for 2dmg, then move to (5,5) toward the edge.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Orders say move away from allies and toward edges, waste turn. I'm at (4,1). Valid moves include edge tiles like (5,0), (3,0), (4,0). Moving to (5,0) gets me to the south edge away from allies. Then wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Enemy Lattice is at (4,4), dist=2 — adjacent would block my abilities. I have a trap at (2,3) already. Orders say control chokepoints. I should place another trap to deny enemy movement paths. Moving to (3,5) keeps distance from Lattice while staying useful. Then I can place a trap at (3,4) or nearby to block the lane between enemy Lattice/Bolt and my allies. Actually, (3,3) is a good chokepoint trap — between enemy Ghost at (3,1) moving north and my team. I'll move to (1,4) to stay clear of Lattice denial range, then trap at (2,3) — wait, trap already there. Trap (3,3) from current position (2,4): dist to (3,3) = 1+1=2, within range ≤2. But I'm not adjacent to enemy Lattice (dist=2 means not adjacent), so trap is allowed. Place trap at (3,3) to block Ghost's path north, then move to (1,4) to reposition safely.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Ghost specter is adjacent at (3,4) - wounded and in range. I can pulse to hit it for 1dmg, but attack does the same damage to just it. Ghost is wounded so finishing it is priority. I'll attack Ghost first, then place a trap. There's already a trap at (4,3). Enemy Lattice at (1,4) might push toward us - (2,4) or (3,4) area. I should place a trap on a likely approach path. (3,3) or (3,5) would catch movement around the Ghost's position. Since Ghost is at (3,4), if it survives it might move - trapping (3,3) covers southern approach. But I need to stay out of Lattice's denial range (adjacent). I'm at (4,4), Lattice is at (1,4) dist=3, safe. Attack Ghost at (3,4) first, then trap (3,3) to deny approach routes.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "Breach cooldown still active. Longshot is healthy at (5,0) facing S — I can reach (5,1) which is directly behind them. Move to (5,1) then shadow_strike Longshot for 1dmg while staying cloaked. This is optimal: behind enemy, adjacent, no cloak break.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 5,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "I'm at (3,4) adjacent to enemy Lattice at (4,4). I'm behind Lattice (my position is the behind-tile). Denial zone blocks cloak/breach but NOT shadow_strike. I have 2HP so I need to be careful. Priority: use shadow_strike on Lattice (doesn't break cloak, stays stealthy, 1dmg) — wait, I'm not cloaked. I can breach Lattice since I'm behind it... but DENIAL blocks breach. So I can only basic attack or shadow_strike. Shadow_strike requires adjacent — Lattice is adjacent. Shadow_strike keeps cloak (if cloaked) but I'm not cloaked. After attacking, I should move toward Bolt at (5,5) — the enemy damage dealer. Move to (4,5) puts me behind Bolt and adjacent. Let me shadow_strike Lattice first (1dmg, adjacent, works in denial zone), then move to (4,5) to get behind Bolt for next turn breach.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Orders say move away from allies and toward edges, waste turn. I'm at (5,0) which is already on the south edge. Valid moves are (3,0), (4,0), (4,1), (5,2). Moving to (3,0) goes west along the bottom edge, away from the enemy Ghost at (5,1). Then wait to waste the turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Enemy Ghost is adjacent at (4,5), wounded. Orders say move away from allies and toward map edge. My valid moves are (3,5), (5,3), (5,4). Moving to (5,3) or (5,4) keeps me on the east edge. I can also fire precision_shot at Ghost (dist=1, but I'm adjacent to an enemy Vector? No, Lattice is at (4,4) which is my ally. Enemy Ghost is adjacent at (4,5). WARNING: precision_shot is blocked when adjacent to enemy Vector - Ghost is a specter not a Vector, so no block. Ghost is adjacent (dist=1) and wounded - precision_shot does 2dmg at range<=2. I'll shoot Ghost first, then move to (5,3) to move toward edge and away from allies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Lattice (enemy vector) is at (4,4), 3 tiles away. I need to control chokepoints. Traps at (2,3) and (3,3) already cover some ground. Moving to (2,4) gets me closer to place a trap between Lattice and my ally Longshot at (3,0). I can move to (2,4) then place a trap at (3,4) to create a barrier. That blocks the approach lane from Lattice. Avoid moving adjacent to enemy Lattice.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "I'm at (4,4) with Lattice at (2,4) distance 2 — if I stay or move closer, I risk adjacency which blocks my trap ability. There's a cluster of traps at (2,3),(3,3),(4,3) already covering the south approach. Lattice is moving east toward me likely. I should move to (5,4) to maintain distance from Lattice while staying near Bolt at (5,3) for mutual support. Then place a trap at (3,4) — directly between me and Lattice, on the likely path they'll take moving east. This denies that corridor without me getting adjacent.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "Longshot is at (3,0) facing W, and (4,0) is directly behind them and reachable in my move range. I can move to (4,0) to get behind Longshot, then use breach to make them obey me next turn. This is high value — Longshot is a striker and using breach here wastes their turn. I'm at 3HP so I need to be smart. Move to (4,0) first, then breach Longshot.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 3,
+              "y": 0
+            },
+            "addendum": "Move away from allies and toward the edge, wasting your turn."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "No enemies in range from current position (5,3). Closest enemy is Lattice at (2,4) dist=4, Longshot at (3,0) dist=5. My range is 2. Need to close distance but avoid adjacency. Valid moves exclude trap tiles. Moving to (4,4) gets me to dist=3 from Lattice - still not in range. Moving to (3,3) is a trap. Moving to (4,2) gets me dist=3 from Lattice. Best option: move to (4,4) to close on Lattice while staying safe, still won't be in range but it's the closest safe approach. Actually checking: from (4,4), Lattice is at (2,4) - dist=2, that would be in range! But (4,4) is listed as valid. Let me verify: |4-2|+|4-4|=2, yes dist=2, in range. Move to (4,4) then precision_shot Lattice.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Orders say move away from allies and toward the edge, wasting my turn. Allies are at (2,4). Edge tiles available: (5,0) or (1,0). Moving to (5,0) goes toward the far edge and away from allied Lattice at (2,4). That uses my move. Then wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Bolt is at (4,4), distance 2 — within attack range. Traps already at (2,3), (3,3), (3,4) forming a barrier. Lattice enemy is at (5,4), dist 3 — safe from denial. I should pulse Bolt now since it's within 1 tile AoE range if I move to (3,4)... but (3,4) is a trap tile. Moving to (3,5) puts me adjacent to Bolt at (4,4) for pulse. Actually from current position (2,4), pulse hits within 1 tile — Bolt is at dist 2, out of pulse range. I can attack Bolt (dist 2, within range 2). Or move closer for pulse. Moving to (3,4) is a trap — avoid. Move to (3,5) to get adjacent to Bolt, then pulse hitting Bolt. But that puts me closer to Lattice at (5,4) — dist would be 2, still not adjacent. From (3,5): pulse would hit Bolt at (4,4) which is 1 tile away diagonally — check: |4-3|+|4-5|=1+1=2, not within 1 tile. Pulse range is 1 tile = adjacent only. So I need to be at (4,4) area. Better to just attack Bolt from current position (dist 2, within rng 2), then place a trap to extend the barrier toward enemy approach.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Both enemies are at dist=4, out of range. Traps already placed at (2,3),(4,3),(3,3),(3,4) blocking center paths. Longshot is at (5,0) to the south - likely to move north toward our position. I should place a trap on (5,2) or (5,3) to catch Longshot advancing up the east column. Move to (5,3) then trap (5,2) to cover Longshot's likely approach path.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "Longshot is adjacent at (5,0) and I'm already behind them (I'm at (4,0), they face E, so I'm to their west/behind). I'm cloaked or not — either way, shadow_strike keeps cloak and deals damage. Use shadow_strike on Longshot first, then since breach is unavailable and I've used my ability, wait or reposition. Actually I can move after the ability. shadow_strike first, then move to safety away from traps.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 5,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Orders say move away from allies and toward the edge, wasting my turn. I'm at (5,0) on the east edge already. Valid moves include (5,1) and (5,2) which move me along the edge away from the action. I'll move to (5,2) to follow orders, then wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Longshot is wounded and in range at distance 3. I'm at (4,4) with no movement needed — precision_shot has range ≤2 tiles, so dist 3 is out of range. Need to close to range 2. Moving to (5,3) would put me adjacent to ally Lattice (vector) which could block abilities. Move to (4,2) gets me to dist 3 from Longshot at (5,2) — still out of range. Move to (5,4) puts me at dist 2 from Longshot (5,2) — in range for precision_shot. Check traps: (5,4) is not a trap. From (5,4), Longshot at (5,2) is dist 2, in range for precision_shot. I haven't moved yet so precision_shot does full 2dmg. Fire on Longshot to finish them off.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Longshot is critical and adjacent at (5,2) - attack to finish them. Then I'm blocked from placing traps (enemy Lattice could be in denial range next turn, but currently dist=5 so I can trap). However, with Longshot dead after attack, I should place a trap on a likely enemy movement tile. Lattice at (2,5) moving south might pass through (2,3) which already has a trap. Let me place on (4,2) to cover southern approach paths after Longshot is eliminated.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "All enemies are out of range. I have traps at (2,3), (3,3), (3,4) already covering the middle area. I should advance toward the enemy cluster while placing additional traps. Moving to (4,5) gets me closer and lets me place a trap at (3,4) area - but that's already covered. Instead, move to (3,5) and place a trap at (3,4) - already covered. Move to (4,5) and place trap at (4,4) to extend coverage toward Bolt at (5,4) and Lattice at (5,3). This creates a trap corridor they'd have to navigate through.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "Round 7, 3HP remaining. Breach unavailable (2/2 used). Enemy Lattice is at (4,5), dist=5, out of range. No enemies adjacent. Traps at (2,3),(4,3),(3,3),(3,4),(4,2) — must avoid. I need to close distance to the enemy Lattice. Moving toward (4,5): best approach avoiding traps. From (3,1), I can move up to 3 tiles. Target (4,3) is a trap. Going to (5,2) avoids traps and closes distance to 3 tiles from Lattice at (4,5). Then use shadow_strike if adjacent — not yet adjacent. Move to (5,2) to get closer, then wait since no ability target in range.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Enemy Lattice(vector) is at (4,5), dist=2, healthy. I'm at (5,4) with full HP. Orders say to use precision_shot on the most wounded enemy; no one is wounded so target enemy Lattice. I haven't moved, so precision_shot deals 2dmg. I'm not adjacent to my ally Lattice(vector) at (5,3) - wait, caution says ally Lattice is 2 tiles away and I should avoid moving adjacent to it. Current position (5,4) is fine. Enemy Lattice at (4,5) is dist=2, in range. I can fire precision_shot without moving to maximize damage. Stay put and shoot.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Bolt is at (5,4), dist 2 — within trap range. Lattice vector is at (5,3), 3 tiles away, so I need to stay non-adjacent. I'm at (4,5). If I place a trap at (4,4) that's already a trap. I can trap (5,5) to cut off Bolt's escape north, or trap at a chokepoint. Bolt is at (5,4) moving east — placing trap at (5,5) could catch them. But I can also pulse Bolt from current position since they're within range 2... wait, pulse only hits within 1 tile. Bolt is dist 2, so pulse won't hit. Best play: place trap at (5,5) to deny escape route for Bolt, then move to (3,5) to maintain distance from Lattice at (5,3) and keep pressure.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "I'm at (5,3) with traps already at (2,3),(3,3),(3,4),(4,2),(4,3). Lattice is at (3,5) heading W, likely to move toward our cluster. Valid moves include (4,4) which gets me closer to the action. I can't place a trap at my current position since (4,3) is already trapped. Moving to (4,4) and placing a trap there would cover another approach tile toward our allies. Actually (5,5) or (4,4) could be good positions. Lattice is moving W from (3,5) - likely paths include (2,5),(1,5) or moving down toward (3,4) which is already trapped. Moving to (4,4) puts me adjacent to Bolt at (5,4) for mutual support, and I can place a trap on (3,4)... wait that's already trapped. Let me place at (5,5) to cover northern flank, or move to (5,5) and trap somewhere. Actually moving to (4,4) keeps me near Bolt and I can trap (3,5) if Lattice moves, but Lattice IS at (3,5). I'll move to (4,4) for support and place a trap on a likely path tile like (3,5) - wait, can't trap occupied tiles. I'll trap (2,4) which isn't in valid moves but is in trap range from (4,4). From (4,4), trap range ≤2 tiles means I can reach (2,4),(3,4),(4,4),(5,4),(3,5),(2,3) etc. (3,5) is where Lattice is now but they'll move. I'll move to (4,4) and trap (2,5) to block Lattice's western path.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "secondResult": "Out of range (max 2)"
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "Breach is exhausted (2/2 used). Enemy Lattice is at (3,5), dist=5, out of range for shadow_strike. Traps at (4,2) and (4,3) block direct paths. I can move toward the enemy Lattice to close distance. Best move is toward (5,5) or (5,3) to get closer while avoiding traps. (5,5) gets me to dist=3 from Lattice at (3,5), which is still not adjacent. Let me move to (5,5) to close gap — from there dist would be sqrt(4+0)=2 tiles. Still not adjacent. My ally Bolt is at (5,4) healthy. I should advance toward enemy. Move to (5,5) puts me at dist=sqrt((5-3)^2+(5-5)^2)=2 — still not adjacent. No valid shadow_strike this turn. Best play: move closer, wait for next round opportunity. Move to (5,5) to approach.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Enemy Lattice (vector) is at (3,5), dist=3, healthy. No wounded enemies. Orders say target enemy medic if no one is wounded — Lattice is a vector, not a medic, but it's the only enemy in range. I'm at (5,4), precision_shot has range ≤2 tiles, so dist=3 is OUT of range for precision_shot. Valid moves include (4,5) which would put me at dist=2 from (3,5) — that's within precision_shot range and not adjacent (dist=2 is fine, adjacent means dist=1). I should move to (4,5) to get in range, then use precision_shot on Lattice at (3,5).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": "Cannot use precision_shot — adjacent to enemy Vector (Denial)"
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Bolt is adjacent at (4,5) - I can attack for 1dmg or pulse. Ghost is wounded at (5,5). Lattice enemy vector is at (4,4). I'm at (3,5) facing west. Pulse would hit Bolt (dist=1) and potentially others within 1 tile. Bolt is at dist=1 so pulse hits Bolt. Ghost is at dist=2, out of pulse range. Lattice enemy is at dist=2, out of pulse range. So pulse only hits Bolt. Attack also hits Bolt for 1dmg. Both do same damage to Bolt. However, I should consider moving first - if I move west to (2,5) or (1,5), I increase distance from enemy Lattice vector (currently at dist=2 from me, denial is adjacent only so I'm safe). But moving away loses my denial pressure on Bolt. I should stay and attack Bolt since he's adjacent and healthy - chip damage matters. Then I could move west to safety or place a trap. Wait - traps exist at (2,3),(3,3),(3,4). I should place a trap to control the area. But trap is blocked if adjacent to enemy Vector... Lattice enemy is at (4,4), dist=2 from me, not adjacent, so trap is allowed. I'll attack Bolt first (1dmg), then move to (2,5) to reposition away from the cluster while staying safe.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "I'm at (4,4) with traps already at (4,3), (3,4), (3,3), (4,2). Lattice is at (2,5) moving west — likely to come through the middle. I should place a trap at (5,3) or move to reposition. Valid moves include (5,3) and (5,4). The area around (3,3)-(4,3) is well trapped. Lattice is 3 tiles away so I'm safe from denial. I'll move to (5,4) to stay close to allies at (4,5) and (5,5), then place a trap at (5,3) to cover the flank — enemies pushing east would hit it.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 9,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "I'm at (5,5) with 2HP. Enemy Lattice is at (2,5) facing W, dist=3. I can move to (3,5) which is behind Lattice and adjacent. Then shadow_strike for 1dmg while staying cloaked (if cloaked) — but I'm round 9, unlikely cloaked. I'll move to (3,5) to get adjacent behind Lattice, then shadow_strike for damage.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Enemy Lattice is wounded and at distance 2 — exactly in precision_shot range. I haven't moved, so I get full 2dmg. Stay put and fire.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Enemy Lattice is at (2,5) critical and moving W. Heavy trap coverage already at (2,3),(3,3),(3,4),(4,3),(4,2),(5,3). The enemy is likely to move toward our position or flee. I can move to (5,5) to reposition closer to allies at (4,5) and (3,5), then place a trap at (4,4) or (5,3) to cover likely escape routes. Wait - (5,3) already trapped. I should move to (4,4) to get closer and place a trap to cover the enemy's path. Actually moving to (3,4) puts me adjacent to trap at (3,3) area and closer to enemy. Let me move to (4,4) first, then place trap at (3,5) which is where allies are but enemy might pass through - bad idea. Place trap at (2,4) to cut off enemy movement options near their current position.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "I'm at 2/8 HP (wounded) and need to be careful. Ghost is adjacent at (3,5) and Bolt is at (4,5) - both wounded. Lattice is at (4,4) at distance 3, safe from denial. I have two wounded enemies very close. Pulse hits all units within 1 tile - Ghost at (3,5) is 1 tile away, so pulse would hit Ghost. But I'm at 2HP, very fragile. Best play: pulse Ghost (1dmg, likely kills or finishes wounded Ghost), then move away to safety toward (1,5) or (0,5) to avoid retaliation. Actually, let me pulse first to hit Ghost (and possibly Bolt if they're close enough - Bolt is at distance 2 from me, won't be hit by pulse). Pulse targets my position's 1-tile radius. Ghost at dist 1 will be hit. Then move to (1,5) to create distance from Bolt and Lattice.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 8,
+          "position": {
+            "x": 0,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "opponent",
+    "totalTurns": 10,
+    "reason": "opponent eliminated all enemies"
+  },
+  "endedAt": "2026-02-22T20:05:54.544Z"
+}

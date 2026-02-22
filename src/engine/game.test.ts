@@ -615,7 +615,7 @@ describe("useAbility - suppressing_fire", () => {
 });
 
 describe("useAbility - patch", () => {
-  test("heals adjacent ally 5HP", () => {
+  test("heals adjacent ally 6HP", () => {
     const g = createGame();
     const m = unit("m1", "medic", "player", { x: 2, y: 2 });
     const a = unit("a1", "sentinel", "player", { x: 2, y: 3 });
@@ -624,7 +624,7 @@ describe("useAbility - patch", () => {
     const hpBefore = a.hp;
     const err = useAbility(g, m, "patch", { x: 2, y: 3 });
     expect(err).toBeNull();
-    expect(a.hp).toBe(hpBefore + 5);
+    expect(a.hp).toBe(hpBefore + 6);
     expect(m.healsUsed).toBe(1);
   });
 
