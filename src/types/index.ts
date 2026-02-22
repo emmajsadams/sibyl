@@ -40,8 +40,8 @@ export const BALANCE: BalanceConfig = {
     striker: { maxHp: 5, movement: 2, range: 2, speed: 2 },
     oracle: { maxHp: 6, movement: 3, range: 3, speed: 3 },
     medic: { maxHp: 11, movement: 3, range: 1, speed: 3 },
-    vector: { maxHp: 7, movement: 2, range: 2, speed: 1 },
-    sentinel: { maxHp: 11, movement: 2, range: 1, speed: 1 },
+    vector: { maxHp: 8, movement: 2, range: 2, speed: 1 },
+    sentinel: { maxHp: 10, movement: 2, range: 1, speed: 1 },
   },
   abilities: {
     attack: { damage: 1 },
