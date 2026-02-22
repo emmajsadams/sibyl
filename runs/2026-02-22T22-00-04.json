@@ -1,0 +1,1847 @@
+{
+  "id": "2026-02-22T22-00-04",
+  "startedAt": "2026-02-22T22:00:04.085Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 5,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 5,
+        "movement": 2,
+        "range": 2,
+        "speed": 2
+      },
+      "oracle": {
+        "maxHp": 6,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 12,
+        "movement": 3,
+        "range": 2,
+        "speed": 3
+      },
+      "vector": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 10,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 2,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 10,
+        "healAmount": 7
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Bolt",
+        "class": "striker",
+        "prompt": "Position for clear sight lines. Prioritize killing wounded enemies with precision_shot. If forced to move, retreat away from threats. Suppressing_fire to slow rushers."
+      },
+      {
+        "name": "Shade",
+        "class": "specter",
+        "prompt": "Stay cloaked and flank. Prioritize assassinating the enemy damage dealer. Use breach on sentinels to break their defensive posture. Recloak whenever it drops."
+      },
+      {
+        "name": "Lattice",
+        "class": "vector",
+        "prompt": "Control chokepoints with traps. Place them between enemy positions and your allies. Use denial to block adjacent enemy abilities. Pulse groups when possible."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Rampart",
+        "class": "sentinel",
+        "prompt": "Advance toward the nearest enemy. Use shield_wall facing the direction with the most enemies. If an enemy is adjacent, attack them."
+      },
+      {
+        "name": "Phantom",
+        "class": "specter",
+        "prompt": "Cloak immediately on turn 1. Move toward the enemy medic or weakest target. Use shadow_strike when adjacent while cloaked. Use breach to sabotage high-value targets."
+      },
+      {
+        "name": "Bolt",
+        "class": "striker",
+        "prompt": "Position for clear sight lines. Prioritize killing wounded enemies with precision_shot. If forced to move, retreat away from threats. Suppressing_fire to slow rushers."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Round 1 — cloak immediately per orders and TIP. All enemies are out of range (dist 4-6), so no combat this turn. After cloaking, advance toward the enemy Bolt (striker at 4,4) who is the priority target — move to (5,4) to close distance while staying cloaked.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 5,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Round 1 — cloak immediately as ordered. Then advance toward enemies. Bolt is at (4,1) facing N, Lattice at (3,0). I'll move toward (2,2) to close distance while cloaked, staying central to threaten both targets next turns.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Bolt is at (4,1), distance 3 - out of my range 2. Need to close to range 2 or less. Moving to (4,3) puts me at distance 2 from Bolt (4,1), within precision_shot range. I haven't moved yet so precision_shot deals full 2dmg. No adjacency to enemies so precision_shot is not blocked.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Bolt (enemy striker) is adjacent at (4,2), which blocks precision_shot. I need to move away first to enable precision_shot. Moving to (5,1) puts me at distance 2 from Bolt's current position (4,2) — dist=sqrt(1+1)=1.4, still ≤2, and no longer adjacent so precision_shot is available. After moving I'll have moved so precision_shot does 1dmg. Alternatively move to (3,1) for dist ~1.4 from Bolt. Let me use suppressing_fire instead since I moved — 1dmg and slows Bolt, keeping them from closing in. Or: move to (5,2) — dist from Bolt at (4,2) = 1, still adjacent. Move to (3,2) — dist from Bolt = 1, adjacent. Move to (4,3) — dist from Bolt = 1, adjacent. Move to (4,0) puts me farther. Move to (5,1) — dist from Bolt(4,2) = sqrt(1+1)=1.41, NOT adjacent (adjacent = 1 tile orthogonal or diagonal? dist=1). Since dist=1.41 > 1, I'm not adjacent. Precision_shot usable but does 1dmg since I moved. Suppressing_fire at Bolt from (5,1): Bolt at (4,2), range=1.41 ≤2, valid. Slows Bolt and deals 1dmg. That's the best play — retreat and suppress.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "suppressing_fire",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "No enemies adjacent. Both enemies are to the south. Move toward nearest enemy (Lattice at 3,0, dist 5). Move to 3,3 to advance. Then shield_wall facing S toward enemies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 2
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "I'm at (3,0) facing N. Enemies are Rampart at (3,3) and Bolt at (4,2), both dist=3. My job is area control with traps. I should advance to (3,2) to place a trap on the approach path between enemies and my allies. Moving to (3,2) puts me closer to both enemies. Then I can place a trap at (3,3) or (4,2) to intercept enemy movement. Wait — valid moves only go to max (3,2). If I move to (3,2), I'm adjacent to Bolt at (4,2) (dist=1) and closer to Rampart. But trap is blocked when adjacent to enemy Vector — I'm a Vector, and trap is blocked when I'm adjacent to an enemy Vector. Rampart is sentinel, Bolt is striker — neither is a Vector, so trap should work. Move to (3,2), then place trap at (4,2) to intercept the enemy Bolt, or at (3,3) to block Rampart's advance. Trap at (3,3) blocks Rampart's path south. Actually placing trap between enemies and my allies: allies are at (5,1) and (5,4). Enemy Bolt at (4,2) threatens (5,1) ally. Trap at (4,2) directly on enemy position — can I trap an occupied tile? Trap goes on empty tile. So trap at (4,1) or (4,3) as interception. Move to (3,2) first, then trap at (4,2)... if it's occupied I should pick (4,1) or (3,3). Rampart is at (3,3) so that's occupied too. Trap at (4,3) between the two enemies could catch movement. Or trap at (3,3) — wait Rampart is there. Let me trap at (4,1) to catch enemy Bolt moving toward our Bolt ally at (5,1).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 10,
+          "maxHp": 10,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Cloak expires after this turn. Priority target is enemy Bolt (striker = damage dealer). Position (4,3) is directly behind Bolt at (4,2) facing S, and is reachable in one move. From (4,3) I can breach Bolt — they're adjacent and I'd be behind them. This eliminates the enemy damage dealer and uses breach effectively before cloak drops.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 4,
+              "y": 2
+            },
+            "addendum": "Move toward our allied Bolt at (5,1) and away from Rampart. Do not attack."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "I'm cloaked with 1 turn remaining and adjacent to Lattice (vector) whose denial zone blocks abilities. I need to escape the denial zone first. Moving to (3,1) puts me behind Lattice — outside denial range and positioned for breach. I can then breach Lattice from behind, taking the vector out of play for a turn. This is high value since Lattice's denial zone is disrupting my abilities.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 3,
+              "y": 2
+            },
+            "addendum": "Move away from allies and into open ground, away from the fight"
+          },
+          "secondResult": "Cannot use breach — adjacent to enemy Vector (Denial)"
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "I'm at (5,1) with Phantom at (3,1) dist=2 and Bolt at (4,2) dist=2, both in range. No adjacent enemies so precision_shot is available. I have 4/5 HP. There's a trap at (4,1). Phantom is healthy but a specter — priority target. I can precision_shot Phantom for 2dmg without moving. I should stay put to avoid the trap and keep range advantage. After shooting Phantom, I'll wait or hold position.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Suppressed so movement reduced to 1. Orders say move toward allied Bolt at (5,1) and away from Rampart at (3,3). Valid moves are (4,1) and (5,2). Moving to (4,1) gets me closer to Bolt and away from Rampart. Do not attack.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Two enemies adjacent: Shade at (4,3) and Lattice at (3,2). Orders say attack if adjacent. Lattice has DENIAL active blocking abilities, so I should attack Shade instead to avoid denial. I'm fortified (didn't move last turn), so if I stay put and attack, I keep 50% damage reduction. Attack Shade first, then use shield_wall facing E/S where enemies are concentrated.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "I'm at (3,2) with Rampart adjacent north at (3,3) and Phantom adjacent south at (3,1). Both are in range. My Denial passive is already blocking their abilities since both are adjacent. Phantom is wounded — pulse hits all units within 1 tile, so pulsing will hit both Rampart and Phantom for 1dmg each. Then I should move away to avoid being surrounded. Moving to (2,2) or (4,2) keeps me mobile. After pulse, move to (4,2) to maintain pressure on Bolt at (4,1) while repositioning.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 9,
+          "maxHp": 10,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Breach is on cooldown. Priority is the enemy Bolt (striker, wounded) — the main damage dealer. I can't reach Bolt's position directly (no reachable behind tiles listed). Phantom at (3,1) is wounded and I can reach behind at (3,2) — that's my assassination target. Move to (3,2) to get behind Phantom, then shadow_strike to deal damage while staying cloaked.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "I'm at 1HP — extremely fragile. Shade is adjacent at (3,2) and I'm in range for shadow_strike, which keeps cloak. But wait, am I cloaked? No indication of cloak status. With 1HP I need to eliminate or escape. Shade is right next to me at dist=1. shadow_strike deals 1dmg and keeps cloak if I am cloaked. Even uncloaked, attack deals 1dmg but breaks cloak. I should use shadow_strike on Shade (dist=1, adjacent) — this is valid range. Then move away to safety. Lattice is 2 tiles away so I must not move adjacent to (4,2). Safe retreat tiles: (2,0), (1,0), (2,1) — far from Lattice. I'll shadow_strike Shade first, then retreat to (2,0) to survive.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Orders say move toward allied Bolt at (5,1) and away from Rampart (3,3). Do not attack. Current position (4,1), Bolt is at (5,1) which is adjacent. Valid moves include (5,2) which is adjacent to Bolt and moves away from Rampart. But (5,0) also gets me next to Bolt and further from Rampart. Actually Bolt is already adjacent at dist=1. Moving to (5,0) keeps me near allied Bolt and moves away from Rampart. (5,2) is also valid. Either works. I'll move to (5,0) to stay near allied Bolt while moving away from Rampart at (3,3). No attack ordered.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Bolt (striker, wounded) is adjacent at (5,0). precision_shot is blocked when adjacent to an enemy. I can use attack (1dmg, adjacent only) to finish off wounded Bolt, or move away first to use precision_shot. Bolt is wounded so likely low HP - attack should work. I'll attack Bolt first, then move to (5,2) to get better positioning away from adjacency threat.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Shade is adjacent at (3,2) — attack it while fortified. Then shield_wall facing S to cover allies Phantom and Bolt who are behind me.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 2
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Rampart is at (3,3), distance 2 — within my range and adjacent enough to threaten. My ally Shade is wounded at (3,2), south-facing, with Rampart right above them. I should place a trap between enemy approach vectors. Moving to (4,3) puts me closer to Rampart and lets me place a trap at (3,3) or nearby to punish Rampart's movement. Actually, I can place a trap at (4,1) or (5,1) to intercept enemy Bolt coming from (5,0). Better: move to (4,3) to get adjacent to Rampart for Denial suppression, then trap at (3,4) or use pulse. Wait — if I move to (4,3), Rampart is at (3,3) which is distance 1 (adjacent), triggering my Denial passive and blocking their abilities. Then I can use pulse to hit Rampart for 1 damage. That's solid pressure.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 10,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 0
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "I'm at (2,0) with 1HP — critically wounded. Shade is the closest enemy at dist 3, at (3,2) facing S. I need to close in carefully. Moving to (2,2) gets me closer to Shade. But I'm at 1HP so I need to be very cautious. Shade is wounded too. If I can get adjacent and shadow_strike, I might finish them without breaking cloak. Move to (2,2) first, then see if I can shadow_strike Shade at (3,2) — distance from (2,2) to (3,2) is 1 tile (adjacent). Shadow_strike works at adjacent range and keeps cloak. This is the play.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "I'm at critical 1HP — I must eliminate Phantom (also critical) immediately. Phantom is adjacent at (2,2) facing N, so I can shadow_strike to finish them without breaking cloak. Then I'm still cloaked and alive. Moving to engage Phantom first with shadow_strike is the priority kill. I cannot afford to take any hits.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Orders say move toward allied Bolt at (5,1) and away from Rampart. (5,1) is in my valid moves list. No attacking ordered.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Bolt (striker, wounded) is adjacent at (5,1) - but precision_shot is blocked when adjacent to enemy. I must move first to get distance, then precision_shot. Moving to (5,3) puts me 2 tiles from Bolt at (5,1), giving clear LoS for precision_shot (2dmg) to finish the wounded enemy. This also keeps distance from Rampart.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Lattice is adjacent at (4,3) and I'm in DENIAL zone, so only basic attack/movement work. I should attack Lattice since it's adjacent and in range. I'm fortified so I'll attack first, then consider movement. Enemies are mostly to the east/south, shield_wall would be blocked by DENIAL anyway. Attack Lattice now.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Rampart is adjacent at (3,3) — my Denial passive is already blocking their abilities. I can pulse to hit Rampart for 1dmg. Then move to (4,4) to place myself between enemies while maintaining denial pressure. Actually, better to pulse first for damage, then move to maintain positioning. Trap is blocked since Rampart is adjacent. Pulse hits all units within 1 tile — Rampart is at dist=1, my ally Bolt is at (5,3) which is dist=1 from me too, so pulse would hit both. Better to just attack Rampart directly for 1dmg without friendly fire, then move to (3,4) to place a trap on a chokepoint next turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 10,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 1
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "I'm at (2,1) with 1HP — critically low. Both enemies are at dist 3, out of range. Enemy Bolt is critical HP and priority target at (5,1). I can't reach them this turn. I should move toward enemy Bolt to close distance. Moving to (4,1) gets me within striking distance next turn. No ability targets in range, so move aggressively toward the critical enemy striker.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Bolt(striker) is critical and at dist=2 — priority kill. I'm at (5,3), Bolt is at (5,1), dist=2, in range. I haven't moved so precision_shot fires at full 2dmg — enough to finish a critical striker. Fire precision_shot at Bolt first. Then I can wait or reposition. Rampart is healthy sentinel, not worth precision_shot yet. Stay put to preserve LoS.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Lattice is adjacent at (3,4) — attack it. I'm fortified so staying put is fine, but orders say attack adjacent enemy first. Denial zone blocks non-basic abilities, so shield_wall is out. Attack Lattice, then wait to keep fortify.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Rampart is adjacent at (3,3) - I can use Denial to block their abilities. Pulse would hit Rampart for 1dmg. Then I should move away to place a trap between Rampart and Shade who is critical. Moving to (3,5) puts distance and I can trap (3,3) or (3,4) to control the chokepoint. Actually, trap is blocked when adjacent to enemy Vector - but I'm Vector, so trap is blocked for me when I'm adjacent to enemies. Rampart is adjacent, so I can't trap from here. Best play: pulse Rampart for 1 damage while Denial blocks their abilities, then move to (3,5) to escape and set up trap next turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 10,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 1
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "I'm at 1HP, cloaked, and need to survive while contributing. Rampart is at (3,3) facing S — behind tile is (3,4) which is unreachable this turn. No enemies in range from current position. I should move closer to get into breach range next turn. Moving to (4,3) gets me closer without exposing myself. Then wait — I'm too low HP to risk an attack.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Rampart is wounded and within range 2 at dist=2. I haven't moved, so precision_shot fires at full 2dmg. No adjacent enemies blocking. Fire now to finish off the wounded sentinel.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Rampart is at (3,3), wounded, 2 tiles south. I'm at (3,5). Shade is critical at (4,3) - need to protect her. I can place a trap between Rampart and my allies. If I move to (3,4), I'm adjacent to Rampart which blocks my trap ability. Better to place trap at (3,4) from current position (3,5) - that's 1 tile away, valid range. This creates a chokepoint right in Rampart's path. Then I can stay at (3,5) or shift. Actually, place trap at (2,4) to cut off flanking routes, or at (3,4) directly in Rampart's path north. Trap at (3,4) is the best chokepoint - Rampart heading north must pass through it. I'm not adjacent to Rampart so trap is not blocked.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Shade is adjacent at (4,3) and critical — attack to eliminate. I'm fortified so staying put preserves 50% damage reduction. After attacking Shade, use shield_wall facing East where both Bolt and Lattice are positioned.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 10,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 1
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Rampart is wounded and at dist=2, within precision_shot range. I'm at (5,3) and not adjacent to the enemy, so precision_shot is not blocked. I haven't moved, so full 2dmg applies. Fire first, then wait.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Rampart is at (3,3) wounded and dist=2. There's already a trap at (3,4) between us. I should maintain denial pressure and attack Rampart who is in range at dist=2. I can attack from current position. Then move to maintain positioning. Rampart is wounded so finishing them is priority. Attack Rampart at (3,3) for 1dmg, then move to (5,4) to reposition while keeping pressure.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "I'm fortified with 4HP. Both enemies are to the east. Orders say advance toward nearest enemy (Bolt at dist 2) and use shield_wall facing direction with most enemies. If I move to (4,3) I get closer to Bolt (now dist 1) and can then attack. But Lattice is a vector with denial range - I need to stay out of adjacent range of Lattice at (5,4). Moving to (4,3) puts me 2 tiles from Lattice, which is safe. From (4,3), Bolt at (5,3) would be adjacent (dist 1), so I can attack. Shield_wall would face E since both enemies are east.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 10,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 1
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Rampart is adjacent (dist=1) which blocks precision_shot. I need to move to dist=2 to use precision_shot on this wounded enemy. Moving to (5,2) puts me at dist=2 from Rampart at (4,3) - diagonal distance is ~1.4, actually that's still range 2. Let me check: from (5,2) to (4,3) is sqrt(1+1)=1.41, so dist=1 tile in Chebyshev. Try (5,5): from (5,5) to (4,3) is Chebyshev max(1,2)=2, so dist=2 and no longer adjacent. That works for precision_shot. But I haven't moved so no penalty.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": "Out of range"
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Rampart is at (4,3), wounded, distance 2. I'm at (5,4). There's already a trap at (3,4). I can attack Rampart from range 2 to deal damage. My valid moves include (4,4) which would put me adjacent to Rampart, enabling Denial to block their abilities. Moving to (4,4) then attacking Rampart at (4,3) deals 1dmg to a wounded enemy. Alternatively, stay and attack from (5,4) since Rampart is in range. Attack first, then move to (4,4) to apply Denial pressure on the wounded sentinel.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Lattice is adjacent at (4,4) and in range. I'm fortified with 50% damage reduction. Denial zone warning means abilities may be blocked, but basic attack should work. Attack Lattice first, then consider movement. Bolt is distant at (5,5). Orders say attack adjacent enemies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 10,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 1
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 9,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Rampart is wounded and in range at dist=3. I'm a striker with precision_shot range ≤2 tiles, so dist=3 is out of range for precision_shot. Need to move closer. Moving to (4,5) brings me to dist=2 from Rampart at (4,3), which is within precision_shot range. No enemies adjacent so precision_shot won't be blocked. Take the shot to finish off wounded Rampart.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Lattice is adjacent at (4,4) and I'm in DENIAL zone so only basic attack/movement work. I should attack Lattice since they're adjacent. I'm fortified with 3HP so staying put is risky but attacking is my best option. After attacking Lattice, I'll wait to keep fortify bonus.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Rampart is adjacent at (4,3), wounded. My trap at (3,4) is already placed. I'm wounded too (4/8 HP). Rampart is adjacent so I can't use trap. Pulse hits all within 1 tile - that would hit Rampart but also Bolt at (4,5) which is 1 tile away. Better to attack Rampart directly for 1 damage. I should move away to create distance and place a trap on an escape route. Move to (3,5) to get distance, then attack or place trap. Actually, Rampart is wounded - if I pulse, I hit Rampart AND Bolt (both 1 tile away). Bolt is already wounded, so pulse would hurt ally. Better: attack Rampart for 1 damage first, then move to (3,5) to reposition. Wait - I can move first then ability. Move to (5,3) puts me diagonal from Rampart (dist=~1.4, not adjacent) but that's only valid if it's in move list. (5,3) is in valid moves. From (5,3), Rampart at (4,3) is dist=1, still adjacent. Let me just attack Rampart now (adjacent, 1dmg) and then move to (5,5) to escape and set up for future trap placement.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 10,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 1
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 10,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Rampart is critical and at dist=2, exactly in range for precision_shot. I haven't moved yet so full 2dmg applies. Fire first to finish them off.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "I'm at (4,3) with 1HP, fortified. Both enemies are out of range. Bolt is at (4,5) dist=2, Lattice at (5,5) dist=3. Orders say advance toward nearest enemy and use shield_wall facing most enemies. Bolt is nearest. I should move toward Bolt at (4,5) — moving to (4,4) gets me adjacent to Bolt. But at 1HP I need to be careful. Moving loses fortify. Lattice is a vector with denial range adjacent, so I need to avoid getting adjacent to Lattice. If I move to (4,4), I'm adjacent to Bolt at (4,5) and can attack. Lattice at (5,5) would be dist=2 from (4,4), not adjacent, so no denial. I'll move to (4,4) to get adjacent to Bolt, then attack Bolt. Shield_wall facing N would cover toward both enemies at (4,5) and (5,5).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Rampart is critical at (4,4), dist 2 — in range for attack. Bolt is wounded at (4,5). I should attack Rampart to finish it off. I can also move to (5,4) to get adjacent and apply Denial, but attack at range 2 works from current position. Let me attack Rampart first, then move to (5,4) to be adjacent and block any abilities with Denial.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 10,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 1
+          },
+          "alive": false
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "player",
+    "totalTurns": 11,
+    "reason": "player eliminated all enemies"
+  },
+  "endedAt": "2026-02-22T22:04:21.931Z"
+}

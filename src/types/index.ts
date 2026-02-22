@@ -51,7 +51,7 @@ export const BALANCE: BalanceConfig = {
     precisionShot: { damage: 2, movedDamage: 1 },
     scan: { damage: 1 },
     suppressingFire: { damage: 1 },
-    patch: { maxUses: 10, healAmount: 7 },
+    patch: { maxUses: 10, healAmount: 8 },
     overclock: { selfDamage: 1 },
     trap: { damage: 1 },
     pulse: { damage: 1 },
