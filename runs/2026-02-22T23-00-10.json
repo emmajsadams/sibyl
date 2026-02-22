@@ -1,0 +1,2408 @@
+{
+  "id": "2026-02-22T23-00-10",
+  "startedAt": "2026-02-22T23:00:10.272Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 5,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 5,
+        "movement": 2,
+        "range": 2,
+        "speed": 2
+      },
+      "oracle": {
+        "maxHp": 6,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 12,
+        "movement": 3,
+        "range": 2,
+        "speed": 3
+      },
+      "vector": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 10,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 2,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 10,
+        "healAmount": 8
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Longshot",
+        "class": "striker",
+        "prompt": "Position for clear sight lines. Prioritize killing wounded enemies with precision_shot. If forced to move, retreat away from threats. Suppressing_fire to slow rushers."
+      },
+      {
+        "name": "Aegis",
+        "class": "sentinel",
+        "prompt": "Hold the front line. Position between allies and enemies. Use shield_wall toward incoming threats. Attack adjacent enemies."
+      },
+      {
+        "name": "Weaver",
+        "class": "vector",
+        "prompt": "Control chokepoints with traps. Place them between enemy positions and your allies. Use denial to block adjacent enemy abilities. Pulse groups when possible."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Watcher",
+        "class": "oracle",
+        "prompt": "Use scan to reveal enemy prompts and cloaked units. Stay at max range (≤4 tiles for scan). Use recalibrate on wounded allies to buff them. Keep distance from enemies and avoid adjacent vectors."
+      },
+      {
+        "name": "Hawk",
+        "class": "striker",
+        "prompt": "Position for clear sight lines. Prioritize killing wounded enemies with precision_shot. If forced to move, retreat away from threats. Suppressing_fire to slow rushers."
+      },
+      {
+        "name": "Aegis",
+        "class": "sentinel",
+        "prompt": "Push forward aggressively. Shield_wall facing the enemy cluster. If flanked, turn to face the biggest threat. Attack when possible."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "All enemies are out of scan range (closest is Longshot at dist=6, need ≤4). I need to advance toward enemies to get them in scan range. Moving to (4,2) gets me closer but still not in range. Best move is toward (4,2) to close distance. After moving, still no enemies in range, so second action is wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Watcher (oracle) is in range at dist=3 from current position. I haven't moved, so precision_shot fires at full 2dmg. Take the shot on Watcher first, then consider repositioning. No need to move beforehand — shooting from current position is optimal.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "All enemies are out of range (dist 5-7). I need to advance to get Longshot in range. Moving to (2,3) gets me closer while maintaining good positioning. Still no targets in range after move, so I'll wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Round 1, no enemies in range. Orders say push forward aggressively. I'll advance south toward the enemy cluster. Hawk is at (2,3) to my southwest. Moving to (3,3) brings me closer to enemies while staying near Hawk. Then I'll use shield_wall facing South to protect Hawk from the enemy cluster approaching from below.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Round 1, all enemies are far (dist 5-6). I should advance toward the center to control chokepoints and place a trap along likely enemy approach paths. Moving to (0,2) puts me closer to the action while staying near my allies. Then I'll place a trap at (1,2) — a natural corridor enemies might cross approaching from (2,3) or (3,3).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Enemies are 3-4 tiles away. I need to advance and hold the front line between allies and enemies. Moving to (2,2) gets me closer to the threat line while staying between Longshot/Weaver and the enemies. No adjacent enemies to attack yet. After moving, I'll wait since no ability targets are in range.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 10,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 0,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 10,
+          "maxHp": 10,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Longshot tried to precision_shot me last turn and failed due to range, but moved to (1,1). Weaver set a trap at (1,2) - danger zone. Enemy Aegis is at (2,2), in scan range at dist=2. I should scan Aegis to reveal their prompt and deal damage. Weaver and Longshot are both at dist=4 from current position but range check shows them as out of range (likely Chebyshev vs Manhattan discrepancy). I'll scan enemy Aegis at (2,2) since it's clearly in range at dist=2. Then move to maintain distance and avoid clustering.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Enemy Aegis is adjacent at (2,2) — precision_shot is NOT blocked by vectors when adjacent to sentinels, only by vectors. Weaver is 3 tiles away, not adjacent, so precision_shot is available. However, Aegis is at dist=1 (adjacent), and precision_shot requires range ≤2 tiles with LoS. Adjacent means I can use it but at full 2dmg only if I haven't moved. Best play: use precision_shot on Aegis first (2dmg, no movement penalty), then move to (3,4) to get distance from the enemy cluster and maintain better positioning away from Weaver.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "No enemies in range from (1,1). Need to advance to get enemies in range. Trap at (1,2) blocks moving north along column 1. Valid moves include (2,1) which moves me closer to enemies while staying safe. From (2,1) enemies are still at dist 3-4, still out of range 2. Moving to (3,1) gets me closest - Aegis at (3,3) would be dist 2, in range. But (3,1) is a big advance and exposes me. Let me check: from (3,1), Aegis(sentinel) at (3,3) is dist 2 - in range for precision_shot. That's a good play. Move to (3,1) then precision_shot Aegis.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (2,2) with 50% damage reduction. Enemy Aegis is at (3,3), distance 2 — not adjacent yet. Moving to (3,2) puts me adjacent to enemy Aegis and keeps me between allies and enemies. From (3,2) I can attack Aegis. I should advance to engage.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (3,3) with Aegis adjacent to my south at (3,2). Orders say attack when possible and shield_wall facing enemy cluster. Aegis is in range for attack. Longshot is at (3,1) behind Aegis — if I attack Aegis first and stay put, I keep fortify bonus. Then shield_wall facing S to protect Hawk at (3,4) from the southern cluster (Aegis + Longshot both on column 3 to my south).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "All enemies are out of range. There's already a trap at (1,2). I should advance toward the center to control chokepoints and place a trap on the likely enemy approach path. Moving to (2,2) puts me closer to the action while staying behind my allies at (3,1) and (3,2). From (2,2) I can place a trap at (2,3) or (2,4) to catch enemies pushing south, blocking their approach corridor between my allies and the enemy cluster at (3,3)-(4,4).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 10,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 10,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Weaver is at (2,2) dist=4 — scan would be blocked if I were adjacent, but I'm at (4,4) so no block. However recon shows Weaver dist=4 is 'inRange:false' for scan. Longshot dist=4 also inRange:false. Only Aegis at dist=3 is in scan range. Aegis is already scanned. Foresight shows Longshot shot ally Aegis at (3,3) last turn, Weaver moved to (2,2) and set trap at (2,3). My current position (4,4) is safe. I should scan Weaver to get their prompt — but recon says they're out of range at dist=4 while scan needs ≤4. Manhattan distance from (4,4) to (2,2) = 2+2=4, which equals 4, so it should be in range. The recon may be using strict <4. I'll try moving to (4,3) to reduce distance to Weaver to 3, then scan Weaver for their prompt. From (4,3): dist to Weaver(2,2) = 2+1=3, in range. Weaver is a vector so I must stay non-adjacent — (4,3) is dist=3 from (2,2), safe.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Aegis sentinel is at dist=2, in range for precision_shot. I haven't moved this turn, so precision_shot deals full 2dmg. No adjacent enemies so precision_shot is not blocked. Target Aegis at (3,2) to deal 2 damage. Then wait or hold position.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Enemy Aegis sentinel is at (3,3) distance 2 — within precision_shot range. I haven't moved, so I get full 2dmg. Orders say prioritize killing wounded enemies, but Aegis is healthy. Still, targeting Aegis at dist=2 is the best shot. I'm not adjacent to any enemy so precision_shot is not blocked. Fire precision_shot at Aegis, then hold position.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Enemy Aegis is at (3,3), distance 2 — in range for pulse or attack. Hawk and Watcher are at distance 3, out of range. I have traps at (1,2) and (2,3) already placed. My ally Aegis is at (3,2) wounded, Longshot at (3,1). The enemy cluster is Aegis(3,3), Hawk(3,4), Watcher(4,3) — they're grouped to the northeast. If I move to (4,2), I'd be adjacent to enemy Aegis at (3,3) — that triggers Denial on them and puts me in pulse range of multiple enemies. But moving to (4,2) puts me close to 3 enemies which is risky at 7/8 HP. Better to place a trap at (2,3) — wait, that already has a trap. Valid moves include (2,3)? No, traps are at (1,2) and (2,3) already. I should place a trap to block the enemy advance corridor. The enemies are moving south/toward our position. A trap at (3,2) would be ideal but that's where ally Aegis is. I can move to (2,1) and place a trap at (2,3) — but trap already exists there. Let me place a trap at (4,2) to block enemy movement — but I need to be within 2 tiles of target and not adjacent to an enemy Vector. From (2,2), target (4,2) is distance 2, valid. This creates a hazard in the enemy path. Then stay put or move.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (3,3) with Aegis wounded adjacent at (3,2). Attack the wounded enemy Aegis to finish them off. Then use shield_wall facing south to protect against the Longshot at (3,1) who can advance. Staying put preserves Fortify bonus. Hawk is north at (3,4), Watcher east at (4,3).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "At 5/10 HP but fortified with 50% damage reduction. Aegis is adjacent at (3,3) to my north. I should attack Aegis while staying put to keep Fortify active. Then use shield_wall facing North to block incoming damage from Hawk and Watcher behind Aegis.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 10,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 10,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Longshot is healthy and unscanned at dist=3, within scan range. Priority is to reveal its prompt. Weaver placed a trap at (4,2) last turn — avoid moving there. I'll scan Longshot first, then consider repositioning. Current position (4,3) is safe and within scan range of Longshot at (3,1).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Enemy Aegis at (3,2) is wounded and exactly 2 tiles away — perfect range for precision_shot. I'm at (3,4) facing N, not adjacent to any enemy, so precision_shot is not blocked. I'll fire precision_shot at the wounded Aegis to finish it off. No need to move first since I have clear LoS from current position.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Aegis sentinel is wounded at (3,3), distance 2 - perfect range for precision_shot (2dmg). I haven't moved this turn so no damage penalty. Priority: eliminate the wounded enemy. I'll use precision_shot on Aegis first, then wait since I'm already in a good position.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "I'm at (1,2) with a trap already there. Enemies are at dist 3-5, not yet in range. I need to advance and place traps on likely enemy approach paths. The enemy Aegis is at (3,3) moving S, Watcher at (4,3) moving S, Hawk at (4,4) moving E. My ally Aegis is at (3,2) and Longshot at (3,1). The chokepoint between enemies and allies is around (2,2)-(2,3). I have a trap at (2,3) already. I should move to (2,2) to get closer and place a trap there to create a minefield corridor. Moving to (2,2) puts me closer to the action while setting up denial zone.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": "Position occupied"
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (3,2) with 4HP, adjacent to wounded enemy Aegis at (3,3). Fortify gives 50% damage reduction if I don't move. Best play: attack the wounded Aegis to potentially finish it, then use shield_wall facing North to protect allies from Watcher/Hawk threats coming from that direction. Staying in place preserves Fortify.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 2
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm at 4/10 HP with fortify active (50% damage reduction). Aegis is adjacent at (3,2) — wounded, priority target. I should attack Aegis first while fortified. Then shield_wall facing South to protect against the enemy cluster at (3,1) and (2,2). Staying put preserves fortify bonus.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 10,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 10,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "All enemies already scanned — no scan targets remain. Ally Aegis at (3,3) is wounded and was just attacked; recalibrate could help but orders prioritize keeping distance. Foresight shows enemy Aegis shield_wall facing S toward (4,3) — that's me, so it's protecting from my direction. Longshot precision_shot targeted (3,3) last turn hitting our Aegis. Weaver is 3 tiles away at (2,2) — must not move adjacent. Best play: recalibrate wounded Aegis at (3,3) to buff it since it's adjacent, then hold position or shift slightly. Aegis is at (3,3) and I'm at (4,3) — that's adjacent, so recalibrate is valid. Give Aegis guidance to use shield_wall toward Longshot at (3,1) to block precision shots.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "addendum": "Priority: use shield_wall facing S to block Longshot precision shots from (3,1). You are the front shield — hold position and protect the Oracle behind you."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Enemy Aegis sentinel is wounded and in range at (3,2) dist=3. I'm at (4,4) and haven't moved, so precision_shot deals full 2dmg. I need to check LoS — no adjacent enemies blocking me. Fire precision_shot at wounded Aegis to finish it off. Then wait or reposition. Weaver vector is at dist=4 so no adjacency threat to my precision_shot. Fire first, then hold position.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Wounded enemy Aegis sentinel is at (3,3), distance 2 - exactly in range for precision_shot. I haven't moved this turn, so precision_shot deals full 2 damage. The wounded Aegis is likely low HP, so this could be a kill. I'm not adjacent to any enemy, so precision_shot is not blocked. I'll fire precision_shot at Aegis first, then wait or reposition. No need to move - current position gives clear shot.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Enemy Aegis is at (3,3), dist=2, wounded. I'm at (2,2). Traps already at (1,2), (2,3), (4,2). I can place a trap at (4,2) but it's already there. Best chokepoint would be between enemy positions and allies. Ally Aegis is at (3,2), Longshot at (3,1). Enemy Aegis at (3,3) is threatening them from above. I should move to (2,3) or stay and place a trap ahead of enemy approach paths. (2,3) already has a trap. I can move to (1,3) to stay back and place a trap at (3,3) if in range — but (3,3) is occupied by enemy. Place trap at (2,4) to cover northern approach, or move toward (3,3) area. I can reach (4,2) which is a valid move tile — that puts me adjacent to enemy Aegis at (3,3) and enables Denial on them. But moving to (4,2) puts me next to enemy Aegis blocking my trap ability. Instead, stay at (2,2) and place trap at (3,3)? Enemy is there — trap requires empty tile. Place trap at (2,4) to block northern flank. Or pulse enemy Aegis at dist=2 — pulse range is 1 tile AoE, so enemy at dist=2 is out of pulse range. Attack requires adjacent. Best option: move to (2,3) — wait, trap is there. Move to (1,3) and place trap at (2,4) for northern coverage. Or stay and place trap at (3,2)? Ally is there. Place trap at (4,3) — dist from (2,2) is 3, out of trap range (≤2). Place trap at (2,4) from current position — dist=2, valid empty tile, covers north approach.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (3,3) with 3HP. Aegis is adjacent at (3,2) - I can attack it. Orders say to shield_wall facing S to block Longshot at (3,1). I should attack the wounded Aegis first to potentially eliminate it, then shield_wall facing S to protect against Longshot. Staying put preserves fortify bonus.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm at 2HP with fortify active giving 50% damage reduction. Aegis enemy is adjacent at (3,3). I should attack the wounded Aegis to potentially finish them, then stay put to keep fortify active for defense.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 10,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 10,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "All three enemies already scanned — no new intel needed. Ally Aegis at (3,3) is critical and was just hit by Longshot's precision_shot and enemy Aegis's attack last turn. I should recalibrate Aegis to help them survive. I'm at (5,3), Aegis is at (3,3) — that's distance 2, not adjacent. I need to move closer first. Move to (4,3) puts me adjacent to ally Aegis at (3,3), then recalibrate. This keeps me at safe distance from enemy Aegis (3,2) at distance 2, and away from Weaver (1,2). Longshot is at (3,1) dist 3 from (4,3) — within their precision_shot range, but recalibrating the critical ally is worth it.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "addendum": "You are critical — fall back east toward (4,3) or (5,3) to avoid enemy Aegis at (3,2) and Longshot at (3,1). Prioritize survival over attacking."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Enemy Aegis sentinel is critical and at distance 2 - perfect range for precision_shot. I haven't moved this turn, so I get full 2dmg which should finish them off. Stay at current position to maintain range.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Enemy Aegis sentinel is critical and in range at (3,2), dist=3. I'm at (4,4) with no enemies adjacent, so precision_shot is not blocked. I can fire precision_shot at the critical Aegis for 2dmg which should finish it off. I haven't moved so full damage applies. After shooting, I'll hold position since I have good range coverage.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm at 1HP — survival is the priority. Enemy Aegis is critical at (3,2) adjacent south, Longshot at (3,1) threatens. I need to fall back east toward (4,3) or (5,3) per orders. Moving to (5,3) puts me further from the enemy cluster. I should NOT stay and attack at 1HP — I'll die. Move east to safety, then wait to maintain fortify for damage reduction.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "All enemies are out of range at dist 4-5. I'm at (1,2) which already has a trap. I should move toward the enemies and place a trap to control approach routes. Moving to (2,2) gets me closer while staying safe. Then I can place a trap at (3,3) to block the corridor between enemy positions and my allies at (3,1) and (3,2). Wait - (2,3) already has a trap. Best trap location would be (3,2) area but ally Aegis is there. Let me move to (2,1) to approach, then trap at (3,2)... ally is at (3,2). Try (2,2) move then trap at (3,3) - that's within range 2 from (2,2) and covers the approach path. Actually from (2,2), trap range is ≤2 tiles, so I can reach (3,3), (4,2), etc. Tile (3,3) would intercept enemies moving from (4,3)/(4,4) toward allies. That's a good choke point.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm at 2HP with fortify active giving 50% damage reduction. All enemies are out of range. Trap at (3,3) blocks direct advance. I should stay fortified to maximize survivability. Moving would lose fortify. Best to wait and preserve the damage reduction while holding position.",
+          "firstAction": {
+            "type": "wait"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 10,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 10,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "All enemies already scanned — no new scan targets needed. Foresight shows Weaver placed a trap at (3,3) and Longshot fired precision_shot at (3,3). I should avoid (3,3). Allied Aegis at (5,3) is critical — recalibrate would help but I need to be adjacent. Currently at (4,3), Aegis is at (5,3) which is adjacent, so I can recalibrate them. Enemy Aegis at (3,2) is critical — Hawk should be able to finish it. My priority: recalibrate our critical Aegis to boost their survivability, then reposition safely away from the trapped (3,3) tile and keep distance from Weaver.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 5,
+              "y": 3
+            },
+            "addendum": "You are critical — prioritize survival. Use shield_wall toward enemies to the west. Hold position and defend."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Enemy Aegis sentinel is critical at (3,2), distance 3 — within my range 2? No, dist=3 exceeds range 2. I need to close to range 2. Moving to (3,3) puts me at dist=1 from Aegis (3,2) — adjacent, which blocks precision_shot. Moving to (4,2) puts me at dist=2 from Aegis (3,2) — that's within range and not adjacent, so precision_shot is valid. Fire precision_shot at critical Aegis for 2 damage to finish it.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Hawk is at (4,2), distance 2, in range for precision_shot. I'm at (3,1) and haven't moved, so precision_shot deals full 2dmg. Hawk is healthy but 2dmg is solid value. I should fire first before moving to preserve full damage. After shooting, I can reposition if needed. No adjacent enemies so precision_shot is not blocked.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Hawk is wounded and within range at (4,2). I'm at (2,2). My ally Aegis is at (3,2) critical - need to be careful. Hawk at dist=2 is in pulse range if I stay or in attack range if I move adjacent. I can pulse from current position to hit Hawk at (4,2)? Pulse hits ALL units within 1 tile - Hawk is at dist=2 so pulse won't reach. Attack range is adjacent only. I could move to (3,2) but Aegis ally is there. Move to (3,3) - but that has a trap. Move to (2,1) and place trap at (3,2) to block Hawk's path? Actually, Hawk is wounded at dist=2 - if I move to (3,2) I'd be adjacent but Aegis ally is there. Let me move to (3,1) - wait Longshot is there. I can move to (2,1) and place a trap at (3,2) to threaten Hawk, but Aegis ally might step on it. Better: move toward Hawk to get adjacent and attack, or place trap on Hawk's likely path. Move to (3,3) is blocked by trap already there. Move to (2,1) and place trap at (3,2) - that's between Hawk and allies but ally Aegis is AT (3,2). Safest: stay at (2,2), use pulse - but Hawk is at dist=2, pulse only hits within 1 tile. Attack requires adjacent. Let me place a trap at (3,3) - already trapped. Place trap at (4,3) - I'm at range 2 from (2,2) to (4,3)? dist = |4-2|+|3-2| = 3, too far. Trap range ≤2 tiles. Valid trap positions within range 2: (3,2) has ally Aegis, (3,1) has ally Longshot, (4,2) has enemy Hawk - can place trap on enemy tile? Trap on empty tile only. (2,3) already trapped, (2,4) already trapped. Move to (2,1) then trap at (3,2)? Aegis is there. Move toward Hawk: go to (3,1) - Longshot is there. I'm somewhat trapped by allies. Best option: move to (1,2) or (1,3) and place trap strategically, or just attack Hawk by moving adjacent. Move to (3,2) - ally is there, can't. Move toward (4,2) Hawk: I can reach (3,2) if ally wasn't there, or go around. Actually can I move to (2,1) and trap (3,2) even with ally? Trap says empty tile. So no. Let me attack Hawk - need to be adjacent. From (2,2) I can move to (3,2) blocked by ally. I'll move to (2,1) to reposition, and place trap at (3,2) - no, ally there. Place trap at (4,1) from (2,1)? dist=|4-2|+|1-1|=2, valid! That's an empty tile ahead of Hawk. Move to (2,1), trap at (4,1) to catch Hawk moving south.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm at 1HP with fortify active (50% damage reduction). Hawk is adjacent at (4,2) and wounded — I should attack to potentially finish it. Moving would lose fortify, so I'll attack first then stay put or use shield_wall. Attacking Hawk at (4,2) is priority. After attacking, I'll shield_wall East to protect allies from Aegis approaching from that direction.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 2
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm at 1HP critical. No enemies in range. Priority is survival. Hold position at (5,3) to keep fortify bonus (50% dmg reduction), use shield_wall facing W to block incoming damage from enemy cluster to the west.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "direction": "W"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 10,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 10,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "All enemies are already scanned and prompts known. Both allies are critical — Hawk at (4,2) is being targeted by Longshot precision_shot and enemy Aegis attack this round. I should recalibrate Hawk to help them survive. Hawk is at (4,2), I'm at (4,5) — that's 3 tiles away, not adjacent. I need to move closer to recalibrate. Moving to (4,3) puts me adjacent to Hawk at (4,2). But enemy Aegis is at (3,2) — shield_wall facing W toward (4,3) area. Weaver has denial (adjacent) at (2,1) — not a threat at that range. Moving to (4,3) keeps me 4 tiles from enemy Aegis (dist would be sqrt((4-3)^2+(3-2)^2)=sqrt(2)~1.4, actually adjacent diagonally — that may trigger Vector denial issues but Weaver is at (2,1) not adjacent). Move to (4,3) to be adjacent to Hawk, then recalibrate Hawk to help them handle the incoming precision_shot and attack.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 4,
+              "y": 2
+            },
+            "addendum": "You are under heavy fire from Longshot precision_shot and enemy Aegis attack. Prioritize survival — move away from (3,2) enemy Aegis. Retreat north or east to break line of sight from Longshot at (3,1)."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Hawk is critical and at dist=2, within precision_shot range. I'm not adjacent to any enemy Vector (Weaver is allied), so precision_shot is not blocked. Fire on Hawk to eliminate the critical striker first. No need to move - I have clear LoS from current position.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "At 1/10 HP I'm critical. Fortified means 50% damage reduction if I don't move, but I'm already at (5,3) which is safe — no enemies in range. Orders say hold position and use shield_wall facing W to block enemies to the west. Staying put preserves Fortify passive. Use shield_wall facing W to protect Watcher at (4,3) from Longshot/Aegis cluster to the west.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "direction": "W"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm at critical HP (1/10) but fortified with 50% damage reduction. Both enemies are out of range. Moving closer risks losing fortify bonus and dying. Best to hold position, stay fortified, and use shield_wall to protect allies Weaver at (2,1) and Longshot at (3,1) from the eastern threats. Shield wall facing E will block damage from Aegis and Watcher approaching from the east.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 1
+            },
+            "direction": "E"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Both enemies are out of range. I need to advance and control the area between us. Moving to (4,1) gets me closer while (4,1) already has a trap. Move to (3,1) area — wait, Longshot is at (3,1). I can move to (2,2) or (3,0). The enemy Watcher is at (4,3) and Aegis at (5,3). I should place traps to cut off approach routes. Moving to (3,0) then placing a trap at (4,1) — but (4,1) already has a trap. Let me move to (2,2) to advance toward enemies and place a trap at (3,3) — already trapped. Move to (3,0) is better positioning, then trap at (4,0) to create a chokepoint on the bottom lane approaching our allies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 10,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 10,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 9,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "All three visible enemies already scanned. Ally Aegis at (5,3) is critical — recalibrate can help. Foresight shows Longshot used precision_shot at (4,2) last turn and Weaver placed trap at (4,0). I was at (4,3) last turn and moved there, so Longshot targeted (4,2) — near me. This turn I should recalibrate the critical Aegis ally at (5,3) — but recalibrate is adjacent only and Aegis is at (5,3) while I'm at (4,3), so we ARE adjacent. I can recalibrate Aegis first, then move to a safer position. Avoid (4,0) due to Weaver's new trap. Weaver is at dist 4 — just out of scan range from current pos. Moving to (5,4) keeps distance from Weaver's denial range and trap, while staying safe.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 5,
+              "y": 3
+            },
+            "addendum": "Enemy Aegis sentinel is critical at (3,2) — engage and finish it. Weaver vector at (3,0) has denial adjacent and trap at (4,0) — avoid that area. Longshot striker at (3,1) is healthy and dangerous at range."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Both enemies are out of range. Critical Aegis is at (5,3) dist=4, need to close to range 2. Moving to (5,1) gets me to dist=2 from Aegis at (5,3). However (4,1) and (4,0) are trapped. (5,1) is a valid move tile. From (5,1), Aegis at (5,3) would be dist=2, in range. But precision_shot does 1dmg if I moved. Aegis is critical so even 1dmg might finish it. Let me move to (5,1) and use precision_shot on Aegis.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Watcher is far away at (5,4), out of range. I have traps already placed at (4,1) and (4,0) near my current position. Aegis is critical at (3,2) - I should help protect them. Moving to (3,1) puts me adjacent to Aegis for denial support and lets me place a trap to cover approaches. The enemy must come through the middle - placing a trap at (2,2) or similar chokepoint would be good. From (3,1) I can trap around (3,2) area to protect Aegis. Let me move to (2,1) and trap (2,2) to create a defensive barrier between Watcher's approach path and our position.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "At 1HP, I must stay fortified to survive. Watcher is at (5,4), distance 4. My allies Weaver is at (2,1) and Longshot at (5,1). I should stay put to maintain Fortify passive (50% DR) and use shield_wall toward the north where Watcher threatens. Staying at (3,2) keeps me between allies and the enemy. I'll use shield_wall toward N to protect against incoming fire.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 10,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 10,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 10,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "All enemies already scanned — no new scan targets needed. Longshot is at (5,1), distance 3, in scan range and just targeted me with precision_shot at (5,3) last turn. I'm now at (5,4) so I'm directly in Longshot's line of fire if I stay on x=5. Weaver is at (2,1) with denial range adjacent — not a threat from here. Aegis is critical at (3,2). I should recalibrate an ally if possible, but no wounded allies are mentioned. My orders say use recalibrate on wounded allies — none present. Best move: shift off the x=5 column to avoid Longshot's precision_shot, then scan Longshot to deal 1 dmg (already scanned but scan deals damage). Wait — scan says 'reveal enemy prompt AND deal 1dmg' — all prompts already known. Still deals damage. Longshot is healthy and dangerous. Scan Longshot for 1 dmg. Move to (4,4) to break line of sight on x=5 column, then scan Longshot at (5,1) — dist from (4,4) = sqrt(1+9) = ~3.16, within 4. Valid.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 5,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Watcher is at (4,4), distance 4 - out of my range 2. No enemies in range currently. Valid moves include (4,2) which would bring me closer to Watcher. From (4,2), distance to Watcher at (4,4) would be 2 - within precision_shot range. I moved, so precision_shot would deal 1dmg. But moving to (4,2) then shooting is viable. Note trap at (4,1) - avoid that. Move to (4,2) then use precision_shot on Watcher.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm at 1HP with fortify active (50% dmg reduction). Watcher is at (4,4), dist=3, not in range. Longshot is wounded at (4,2). I should stay fortified to keep the damage reduction — moving loses it. I'll shield_wall toward the enemy (N direction) to protect Longshot. Staying put preserves fortify.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 2
+            },
+            "direction": "N"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Watcher is at (4,4), distance 5, out of range. Allies are critical/wounded at (3,2) and (4,2). Heavy trap coverage already exists around (2,2)-(4,1) area. I need to push toward Watcher to apply denial pressure and set traps on approach paths. Move to (3,1) to get closer, then trap (3,0) or (4,1) - but (4,1) already has a trap. Move toward (3,1) then place trap at (3,0) to further block southern approach. Actually, moving to (3,1) and trapping at (2,2) - already trapped. Let me move to (2,2) - already trapped so can't. Valid moves include (3,1). From (3,1) I can trap nearby open tiles. (3,0) seems open and useful. Move to (3,1), trap at (3,0) to seal off that corridor.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 10,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 10,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 11,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Longshot is wounded and targeted me with precision_shot last turn. I should scan Longshot — wait, already scanned. Both Aegis and Longshot are in range. Longshot is wounded and shot at me (4,4) — dangerous. I have all prompts. Priority: Longshot is wounded and threatening. I can't attack from range (attack is adjacent only). I should move to stay safe and use scan on... all enemies already scanned. Recalibrate has no nearby ally. Best play: move away from Longshot's precision_shot range or stay and wait. Longshot at (4,2) will likely shoot me again. I should move north or laterally to break sight/positioning. Move to (5,5) to increase distance, then wait. Actually, moving to (5,4) keeps distance from Weaver's denial. Let me move to (5,5) — out of Longshot's current position threat, still in scan range if needed. But all enemies are scanned. I'll move to (5,5) to reposition safely and wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Watcher is at (5,5), distance 4 - out of my range 2. No enemies in range currently. I need to close distance to get Watcher in range. Moving to (5,3) brings me within distance 2 of (5,5), enabling precision_shot. Valid moves include (5,3). Move there then fire.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm at 1HP — critically low. Fortify gives me 50% damage reduction while stationary, which is my best survival tool. Watcher is at (5,5), dist=5, not adjacent. Weaver is at (3,1) below me, Longshot is at (5,3) wounded. I should stay still to keep Fortify active and use shield_wall to protect Longshot to the north/east. Moving would lose Fortify and likely get me killed. Shield_wall facing N or E toward Watcher's direction could protect Longshot at (5,3).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 5,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Watcher is far at dist=6, no enemies in range. Traps are already heavily placed. Valid moves include (4,2) which is an uncovered tile that could serve as a chokepoint approach. Moving to (4,2) puts me closer to Longshot who is wounded at (5,3) and helps deny the Watcher's approach. Then place a trap at (5,2) to block the Watcher's path toward allies. Wait - checking valid moves: (4,2) is valid. For trap, I need to check if target is within 2 tiles of my new position (4,2). Target (5,2) would be dist=1, valid. That tile is not listed as having a trap already.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 10,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 10,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 12,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Foresight shows Longshot will precision_shot me at (5,5) — I need to dodge. I'm at 4HP and Longshot is wounded and already scanned. Moving to (4,5) gets me out of Longshot's likely line of fire while keeping scan range on Weaver at (4,2) — dist 3 from (4,5), within 4. I can scan Weaver... wait, Weaver is already scanned. All enemies already scanned. Longshot is wounded — I should try to finish them. From (4,5), Longshot at (5,3) is dist 3, within scan range (4). But scan only does 1dmg. Better to dodge the precision_shot. Move to (4,5) first to dodge, then scan Weaver isn't needed (already done). I could scan Longshot again for 1 more dmg — they're wounded, might finish them if low enough. From (4,5), Longshot at (5,3) is dist sqrt(1+4)=~2.2, so dist=3 tiles (Manhattan: |4-5|+|5-3|=1+2=3). Within scan range 4. Scan Longshot for 1dmg — they're wounded, this could help. Main priority: dodge precision_shot by moving off (5,5).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Watcher is at (4,5), dist=3, which is within my range=2... wait, dist=3 means out of range for precision_shot (range ≤2). I need to close distance. Moving to (5,5) puts me at dist=1 from (4,5), but (5,2) is a trap. Moving to (5,4) gives dist=2 from Watcher at (4,5) - that's exactly in range. From (5,4), Watcher at (4,5) is dist=sqrt(1+1)=1.41, so ≤2. I haven't moved yet so precision_shot deals 2dmg. I'm at 2HP so need to be cautious. Let me move to (5,4) first, then fire precision_shot at Watcher.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Watcher is at (4,5), dist 3, out of range. I need to move toward them or place traps to control approach. Valid moves include (4,4) which closes distance to Watcher to dist 1. Many traps already placed. Aegis is critical at (3,2). Moving to (4,4) gets me adjacent to Watcher next turn and enables denial. After moving to (4,4), Watcher is at dist 1 — I can pulse to damage them. Wait, from (4,4) Watcher at (4,5) is distance 1, within pulse range. So move to (4,4) then pulse targeting (4,5) for 1 damage to all within 1 tile.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm at 1 HP, fortified with 50% damage reduction. Longshot is critical at (5,4). Watcher is at (4,5), dist=4. I should move toward (4,3) to stay between allies and the enemy, then use shield_wall N to protect Longshot and Weaver from Watcher's attacks. Moving to (4,3) puts me adjacent to Longshot at (5,4) and I can shield_wall N to protect them.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 5,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 10,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 10,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "player",
+    "totalTurns": 13,
+    "reason": "player eliminated all enemies"
+  },
+  "endedAt": "2026-02-22T23:08:03.016Z"
+}
