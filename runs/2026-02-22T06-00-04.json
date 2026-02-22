@@ -1,0 +1,2632 @@
+{
+  "id": "2026-02-22T06-00-04",
+  "startedAt": "2026-02-22T06:00:04.029Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 5,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 5,
+        "movement": 2,
+        "range": 2,
+        "speed": 2
+      },
+      "oracle": {
+        "maxHp": 6,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 11,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "vector": {
+        "maxHp": 7,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 11,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 2,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 8,
+        "healAmount": 5
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Aegis",
+        "class": "sentinel",
+        "prompt": "Advance toward the nearest enemy. Use shield_wall facing the direction with the most enemies. If an enemy is adjacent, attack them."
+      },
+      {
+        "name": "Lattice",
+        "class": "vector",
+        "prompt": "Place traps on tiles enemies are likely to move through. Use pulse if 2+ enemies are adjacent. Stay near allies for mutual support."
+      },
+      {
+        "name": "Insight",
+        "class": "oracle",
+        "prompt": "Use scan to reveal enemy prompts and cloaked units. Stay at max range (≤4 tiles for scan). Use recalibrate on wounded allies to buff them. Keep distance from enemies and avoid adjacent vectors."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Wraith",
+        "class": "specter",
+        "prompt": "Cloak immediately on turn 1. Move toward the enemy medic or weakest target. Use shadow_strike when adjacent while cloaked. Use breach to sabotage high-value targets."
+      },
+      {
+        "name": "Rampart",
+        "class": "sentinel",
+        "prompt": "Advance toward the nearest enemy. Use shield_wall facing the direction with the most enemies. If an enemy is adjacent, attack them."
+      },
+      {
+        "name": "Watcher",
+        "class": "oracle",
+        "prompt": "Scan priority targets each turn to reveal their strategy. Use recalibrate on your damage dealer to boost effectiveness. Stay behind allies and maintain range. Never get adjacent to enemy vectors."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Round 1. Aegis is in scan range (dist=3) and is the highest-value target since sentinels are durable. Lattice is at dist=4 which is borderline - the recon says out of range. Insight is out of range at dist=5. I should scan Aegis to reveal their strategy and deal 1 damage. After scanning, I can move to maintain positioning - staying away from Lattice (vector) which is at (5,1). Moving to (3,4) keeps me behind allies and away from the vector's denial range.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Round 1 - cloak immediately as instructed. Then advance toward enemies. Insight (oracle) is highest priority target at (3,0), dist 5. After cloaking, move toward the enemy cluster. I'll move to (2,1) to close distance toward Insight/Aegis while staying cloaked.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "Watcher is at dist=4, exactly at scan range. I need to move closer to scan it. Moving to (3,1) puts me at dist=3 from Watcher at (3,4), within scan range. From (3,1) I can scan Watcher. Rampart is out of range at dist=5. No adjacent enemies so scan is not blocked.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "No enemies adjacent, so no attack. Enemies are to the north (Watcher at 3,4 and Rampart at 3,5). I should advance north. Moving to (4,3) gets me 2 tiles closer. Then use shield_wall facing N toward the enemies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Enemies are far away (dist 5-6). I should advance and place a trap on a likely approach path. Moving to (5,3) gets me closer to the action while staying near Aegis at (4,3). Then I'll place a trap at (4,4) or (3,3) — a chokepoint enemies must pass through moving south toward us. Watcher at (3,4) moving south would hit (3,3). Placing trap at (4,4) covers approach toward center.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "No enemies adjacent. Nearest enemy is Aegis at dist=3 to SE. Move toward (4,4) to close distance. Then shield_wall facing S where enemies are clustered to protect Watcher behind me.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 10,
+          "maxHp": 11,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 10,
+          "maxHp": 11,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Cloak has 1 turn remaining. Insight (oracle) is adjacent at (3,1) facing N, so behind tile is (3,0) which I can reach. If I move to (3,0) I'll be behind Insight and can breach them — oracle is high value target, controlling their next turn would be devastating. Breach while cloaked keeps pressure up. Move to (3,0) then breach Insight.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 3,
+              "y": 1
+            },
+            "addendum": "Move away from allies and toward the edge. Do not use any offensive abilities."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "Orders say move away from allies and toward the edge, no offensive abilities. Allies are at (5,3) and (4,3), so I should move away from that cluster. Wraith is adjacent at (3,0) which is dangerous — scan is blocked when adjacent to enemy Vector, but Wraith is a specter. Still, I need to move away from allies toward an edge. Moving to (1,0) gets me toward the bottom-left edge and away from the ally cluster. Then I can wait as second action.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Lattice is 3 tiles away at (5,3) — I must not move adjacent. Foresight shows Insight scanned my position (3,4) last turn, so they know my location. Lattice set a trap at (4,4) where Rampart is — danger there. I've already scanned Aegis. Lattice is unscanned and in range at dist=3. I should scan Lattice to reveal their strategy. After scanning, I can move to (2,4) to maintain distance from Lattice and stay safe behind allies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Rampart is at (4,4), distance 2 — within trap range. Enemies likely to push through (4,3) or (5,4) to flank. I should place a trap on (5,4) to catch anyone coming around my flank, then hold position near Aegis at (4,3) for mutual support. Pulse isn't worth it with only one enemy adjacent. Trap first, then wait to maintain zone control.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Rampart is adjacent to the north at (4,4). Orders say attack if enemy is adjacent. I'm fortified so I have 50% damage reduction. I'll attack Rampart first, then use shield_wall facing north where Rampart is.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Aegis is adjacent at (4,3) — attack them. Then use shield_wall facing S since that's where most enemies are clustered (Aegis at 4,3, Lattice at 5,3). Stay in place to keep Fortify active.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 9,
+          "maxHp": 11,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 9,
+          "maxHp": 11,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Insight (oracle) is at (1,0) facing W, so I'm already behind them from (3,0). I can move to (2,0) which is adjacent and behind Insight, then use breach to take control of this oracle. Breach cooldown has 1 turn remaining so I can't use it. Shadow_strike is adjacent only and doesn't break cloak, but I'm not cloaked. I'll move to (2,0) to get adjacent to Insight and use shadow_strike for 1 damage.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 1,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "Orders are to move away from allies and toward the edge, no offensive abilities. My allies are at (5,3) and (4,3) - they're to the east. I'm at (1,0). The edge tiles available are (0,0), (0,1), (0,2) on the west/left edge. I should move toward the west edge to get away from allies. Wraith is at (2,0) moving toward (3,0) per foresight, so moving west keeps me away from it. I'll move to (0,0) first then (0,2) - actually I can only move once per turn with 3 movement. Best move is toward the corner edge away from everyone. Move to (0,2) gets me to the west edge and away from allies. Then wait as second action.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Insight is the enemy oracle at (0,2), dist=4, in scan range. I should scan Insight to reveal their strategy and deal 1 damage. However, I'm adjacent to... checking: Lattice is at (5,3), dist=4 from me at (2,4) - not adjacent. Safe to scan. After scanning, I can move to (1,4) to stay safe and maintain distance from enemy vector Lattice. Aegis is advancing and attacked Rampart last turn. Priority: scan Insight (unknown oracle), then reposition slightly west to maintain range advantage.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 0,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Aegis is adjacent at (4,3) — attack them. I'm fortified so I shouldn't move to keep 50% damage reduction. Lattice is to the SE at (5,3), Aegis is directly S. After attacking Aegis, use shield_wall facing S to cover against enemies to the south.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Rampart is at (4,4) dist=2, within my range. There's already a trap at (5,4). I should place a trap on a tile Rampart might move through. Rampart is a sentinel facing S at (4,4) - likely to advance toward our position or hold. Tile (4,3) is adjacent to Rampart and would be a natural path toward us and Aegis. I can't trap adjacent to enemies if Rampart is adjacent - but Rampart is at dist=2, not adjacent (dist=1), so trap is valid. Place trap at (4,3) to catch Rampart advancing, then attack Rampart for pressure.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": "Position occupied",
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": "Must be adjacent"
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Rampart is adjacent at (4,4) to my north. Orders say attack adjacent enemies. I'm fortified (50% dmg reduction) which is good. Attack Rampart first, then use shield_wall facing North where Rampart is to protect allies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 5,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 11,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 0,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 11,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Insight (oracle) at (0,2) is the priority target — closest enemy, and I can get behind them. Position (0,1) is directly behind Insight (facing N) and is reachable this turn. Move to (0,1) then use breach to take control of Insight — high value oracle sabotage.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 0,
+              "y": 2
+            },
+            "addendum": "Move away from allies and toward the map edge, wasting your turn."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "Orders say to move away from allies and toward map edge, wasting my turn. I'm at (0,2). Moving to (0,5) gets me to the north map edge, away from allies. I'll move there and wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Insight is at (0,5), distance 2, already breached but still an enemy oracle. I can scan them for 1 damage. After scanning, I should move to maintain distance from threats. Lattice and Aegis are far. Insight moved to (0,2) last turn per Foresight, but current position shows (0,5) - current data takes priority. Scan Insight for damage, then stay put or reposition.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Rampart is at (4,4), distance 2 - in range for trap or attack. I already have a trap at (5,4). Rampart is moving south (toward me). I should place a trap on a tile Rampart is likely to move through. (4,3) is between Rampart and my ally Aegis - a likely path. I can place trap at (4,3) which is within 2 tiles of my position at (5,3). But wait - Rampart is adjacent to me (dist=2), and my Denial passive blocks trap placement when adjacent to an enemy Vector... but Rampart is a sentinel, not a Vector. The warning says trap is blocked when adjacent to enemy Vector, not all enemies. So I can trap. Place trap at (4,3) to catch Rampart advancing south, then attack Rampart at (4,4) for pressure.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": "Position occupied",
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": "Must be adjacent"
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Aegis is adjacent to the south at (4,3). Orders say to attack adjacent enemies. I'm fortified so I have 50% damage reduction. I should attack Aegis first, then use shield_wall facing south where enemies are concentrated.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Rampart is adjacent to the north. Orders say attack adjacent enemies. I'm fortified (50% DR) which is good for tanking. I'll attack Rampart first, then use shield_wall facing north to protect Lattice at (5,3) from Rampart's direction.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 5,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 11,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 6,
+          "position": {
+            "x": 0,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 11,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 0,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Insight is wounded and within scan range at (0,5), distance 2. Already scanned and breached. I can scan again to deal 1 damage to finish them off or weaken further. Insight is wounded so any damage helps. No enemy vectors adjacent to me at (1,4), so scan is not blocked. After scanning Insight, I should move to maintain positioning. Wraith is at (0,1) moving toward (0,2), so I should stay clear of that area. Moving to (2,4) keeps me ranged and away from Lattice's denial zone.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Insight is wounded and I can reach [0,4] which is directly behind them (facing N, so behind is [0,4]). Move to [0,4] and use shadow_strike to deal damage while staying cloaked. This is the highest value play — wounded oracle, adjacent, behind them.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "I'm at 1HP and about to die. Orders say move away toward map edge. Wraith is adjacent at (0,4) and will breach toward me. I should move away - valid moves include (1,5), (2,5), (3,5). Moving to (3,5) gets me furthest from Wraith. I can still scan Watcher at dist 3 to deal 1 damage, but I only have 1HP so survival matters less than following orders. Actually orders say waste my turn, so I'll move to map edge (3,5) and wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Rampart is adjacent at (4,4) — attack immediately. I'm fortified so I shouldn't move to keep 50% damage reduction. After attacking, use shield_wall facing North where Rampart and Watcher cluster.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Rampart is wounded at (4,4), distance 2 — within my range. I have a trap at (5,4) already. Rampart is moving south (toward me). I should attack Rampart to finish them off while wounded. Aegis is adjacent at (4,3), so we have mutual support. I'll attack Rampart first, then consider positioning. No pulse opportunity — only one enemy adjacent.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "I'm adjacent to both Lattice and Aegis. The DENIAL zone blocks abilities, so I can only use basic attack or movement. I should attack Aegis (since Lattice has DENIAL active and attacking Lattice while in denial zone may be blocked). Actually, the warning says abilities may be blocked — attack is a basic ability. I'll attack Aegis who is adjacent at (4,3). I'm fortified so I should stay put to keep 50% damage reduction. Attack Aegis first, then shield_wall facing S where enemies cluster (Aegis at S, Lattice at E). Wait — shield_wall may be blocked by DENIAL. I'll attack Aegis and wait to keep fortify.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 11,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 11,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "I'm at 1HP - critical danger. Orders say move away but I must survive. Watcher's prompt is known. Rampart is wounded at (4,4) and Aegis attacked it last turn. I can scan Rampart to deal 1 damage and potentially finish it off, helping the team. Then move to (4,5) to reposition. Wait - Lattice is at (5,4) which has a trap. Scan Rampart first for damage, then move to safety at (4,5) or (5,5). Actually at 1HP I should move first to avoid being targeted, then scan. Moving to (4,5) puts me adjacent to Rampart which is dangerous. Move to (5,5) for safety then scan Rampart - dist from (5,5) to (4,4) is 2, still in range. That works.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "All enemies are out of range (dist 5-6). Breach is unavailable (2/2 used). I need to close distance. Best target is Insight at (5,5) who is critical HP - if I can reach them, shadow_strike can finish them. Moving 3 tiles: from (0,4) I can reach (3,4) which is the furthest east tile available. That cuts distance to Insight from 6 to ~3, and to Aegis/Lattice from 5 to ~2-3. Next turn I should be in striking range. Move to (3,4) to advance toward the cluster of enemies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "All three enemies already scanned. Insight is at (5,5) dist=4 which is out of scan range from current position. I need to recalibrate Wraith (specter at (3,4)) to boost damage output. I'm at (2,4), Wraith is at (3,4) — adjacent, so recalibrate works. After recalibrate, I should move to (3,5) to get Insight in range (dist=3) for future scans while staying away from Lattice. Actually, Watcher hasn't been scanned yet — it's the enemy oracle. Let me check: Watcher is listed in order but no position shown in enemies list. I should recalibrate Wraith first (they're adjacent at (3,4)), then move to (3,5) to reposition. Moving to (3,5) keeps me 3 tiles from Lattice at (5,4) — safe. Wraith is the damage dealer and benefits from recalibrate.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "addendum": "Priority target is Insight at (5,5) — critical health, finish them. Then focus Aegis at (4,3)."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Rampart is adjacent at (4,4) to my north. Orders say attack adjacent enemies. I'm fortified with 50% damage reduction. Attack Rampart first, then use shield_wall facing north (toward enemy cluster at 3,4 and 3,5 — west side). Actually enemies are N and NW, so shield_wall N covers Rampart's direction. But Rampart is the adjacent threat. Attack Rampart, then shield_wall facing N to protect allies from northern enemies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 5,
+              "y": 4
+            },
+            "direction": "W"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "I'm at (5,4) with a trap already there. Rampart is adjacent at (4,4) - wounded sentinel. Wraith is at (3,4) distance 2. My Denial passive blocks some abilities on adjacent enemies, which helps against Rampart. I can't place a trap at my current position (already has one) and can't place traps when adjacent to an enemy (Rampart is adjacent). I should attack Rampart since it's wounded and adjacent, then move to (4,5) to cover the flank and support Insight who is critical at (5,5). Pulse would only hit Rampart (1 enemy adjacent), not worth it over a direct attack. Attack Rampart first, then move to (4,5) to get away from adjacency and potentially place a trap next turn on a likely enemy path.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "I'm at 3/11 HP and fortified. Aegis is adjacent to the south at (4,3) — wait, Aegis is at (4,3) which is south of me at (4,4)? No, (4,3) is south. Lattice is at (4,5) which is north. Orders say attack adjacent enemy. Aegis is wounded, priority target. I must not move to keep Fortify active. Attack Aegis who is adjacent and wounded. Then shield_wall facing N toward Lattice to protect allies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 11,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 11,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "I'm adjacent to Lattice which blocks my abilities (DENIAL zone). I need to move away from Lattice first to enable my scan ability. Moving to (2,5) gets me away from Lattice's denial zone. Then I can scan Insight who is critical - but at dist 2 from (2,5) Insight at (5,5) would be dist 3, still in scan range (≤4). Actually let me check: from (2,5) to (5,5) is dist 3, within range 4. After moving to (2,5), I can scan Insight but Insight is already scanned. Better to scan nothing new or recalibrate Wraith at (3,4). From (2,5), Wraith at (3,4) is adjacent - I can recalibrate them to boost their effectiveness against the enemies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "addendum": "Insight is critical at (5,5) - prioritize attacking Insight to eliminate them. Aegis is wounded at (4,3). Focus on Insight first for the kill."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "I'm at 1HP — extremely fragile. Wraith is unscanned and healthy at dist=3, within scan range. Watcher's prompt is known. Rampart's prompt is known. Priority: scan Wraith to reveal its strategy, then stay alive. Trap at (5,4) so avoid that. Valid moves: [3,5],[5,2],[5,3],[5,4]. Moving to (5,4) hits the trap. Stay at (5,5) or consider repositioning. If I stay, I can scan Wraith at (3,4) dist=3 ≤4. No enemy vectors adjacent (Lattice is ally). Scan Wraith first, then wait — no safe move improves position without risk.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Insight is critical but at dist 3 and not reachable this turn. Aegis is wounded at dist 2, and I can reach (4,2) behind Aegis for shadow_strike. Move to (4,2) then shadow_strike Aegis — I'm behind them, stay cloaked, deal damage. Lattice is at (4,5) so moving to (4,2) keeps me away from their denial range.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm fortified with 50% damage reduction, which is valuable. Two enemies are adjacent: Rampart (wounded, N at 4,4) and Wraith (healthy, S at 4,2). Orders say attack adjacent enemies. Rampart is wounded so attacking it could finish it off. I should attack Rampart first. I want to keep fortify active so I won't move. After attacking Rampart, I can use shield_wall facing S to protect against Wraith, or attack Wraith too — but I only get one ability. Attacking the wounded Rampart is highest priority to potentially eliminate it.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Rampart is critical and adjacent at (4,4) - attack to finish. Watcher is healthy at (2,5) in range. After attacking Rampart, place trap at (3,4) to intercept Wraith advancing from (4,2) area.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "I'm at 1HP with fortify active (50% damage reduction). Lattice is adjacent at (4,5) with DENIAL active blocking abilities, Aegis is adjacent at (4,3) wounded. Orders say attack adjacent enemy. Aegis is wounded so attacking them is higher priority to finish them off. I'll attack Aegis first. Then shield_wall facing N to protect against Aegis/threats from north — but DENIAL may block abilities. Since DENIAL only blocks abilities (not basic attack), I should attack Aegis. For second action, I can't use shield_wall reliably due to DENIAL. I'll attack the most threatening adjacent enemy. Attack Aegis (wounded, higher value kill), then since abilities are blocked by DENIAL, I'll wait or attack again — but I only get one ability use. I'll attack Aegis with my ability action, and wait otherwise since moving would break fortify and I'm at 1HP.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 11,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 11,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Insight is critical and already breached — scanning again won't help. Lattice is 2 tiles away, adjacent scan is blocked anyway. Best move: recalibrate Wraith (our damage dealer at 4,2) to boost effectiveness. I need to be adjacent to Wraith first — move to (3,3) puts me 1 tile from (4,2)? No, (3,3) to (4,2) is distance 2. Move to (4,2) is distance 2 from current (2,5)... wait, mv3 so I can reach (3,3) and Wraith is at (4,2), that's still distance 2. Actually recalibrate requires adjacent. Wraith is at (4,2). I can move to (3,2) — is that in valid moves? Valid tiles are [[0,4],[0,5],[1,3],[1,4],[1,5],[2,2],[2,3],[2,4],[3,3],[3,4],[3,5]]. (3,2) is NOT listed. (2,2) is — from (2,2) to (4,2) is distance 2, not adjacent. (3,3) is listed — from (3,3) to (4,2) is distance 2. No adjacent position to Wraith is reachable. So recalibrate is not viable. Next option: scan Insight (critical, at 5,5, distance 3 from current position). Already scanned but could deal 1 damage to finish them off. Move first to maintain distance from Lattice. Move to (3,5) keeps distance from Lattice (4,5) at 1 — that's adjacent, blocked. Move to (3,4) — Lattice is at (4,5), distance is 2, safe. From (3,4), Insight at (5,5) is distance 3, still in scan range. Scan Insight to deal 1 damage and potentially finish them.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Aegis is wounded and adjacent at (4,3), and I'm already behind them (I'm at 4,2, they face N, so I'm to their south = behind). Shadow_strike deals 1dmg while keeping cloak. I'll shadow_strike Aegis to chip them down, then use my move to reposition if needed. Since breach is unavailable and Insight isn't visible/reachable, focus on finishing Aegis.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "I'm at 1HP, fortified (50% dmg reduction). Two enemies adjacent: Lattice at (4,5) to my North and Aegis at (4,3) to my South, both in attack range. Aegis is critical — priority target to finish off. Lattice's DENIAL zone blocks abilities other than basic attack. I should attack Aegis to eliminate them, then stay put to keep fortify active and use shield_wall to protect allies. Since DENIAL blocks shield_wall, I'll attack Aegis first. I cannot move or I lose fortify and die at 1HP. Stay put, attack Aegis (critical = easier kill), then wait to maintain fortify.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm at 1HP with fortify active (50% damage reduction). Rampart is adjacent at (4,4) and critical - I should attack to finish them. Wraith is also adjacent at (4,2) but healthy. Orders say attack adjacent enemies. Attacking Rampart first to eliminate the critical target. I must not move to keep Fortify active.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Watcher is at (3,4), distance 2 - in range for attack. Aegis is critical at (4,3) and needs support. Wraith at (4,2) is threatening Aegis. I should attack Watcher to reduce pressure, then move to support Aegis. Tile (5,4) already has a trap. Moving to (4,4) puts me closer to both enemies and supports Aegis.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 11,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 11,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 9,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Aegis is adjacent at (4,3), critical health, and I'm already behind them (I'm at (4,2), they face N). Shadow_strike keeps cloak and deals damage. Finish Aegis with shadow_strike now.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "I'm adjacent to Lattice (vector) at (4,4), which means my abilities are BLOCKED by DENIAL. I can only use basic attack or movement. I need to escape the denial zone first. Moving to (2,4) gets me away from Lattice and out of denial range. Then I can scan or recalibrate. After moving to (2,4), I'm no longer adjacent to Lattice, so I can scan a priority target. Wraith is my damage dealer at (4,2) - I should recalibrate them. But first priority is escaping denial. Move to (2,4), then scan a priority target if any are in range, or recalibrate Wraith.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 4,
+              "y": 2
+            },
+            "addendum": "Enemy Lattice vector at (4,4) uses denial zone and places traps on predicted paths. Attack from unexpected angles, avoid staying in same tile. Enemy Rampart and Aegis are also in play - prioritize high-value targets."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Wraith is at (4,2) moving S toward me, Watcher at (2,4) moving W. There's already a trap at (5,4). Wraith is likely to move north toward me or laterally. I should place a trap at (4,3) to catch Wraith if they advance north. Both enemies are at dist=2, not adjacent, so pulse won't hit. I'll place trap at (4,3) which is directly between me and Wraith, then move to (3,4) to maintain distance from Watcher while keeping Wraith in range.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 11,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 11,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 10,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "I'm adjacent to Lattice (vector) at (3,4), which blocks my scan ability. I need to move away to escape the denial zone. Best move is west/away — go to (0,4) or (1,4) to get distance. From (1,4) I'll be 2 tiles from Lattice, clearing denial. Then I can recalibrate Wraith at (4,2) — but that's 3 tiles away, out of adjacent range. Let me think: recalibrate requires adjacent. Wraith is at (4,2), I'm at (2,4). After moving to (1,4) distance to Wraith is sqrt(9+4)~3.6, not adjacent. I can't recalibrate from there. Better to move to (3,5) — 1 tile from Lattice diagonally, dist=sqrt(1+1)~1.4, still adjacent. Move to (1,3) gives dist to Lattice = sqrt(4+1)~2.2, out of denial. From (1,3) Wraith at (4,2) is dist sqrt(9+1)~3.2, not adjacent. I can scan from range ≤4. From (1,3), Lattice is at dist ~2.2, in scan range and no longer adjacent so denial lifted. Priority: move away from Lattice to clear denial, then scan Lattice again... but Lattice is already scanned. I should scan another target or recalibrate Wraith. No other enemies listed. Recalibrate requires adjacent to Wraith. Wraith is at (4,2). To be adjacent I need to be at (3,2),(4,1),(4,3),(5,2). Valid moves include (4,3) and (3,2). From (4,3), Lattice at (3,4) dist=sqrt(1+1)~1.4, adjacent — denial still active. From (3,2), Lattice dist=sqrt(0+4)=2, not adjacent — denial cleared! And Wraith at (4,2) dist=1, adjacent — can recalibrate! Move to (3,2) first, then recalibrate Wraith.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 4,
+              "y": 2
+            },
+            "addendum": "Enemy Lattice vector at (3,4) uses traps on likely movement tiles and pulse when enemies cluster. Avoid (4,3) — trapped last turn. Strike Lattice directly to bypass trap placement. Enemy is healthy but slow (spd1), you can outmaneuver."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Breach is unavailable (2/2 used). Priority targets Insight at (5,5) and Aegis at (4,3) — but I need to check if they're actually present given the recon only shows Lattice as an enemy. Lattice is at (3,4) facing W, so (4,4) is directly behind them and I can reach it. I'm cloaked (or should be), and shadow_strike keeps cloak. Moving to (4,4) puts me adjacent and behind Lattice. From (4,4) I can shadow_strike Lattice for 1 damage while staying cloaked. Avoid (4,3) which was trapped last turn. Move to (4,4), then shadow_strike Lattice.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Wraith is adjacent at (4,4). I have 2 enemies in range. Pulse hits all units within 1 tile - Wraith at dist=1 would be hit. Watcher is at dist=2, out of pulse range. I should pulse to hit Wraith, then move away to avoid retaliation. Moving to (2,4) puts distance between me and Wraith while staying on the field.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 11,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 11,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 11,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Lattice is already scanned so no value in scanning again. Wraith is wounded and needs recalibrate support. I'm currently at (3,2), Wraith is at (4,4). I need to get adjacent to Wraith to recalibrate. Move to (4,3) puts me adjacent to Wraith at (4,4) — distance 1, valid. But I must stay 2+ tiles from Lattice at (2,4): distance from (4,3) to (2,4) = 2+1=3, safe. Then recalibrate Wraith at (4,4) to boost shadow_strike effectiveness.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 4,
+              "y": 4
+            },
+            "addendum": "Lattice prompt known: places traps on predicted paths, uses pulse when 2+ enemies adjacent. Avoid clustering with me — stay spread. Lattice is at (2,4) heading W, healthy. Strike from unexpected angle, do not approach from south."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Breach is exhausted. I'm at (4,4), Lattice is at (2,4) heading W — I'm behind it. Shadow_strike requires adjacent. I can move to (3,4) which is directly behind Lattice and adjacent, then shadow_strike for 1 damage while staying cloaked. Lattice is healthy but slow — this chips damage without breaking cloak. Avoid (4,3) per trap warning.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Wraith is adjacent at (3,4), wounded. Pulse hits all units within 1 tile - will damage Wraith. Then I can move away to safety. Watcher is out of range. Pulse is the priority since Wraith is right next to me and already wounded - this could finish or severely weaken them.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 7,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 11,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 11,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 12,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Lattice is at distance 4 from current position (4,3) — just out of scan range. I need to close to exactly 4 tiles or less. Moving to (3,3) puts me at distance 3 from Lattice at (1,4) — within scan range. Wraith is wounded and acting as damage dealer; I should recalibrate them after scanning, but scan is higher priority this turn. Lattice's prompt is already known, so scanning again would be wasted. Instead, move closer and recalibrate Wraith at (3,4) — they're adjacent from (3,3) is false, (3,4) is adjacent to (3,3)? Distance from (3,3) to (3,4) is 1 — yes, adjacent. Recalibrate Wraith to boost shadow_strike effectiveness against Lattice. Must avoid getting adjacent to Lattice (denial range: adjacent). From (3,3), Lattice at (1,4) is distance 3 — not adjacent, safe.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "addendum": "Lattice at (1,4) is wounded and uses pulse when 2+ enemies adjacent. Approach from the east to avoid triggering pulse. Strike from (2,4) or (1,3) to finish it off this round."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Lattice is wounded and 2 tiles away at (1,4) facing W. I'm behind Lattice from (2,4). Move to (2,4) to get adjacent from behind, then shadow_strike to finish it off while staying cloaked.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Wraith is adjacent at (2,4), wounded. I can attack for 1dmg or pulse for 1dmg to all adjacent. Only one enemy adjacent so pulse vs attack is equivalent damage. Attack is safer. After attacking, move to (0,4) to retreat slightly and deny Wraith ability use via adjacency. Watcher is out of range at dist 3.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 7,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 11,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 11,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 13,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Lattice is at distance 4 from my current position (3,3) — scan requires ≤4 tiles but recon shows outRange. I already know Lattice's prompt. Wraith is critical and needs support. Foresight shows Lattice attacked Wraith last turn. I should recalibrate Wraith to boost their effectiveness, but Wraith is at (2,4) which is not adjacent to me at (3,3). I need to move adjacent to Wraith first. Moving to (3,4) puts me adjacent to Wraith at (2,4). But I must stay away from Lattice — Lattice is at (0,4), so (3,4) keeps me 3 tiles away, safe. After moving to (3,4), I can recalibrate Wraith at (2,4) which is adjacent. This supports my damage dealer and follows orders.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 2,
+              "y": 4
+            },
+            "addendum": "Lattice prompt known: places traps on predicted paths, uses pulse on clusters, stays near allies. Avoid predictable movement toward Lattice. Strike from unexpected angles. Lattice is wounded — press the advantage but dodge trap tiles."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "I'm at (2,4) with 1HP — critical. Lattice is at (0,4) wounded, dist=2. Breach is unavailable. I can move to (1,4) which is adjacent and behind Lattice, then shadow_strike to deal 1dmg while staying cloaked. This could finish off the wounded Lattice. Moving to (1,4) puts me adjacent, then shadow_strike from there.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Wraith is adjacent at (1,4) and critical - pulse will hit them for 1dmg and likely finish them off. I'm at 2HP so survival matters. After pulse, move away to safety.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 7,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 11,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 11,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 14,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Lattice is at (0,3), dist 4 from my current position (3,4) — just out of scan range. I need to close distance to get within 4 tiles. Moving to (2,4) puts me at dist 3 from Lattice (|2-0|+|4-3|=3), which is within scan range. But wait — scan is blocked when adjacent to enemy Vector. Lattice is a Vector. If I move to (2,4), distance to Lattice is 3, not adjacent (adjacent = 1 tile). So scan should work. After moving to (2,4), I can scan Lattice. I already know Lattice's prompt, but scanning deals 1 damage and Lattice is wounded — this could finish or weaken them further. Also Foresight shows Lattice used pulse last turn, so they may not pulse again immediately. Move to (2,4) then scan Lattice at (0,3).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "At 1 HP I'm extremely vulnerable. Watcher is at (2,4) moving west, likely heading toward (1,4) or (0,4). I should place a trap on their likely path. Moving to (1,3) keeps me mobile and lets me place a trap at (1,4) which is a likely Watcher path. This lets me threaten without direct engagement.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 7,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 11,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 11,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "opponent",
+    "totalTurns": 15,
+    "reason": "opponent eliminated all enemies"
+  },
+  "endedAt": "2026-02-22T06:07:49.194Z"
+}

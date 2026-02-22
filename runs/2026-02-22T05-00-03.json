@@ -1,0 +1,2265 @@
+{
+  "id": "2026-02-22T05-00-03",
+  "startedAt": "2026-02-22T05:00:03.782Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 5,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 5,
+        "movement": 2,
+        "range": 2,
+        "speed": 2
+      },
+      "oracle": {
+        "maxHp": 6,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 11,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "vector": {
+        "maxHp": 7,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 11,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 2,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 8,
+        "healAmount": 5
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Marksman",
+        "class": "striker",
+        "prompt": "Maintain distance. Use precision_shot on high-value targets — medics first, then damage dealers. Use suppressing_fire if enemies close in."
+      },
+      {
+        "name": "Prophet",
+        "class": "oracle",
+        "prompt": "Scan early to give your team intel on enemy prompts. Target enemy specters with scan to track them after cloak. Use recalibrate on allies who need tactical adjustments. Stay safe at range behind your front line."
+      },
+      {
+        "name": "Veil",
+        "class": "specter",
+        "prompt": "Stay cloaked and flank. Prioritize assassinating the enemy damage dealer. Use breach on sentinels to break their defensive posture. Recloak whenever it drops."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Warden",
+        "class": "sentinel",
+        "prompt": "Hold the front line. Position between allies and enemies. Use shield_wall toward incoming threats. Attack adjacent enemies."
+      },
+      {
+        "name": "Remedy",
+        "class": "medic",
+        "prompt": "Stay adjacent to the most threatened ally. Use patch on the most wounded teammate. If all healthy, use overclock on your damage dealer."
+      },
+      {
+        "name": "Hawk",
+        "class": "striker",
+        "prompt": "Position for clear sight lines. Prioritize killing wounded enemies with precision_shot. If forced to move, retreat away from threats. Suppressing_fire to slow rushers."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Round 1, all enemies out of scan range from current position (1,1). Hawk is closest at dist=4 but scan requires ≤4 tiles AND I'm currently at dist=4 with no clear path to scan from here. I need to move north to close distance on Hawk at (1,5). Moving to (1,4) puts me at dist=1 from Hawk — well within scan range. I'll move north to (1,4) then scan Hawk to get intel on their prompt and deal 1 damage.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Veil",
+          "class": "specter",
+          "thinking": "Round 1, all enemies are far away (dist 5-6). Orders say to cloak first turn. I'll cloak now to gain invisibility for flanking, then advance toward the enemy damage dealers (Hawk striker at 1,5). Move toward center to close distance while cloaked.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 2,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "Hawk is wounded at (1,5) with 4/5 HP and needs healing. I'm at (3,4) and need to get adjacent to Hawk to use patch. Hawk is at distance 3, so I need to move closer first. Moving to (2,5) puts me adjacent to Hawk at (1,5) (dist=1). From (2,5) I can then use patch on Hawk.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Prophet is adjacent at (1,4) - precision_shot is blocked when adjacent to enemy. I can use attack (adjacent only, 1dmg) or suppressing_fire. Best option: attack Prophet for 1dmg, then move to (2,4) to get distance and better positioning for next turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "All enemies are out of range (dist 5-6, max range 2). Orders say maintain distance and use precision_shot on high-value targets. Remedy (medic) is the priority. Moving north toward (4,3) closes distance to 4 from Remedy/Hawk while keeping position. Still out of range after move, so wait for second action.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Both enemies are at distance 3, out of attack range. I need to advance and position between allies and enemies. Moving to (3,3) puts me closer to both threats and on the front line. Remedy is at (2,5) behind me, Hawk at (2,4) to my left. Marksman is at (4,3) to my southeast, Prophet at (1,4) to my southwest. Moving to (3,4) centers me between allies and enemies. No adjacent enemies to attack this turn, so I'll wait after moving.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 11,
+          "maxHp": 11,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 11,
+          "maxHp": 11,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Veil",
+          "class": "specter",
+          "thinking": "Cloak expires after this turn. Hawk is adjacent at (2,4) facing S — I'm not behind them and (2,5) is occupied by Remedy, so breach isn't viable. Priority is assassinating the enemy damage dealer (Hawk=striker). I can shadow_strike Hawk from current position to deal damage while keeping cloak active. Then move to (3,5) to get behind Warden for a breach next turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "Hawk is wounded at (2,4) with 4/5 HP and is adjacent to me (dist=1). I should patch Hawk. However, Veil (specter) is also adjacent to me at (3,5), which blocks patch/overclock. I need to move away from Veil first to use patch. Moving to (1,5) puts me at dist=1 from Veil (no longer adjacent) and keeps Hawk at (2,4) adjacent (dist=1 from (1,5) to (2,4) = 2... wait, manhattan dist from (1,5) to (2,4) = 1+1=2, not adjacent). Let me reconsider. Moving to (2,4) would be on top of Hawk - not valid. Moving to (1,3): dist to Hawk (2,4) = 1+1=2, not adjacent. Moving to (0,4): dist to Hawk (2,4) = 2+0=2, not adjacent. I need to stay adjacent to Hawk. From (2,5), Hawk is at (2,4) - dist=1, adjacent. But Veil at (3,5) is also adjacent, blocking abilities. If I move to (1,5): dist to Veil = 2 (not adjacent, unblocked!), dist to Hawk (2,4) = sqrt... manhattan = |1-2|+|5-4| = 2, not adjacent for patch. Hmm. Valid moves include (2,3): dist to Hawk (2,4) = 1, adjacent! Dist to Veil (3,5) = 1+2=3, not adjacent. So move to (2,3) first, then patch Hawk at (2,4).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Hawk is adjacent (dist=1) and attacked me last turn — dangerous. I already have Hawk's prompt. Remedy is a high-value scan target (dist=2, healer, unknown prompt). Warden also unknown but lower priority than Remedy. I should scan Remedy to expose their healing strategy. Then move away from Hawk who is adjacent and will likely attack again. Moving to (0,5) puts me at distance 2 from Hawk and 3 from Warden, keeping me safer while I still contributed intel.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Remedy (medic) is highest priority target at dist=2, in range for precision_shot. I haven't moved yet so precision_shot deals full 2dmg. I'll fire on Remedy first, then move to (5,3) to maintain distance from enemies while staying in range for next turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Veil is at dist=2 and in range for precision_shot. I haven't moved yet so no damage penalty. Veil is the closest threat and a specter - dangerous. Prophet is at dist=3, out of precision_shot range (needs ≤2). I'll shoot Veil with precision_shot for 2dmg, then hold position or reposition. No adjacent enemies so precision_shot isn't blocked.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Veil is adjacent at (3,5) and wounded — attack to finish or weaken. I'm fortified so staying put preserves 50% damage reduction. Attack Veil, then shield_wall North to protect allies from Veil's potential counterattack or incoming threats.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 0,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 11,
+          "maxHp": 11,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 11,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Hawk and Remedy are already scanned. Warden is at dist=4 which is out of scan range (needs ≤4 but recon says inRange=false, so must be exactly 4 but blocked or boundary issue). Foresight shows Warden will attack Veil at (3,5) — Veil is wounded. I should recalibrate an ally if possible, but recalibrate is adjacent-only and no allies are adjacent. Best play: move to (1,4) to get Warden in scan range and stay safe, then scan Warden to get its prompt intel. From (1,4), Warden at (3,4) is dist=2, well within range 4. This gives team valuable intel on the sentinel.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "Warden at (3,4) is wounded and needs a heal. I'm at (2,3), distance 2 from Warden. I need to move adjacent to Warden first, then use patch. Moving to (3,3) puts me adjacent to Warden at (3,4). That tile is in my valid moves list. Then I can patch Warden.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Veil",
+          "class": "specter",
+          "thinking": "I'm at (3,5) with 2HP, cloaked. Warden is adjacent at (3,4) facing S — I'm already behind them. Breach Warden to control them next turn (breaking their defensive posture per orders), then move to (2,5) to get behind Hawk for a shadow_strike or breach next round. Hawk is the priority damage dealer to assassinate. Breaching Warden now sets up a 2v1 on Hawk next turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "addendum": "Move toward Hawk at (2,4) to pressure the striker."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Remedy is the medic — highest priority target at dist=2, in range. I'm at (5,3), Remedy at (3,3), not adjacent so precision_shot is available. I can shoot Remedy for 2dmg without moving first. After shooting, I should maintain distance — staying at (5,3) or moving to (5,4) or (5,5) to keep separation.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Veil is wounded and adjacent at (2,5). Precision_shot is blocked when adjacent to enemy, so I must use regular attack on Veil to finish them. But wait - Veil is at dist=1 which means adjacent, so precision_shot is blocked. I can move away first to get range 2 on Veil, then use precision_shot. Move to (2,3) gives me dist=2 to Veil at (2,5), clearing the adjacency block. Then precision_shot Veil for 2 dmg to kill the wounded specter.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "secondResult": "Out of range"
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Orders say move toward Hawk at (2,4). That tile is in my valid moves list. Moving there puts me adjacent to Remedy at (3,3) and closer to Hawk at (2,2). I lose Fortify by moving but follow orders. No ability targets in range after moving either.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 11,
+          "maxHp": 11,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 11,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Veil",
+          "class": "specter",
+          "thinking": "I'm at (2,5) with 2HP, facing W. Warden is adjacent at (2,4) but breach is on cooldown. Orders say prioritize assassinating enemy damage dealer — that's Hawk at (2,2). I can reach (2,3) which is behind Hawk AND behind Remedy. Shadow_strike on Warden keeps cloak, but I'm at 2HP and need to avoid dying. Best play: shadow_strike Warden (1dmg, stays cloaked, adjacent), then move to (2,3) to set up breach on Hawk next turn when cooldown clears.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "All three enemies already scanned. Remedy is wounded and healing allies — Marksman targeted Remedy with precision_shot last round. Veil is wounded and Hawk is targeting (2,5) where Veil moved. Key threat: Warden is adjacent at (2,4) which blocks my scan ability. I need to move away from Warden first to enable scan, or use this turn differently. Since all enemies are scanned, I should use recalibrate on allies. Veil is wounded and moving north — I could move to (2,5) to be adjacent and recalibrate. But Hawk is targeting (2,5) with precision_shot. Better to recalibrate Marksman who's healthy at (5,4) — too far. Veil is at (2,3) — I'm at (1,4), that's adjacent diagonally... distance is sqrt(2) ~ not adjacent for recalibrate (needs adjacent only, likely Manhattan=1). Move to (1,3) to be adjacent to Veil at (2,3)? Dist = 1 (Manhattan). Yes! Then recalibrate Veil to warn about Hawk targeting them. Or move to (0,4) to escape Warden adjacency. Actually best play: move to (0,4) to escape Warden (no longer adjacent, scan unblocked), then recalibrate Veil at (2,3) — distance from (0,4) to (2,3) is 3, not adjacent. Instead: move to (1,3) — adjacent to Veil at (2,3), dist=1. Then recalibrate Veil warning about Hawk. Warden is at (2,4), distance from (1,3) to (2,4) is 2 — not adjacent, scan unblocked there too.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "addendum": "Warning: Hawk has precision_shot trained on your position at (2,5) — do NOT move there. Retreat west or north away from Hawk's sight line. Hawk is at (2,2) and prioritizes wounded targets."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses left). Warden is wounded at (2,4) dist=2, needs healing but I can't patch. Veil is adjacent at (2,3) which blocks abilities. I should move away from Veil to enable overclock, then use overclock on Hawk (damage dealer) or move toward Warden to stay adjacent. Moving to (3,4) keeps distance from Veil and gets closer to Warden at (2,4). From (3,4) Veil at (2,3) is dist=2, so overclock is unblocked. Hawk is at (2,2) dist=2 from (3,4) - not adjacent. Warden at (2,4) is dist=1 from (3,4) - adjacent! I can overclock Warden to help defense, or attack Veil. Actually from (3,4), Warden is adjacent so I can overclock Warden. Let me move to (3,4) then overclock Warden.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Remedy is the wounded medic at dist=2, highest priority target. I'm at (5,4), haven't moved yet so precision_shot deals 2dmg. Shooting Remedy at (3,4) first. Then move away to maintain distance — move to (5,5) to keep range and avoid being adjacent to enemies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Veil is adjacent at (2,3) which blocks precision_shot. I need to move away first to use precision_shot on the wounded Veil. Moving to (3,2) puts me 2 tiles from Veil and clears the adjacency restriction. Then I can fire precision_shot on Veil to finish them off.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Veil is adjacent and critical — I can finish them with attack. I have 2 ability uses (overclocked). Attack Veil first, then attack again to ensure elimination. I'm fortified so staying put is beneficial, but orders say move toward Hawk at (3,2). However, killing a critical enemy takes priority. Use both ability charges on Veil to secure the kill, then I can move next turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": "No unit at target"
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 9,
+          "maxHp": 11,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 11,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Remedy is wounded and is the highest-value target - already scanned. I should scan Remedy to deal 1 damage and potentially help Marksman finish them off. Remedy is at (3,4), distance 3, within my scan range of 4. After scanning, I'll stay put or reposition. Warden and Hawk prompts already known. Priority: scan Remedy for damage since they're wounded and could be killed by Marksman's precision_shot follow-up.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses left). Warden is wounded at (2,4) adjacent to me. I should use overclock on Warden or stay near them. No enemies in range. Warden is adjacent at dist=1. I'll use overclock on Warden to boost their effectiveness, then wait or reposition. Actually orders say use overclock on damage dealer if all healthy - but Warden is wounded. Since patch is unavailable, I'll use overclock on Hawk (our damage dealer) but Hawk is not adjacent (dist=2). I need to move closer to Hawk to overclock, but Warden needs protection. Best play: move to (3,3) to be closer to Hawk at (3,2), then overclock Hawk.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "All enemies are out of range (dist 4-5, my range is 2). Priority target is Remedy (medic, wounded) at (3,3) dist=4. I need to close distance. Moving to (4,4) gets me closer but still won't reach range 2. Best move is (4,4) which reduces distance to Remedy to ~2 tiles (Manhattan: |4-3|+|4-3|=2), potentially in range. Let me check: from (4,4) to Remedy (3,3) = dist 2, which is within range 2. Move to (4,4) then precision_shot Remedy.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "I have OVERCLOCKED status — 2 ability uses this turn. Marksman is at (4,4), dist=3, which is within my range-2 limit... wait, dist=3 means out of precision_shot range (≤2 tiles). I need to close distance. Moving to (4,3) gets me adjacent-diagonal to Marksman at (4,4) — dist=1, so precision_shot would work but I'd be adjacent to an enemy which blocks precision_shot. Better: move to (3,4) puts me at dist=2 from (4,4) which is exactly in range and not adjacent. From (3,4) I can fire precision_shot twice with overclocked. But wait — did I move? Yes, moving means precision_shot does 1dmg instead of 2dmg. Alternatively, stay at (3,2) — Marksman is dist=3, out of range. I must move closer. Move to (4,3): dist to Marksman=(4,4) is 1 — adjacent, blocks precision_shot. Move to (3,4): dist to (4,4) = sqrt(1+0)=1... no, (3,4) to (4,4) = 1 tile, adjacent — also blocks. Move to (4,2): dist to (4,4) = 2, not adjacent, in range! Fire precision_shot twice (1dmg each since I moved). Total 2 damage to Marksman.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (2,4) with 50% damage reduction. Orders say to move toward Hawk at (4,2), but Remedy is critical at (3,3) — I should protect them. Marksman is at (4,4) dist=2, threatening both Hawk and Remedy. Moving to (3,4) gets me adjacent to Marksman's approach path and closer to Remedy. I can use intercept to protect Remedy from Marksman. Let me move to (3,4) first to close distance, then intercept to protect Remedy.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "intercept",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 9,
+          "maxHp": 11,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 11,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses left). I'm at 2/11 HP, very low. Warden is adjacent at (2,3) and wounded. I can't heal but I can use overclock on Warden to boost their effectiveness. Move closer to Warden first if needed - they're already adjacent at dist=1. I should use overclock on Warden (adjacent ally) to give them 2 abilities next turn, boosting damage output. I take 1 dmg from overclock but at 2 HP that's risky - I'll go to 1 HP. Still, it's the best play since I can't heal. Move to (2,4) to stay safe from Marksman at (4,4) while staying adjacent to Warden at (2,3).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Remedy is critical and about to overclock an enemy damage dealer — that's a priority threat. I already have Warden and Hawk's prompts. Remedy is at (2,4), dist 3, in scan range. Scanning Remedy deals 1 damage to a critical target (could finish or soften) and reveals prompt. My Foresight shows Warden moving to (3,4) and Remedy moving to (3,3) this turn. I should scan Remedy now before she moves out of position, then move to stay safe. Current pos (0,3), I can stay or reposition. Remedy at dist 3 is scannable. Scan her for damage + intel confirmation.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Remedy (medic) is critical and in range at dist=2 from my current position. Priority orders say medics first. I can use precision_shot on Remedy at (2,4) without moving to preserve full 2dmg. Hawk is also in range but medic elimination is higher priority. I'll shoot Remedy first, then move away to maintain distance from Hawk at (4,2).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Both enemies are out of range. Marksman is at (5,5), dist=4 from my position (4,2). Need to close to range 2. Moving to (5,3) gets me dist=2 from Marksman at (5,5) - that's exactly range 2 for precision_shot. Check: |5-5|+|3-5|=0+2=2. Valid. I'm not adjacent to any enemy so precision_shot is not blocked.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "I'm at (2,3) with Fortify active (50% dmg reduction) and Overclocked (2 ability uses). Hawk is at (5,3) to my east. Prophet is at (0,4) to my west at dist 3 — a threat approaching from behind. Marksman is at (5,5) wounded and far. Orders say hold the front line between allies and enemies. Prophet is the immediate threat at dist 3 approaching from the west. I should move east toward (4,3) to position between Hawk and any approaching enemies, then use shield_wall west toward Prophet to protect against incoming damage. With 2 ability uses, I can shield_wall and still have another ability — but attack has no targets in range. I'll move to (4,3) to close toward Hawk and threaten Marksman's approach, then shield_wall facing West toward Prophet.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 5,
+              "y": 3
+            },
+            "direction": "W"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 11,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 11,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Both enemies are out of scan range (Warden at dist 5, Hawk at dist 6, scan range is ≤4). I've already scanned both enemies so their prompts are known. Foresight shows Hawk used precision_shot on Marksman (5,5) last turn — Marksman is wounded and Hawk will likely repeat. I should recalibrate Marksman to warn about Hawk's targeting, but Marksman is at (5,5) and I'm at (0,4) — not adjacent. I need to close distance. Moving to (3,4) gets me closer but still not adjacent to Marksman. Best play: move toward Marksman to eventually recalibrate, or move to get enemies in scan range for future turns. Moving to (3,4) is my max reach this turn — still not adjacent to Marksman at (5,5). I'll wait this turn or reposition. Actually let me move to (2,4) to stay safe and closer to the action, then wait since no ability is useful right now.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Hawk is a striker at dist=2, high-value damage dealer. I'm at (5,5), Hawk at (5,3) — that's directly south, dist=2, within precision_shot range. I haven't moved yet so no movement penalty. I should fire precision_shot on Hawk for 2dmg, then move to (4,5) to maintain distance from Warden at (4,3).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Marksman is wounded and in range at dist=3. I'm at (5,3) and haven't moved, so precision_shot deals 2dmg. Marksman is wounded - likely 1-2HP left, so 2dmg should finish them. No adjacent enemies so precision_shot is not blocked. Fire first, then move to (5,5) to gain distance from threats.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (4,3) with 50% damage reduction. Hawk is wounded at (5,5) to my north. Marksman is at (4,5) distance 2 to my north - a threat to Hawk. If I move to (4,4), I'll be adjacent to Marksman's path and can shield_wall north to protect Hawk. Moving to (4,4) puts me at distance 1 from Marksman at (4,5), allowing an attack next turn or shield_wall now. Let me move to (4,4) to interpose between Marksman and Hawk, then shield_wall North to protect Hawk from Marksman.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 5,
+              "y": 5
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 11,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 11,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Hawk is at (5,5) wounded and just tried to precision_shot Marksman at (4,5) — that's a kill threat next turn if Hawk gets in range. Warden is healthy at (4,4) shielding north toward Hawk's position. I've already scanned both enemies. Priority: recalibrate Marksman to warn about Hawk's kill intent and advise repositioning, since Marksman is wounded and adjacent to Hawk. I'm at (2,4), Marksman is at (4,5) — that's distance 3, not adjacent. So recalibrate is out of range. Scan is only useful for unscanned enemies. I should move closer to recalibrate Marksman next turn, or scan isn't needed. Best move: reposition to (3,5) to get adjacent to Marksman at (4,5) for recalibrate next turn, staying behind the front line. This turn I'll move to (3,5) and wait — no ability targets available that are useful.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 4,
+              "y": 5
+            },
+            "addendum": "Hawk at (5,5) is wounded but will prioritize precision_shot to kill you — you are its primary target. Reposition away from (5,5) or use cover. Do not stay at (4,5)."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Marksman is adjacent (dist=1) and wounded — precision_shot is blocked when adjacent to enemy. Must use basic attack or suppressing_fire. Marksman is at (4,5), I'm at (5,5). Attack deals 1dmg; Marksman is wounded so likely low HP — attack could finish them. Suppressing_fire hits a 2-tile line from target but Marksman is adjacent so attack is cleaner. After attacking, I can't use precision_shot this turn anyway. Prophet at dist=2 is healthy — secondary threat. Priority: kill wounded Marksman with attack, then consider move to break adjacency for next turn or use suppressing_fire on Prophet.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "I'm at (4,5) with 2HP, Warden is adjacent at (4,4) which blocks precision_shot. Hawk at (5,4) is wounded and targeting me. I need to reposition away from both threats. Valid moves: (2,5), (3,4), (4,3), (5,5). Moving to (2,5) gets me away from both enemies and gives distance. From (2,5) I can use precision_shot on Hawk (dist would be ~3, out of range2) or Warden. Actually from (2,5), Hawk at (5,4) is dist=sqrt(9+1)~3.2, out of range. Warden at (4,4) is dist=sqrt(4+1)~2.2, also out of range2. Better to move to (3,4) — dist to Warden(4,4)=sqrt(1+0)=1, still adjacent. Move to (5,5) — Hawk is at (5,4), dist=1, too close. Best: move to (2,5), then use suppressing_fire on Hawk if in range, or wait. From (2,5): Hawk at (5,4) dist=sqrt(9+1)>2, out of range. Warden at (4,4) dist=sqrt(4+1)>2, out of range. So I move to (2,5) and wait — getting out of danger is priority with only 2HP.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (4,4) with 50% damage reduction. Hawk is wounded at (5,4) to my south. Enemies are Prophet at (3,5) and Marksman at (2,5), both out of attack range. I should move toward the enemies to close the gap while positioning between them and Hawk. Moving to (3,4) gets me closer and keeps me between Hawk and the enemies. From there I can use shield_wall to protect Hawk from the western threat direction.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 5,
+              "y": 4
+            },
+            "direction": "W"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 11,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 11,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 9,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Both enemies already scanned. Warden is adjacent at (3,4) — dangerous, I need to back off. Hawk is wounded at (5,4) — priority target but at range 3. Marksman is wounded and nearby. Best move: step back to (4,5) to get out of Warden's attack range while keeping Hawk in scan range. Then recalibrate Marksman to focus Hawk for a kill, or scan Hawk again isn't needed since prompt known. Actually, I should recalibrate Marksman to coordinate killing Hawk — Marksman is adjacent to me at (2,5). Wait, recalibrate is adjacent only and Marksman is at (2,5), I'm at (3,5) — that's adjacent. Move first to (4,5) then recalibrate won't reach Marksman. Better: recalibrate Marksman first while adjacent, then move away from Warden.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 2,
+              "y": 5
+            },
+            "addendum": "Hawk at (5,4) is wounded — prioritize moving into range and attacking to finish them off. Avoid Warden at (3,4)."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Prophet is adjacent (dist=2) and healthy but in range. Marksman is wounded but out of range at dist=4. I'm at 2HP so I need to be careful. Prophet is the immediate threat at (4,5). I can use precision_shot on Prophet since dist=2 and I haven't moved yet (full 2dmg). I'm not adjacent to Prophet so precision_shot isn't blocked. After shooting, I should consider repositioning. Let me shoot Prophet first, then move to (5,5) or (5,3) to maintain distance from threats.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "I'm at (2,5) with 2HP, very vulnerable. Hawk is my primary threat but at dist=5, out of range. Warden is at (3,4), dist=2 and healthy — I can hit it with precision_shot for 2dmg. Orders say avoid Warden but also say to prioritize attacking Hawk when in range. Warden is the only target in range. My orders say medics first then damage dealers. Warden is a sentinel. I should shoot Warden with precision_shot (2dmg, dist=2, in range, no move needed so no penalty), then consider repositioning. If I shoot first then move, I preserve the full 2dmg. Move to (1,5) or (0,5) to increase distance from Warden and create separation from Hawk's approach vector.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Prophet is only 2 tiles away at (4,5). I can move to (4,4) to close in and position between allies and enemies. From (4,4) Prophet would be adjacent at (4,5), allowing an attack. This also keeps me between Hawk at (5,3) and the enemies. Moving loses Fortify but attacking Prophet is worth it.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 5,
+          "position": {
+            "x": 0,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 11,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 11,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 10,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "I'm at 2HP — critical. Foresight shows Warden will attack me at (4,5) and Hawk used precision_shot on me last turn. I need to escape. Move away first, then recalibrate Marksman who is wounded and could use tactical support. Best escape: (5,5) moves me away from Warden at (4,4) and out of easy reach. Then recalibrate Marksman at (0,5) — but that's out of adjacent range. Actually recalibrate is adjacent only, so I can't reach Marksman from anywhere useful this turn. Instead, after moving to (5,5), I could attack Hawk at (5,3) which is dist 2 — no, attack is adjacent only. Hawk is at (5,3), from (5,5) that's dist 2. No attack possible. Scan Hawk from (5,5)? Hawk already scanned. Warden already scanned. I should just move to safety. Move to (5,5) to escape Warden's attack range, then wait — I have no good ability targets from there.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Prophet is wounded and adjacent (dist=2) at (5,5). I'm at (5,3). Prophet is not adjacent to me (dist=2), so precision_shot is not blocked. I can use precision_shot on Prophet for 2dmg which should finish off a wounded enemy. I haven't moved yet so I get full 2dmg. After shooting, I can stay put or reposition.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Both enemies are out of range. Hawk is at (5,3) wounded and is my priority target. I need to close distance. Moving to (2,5) gets me closer to Hawk while still being cautious. From (2,5) Hawk at (5,3) is still dist=5, out of range 2. Best I can do is move toward them. Let me move to (2,5) to advance, then wait since no targets in range.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Marksman is at (2,5), dist 3, out of melee range. Hawk is wounded at (5,3) to my south. I need to position between the Marksman and Hawk. Moving to (3,5) puts me closer to the Marksman and more directly in the line between them. I'm fortified but moving will break that — worth it to intercept. After moving to (3,5), Marksman is still dist 2, still out of adjacent range for attack, but I'm blocking the path and can shield_wall toward W to protect against incoming fire.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 5
+            },
+            "direction": "W"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 11,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 11,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 11,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Marksman is at (2,5), distance 5, out of range. I need to close distance. Moving to (4,5) would get me closer but valid moves don't include that. Best move toward Marksman is (4,4) or (4,3). Moving to (4,5) isn't available, so (4,4) gets me to dist 3 from Marksman - still out of range 2. I need dist ≤2. From (4,4) Marksman at (2,5) is still dist 3. No shot available this turn. Move to best position and wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "I'm at (2,5) with 2HP, adjacent to Warden at (3,5). Hawk is wounded at (4,4), dist=3, out of range. I need to move to get Hawk in range (≤2 tiles) while avoiding the Warden. Moving to (2,3) or (2,4) won't help with Hawk range. Moving to (4,5) puts me at dist=1 from Hawk at (4,4) — but orders warn against staying at (4,5) due to Hawk targeting me. Valid moves include (3,4) but orders say avoid Warden at (3,4)... wait, Warden is at (3,5) not (3,4). Moving to (3,4) gets me dist=1 from Hawk at (4,4) and dist=1 from Warden at (3,5). Moving to (4,5) gets me dist=1 from Hawk — I can precision_shot Hawk. But orders warn not to stay at (4,5). Let me move to (2,4) first to get away from Warden, then use suppressing_fire on Warden since Hawk is out of range. Actually, moving to (2,4) and then I'm dist=2 from Warden, dist=2 from Hawk at (4,4)... that's range for precision_shot on Hawk! Distance from (2,4) to (4,4) = 2 tiles Manhattan. That works. Move to (2,4), then precision_shot Hawk.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Marksman is at (2,4), dist=2, wounded. Hawk is critical at (4,4). I need to get adjacent to Marksman to attack. Moving to (2,5) puts me adjacent to Marksman at (2,4). Then I can attack.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 11,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 11,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 12,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "I'm at 1HP - critical situation. Hawk is at (4,4) at critical health, distance 2 - priority kill. Warden is adjacent at (2,5) - dangerous. I need to shoot Hawk first with precision_shot (2dmg should finish them if critical), but I haven't moved so I get full 2dmg. However, Warden is adjacent which blocks precision_shot. I need to move away from Warden first, then shoot Hawk. Moving to (3,3) gets me away from Warden and maintains range 2 to Hawk at (4,4) - dist would be sqrt(1+1)=~1.4, still in range. Actually from (3,3) to (4,4) is dist=sqrt(2)≈1.4, within range 2. Warden won't be adjacent. Then fire precision_shot on Hawk for 2dmg kill.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Marksman is at (3,3), distance 3, critical HP. I'm fortified at (2,5) with 50% damage reduction. Moving toward the enemy will break fortify. Best to advance to (3,4) to get adjacent to Marksman next turn while positioning between allies and enemy. Move to (3,4) then wait to maintain pressure.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 11,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 11,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "opponent",
+    "totalTurns": 13,
+    "reason": "opponent eliminated all enemies"
+  },
+  "endedAt": "2026-02-22T05:06:48.209Z"
+}
