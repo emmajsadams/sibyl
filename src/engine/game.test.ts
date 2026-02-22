@@ -631,7 +631,7 @@ describe("useAbility - patch", () => {
   test("heal cap at 5", () => {
     const g = createGame();
     const m = unit("m1", "medic", "player", { x: 2, y: 2 });
-    m.healsUsed = 8;
+    m.healsUsed = 10;
     const a = unit("a1", "sentinel", "player", { x: 2, y: 3 });
     a.hp = a.maxHp - 3;
     g.units.push(m, a);
