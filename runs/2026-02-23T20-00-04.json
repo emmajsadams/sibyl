@@ -1,0 +1,2086 @@
+{
+  "id": "2026-02-23T20-00-04",
+  "startedAt": "2026-02-23T20:00:04.483Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 4,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 4,
+        "movement": 2,
+        "range": 2,
+        "speed": 2
+      },
+      "oracle": {
+        "maxHp": 6,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 16,
+        "movement": 3,
+        "range": 2,
+        "speed": 3
+      },
+      "vector": {
+        "maxHp": 9,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 1,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 12,
+        "healAmount": 10
+      },
+      "overclock": {
+        "selfDamage": 0
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Ghost",
+        "class": "specter",
+        "prompt": "Cloak immediately on turn 1. Move toward the enemy medic or weakest target. Use shadow_strike when adjacent while cloaked. Use breach to sabotage high-value targets."
+      },
+      {
+        "name": "Watcher",
+        "class": "oracle",
+        "prompt": "Use scan to reveal enemy prompts and cloaked units. Stay at max range (≤4 tiles for scan). Use recalibrate on wounded allies to buff them. Keep distance from enemies and avoid adjacent vectors."
+      },
+      {
+        "name": "Bolt",
+        "class": "striker",
+        "prompt": "Position for clear sight lines. Prioritize killing wounded enemies with precision_shot. If forced to move, retreat away from threats. Suppressing_fire to slow rushers."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Pulse",
+        "class": "medic",
+        "prompt": "Prioritize healing the lowest HP ally. Position safely behind your sentinel. Use overclock on allies who can do the most with an extra action."
+      },
+      {
+        "name": "Insight",
+        "class": "oracle",
+        "prompt": "Scan priority targets each turn to reveal their strategy. Use recalibrate on your damage dealer to boost effectiveness. Stay behind allies and maintain range. Never get adjacent to enemy vectors."
+      },
+      {
+        "name": "Hawk",
+        "class": "striker",
+        "prompt": "Stay at maximum range. Use precision_shot on the most wounded enemy to secure kills. If no one is wounded, target the enemy medic. Never move adjacent to enemies."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "Round 1 — cloak immediately as instructed. Then move north toward the enemy cluster (Insight at 4,5, Pulse at 3,4). Moving to (5,4) gets me 3 tiles closer while staying cloaked.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 5,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "Bolt is at distance 4 from my current position (4,5) but the recon shows 'inRange: false' for scan. I need to get closer to scan Bolt. Moving to (4,2) puts me at distance 3 from Bolt at (4,1), which is within scan range. However, that would put me adjacent to Bolt (dist=1), and I need to check if Bolt is a Vector - it's a striker, not a vector, so adjacency is fine for scanning. Wait - moving to (4,2) puts me distance 1 from Bolt at (4,1), which is adjacent and within scan range. But I should also recalibrate Hawk or Pulse to boost them. Priority: move closer to scan Bolt, then scan. Move to (4,2) gives dist=1 to Bolt, well within scan range of 4.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Insight is in scan range at distance 3. Pulse is at distance 4 but the pre-computed data says out of range - I should move north to bring Pulse into range. Moving to (3,1) keeps me safe while potentially bringing Pulse to distance 3. But Insight is already in range now, so I should scan Insight first, then consider movement. Actually, scan Insight now (dist 3, in range), then move north to get closer to Pulse for next turn. Hawk is at dist 6, out of reach. No adjacent enemies so scan isn't blocked.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Insight is wounded at 5/6 HP and is 3 tiles away. I can move toward Insight to get adjacent for a heal next turn. Moving to (4,3) reduces distance to Insight at (4,2) to 1 — adjacent. But I should check if that's safe. Watcher is at (3,2), distance 2 from me currently. If I move to (4,3), Watcher is at dist ~1.4 (diagonal), so not adjacent. I can move to (4,3) and then use patch on Insight at (4,2) since they'd be adjacent. That gets the heal done this turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Insight is adjacent at (4,2) - precision_shot is blocked when adjacent to enemy Vector, but Insight is an oracle not a Vector. However, being adjacent means I should check: precision_shot requires LoS and range ≤2, does 2dmg but 1dmg if moved. Insight is at dist=1 (adjacent). I can use precision_shot without moving for full 2dmg. Pulse is at dist=2, also in range. Priority: shoot Insight first (closer, oracle is dangerous), then move away to avoid being sandwiched. Move to (5,1) after shooting to create distance.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "No enemies in range from current position (2,5). Watcher is closest at dist=4, need to close distance. Moving toward (3,4) gets me closer while staying back. From there Watcher at (3,2) would be dist=2, in range for precision_shot. Let me move to (3,4) to engage Watcher next turn, or if possible get closer. Valid moves include (3,4) which puts me at dist=2 from Watcher - that's in range! Wait, Watcher is at (3,2) and (3,4) gives dist=2, which is within rng2. I should move then shoot.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 16,
+          "maxHp": 16,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "Cloak has 1 turn remaining. Pulse medic is the highest-value target — killing the healer cripples the enemy team. I'm currently behind Pulse (facing S, I'm at 5,4 which is behind relative to facing). I can move to (4,4) which is directly behind Pulse and adjacent, then use breach to take control of the medic. Breach from behind while cloaked is the optimal play here.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "addendum": "Move away from allies and toward the edge. Stay out of healing range."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Orders say move away from allies and toward edge, stay out of healing range. Ghost is adjacent at (4,4). Insight is wounded at (4,2) but orders override healing. I should move to an edge tile far from allies. (4,0) gets me to the south edge and away from Hawk(3,4) and Insight(4,2). Ghost is at (4,4) so moving south puts distance. After moving to (4,0), no useful ability to use.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Insight is adjacent (dist=1) which blocks my scan ability per Vector adjacency rule — but Insight is an oracle, not a vector. Hawk is at (3,4) dist=2 and unscanned. Pulse at (4,0) dist=3 also unscanned. Foresight shows Hawk used precision_shot targeting (3,2) — my current position — last turn. I should move away from (3,2) to avoid Hawk's likely repeat shot. Moving to (2,2) keeps me at dist=2 from Hawk and dist=2 from Insight, then I can scan Hawk to reveal their prompt. Insight is already known. Pulse is a priority scan target too but Hawk is the immediate threat.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "Foresight shows Watcher will scan me and move to (3,2), and Bolt will precision_shot me from (5,1). I'm at 5/6 HP and taking fire. Ghost is at (4,4) unscanned. Priority: scan Ghost to reveal their strategy (dist=2, in range), then move away from Bolt's sight line. Moving to (3,2) would collide with Watcher's predicted position. Moving to (5,2) keeps me near Bolt (striker). Best move: go to (3,3) to get distance from Bolt and stay useful. Actually, scan Ghost first (they're a specter - high priority intel), then move to (3,3) to reposition away from Bolt's precision_shot angle.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Pulse (medic) is in range at distance 2 from my current position (5,1). I can use precision_shot for 2 damage on Pulse. I haven't moved this turn so I get full damage. This will bring Pulse to critical health or finish if already wounded. Stay in place to maintain range advantage.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Ghost (specter) is adjacent at (4,4), distance 1. Precision_shot is blocked when adjacent to enemy Vector, not specter - but I need to check: Ghost is a specter, not a Vector, so precision_shot should work. However, Ghost is at dist=1 (adjacent), and precision_shot requires LoS and range ≤2 tiles. Adjacent is within range 2, but I need to move away first to avoid being adjacent. Wait - the warning says precision_shot blocked when adjacent to enemy Vector specifically. Ghost is a specter, so no block. But I'm adjacent to Ghost, which is dangerous. I should move away to gain distance while still keeping Ghost in range, then use precision_shot. Move to (2,4) puts me at dist=2 from Ghost at (4,4) - that's still in range. From (2,4), Ghost at (4,4) is dist=2, within precision_shot range. No enemies wounded, so target the enemy with tactical priority - Ghost is closest threat. Orders say target enemy medic if no one wounded - no enemy medic visible. Target Ghost with precision_shot after moving to safe distance.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 15,
+          "maxHp": 16,
+          "position": {
+            "x": 4,
+            "y": 0
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "I'm at 2/4 HP with breach on cooldown. Insight (oracle) at (3,3) is a high-value target — oracles provide vision and coordination. I can move to (3,2) which is behind Insight, then use shadow_strike (stays cloaked if still cloaked, but I'm not cloaked). Actually I'm not cloaked so shadow_strike is just 1dmg adjacent. Hawk at (2,4) is adjacent-reachable via (3,4). Priority: Insight is higher value (oracle disruption). Move to (3,2) to get behind Insight and adjacent, then shadow_strike for 1dmg. This keeps me mobile for breach next turn when cooldown expires.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Pulse is at dist=4 which is exactly scan range but Range to Pulse shows inRange:false from current position. I need to scan Pulse to reveal their prompt. Moving to (3,0) puts me at dist from Pulse(4,0) = 1, too close. Let me check: from (2,2) Pulse is at (4,0), dist = |4-2|+|0-2| = 2+2 = 4. The range data shows outRange for Pulse but dist=4. Scan range is ≤4 tiles, so dist=4 should be valid. However, I must avoid being adjacent to enemy Vector — no vectors visible. Hawk and Insight are already scanned. Priority: scan Pulse to reveal their medic prompt. Ghost is wounded and could benefit from recalibrate. I'll scan Pulse first (dist=4, within range), then recalibrate Ghost who is at (3,2) which is adjacent to my current position (2,2).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 2
+            },
+            "addendum": "You are wounded — prioritize survival. Stay mobile, avoid clustering with enemies. Use your breach ability strategically on isolated targets and reposition after each engagement to avoid focus fire."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Orders say move away from allies and toward the edge. Allies are at (2,4) and (3,3), generally northwest. I should move southeast/south toward the edge. (5,0) is the corner edge tile, moving me away from allies and toward the boundary. Then wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "Foresight shows Watcher will scan (3,4) and Ghost will move to (4,4). I need to scan Watcher to reveal their prompt — they're at dist=2, in range. Ghost is adjacent at dist=1 which blocks scan (Vector adjacency rule — wait, Ghost is a specter not a vector, so scan not blocked). Ghost is wounded and adjacent, dangerous. My priority: scan Watcher first to get their prompt, then move away from Ghost who plans to use breach. Ghost is moving to (4,4) next action per Foresight, so if I stay I may get breached. Move to (3,4) after scanning — but Watcher will scan (3,4) targeting me there. Better to move to (4,3) to stay away from Ghost's projected path and out of Watcher's scan target. Actually scan Watcher first (they're in range at dist=2), then move to (4,3) to reposition away from Ghost.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Pulse is adjacent at (5,0), which means precision_shot is blocked if Pulse is a Vector - but Pulse is a medic, not a Vector, so precision_shot should work. However, at dist=1 (adjacent), precision_shot requires LoS and range ≤2, so it should be valid. But wait - Pulse is adjacent to me, and my precision_shot warning says blocked when adjacent to enemy Vector. Pulse is a medic, not a Vector, so I can use precision_shot. But precision_shot does 2dmg at range ≤2 tiles. At dist=1, this works. Pulse is healthy (likely full HP). I should use precision_shot on Pulse for 2 damage. Then I can move to create distance from threats or reposition. Actually, let me use precision_shot first while stationary (no movement penalty), then move away from Pulse to avoid melee retaliation. Move to (4,1) to gain distance and better positioning.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Ghost is wounded and at dist=3 (out of my range-2 precision_shot). Watcher is healthy at dist=2 (in range). I need to prioritize the wounded Ghost to secure a kill. Ghost is at (3,2), dist=3 from my current (2,4) - that's out of precision_shot range (max 2 tiles). I need to move closer to Ghost. Moving to (3,3) puts me at dist=1 from Ghost (3,2) - that's adjacent, which I must avoid. Moving to (2,3) puts me at dist=2 from Ghost (3,2) - that's in range and not adjacent. From (2,3), Ghost at (3,2) is sqrt(1+1)=1.41 tiles (Chebyshev dist=1 - adjacent!). Let me recalculate with Chebyshev distance: from (2,3) to (3,2) = max(|3-2|,|2-3|) = max(1,1) = 1 (adjacent - bad). From (1,3) to (3,2) = max(2,1) = 2 (in range, not adjacent - good!). Move to (1,3), then precision_shot Ghost at (3,2) from dist=2. That secures the kill on the wounded target per orders.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": "Out of range"
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 13,
+          "maxHp": 16,
+          "position": {
+            "x": 5,
+            "y": 0
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "I'm at (3,2) with 2HP, wounded. Insight (oracle) is at (4,3) facing E, and I'm already behind them — tile (3,3) is reachable in 1 step and is a valid breach position. Breach on Insight would make them obey me next turn, disrupting their support. I can move to (3,3) then breach Insight. This is high-value: oracles provide intel/support and controlling one cripples the enemy team. After breach, I'm adjacent to Insight but repositioned safely.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "addendum": "Move away from allies toward the enemy backline, do not attack or use abilities."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "Orders say move away from allies toward enemy backline, no attacks or abilities. Allies are at (1,3) and (5,0). Enemy backline: Bolt is at (4,1), Watcher at (2,2). Moving toward enemy backline means pressing forward. Current position (4,3). Valid moves include (5,2), (5,3), (5,4) which push toward enemy side. (5,2) moves me closer to Bolt's area and enemy backline while away from Hawk at (1,3) and Pulse at (5,0). Let me pick (5,4) to move into enemy territory while staying away from ally Pulse at (5,0).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "I'm at (2,2) with 4/6 HP. Hawk is at (1,3), dist 2 - within scan range (≤4) but NOT adjacent, so scan is valid. Hawk's prompt is already known. Insight and Pulse are out of range at dist 5. Foresight shows Insight scanned me last turn, so they know my position. Ghost is wounded at (3,3) and Hawk tried to precision_shot (3,2) - Ghost is the priority target. I should recalibrate Ghost to help them, but Ghost is at (3,3) - not adjacent to me at (2,2), dist=2, recalibrate is adjacent only. I need to move adjacent to Ghost first. Moving to (3,2) puts me adj to Ghost at (3,3) AND within scan range of enemies. But Foresight shows Ghost moving to (3,2) this turn - we'd collide. Better move to (2,3) - adjacent to Ghost at (3,3)? Dist from (2,3) to (3,3) = 1, yes adjacent. Then recalibrate Ghost. (2,3) is in valid moves. This keeps me at range from Hawk at (1,3) - dist from (2,3) to (1,3) = 2, safe. Let me recalibrate Ghost with a useful addendum to help them survive.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "addendum": "Hawk at (1,3) is targeting you with precision_shot. Stay mobile, avoid (3,2). Insight at (5,4) is scanning — keep moving unpredictably."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Orders are to move away from allies and toward the edge. I'm at (5,0). Valid moves include (5,1), (5,2), (5,3) which move north along the east edge. Moving to (5,3) keeps me on the east edge and away from Hawk at (1,3). Insight is at (5,4) which is adjacent distance 1 from (5,3) - that would put me adjacent to a wounded ally, which conflicts with staying out of healing range. Better to move to (5,2) or stay lower. Actually (5,3) is dist=1 from Insight at (5,4), meaning I'd be adjacent and could heal. Orders say stay out of healing range. I'll move to (5,2) instead - that keeps me on the east edge, dist=2 from Insight, out of adjacent healing range. Then wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Pulse (medic) is adjacent at distance 2 and in range. I can fire precision_shot for 2 damage. I haven't moved yet so no penalty. This would bring Pulse from healthy (likely 3-4HP) to wounded. No enemies are adjacent so precision_shot is not blocked by Vector. After shooting, I can hold position or adjust. Staying put keeps my options open.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Ghost is wounded and at dist=2, making it the priority target for precision_shot to secure a kill. Watcher is adjacent (dist=1) which blocks precision_shot per rules. I need to move away from Watcher first to enable precision_shot on Ghost. Moving to (0,3) keeps distance from Watcher and Ghost remains at dist=3 — out of range. Better: move to (1,4) to increase distance from Watcher (now dist=2) while keeping Ghost at dist=2 diagonally... wait, dist is manhattan. Ghost at (3,3), me at (1,4): |3-1|+|3-4|=3, out of range. Move to (2,4): Ghost dist=|3-2|+|3-4|=2, in range; Watcher at (2,3) dist=1, still adjacent — blocks shot. Move to (0,3): Watcher dist=|2-0|+|3-3|=2, not adjacent; Ghost dist=|3-0|+|3-3|=3, out of range. Move to (1,2): Watcher dist=|2-1|+|3-2|=2, not adjacent; Ghost dist=|3-1|+|3-2|=3, out of range. Move to (0,4): Watcher dist=|2-0|+|3-4|=3; Ghost dist=|3-0|+|3-4|=4. Move to (1,4): Ghost dist=3, out of range. Seems like escaping Watcher adjacency puts Ghost out of range. Best option: stay at (1,3) — Watcher is at dist=1 (adjacent), so precision_shot on Ghost is BLOCKED. Use suppressing_fire on Watcher (adjacent, dist=1, within range ≤2) to deal damage and slow. Or use basic attack on Watcher since adjacent. Actually suppressing_fire deals 1dmg in a 2-tile line — I should check direction. Watcher at (2,3), I'm at (1,3), so Watcher is E of me. Suppressing_fire in E direction from Watcher would hit (2,3) and (3,3) — Ghost is at (3,3)! That hits both Watcher and potentially Ghost. Wait, suppressing_fire: '1dmg 2-tile line from target, range:≤2 tiles'. Target Watcher at (2,3), line extends E hitting (3,3) where Ghost is — wounded Ghost takes 1dmg, possibly finishing it. This is the best play: suppressing_fire targeting Watcher, dealing 1dmg to Watcher and 1dmg to Ghost (potentially killing wounded Ghost).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "suppressing_fire",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "direction": "E"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 12,
+          "maxHp": 16,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "Orders say move toward enemy backline, no attacks or abilities. I'm at (5,4). Enemy backline has Bolt at (4,1) and Watcher at (2,3). Moving toward Bolt's direction. Best move is (4,3) which advances toward enemies, then (4,2) to get closer to Bolt.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "I'm suppressed (movement reduced to 1), at 3/6 HP, critical situation. Ghost is critical and adjacent at (3,3). Foresight shows Watcher will recalibrate at (3,3) - that's where Ghost is, so Ghost gets support. Hawk already scanned. Insight already scanned. Pulse already scanned and breached. All three enemies already have known prompts - no new scan targets needed. Ghost is critical and adjacent - I should recalibrate Ghost to help them survive. Move to (2,2) to reposition away from Hawk's suppressing fire direction, then recalibrate Ghost at (3,3) which is adjacent from (2,2)? No - from (2,2), Ghost at (3,3) is distance 2, not adjacent. From current (2,3), Ghost at (3,3) is distance 1 - adjacent! So recalibrate Ghost now before moving. Recalibrate Ghost first (they're adjacent at (3,3)), then move to (2,2) to get further from Hawk.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "addendum": "You are critical - prioritize survival. Move away from enemies and avoid taking damage. Let allies handle offense."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "I'm at 1HP critical, suppressed (movement 1). Breach unavailable. No enemies in range. I can move 1 tile. Insight is at (4,2) facing S — I'm behind them at (3,3), and (4,3) is behind Insight and reachable. If I move to (4,3), I'll be adjacent to Insight and can shadow_strike for 1 damage while staying cloaked (if cloaked). But I'm not cloaked. At 1HP I need to weigh offense vs survival. Orders say prioritize survival at critical HP. Moving to (4,3) puts me adjacent to Insight who is healthy — risky. Moving to (3,2) or (2,3) gets me away. But shadow_strike deals 1 damage and doesn't break cloak — wait, I'm not cloaked. Regular attack would be 1 damage but breaks cloak. Shadow_strike works whether cloaked or not — it just 'keeps cloak if cloaked'. So shadow_strike adjacent does 1 damage. If I move to (4,3), I'm behind Insight and adjacent, and can shadow_strike for 1 damage. Insight has full HP so likely won't die. But this is an opportunity. At 1HP survival is paramount — moving toward an enemy is risky. I'll move to (3,4) to get some distance from Insight at (4,2) and avoid clustering. Then wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Insight at (4,2) is wounded (4/6 HP) and adjacent to me at (5,2) - distance 1, so I can heal them. Hawk is too far (dist=6). Bolt is at (4,1) dist=2, so not adjacent - I can safely heal Insight first. After healing, I should move away from Bolt to avoid being adjacent to enemies next turn which would block my abilities.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Insight is adjacent at (4,2) - precision_shot is blocked when adjacent to enemy Vector, but Insight is an oracle not a Vector. Wait, the warning says precision_shot is blocked when adjacent to enemy Vector class. Insight is an oracle, so precision_shot should work. However, at range 1 (adjacent), precision_shot deals 2dmg if I haven't moved. I should use precision_shot first before moving. Insight is healthy so 2dmg won't kill but will wound it. After shooting, I can move away to maintain range advantage and avoid being adjacent next turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Watcher is wounded and in range at dist=3. I can use precision_shot for 2dmg to potentially finish them off. I haven't moved, so no damage penalty. Stay at current position to maintain range advantage.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 12,
+          "maxHp": 16,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "At 1HP I'm critical and must prioritize survival. No enemies are in range this turn. Breach is exhausted. I should reposition away from danger rather than engage. Moving to (5,5) gets me far from Hawk at (0,3) and puts distance between me and Insight at (4,2). From there I can shadow_strike Pulse at (5,3) if they don't move — but wait, (5,4) is reachable and adjacent to Pulse at (5,3), letting me shadow_strike for damage while staying cloaked. Actually I'm not cloaked. At 1HP, engaging is risky. Let me move to (5,5) to stay away from enemies and wait — survival is paramount.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Insight is closest wounded ally at dist=2, at (4,2). I need to move adjacent to heal. Valid moves include (4,3) which would put me adjacent to Insight at (4,2). Ghost is critical at (5,5) dist=2 but I should prioritize healing. Moving to (4,3) then healing Insight with my last patch charge.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "Orders are to move away from allies toward enemy backline, no attacks or abilities. Allies are at (0,3) and (4,3). Enemies are at (3,1), (5,5), (2,2). Moving toward enemy backline means pushing toward Ghost at (5,5). Valid moves include (4,5) which moves me away from allies and toward the enemy backline. Then I can continue with a second move or wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Hawk tried to precision_shot me last turn but was out of range. Pulse has been breached and is moving erratically. Ghost is critical and nearby at (5,5). I should recalibrate Ghost to help them, but they're not adjacent. I can move closer to Ghost or scan Pulse again isn't needed. Best play: move toward Ghost to get adjacent for recalibrate, or scan Hawk/Pulse. Pulse is already breached. Hawk is at dist 3, in scan range. I could scan Hawk again but already know prompt. More valuable: move to (3,3) to get closer to Ghost at (5,5) - still not adjacent. Ghost is critical, recalibrate would help but I need to be adjacent. From (2,2), moving to (3,3) puts me at dist 3 from Ghost. Not adjacent. Better to scan Pulse or Hawk for 1 damage. Hawk at dist 3 - scan deals 1 dmg. Pulse at dist 3 - scan deals 1 dmg. Pulse is breached/healthy, Hawk is healthy. I should try to contribute damage. Move to (3,2) first to reposition, then scan Hawk or Pulse. Actually stay and scan Hawk for damage since Hawk tried to target me.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Pulse is in range at dist 3 but precision_shot requires ≤2 tiles - out of range for precision_shot. No wounded enemies in range. Hawk is wounded at dist 5, Insight is healthy at dist 5, both out of range. I can move closer to Pulse to get within range 2, then use precision_shot. Moving to (4,2) would put me adjacent-ish. Move to (4,2) puts dist to Pulse at 1 tile - that's in range for precision_shot. But wait, I need to check if I'll be adjacent to any Vector units - none present. Move to (4,2) then precision_shot Pulse at (4,3).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "All enemies are out of range (Watcher at dist=4, Bolt at dist=5, Ghost at dist=7). My range is 2. I need to close distance to get Watcher in range. Moving to (2,3) gets me closer to Watcher at (3,2) — distance would be 2, which is exactly my max range. That lets me use precision_shot on Watcher who is wounded. I haven't moved yet so precision_shot deals full 2dmg. Must avoid moving adjacent to enemies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 11,
+          "maxHp": 16,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "I'm at 1HP, critical condition. Insight is adjacent at (4,5). I cannot breach (used 2/2). Shadow_strike keeps cloak but I'm not cloaked. I need to survive. Moving away is priority - valid moves include (5,2), (5,3), (5,4), (3,5), etc. If I shadow_strike Insight it deals 1dmg but I'm already at 1HP and Insight is healthy - risky. Best survival play: move to (5,4) to create distance or use shadow_strike on Insight (1dmg, doesn't break any cloak state) then flee. Actually at 1HP, any hit kills me. I should flee entirely. Move to (5,3) to get distance from Insight, then wait. Or move to (3,4) away from Insight. Let me pick (5,2) to maximize distance from Insight at (4,5) and Pulse at (4,3). Wait as second action.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "No heals remaining, so patch is unavailable. Hawk is critically low at 2/4 HP but I can't heal. Bolt is adjacent at (4,2) — dangerous for me. I should move away from Bolt to avoid melee damage, then use overclock on Hawk who is at 2HP and could benefit from extra actions to contribute before dying. Moving to (3,3) gets me away from Bolt and closer to Hawk at (2,3) — dist would be 1, enabling overclock. Then use overclock on Hawk so he can attack twice.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "Bolt is within scan range (dist 3) and healthy — but already scanned. Ghost is critical and moved to (5,5) last turn, now adjacent to me at (4,5). Ghost plans to shadow_strike while cloaked — this is a critical threat. I need to move away from Ghost at (5,5) to avoid adjacency. Move to (3,4) to maintain distance. Then recalibrate Hawk (wounded striker at (2,3)) to boost their effectiveness — but Hawk is not adjacent. Pulse is at (4,3) after move, adjacent enough. Actually I should recalibrate an ally that's adjacent. After moving to (3,4), Pulse would be at (4,3) — not adjacent. Hawk at (2,3) — not adjacent from (3,4). No adjacent allies to recalibrate. Bolt is in scan range from current position (dist 3). Scan Bolt for 1 damage — already know their prompt but scan deals 1 damage. That would wound Bolt. Bolt plans to precision_shot (4,3) where Pulse will be — warning Pulse via recalibrate would help but no adjacency. Best play: scan Bolt from current position (4,5) dealing 1 damage, then move to (3,5) to stay safe from Ghost at (5,5).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "I'm at 2HP — critical survival priority. Foresight shows Hawk will precision_shot me at (3,2) and Watcher will scan me. I must move away. Pulse is breached and moving erratically — not a healing threat. I should move to (4,4) to escape Hawk's range and Watcher's scan, then scan Watcher who is currently scanning me at (0,3) — but Watcher will move to (3,2) first, so after I move to (4,4), Watcher ends at (3,2), dist=2, in scan range. Actually let me recalibrate Bolt who is wounded at (4,2) — adjacent to my destination (4,4) is not adjacent. Let me move to (4,3) — Bolt is at (4,2), that's adjacent. I can recalibrate Bolt to buff them. Moving to (4,3) puts me away from Hawk at (2,3) — dist=2 from (4,3), precision_shot has range? Striker precision_shot range is typically >1. Need more distance. Move to (5,3) — dist from Hawk(2,3)=3+0=3 tiles, safer. From (5,3) I can recalibrate Bolt at (4,2) — dist=sqrt(1+1)=1.4, not adjacent (need exactly adjacent). (4,3) to Bolt(4,2) is adjacent=1 tile. Go to (4,3), recalibrate Bolt to boost their striker effectiveness against enemies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 4,
+              "y": 2
+            },
+            "addendum": "Priority: use precision_shot on Pulse(medic) at approximately (4,3) — they are breached and isolated. Then target Insight(oracle) at (4,5). Hawk is wounded and will also target Pulse area. Coordinate kills on the medic first."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "I'm overclocked with 2 ability uses. Ghost is critical but out of range at dist=4. Watcher is wounded at dist=2 and in range - priority target to secure kill. Bolt is wounded at dist=3 also in range. I'll use both precision_shots: first on Watcher (wounded, closer, 2dmg should finish), then on Bolt (wounded). No movement needed - staying at current position keeps me at safe range from both enemies (dist=2 from Watcher, dist=3 from Bolt). I haven't moved so precision_shot does full 2dmg.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": "Out of range"
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Pulse(medic) is at (3,3), distance 2, in range for precision_shot. I'm at (4,2) and haven't moved, so precision_shot does full 2dmg. Priority orders say kill Pulse first - they're breached and isolated. Watcher is at (4,3) which is adjacent to Pulse, providing coordination. I'll fire precision_shot at Pulse for 2dmg. Then I can use suppressing_fire on Hawk at (2,3) to slow them, or wait. Actually, after precision_shot I have my move available. I should stay put or reposition. If I move I lose precision_shot effectiveness. Better to shoot Pulse first, then move to cover at (5,1) to avoid being adjacent to threats. Wait - I can do ability first then move. Shoot Pulse with precision_shot (2dmg, in range, no movement penalty), then move to (5,1) for better positioning away from threats.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 10,
+          "maxHp": 16,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "Watcher is at (4,3), critical health, within scan range (dist 3). Already scanned — prompt known. I should scan to deal 1 damage and potentially finish it off, or recalibrate Hawk who is wounded nearby. Hawk is at (2,3) and is my damage dealer. Pulse is healing nearby. Ghost is cloaked and critical at (5,2) — dangerous but out of range. Priority: scan Watcher to deal damage (it's critical, any damage helps finish it). I'm at (3,5), Watcher at (4,3) — dist 3, within scan range of 4. After scanning, I can stay put or reposition. No need to move since Watcher is already in range.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "I'm at 1HP — critical condition. Breach is unavailable. No enemies in range. Ally Bolt is at (5,1) also wounded. Pulse is at (3,3) facing W, and (4,3) is behind them and reachable. But engaging at 1HP is suicidal. I need to survive. Moving to (5,5) or (5,4) puts distance between me and Pulse/Hawk. Best survival move: go to (5,5) to get away from Pulse at (3,3) and Hawk at (2,3). No ability to use safely at 1HP with no breach and no adjacent enemies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses left). Hawk is critically wounded at 2HP but I can't heal. I should use overclock on Hawk at (2,3) - he's adjacent (dist=1) and could do the most damage with an extra action as a striker. I need to move adjacent to Hawk first. I'm at (3,3), Hawk is at (2,3) - we're already adjacent! So I can use overclock on Hawk directly. Then I should reposition safely - enemies are far at dist=4, so I can move to a safer position.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Both enemies are at distance 5, out of my range 2. I need to close distance. Ghost is critical and priority target. Moving to (4,3) gets me closer. From (4,3) Ghost at (5,5) is still dist ~2.8, out of range 2. Bolt at (5,1) is dist ~2.2, also out of range. Best I can do is move toward the nearest enemy. Moving to (4,3) puts me at dist 3 from Bolt and dist ~2.8 from Ghost - still out of range. No shot available this turn even with overclocked. I should advance as close as possible without going adjacent. Move to (4,3) to close gap.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "I'm at (5,1) with 2HP, facing south. Hawk is at (4,3), dist=3, wounded - out of my range 2. Orders say prioritize Pulse the medic, but both Pulse and Insight are dist=6, out of range. Hawk is the only enemy in range at dist=3 but that's beyond my range-2 precision_shot. I need to move closer. Moving to (5,3) gets me to dist=2 from Hawk at (4,3) - that's diagonal, so dist = max(|5-4|,|3-3|) = 1 tile away, within range. Wait - (5,3) to (4,3): x diff=1, y diff=0, Chebyshev dist=1, that's adjacent. Precision_shot needs LoS and range ≤2. Moving to (4,2) puts me at dist=1 from Hawk (adjacent), which enables attack but precision_shot is blocked if adjacent to enemy. Moving to (5,3): dist to Hawk = Chebyshev(5,3,4,3)=1, adjacent - blocks precision_shot. Moving to (4,1): dist to Hawk = Chebyshev(4,1,4,3)=2, not adjacent, enables precision_shot but I moved so it deals 1dmg. That would finish Hawk (wounded=1HP likely). Let me move to (4,1) then precision_shot Hawk.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 10,
+          "maxHp": 16,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 9,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "I'm at 1HP, critical condition. Breach is exhausted. Insight is 2 tiles away at (3,5) facing W, meaning (4,5) is behind them and adjacent — reachable in one move. Shadow_strike works while cloaked and keeps cloak. But I'm already cloaked from earlier? No, cloak status not shown. At 1HP I must survive. Moving to (4,5) puts me behind Insight and adjacent — I can shadow_strike for 1 damage while staying cloaked. Insight is healthy so won't kill, but it's the best offensive play. Risk: Insight acts before me (spd3 vs spd3, but I'm listed first in order as Ghost). I go first this round. Move to (4,5), then shadow_strike Insight to deal damage while maintaining cloak.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses left). Hawk is critically wounded at 1HP but I can't heal. Ghost (specter, enemy, critical) is at (4,5) dist=3. Insight is at (3,5) dist=2, wounded. I should move closer to Insight to potentially overclock them - Insight as oracle can do the most with an extra action. Moving to (3,4) puts me adjacent to Insight at (3,5) and I can overclock them. Also keeps me away from enemies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "Ghost is adjacent at (4,5) and critical — scan will deal 1dmg and likely finish it (already at critical). I have 2 ability uses from overclocked. First, scan Ghost to deal damage and potentially eliminate it. Then recalibrate Hawk at (4,3) who is critical and needs support — but recalibrate requires adjacent range and Hawk is 2 tiles away, so that's out of range. Instead, use second scan on... Bolt is out of range at dist 5. I could move first to get away from Ghost (adjacent means scan is blocked by Vector rule — but Ghost is a specter not a vector, so scan should work). Ghost is at critical so 1 more damage kills it. Scan Ghost first. Then for second ability, I need a valid target — Bolt is out of range. I'll move away to position better and use second scan attempt isn't needed. Actually: scan Ghost (kill it), then move to (2,5) to reposition away from front lines and stay ranged.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Bolt is wounded and in range at distance 2. I'm at 1HP so I need to secure this kill quickly. I haven't moved, so precision_shot deals 2dmg which should finish off the wounded Bolt. Stay at current position to maintain range.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "I'm at 1HP critical. Hawk is at (4,3) distance 2, also critical. Orders say to target Pulse but they're out of range at dist 4. Hawk is in range and critical - killing them now is the right play. I can use precision_shot on Hawk at (4,3) for 2dmg to finish them off. I haven't moved so no penalty. Then move away to safety.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 10,
+          "maxHp": 16,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 10,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "Bolt is at (5,0), distance 8 - out of scan range (max 4). No enemies in scan range from current position. Pulse is adjacent at (3,4). I should recalibrate Pulse to boost effectiveness, then move closer to get scan range on Bolt next turn. Moving to (4,4) gets me closer while staying behind allies. Actually, recalibrate Pulse first then move toward better position.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "addendum": "Bolt is critical at (5,0), prioritizing precision kills. Move to intercept and finish them off this round."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses left). Insight is wounded at (3,3) with 5/6 HP but I can't heal. I can use overclock on Insight to give them 2 abilities next turn - that's valuable. I need to be adjacent to Insight at (3,3). I'm at (3,4) so I'm already adjacent to the south. I can use overclock on Insight right now, then move closer to support.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Both enemies are out of range at dist 4-5. Max move is 2 tiles. Moving to (4,1) gets me closer but Pulse at (4,3) would still be dist=2 away - within precision_shot range of 2. Let me check: from (4,1) to (4,3) is dist=2, which is exactly in range. Move to (4,1) then precision_shot Pulse at (4,3).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 9,
+          "maxHp": 16,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "opponent",
+    "totalTurns": 11,
+    "reason": "opponent eliminated all enemies"
+  },
+  "endedAt": "2026-02-23T20:06:46.719Z"
+}
