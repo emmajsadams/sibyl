@@ -1,0 +1,3278 @@
+{
+  "id": "2026-02-23T00-00-04",
+  "startedAt": "2026-02-23T00:00:04.344Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 5,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 5,
+        "movement": 2,
+        "range": 2,
+        "speed": 2
+      },
+      "oracle": {
+        "maxHp": 6,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 12,
+        "movement": 3,
+        "range": 2,
+        "speed": 3
+      },
+      "vector": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 10,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 2,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 10,
+        "healAmount": 8
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Lattice",
+        "class": "vector",
+        "prompt": "Control chokepoints with traps. Place them between enemy positions and your allies. Use denial to block adjacent enemy abilities. Pulse groups when possible."
+      },
+      {
+        "name": "Hawk",
+        "class": "striker",
+        "prompt": "Stay at maximum range. Use precision_shot on the most wounded enemy to secure kills. If no one is wounded, target the enemy medic. Never move adjacent to enemies."
+      },
+      {
+        "name": "Bulwark",
+        "class": "sentinel",
+        "prompt": "Advance toward the nearest enemy. Use shield_wall facing the direction with the most enemies. If an enemy is adjacent, attack them."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Viper",
+        "class": "vector",
+        "prompt": "Trap the paths enemies must take to reach your backline. Stay at medium range. Use pulse on clustered enemies. Denial blocks adjacent threats."
+      },
+      {
+        "name": "Longshot",
+        "class": "striker",
+        "prompt": "Stay at maximum range. Use precision_shot on the most wounded enemy to secure kills. If no one is wounded, target the enemy medic. Never move adjacent to enemies."
+      },
+      {
+        "name": "Aegis",
+        "class": "sentinel",
+        "prompt": "Push forward aggressively. Shield_wall facing the enemy cluster. If flanked, turn to face the biggest threat. Attack when possible."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "All enemies are out of range (min dist 5, max range 2). I need to advance. Moving to (0,2) gets me closer to Viper at (0,5) — still out of range but reduces distance to 3. No ability available this turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Lattice (vector) is the only enemy in range at dist=3. I can use precision_shot (range ≤2 tiles) — wait, dist=3 means Lattice is OUT of precision_shot range. I need to move closer but must NOT go adjacent to Lattice (vector denial). Lattice is at (2,1). Moving to (2,3) puts me at dist=2, which is in precision_shot range, and not adjacent. That's a valid approach. From (2,3) I can fire precision_shot on Lattice. I haven't moved yet so no penalty.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Round 1, no enemies adjacent. Nearest enemy is Longshot at (2,3), dist 3. I should advance north toward them. Best move is (2,2) to close distance. Then use shield_wall facing N toward the cluster of enemies (Longshot and Aegis both north).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 1
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Round 1, all enemies are distant. Hawk at (0,2) is closest at dist 3, approaching along x=0 column. I should move forward and place a trap on the path Hawk will take. Moving to (0,3) puts me in range to trap (0,2) or nearby tiles. Actually, trap range is ≤2 tiles, so from (0,3) I can trap (0,2) directly in Hawk's path. This denies the approach corridor and forces enemies to route around.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 0,
+              "y": 2
+            }
+          },
+          "secondResult": "Position occupied"
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Longshot is at (2,3), distance 2 from my position (2,1). I can place a trap at (2,2) where Bulwark currently stands — wait, Bulwark is there so that's occupied. I need an empty tile. (2,2) is occupied by Bulwark. I could move north to (2,2)... but Bulwark is there. Let me think: valid moves include (1,2) and (3,2) which are chokepoint tiles. If I move to (3,2), I'm adjacent to Longshot at (2,3) — that puts me in denial range of Longshot and I can block their abilities. Alternatively, I can place a trap first at (2,2) — but Bulwark is there. I could trap (3,2) from current position (dist=1, within range 2) — that's a valid empty tile on Longshot's likely path. Then stay put. Actually, placing a trap at (2,2) is blocked by Bulwark. Let me trap (3,2) — it's empty, within range 2, and on a flank path. Then I can move to (1,2) to get closer and apply denial to Viper/Longshot area. Or move first to (3,1) then trap (3,2) adjacent north. If I trap (3,2) from (2,1): distance = |3-2|+|2-1| = 2, within range. Valid. Then move to (3,1) to be closer. This puts a trap on Longshot's flank path.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Round 1, no enemies in range. Orders say push forward aggressively. Move to (2,3) to close distance with Bulwark at (2,2) — that puts me adjacent next turn. Then shield_wall facing South... wait, enemies are to my North/South. Bulwark is at (2,2), I'm moving to (2,3), so enemies are to my South. Shield_wall facing S to protect allies behind me. Actually Longshot is at (2,3) so I shouldn't move there. Move to (2,4) instead to push forward without occupying Longshot's tile. From (2,4) I'm 2 away from Bulwark. Shield_wall facing S to cover allies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 10,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 0,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 10,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "I'm adjacent to Viper which blocks precision_shot. I need to move away first. Valid moves include (1,1), (1,2), (1,3), (0,1), (0,4), (0,0). Moving to (1,1) or (1,3) gets distance from Viper. From (1,3) I'd be dist=2 from Longshot at (2,3) — in range for precision_shot. Let me move to (1,3) to get precision_shot on Longshot.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": "Cannot use precision_shot — adjacent to enemy Vector (Denial)"
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Both Bulwark and Hawk are adjacent (dist=1), which blocks precision_shot. I need to move away first to enable precision_shot. Moving to (3,3) keeps me at range 2 from Hawk at (1,3) — dist=2, so precision_shot works. Bulwark at (2,2) is also dist~1.4 tiles, within range 2. Hawk is a striker and higher threat than Bulwark sentinel. After moving to (3,3), Hawk is at dist=2, Bulwark at dist~1.4. I should target Hawk with precision_shot since strikers are higher priority. No wounded enemies, no medic on field, so target highest threat.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Aegis is at (2,4) dist=2, Longshot at (3,3) dist=2. Moving to (2,3) puts me adjacent to Aegis at (2,4) — I can attack. Longshot is to the NE, Viper to the NW. After moving I lose Fortify, but attacking Aegis is worth it. Shield_wall facing N covers Aegis direction.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Hawk is adjacent at dist=1, Bulwark at dist=2. Both in range for pulse. Pulse hits ALL units within 1 tile - that's Hawk for sure. I'm at (0,3), Hawk at (1,3). Pulse from my position hits Hawk. Bulwark is at dist=2, outside pulse radius. After pulse, I should move to (0,2) to create distance and potentially set a trap on a chokepoint path. Actually, better to pulse first then move back to create space. Pulse at my position hits Hawk (dist=1). Then move to (0,2) or (0,4) to reposition. Moving to (0,4) puts me further from enemies and closer to backline defense.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Bulwark is adjacent at (2,3) — attack it. I'm fortified so staying put keeps 50% damage reduction. Shield_wall facing S to protect allies from the enemy cluster to the south.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Longshot is at (3,3), dist=2, in range. There's already a trap at (3,2) between us. I'm at (3,1) facing E. I can move to (4,1) to reposition, then use pulse to hit Longshot if they're within 1 tile — but dist=2 so pulse won't reach. Better plan: attack Longshot directly (dist=2, range=2). Or place a trap to cut off their movement. Longshot is healthy at (3,3). Attack hits at range 2 for 1 dmg. Alternatively, move to (3,2) would be blocked by the trap there. I can move to (4,1) and then attack — Longshot would be at dist=3 from (4,1), out of range 2. Better to stay at (3,1) and attack Longshot at dist=2, then place a trap at (4,2) to control the flank. Wait — valid moves include (3,2) which has a trap; that tile is listed in valid moves so maybe I can move there. Actually traps are mines that trigger on enemy step, allies can walk through. (3,2) is in valid moves. If I move to (3,2), Longshot is at dist=1, in pulse range! Then pulse hits Longshot for 1 dmg. But I'd be very close to Longshot. Or attack from current position for 1 dmg, then place trap at (4,2) to control east flank. I'll attack Longshot now (range 2 attack), then move to (2,1) to reposition away from their counter.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 9,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 9,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "All enemies are healthy, no wounded targets to finish off. No enemy medic present. I'm at (1,3) with 3 enemies in range at dist=2. Viper is a vector at (0,4) - I must avoid moving adjacent. Orders say stay at max range and target the most wounded (none wounded, so prioritize as best target). Longshot is a striker and highest threat. I can use precision_shot without moving to keep full 2dmg. Stay put and fire precision_shot at Longshot at (3,3) - dist=2, in range, not adjacent to Viper so no block.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Hawk is wounded and at dist=2, making it the priority kill target. I'm currently at (3,3) and Hawk is at (1,3). Precision_shot has range ≤2 and I haven't moved yet, so I can use it from current position for full 2dmg. However, Bulwark is adjacent at dist=1 — need to check if that blocks precision_shot. Bulwark is a sentinel, not a vector, so no denial. Lattice(vector) is at dist=3, safe. I should fire precision_shot on Hawk first (2dmg to finish the wounded enemy), then move away from Bulwark to avoid being adjacent. Moving to (4,3) or (4,4) keeps distance from Bulwark and Lattice.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Bulwark is adjacent at (2,3) to my south. I'm fortified with 50% damage reduction. Orders say attack when possible and shield_wall facing enemy cluster. Attacking Bulwark now is the priority. If I move I lose fortify, so I should attack first, then consider shield_wall facing S to protect against Bulwark's attacks. Hawk is critical at dist 2 but I can't reach it without moving. Stay put, attack Bulwark, then shield_wall S to block damage from the enemy cluster to my south.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Hawk is critical and within range 2 — I can attack for 1dmg to finish them off. I'm not adjacent to any enemy so trap is available. After attacking Hawk, I'll place a trap at (1,2) to block the path Bulwark and any advancing enemies must take through the middle. This denies approach routes while I stay safe at (0,4).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "secondResult": "Out of range (max 2)"
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Longshot is wounded and only 2 tiles away at (4,3). I can attack them directly for damage. There's also a trap at (3,2) already placed. I should pressure Longshot who is wounded - a pulse would hit them from adjacent range. Move to (4,2) to get adjacent to Longshot, then pulse to deal 1 damage to all units within 1 tile (hitting Longshot). Or just attack for 1 damage. Actually, pulse hits ALL units within 1 tile - need to check if any allies are nearby. At (4,2), Longshot at (4,3) is 1 tile away. No allies nearby there. Pulse from (4,2) hits Longshot. Or I could attack Longshot directly since they're in range at dist=2 (attack is adjacent only - dist 1). Wait, attack range is adjacent only. Longshot is at dist=2. I need to move adjacent. Move to (4,2) puts me at dist=1 from Longshot at (4,3). Then I can attack or pulse. Pulse hits for 1 damage, attack hits for 1 damage - same. But pulse is AoE. Let me move to (4,2) then attack Longshot who is wounded - finishing them off would be ideal. Actually pulse from (4,2) hits Longshot at (4,3) for 1 damage. That works. Let me move to (4,2) and pulse targeting Longshot.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Aegis is adjacent at (2,4) to my north. Orders say attack adjacent enemies. I'm fortified with 50% damage reduction. Attack Aegis first, then use shield_wall facing north where Aegis and Viper are concentrated.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Longshot is wounded — priority target to secure a kill. Currently at dist=3 which is out of precision_shot range (max 2). Need to close to range 2. Move to (3,3) would put me adjacent to trap. Move to (2,2) gets me closer but Longshot at (4,3) would be dist=2, in range. Wait — from (1,3) Longshot is dist=3, out of range. But recon says Longshot IS in range from current position. Let me reconsider: dist is Chebyshev? (4-1)=3, (3-3)=0, so Manhattan=3, Chebyshev=3. Either way dist=3 > range 2. Recon says 'inRange' for Longshot though — trusting recon data. If Longshot is in range, use precision_shot on Longshot to try to finish them. I'm at 1HP so staying put is fine if I can kill from here. Trust the recon: Longshot inRange=true. Use precision_shot on Longshot first. Then wait.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "I'm adjacent to Lattice's denial zone, so precision_shot is blocked. I must move away first. Hawk is critical (low HP) but out of range at dist=3. I should move to escape Lattice's denial zone and get Hawk in range. Moving to (3,4) gets me away from Lattice and keeps distance from enemies. From (3,4), Hawk at (1,3) is dist=sqrt(4+1)=~2.2, still out of range 2. Moving to (5,4) puts me far from Lattice. From (5,4) Hawk is at dist=4+1=sqrt(17)~4, too far. Best move: go to (3,4) - dist to Hawk=(1,3) is sqrt(4+1)≈2.2 still out of range. Actually let me recalc: range is tile distance (Chebyshev or Manhattan?). Hawk at (1,3), from (3,4): dx=2, dy=1, Manhattan=3 still out. From (3,3): dx=2, dy=0, dist=2 - in range! And (3,3) is a valid move. That gets me away from Lattice (which is at 4,2, dist from 3,3 = dx=1,dy=1=Chebyshev 1... still adjacent). Try (3,4): Lattice at (4,2), dx=1,dy=2, Chebyshev=2, not adjacent. From (3,4) can I hit Hawk(1,3)? dx=2,dy=1, Chebyshev=2, YES in range! Move to (3,4) then precision_shot Hawk to finish him.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "secondResult": "Out of range"
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Bulwark is adjacent at (2,3). I'm fortified (50% DR). Orders say attack when possible and shield_wall facing enemy cluster. I'll attack Bulwark first, then shield_wall facing S to block incoming fire from the enemy cluster below. Staying in place preserves fortify.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Aegis is adjacent at (2,4) to my north. Orders say attack if adjacent. I'm fortified (50% DR) which is valuable. Attacking Aegis with my ability while staying put preserves fortify. Longshot and Viper are also to the north, so shield_wall facing N would help but attack takes priority on adjacent enemy.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 1,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Longshot is wounded at (3,4) dist 3, moving toward our position. There's already a trap at (3,2). I should move to (4,3) to get closer and place a trap at (3,3) to create a trap corridor — enemies moving south from (3,4) would hit it. Aegis is at (2,4) heading south too. A trap at (3,3) covers the approach path between Longshot and my allies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Hawk is critical and adjacent (dist=2, within range 2). I can attack Hawk to potentially finish it off. I'm at (0,4), Hawk at (1,3) - dist=2 which is within my range. After attacking, I should place a trap on a likely enemy approach path. Bulwark is at (2,3) moving north toward our backline - placing a trap at (1,2) or (0,3) could catch advancing enemies. Let me attack Hawk first (critical = likely to die), then trap a chokepoint.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "I'm at 1 HP so survival is critical. Longshot is wounded — priority target for a kill. I'm at (1,3), Longshot is at (3,4), distance 3 which is within precision_shot range (≤2 tiles... wait, dist=3 but recon says inRange:true). Viper is at (0,4) distance 2 — I must not move adjacent to Viper or my abilities get blocked. I should not move adjacent to any enemy. I can fire precision_shot at Longshot from current position since recon confirms inRange. I haven't moved this turn so full 2dmg applies. That should finish off the wounded Longshot. Stay put to avoid traps at (3,2),(3,3) and keep distance from Viper.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Hawk is at critical HP and dist=3, which exceeds my precision_shot range of ≤2. Bulwark and Lattice are both at dist=2 and in range. Hawk is the priority kill target but out of range. I could move closer to Hawk but that risks getting adjacent to enemies. Moving to (3,3) would put me at dist=2 from Hawk at (1,3) — still dist=2, not close enough. Actually dist from (3,3) to (1,3) = 2+0=2, yes in range. But (3,3) is a valid move tile. From (3,3), Hawk at (1,3) is dist=2, in range for precision_shot. However I haven't moved yet so no movement penalty. Wait — I need to check: if I move first then shoot, precision_shot does 1dmg (moved penalty). Hawk is critical, likely 1HP, so 1dmg should finish them. Let me move to (3,3) first, then precision_shot Hawk. But I must not move adjacent to enemies — Bulwark is at (2,3), so (3,3) keeps me at dist=1 from Bulwark diagonally = adjacent? (3,3) to (2,3) is dist=1, that IS adjacent. Bad. Stay at current position (3,4). From here Hawk is dist=3, out of precision_shot range (≤2). So I can't reach Hawk. Target Bulwark or Lattice with precision_shot. No movement penalty if I don't move. Precision_shot does 2dmg. Target Bulwark at (2,3) dist=2.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Aegis is adjacent at (2,4) to my north. Orders say attack adjacent enemies. I'm fortified so staying put preserves 50% damage reduction. I'll attack Aegis, then use shield_wall facing N to block damage from the enemy cluster (Aegis, Longshot) to protect Hawk who is critical.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 1,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Longshot is wounded and within range at (3,4). I have traps at (3,2) and (3,3) already placed. I should pulse Longshot since they're adjacent-ish, but pulse only hits within 1 tile (adjacent). Longshot is at dist=2 so pulse won't reach. I can use attack on Longshot (dist=2, but attack is adjacent only - no). My attack is range:adjacent only, and Longshot is dist=2. Trap is blocked when adjacent to enemy - Longshot is at (3,4) which is dist=2, not adjacent. I can place a trap. Move to (4,4) to get adjacent to Longshot for denial, then use pulse to hit them? Moving to (4,4) puts me adjacent to Longshot at (3,4) - dist=1, enabling denial and pulse. Pulse hits all units within 1 tile - that would hit Longshot. Let me move to (4,4) first, then pulse targeting Longshot at (3,4).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (2,4) with Bulwark adjacent to my south at (2,3). I should attack Bulwark (wounded, will likely finish or cripple it), then shield_wall facing S to protect against the enemy cluster. Hawk is critical at (1,3) - attacking Bulwark first is better since it's adjacent. After attacking, use shield_wall facing S to cover Longshot who is critical.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Hawk is critical and within range 2 from my position (0,4). I can attack Hawk at (1,3) to potentially finish it. There's already a trap at (0,3) blocking that path. I should pulse to hit Hawk if it's within 1 tile, but Hawk is at distance 2 so pulse won't reach. Attack is range 1 (adjacent only) so that won't work either. My best option is to use trap to further deny paths, or move closer to pulse Hawk. If I move to (1,4), Hawk at (1,3) would be adjacent - I could then pulse to hit Hawk (critical) for 1 damage which might finish it. But moving to (1,4) puts me adjacent to Hawk. Alternatively, trap is blocked if adjacent to enemy - Hawk is at (1,3), I'm at (0,4), not adjacent so trap is fine from current pos. Let me trap (1,4) to block enemy movement paths, then I'm already in range 2 of Hawk with my attack... wait, attack is adjacent only. So I can only damage Hawk via pulse (range 1 AoE) or trap. Trap at (1,4) would threaten that tile. Actually best: move to (1,4) to get adjacent to Hawk, then pulse hits Hawk (critical) for 1 damage to finish it. Risk: I'd be adjacent to Hawk but Hawk is critical so low threat.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "I'm adjacent to Lattice's denial zone, so precision_shot is blocked. I need to move away first. Bulwark is wounded and at dist=2 — priority kill target. Moving to (4,5) gets me away from Lattice's denial zone and keeps Bulwark in range at dist=2. Then I can use precision_shot on Bulwark.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": "Cannot use precision_shot — adjacent to enemy Vector (Denial)"
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Longshot is critical and adjacent (4,5) — attack to finish them. Then place a trap at (3,3) to block the chokepoint between Viper/Aegis and Bulwark, protecting my ally. I'm not adjacent to Viper so trap is valid.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Aegis is adjacent at (2,4) — attack immediately. I'm fortified so I should not move to keep 50% damage reduction. Viper is at distance 2 so I can't attack them. After attacking Aegis, use shield_wall facing North to block damage from both Aegis and Viper who are both to my north.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm at (2,4) with 4HP, fortified, facing Bulwark at (2,3) which is adjacent and wounded. Orders say push forward aggressively and attack when possible. I should attack Bulwark to finish it off. If I move, I lose fortify — but Bulwark is already adjacent so I can attack without moving. I'll shield_wall facing S to block any threat from that direction, or better: attack Bulwark first, then shield_wall facing the enemy cluster. Lattice is at (4,4) to the E at dist=2, denial range adjacent so I should stay away. Attack Bulwark now while fortified, then shield_wall N to block Lattice if it advances.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 1,
+              "y": 4
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Bulwark is wounded and in range at (2,3). I can attack for 1 damage or use pulse if I move adjacent. Pulse hits all units within 1 tile — if I move to (1,3) I'd be adjacent to the trap at (0,3), and Bulwark at (2,3) would be 2 tiles away so out of pulse range. Better to just attack Bulwark from current position (1,4) since it's at dist=2 and in range. Then I should place a trap to control paths. Moving to (1,3) would step on the trap at (0,3)... wait, trap is at (0,3) not (1,3). I can move to (1,3) safely. From (1,3) Bulwark at (2,3) would be dist=1, enabling pulse to hit it. But pulse hits ALL units within 1 tile — Aegis is at (2,4) which would be dist=sqrt(2)≈1.4, so probably not in pulse range. Let me attack Bulwark first from current position, then place a trap on a key path tile like (2,5) or (3,4) to deny enemy routes.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "4": 4,
+              "x": 3
+            }
+          },
+          "secondResult": "Invalid position"
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Bulwark is wounded and within range 2 — I can attack it. Lattice is 3 tiles away so no denial concern yet. Trap placement on (1,3) or along approach paths would help. I'll place a trap at (1,3) to cover the approach route, then attack Bulwark at (2,3) from current position. Both are valid from (1,4).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": "Must be adjacent"
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Aegis is adjacent at (2,4) - attack them. I'm fortified at 4HP so staying put preserves my damage reduction. After attacking, use shield_wall facing North to block damage from Aegis.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Aegis is at (2,4) within range 2 — I can pulse from current position to hit it (dist 2 is outside pulse's 1-tile AoE though). Better to use attack on Aegis at dist 2 since attack is range 2 adjacent-only... wait, attack is range 1 (adjacent only). Aegis is at dist 2, so attack won't reach. Pulse hits within 1 tile AoE — Aegis is 2 tiles away, won't hit. Traps at (3,3) and (3,4) already placed. I could move to (3,4) but there's a trap there. Move to (3,5) to get closer without hitting traps, then place a trap to further restrict movement. Or move to (4,3) and place a trap at (3,3)... but (3,3) already has a trap. Let me move to (4,3) to get adjacent to Aegis's likely path, then place a trap at (2,3) near Bulwark's position — but that could harm ally. Place trap at (2,5) to cut off escape routes. Actually, move to (3,5) keeps distance from Viper (who is at dist 3 from current, would be dist ~3 from 3,5) and I can place a trap at (2,5) to block Aegis movement northward.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm at 3HP with Fortify active (50% dmg reduction if I don't move). Bulwark is adjacent at (2,3), wounded. Best play: attack Bulwark to finish them off, then shield_wall facing south to protect against Lattice. If I stay put, Fortify keeps me alive. Attack Bulwark first, then shield_wall facing the enemy cluster direction.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 1,
+              "y": 4
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Aegis is adjacent to the north at (2,4) and wounded. Orders say attack adjacent enemies. I'm fortified with 50% damage reduction at 3HP. I should attack Aegis first. Then use shield_wall facing north (toward Aegis/Viper cluster) to protect against incoming damage while staying fortified — but shield_wall requires not moving, and I want to keep fortify active. Attack Aegis, then shield_wall facing N to block damage from the north where both enemies are.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Aegis is critical and in range at (2,4). I can attack Aegis to potentially finish them off. Then I should consider placing a trap to control the area. (2,5) already has a trap, and (3,2)(3,3)(3,4) are covered. Viper is at (1,4) distance 3, not adjacent so no denial threat. Attack Aegis first to try to eliminate the critical enemy, then place a trap at (4,4) or move to better position.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm at 2HP but fortified with 50% damage reduction. Bulwark is adjacent at (2,3) and wounded — I should attack to finish or weaken them. I can attack from current position and then shield_wall facing south to protect against any flanking, or face north toward Bulwark. Staying put preserves fortify bonus. Attack Bulwark first, then shield_wall facing S toward the enemy cluster direction.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Bulwark is critical and adjacent (dist=2) - I can attack for likely kill. Traps at (0,3) and (1,3) already cover southern approach. I should attack Bulwark to finish it, then consider positioning. Moving to (3,4) would put me adjacent to Lattice which blocks abilities - avoid that. Stay at (1,4) and attack Bulwark at (2,3) which is in range.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 9,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Aegis is adjacent at (2,4) and critical — attack to finish them. I'm fortified so staying put preserves 50% damage reduction. Attack first, then shield_wall facing N where remaining threats are.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Bulwark is critical at (2,3) and within range 2. I can attack Bulwark to potentially finish it off. Traps at (0,3) and (1,3) block those paths. I should stay at current position to keep denial pressure and attack Bulwark. After attacking, I could place a trap to deny approach routes since Lattice is 3 tiles away (not adjacent, so trap is allowed).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Aegis is critical at (2,4) and in range. I can attack Aegis directly to potentially finish it off. Viper is 3 tiles away so no denial risk. Valid moves include (2,5) which would put me adjacent to Aegis for a follow-up, but I can attack from current position at range 2. Let me attack Aegis first, then place a trap to control the approach. (2,5) is trapped already. I'll attack Aegis at (2,4) from current position, then move to (4,5) to maintain distance from Viper while staying relevant.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm at 1HP but fortified (50% damage reduction). Bulwark is adjacent at (2,3) and critical — I can finish them off with attack. If I move, I lose fortify, so I should stay and attack. After attacking, I'll use shield_wall facing S to protect against any counterattack from that direction, but Bulwark is to my S already. Attack Bulwark first to eliminate them, then wait/shield to maintain fortify bonus.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 10,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Aegis is adjacent at (2,4) and critical — attack to eliminate. I'm at 1HP so I must not move to keep Fortify active (50% damage reduction). Stay put and attack.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Viper is at (1,4), dist 4, out of range. Bulwark is critical at (2,3). I need to protect Bulwark and control the approach. Trap at (2,5) and (3,4) already placed. Valid moves include (3,5) which gets me closer to threaten Viper while covering the corridor. I should move to (3,5) to get closer and then place a trap at (3,3) to block Viper's path toward Bulwark — wait, (3,3) already has a trap. The area around (2,3)-(3,4) is well covered. Move to (3,5) to close distance and use pulse or trap. From (3,5) I can trap at (3,4) — already trapped. Let me trap at (2,4) which is adjacent to Bulwark's position and blocks Viper's approach from (1,4). Move to (3,5), then trap at (2,4) — that's within 2 tiles of (3,5): dist = |3-2|+|5-4|=2, valid.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Bulwark is at dist=2 and critical — I can attack it from range. Lattice is at dist=3 and healthy, outside my range. I should attack Bulwark to finish it off while staying at dist=2 to avoid Lattice's denial. I'll attack Bulwark first, then place a trap to block Lattice's approach path.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 11,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Traps already cover (3,2), (3,3), (3,4), (2,5), (4,4), (2,4) — major chokepoints covered. Viper is at (1,4) heading East, dist=3. I need to keep denying ability corridors. Moving to (4,5) keeps me safe from Viper's denial range while I can lay a trap at (5,5) to block eastern approach. Alternatively, move to (2,5) is already trapped. Valid moves: (4,5) or (5,5) look safest. I'll move to (4,5) then place a trap at (5,4) to extend eastern coverage — checking if (5,4) is valid trap target (within 2 tiles of new position (4,5): dist=1, yes). This creates a eastern wall.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I'm at 1HP so extremely fragile. Fortify gives me 50% damage reduction if I don't move — I should stay put. Viper is at (1,4), distance 2, not adjacent so I can't attack. Moving adjacent to Viper would be dangerous and I'm warned to avoid it. Best play is to wait and maintain fortify, then use shield_wall facing North where Viper is to protect against incoming attacks.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 5
+            },
+            "direction": "N"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Bulwark is at (2,3) critical health and within range 2. I can attack it to potentially finish it off. I'm at (1,4) facing E. Attack range is adjacent only (dist 1), so I need to move closer. Moving to (2,4) puts me adjacent to Bulwark at (2,3). Then I can attack it. However, (2,4) is in my valid moves list. After moving to (2,4), Bulwark is adjacent to the south at (2,3) - I can attack it. This could finish the critical enemy.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 12,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Viper is at (2,4) heading east, dist=3. Many traps already placed. Valid moves include (3,5) which gets me closer without adjacency risk. I can't place traps at (2,5),(3,4),(4,4),(5,4) — all occupied. (3,5) is open for a trap. Move to (3,5) then place trap there to block Viper's eastward path.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": "Position occupied"
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Lattice is at (3,5), distance 2 — in range for trap or pulse. I'm at (2,4). Pulse hits all within 1 tile AoE but Lattice is at dist 2 so pulse won't reach. I can trap a tile to control approach paths. Trap on (3,4) would threaten Lattice's movement south. I should stay at medium range — avoid moving adjacent to Lattice (which would be (3,5) or adjacent). I'll trap (3,4) to block the path, then move to (1,4) to maintain distance and avoid getting adjacent.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 13,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Lattice is at (3,5) moving west, likely heading toward (2,5) or (1,5). I have traps at (2,5) already which is good. I should place a trap on (1,5) to cover Lattice's approach path along the top row. Stay at current position or move slightly to maintain denial pressure without getting adjacent.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Viper is at (1,4) heading W, dist 3. Many traps already placed. (2,5) is trapped. I should place a trap at (1,5) to cover Viper's likely movement path northward. Move to (2,5) is trapped so avoid. I can move to (2,4) or stay and place trap. Actually (2,5) is trapped - can't move there. Let me move to (4,5) to stay safe and place a trap at (3,5) or (2,4) area. Better: move to (5,5) then trap (4,5) - but (4,5) is already trapped. I'll move to (2,4) - wait that puts me adjacent risk. Move to (1,5) and trap (1,4) right on Viper? No, Viper is there. Place trap at (2,4) from current pos - dist is 1, within range 2. That covers approach. Move first to (4,5) then trap (2,4) - dist 2, valid.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": "Out of range (max 2)"
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 14,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Viper is at (1,4) heading W, dist=4, out of range. Valid moves include (3,5) which gets me closer while maintaining positioning. Many traps already placed. I should move toward Viper to apply denial pressure and set more traps on likely paths. Moving to (3,5) then placing a trap at (2,5) which is a valid trap position and on Viper's likely path.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Lattice is at (3,5) moving west, distance 3. I'm at (1,4). Many traps already placed: (0,3),(1,3),(2,5),(3,4),(1,5). Lattice moving west from (3,5) will likely pass through (2,5) or (3,4) — both already trapped. I should place a trap at (2,4) to cover the approach path along row 4, then stay at medium range. Moving to (0,4) keeps me safe and maintains distance from denial range.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 15,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Viper is at (0,4) heading W, dist 4, out of range. Traps already cover (3,2)(3,3)(3,4)(2,5)(4,4)(5,4). Need to extend trap coverage toward Viper's likely approach. (2,5) is already trapped. Moving to (1,5) gets me closer and I can trap (1,4) or (0,5) to block Viper's northward approach. But I'm blocked by denial if adjacent to Viper — Viper is at dist 4 so no denial issue. Let me move to (2,4) then trap (1,4) to cut off approach corridor. Actually (2,4) is a valid move. From (2,4) I can trap tiles in range ≤2. Trap at (0,4) would hit Viper directly but that's dist 2 from (2,4) — valid! Place trap on Viper's current position to punish if they stay or return.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "secondResult": "Position occupied"
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Lattice is at (2,4) distance 2 — in attack range but I must stay non-adjacent to avoid denial blocking my abilities. I can attack Lattice from current position (dist=2, within range 2). Then place a trap to deny approach paths. Many traps already placed at (0,3),(1,3),(1,5) — the (1,4) tile is a key approach route not yet trapped.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 16,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Lattice is at (2,4), 2 tiles away — I must not move adjacent. My traps are already clustered around (0,3),(1,3),(1,4),(1,5). Lattice is to my east at range 2, within pulse range if I stay. I can pulse now to deal 1 damage to Lattice from (0,4). Then place a trap at (1,4) wait — (1,4) is already trapped. Place at a new tile to channel paths. Actually let me pulse first for damage, then trap at (2,5) or (3,4) to block approach corridors — but (2,5) and (3,4) already have traps. Let me trap at (0,5) or (0,2) to cover retreat/flank. (0,5) is a valid move tile suggesting it's reachable. I'll pulse Lattice (target self area, hits within 1 tile — Lattice at dist 2 is NOT within 1 tile of me). Pulse hits within 1 tile radius of me at (0,4), so Lattice at (2,4) is out of range. I should trap a new path tile instead. Valid moves include (1,3),(1,4),(1,5) but those are mostly trapped. I'll trap (0,5) to cover north flank, then wait.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Viper is 2 tiles away at (0,4). I need to avoid moving adjacent to them or my abilities get blocked. The area around (3,2)-(3,4) and (4,4) already has traps. I can see (2,5) is trapped. Valid moves include (1,4) which would put me adjacent to Viper - avoid that. I should place a trap to further deny movement. Moving to (2,3) keeps distance and lets me trap a new chokepoint. From (2,3) I can trap (1,3) or (2,2) to block approach routes. Actually, staying at (2,4) and trapping (1,4) would create a nice trap between me and Viper - if they advance they hit the trap. But I need to check: trapping range ≤2 tiles, and (1,4) is 1 tile away - valid. But wait, Viper is at (0,4) - distance 2 from me, not adjacent, so denial doesn't block my trap. Place trap at (1,4) to punish Viper if they move east toward me.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 17,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "I'm at (0,4) with Lattice at (2,3) distance 3. Most nearby tiles are already trapped — (0,3), (1,3), (1,4), (0,5), (1,5) are all trapped. Valid moves include (2,4) but that brings me closer to Lattice. I should stay at medium range and trap untrapped tiles. (2,4) and (0,2) are untrapped valid moves. I'll trap (2,4) from current position — wait, trap range is ≤2 tiles so (2,4) is reachable at dist 2. That blocks a key approach path. I'll stay put and trap (2,4) since it's on Lattice's likely approach route.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Viper is at (0,4) heading W, 3 tiles away. I'm at (2,3). There are already many traps placed. I should move to a position that maintains denial pressure while placing traps to further restrict Viper's movement. Moving to (1,3) gets me closer to Viper for denial without going adjacent. From (1,3) I can place a trap at (0,3) to block Viper's southward escape route, or at (1,4) to cut off movement. Actually (1,4) already has a trap. Let me move to (1,3) to threaten denial range on Viper if they move to (0,3) or (1,4), and place a trap at (0,3) to block their path.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 18,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "I'm at (1,3) with 5HP. Viper is at (0,4), dist=2 — must not move adjacent or my abilities get blocked. Trap at (1,4) and (0,3) already placed. I want to maintain denial pressure without closing to adjacency. I can pulse from current position to hit Viper at dist=2? No, pulse is 1-tile AoE. Viper is at dist=2 so pulse won't reach. I should place a trap to further control the area. Valid moves include (2,3) which moves me away from Viper and lets me trap. Actually, I'm going first this round. Let me trap an uncovered tile to cut off Viper's movement. (0,2) would be a good trap target — Viper might move south. But I need to check if trap is blocked: trap is blocked when adjacent to enemy Vector, and Viper is at dist=2 so NOT adjacent. I can trap. Let me trap (0,2) to block southern escape route, then move to (2,3) to reposition safely.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 0,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "I'm at (0,4) with Lattice at (2,3) distance 3. The area is heavily trapped already. I should maintain distance from Lattice (stay 2+ tiles away to avoid Denial). Valid moves show (1,3) and (1,4) are available but those would bring me closer to the trap cluster. I'll place another trap to reinforce coverage and stay at medium range. Trap at (1,3) would cover an approach path. I'm not adjacent to any enemy so trap is not blocked.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 19,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Viper is at (0,4) heading W, dist 3. I'm at (2,3) with many traps already placed. Valid moves show (1,4) is available — moving there puts me adjacent to Viper's likely path and enables denial. But caution says avoid adjacent. I should maintain pressure without getting adjacent. Move to (1,3) to close distance and apply denial pressure if Viper moves east, then place a trap at (1,4) to block Viper's movement corridor.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Lattice is at (1,3), wounded, distance 2. I'm at (0,4). I can attack Lattice from range 2. Moving adjacent would trigger denial and block my abilities. I should stay at range 2 and attack the wounded Lattice. After attacking, I can place a trap to control nearby paths. The area is heavily trapped already but I can reinforce. Attack Lattice first to potentially finish them off since they're wounded, then place a trap.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 20,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "I'm at (1,3) with 4HP, Viper is at (0,4) distance 2. I have traps at (1,4) and (0,3) already - Viper is somewhat hemmed in. I should not move adjacent to Viper or my abilities get blocked. My best play is to place a trap at (2,3) or (2,4) to extend my denial zone, then move to a safer position. Actually, (0,3) already has a trap. Let me place a trap at (2,4) to further restrict movement, then move to (2,3) to stay at safe distance while maintaining pressure.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "I'm at (0,4) with Lattice at (2,3) distance 3. The area is heavily trapped already. Valid moves include (1,3), (1,4), (1,5), (2,4) etc. Many traps already placed. Lattice is wounded and moving east, away from me. I should hold position or reposition to maintain denial pressure without getting adjacent. Let me place a trap on a path Lattice might use. (1,3) is a good chokepoint. I'll move to (1,4) to get closer while staying at distance 2+ from Lattice at (2,3), then trap (1,3) or another path tile. Wait - if I move to (1,4), Lattice is at (2,3), dist=sqrt(1+1)=1.41, that's adjacent diagonal - would that trigger denial? Dist=2 tiles manhattan. Let me stay at (0,4) or move to (0,3) and trap from range. Actually trap range is ≤2 tiles. From (0,4) I can trap up to range 2. (2,4) is distance 2, reachable for trap. That tile isn't listed as already trapped. I'll stay and trap (2,4) to block Lattice's path.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 10,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "draw",
+    "totalTurns": 21,
+    "reason": "Max rounds reached"
+  },
+  "endedAt": "2026-02-23T00:08:01.023Z"
+}
