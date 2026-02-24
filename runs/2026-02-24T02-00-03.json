@@ -1,0 +1,2143 @@
+{
+  "id": "2026-02-24T02-00-03",
+  "startedAt": "2026-02-24T02:00:03.616Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 4,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 4,
+        "movement": 2,
+        "range": 2,
+        "speed": 2
+      },
+      "oracle": {
+        "maxHp": 6,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 16,
+        "movement": 3,
+        "range": 2,
+        "speed": 3
+      },
+      "vector": {
+        "maxHp": 9,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 1,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 12,
+        "healAmount": 10
+      },
+      "overclock": {
+        "selfDamage": 0
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Bulwark",
+        "class": "sentinel",
+        "prompt": "Push forward aggressively. Shield_wall facing the enemy cluster. If flanked, turn to face the biggest threat. Attack when possible."
+      },
+      {
+        "name": "Patch",
+        "class": "medic",
+        "prompt": "Stay adjacent to the most threatened ally. Use patch on the most wounded teammate. If all healthy, use overclock on your damage dealer."
+      },
+      {
+        "name": "Marksman",
+        "class": "striker",
+        "prompt": "Maintain distance. Use precision_shot on high-value targets — medics first, then damage dealers. Use suppressing_fire if enemies close in."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Longshot",
+        "class": "striker",
+        "prompt": "Maintain distance. Use precision_shot on high-value targets — medics first, then damage dealers. Use suppressing_fire if enemies close in."
+      },
+      {
+        "name": "Lens",
+        "class": "oracle",
+        "prompt": "Use scan to reveal enemy prompts and cloaked units. Stay at max range (≤4 tiles for scan). Use recalibrate on wounded allies to buff them. Keep distance from enemies and avoid adjacent vectors."
+      },
+      {
+        "name": "Bastion",
+        "class": "sentinel",
+        "prompt": "Push forward aggressively. Shield_wall facing the enemy cluster. If flanked, turn to face the biggest threat. Attack when possible."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Patch",
+          "class": "medic",
+          "thinking": "All allies are at full HP, so no healing needed. Orders say to use overclock on damage dealer if all healthy. Marksman is the damage dealer at (4,0), distance 3 from my current position (2,1). I can move closer to Marksman and use overclock. Moving to (3,1) puts me at distance 2 from Marksman at (4,0) - still not adjacent. Moving to (4,1) would put me adjacent to Marksman at (4,0). That's within my move range of 3. Then overclock Marksman.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 4,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "All enemies are out of scan range (dist 5-6, need ≤4). I need to advance south to bring them into range. Moving to (3,2) gets me closest to enemies while staying near center. From there I can scan next turn. No enemies in range this turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "All enemies are out of range (dist 5-7, my range is 2). I need to advance toward them while maintaining good positioning. Moving toward the cluster of enemies near bottom. Patch (medic) is highest priority. Moving SE to close distance without overextending.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "I'm overclocked with 2 ability uses. Lens (oracle) is in range at dist=3. Orders say medics first, then damage dealers — but no medic in range. Lens is a high-value oracle target. I'll fire precision_shot at Lens twice. I haven't moved so no penalty on first shot. After first shot I still haven't moved so second shot at full 2dmg too.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": "Out of range"
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Push forward aggressively per orders. Enemies Longshot and Lens are at dist=3 to my north. Moving to (2,2) gets me closer and positions me between allies and the enemy cluster. Then shield_wall facing N to protect advancing allies from the enemy cluster.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 1
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Round 1, all enemies out of range. Orders say push forward aggressively. Move toward the enemy cluster. Best valid move toward (2,2) Bulwark is (1,4) or (0,3) - (1,4) gets me closer and slightly flanks. Then shield_wall facing South toward the enemy cluster to protect allies Longshot and Lens who are ahead of me.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Patch",
+          "class": "medic",
+          "side": "player",
+          "hp": 16,
+          "maxHp": 16,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Bulwark is adjacent at dist=1 which blocks scan per Vector rule — wait, Bulwark is sentinel not Vector, so scan is not blocked. Marksman tried precision_shot on me last turn (failed, out of range). Priority: scan Marksman to reveal prompt and deal damage, then move away from Bulwark who is adjacent and threatening. Move to (3,3) to increase distance from Bulwark while keeping Marksman and Patch in scan range.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Patch",
+          "class": "medic",
+          "thinking": "Marksman at (4,0) is wounded (3/4 HP) and adjacent to me at (4,1) - distance 1, so I can patch them directly. Move to (4,0) would put me on top of them, but they're already adjacent. I'll patch Marksman first, then move closer to maintain support position.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 4,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "No enemies in range from current position (4,0). Nearest threat is Lens at dist=4, Longshot at dist=5. Orders say maintain distance but also use precision_shot on high-value targets. Lens (oracle) is closest at dist=4 — if I move north to (4,2), that closes distance to Lens at (3,3) to dist=2, potentially bringing it in range. Let me check: from (4,2) to (3,3) = |4-3|+|2-3| = 1+1 = 2 tiles. That's within precision_shot range (≤2). Move to (4,2) then use precision_shot on Lens.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Bulwark (sentinel) is adjacent at dist=1, which blocks precision_shot. Orders say maintain distance and prioritize medics. I should move away from Bulwark to get range, then use precision_shot on a high-value target. Moving to (3,4) increases distance from Bulwark and keeps me in range of Marksman at (4,2) — dist becomes 2, which is in range for precision_shot. Patch at (3,1) would be dist=3 from (3,4), still out of range. Marksman at (4,2) from (3,4) = dist 2, in range. Target Marksman as the damage dealer.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": "Out of range"
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Lens oracle is closest at dist=2 to my north. Orders say push forward aggressively. Moving to (2,4) gets me adjacent to Bastion at (1,4) and closer to the cluster. Actually, valid moves include (2,4) which puts me dist=1 from Bastion and dist=2 from Lens. Better: move to (3,2) to close on Lens, then shield_wall N to block the enemy cluster to my north. Wait - Lens is at (3,3), moving to (3,2) puts me adjacent! Then I can attack Lens. Let me verify: (3,2) is in valid moves. Lens at (3,3) - distance from (3,2) is 1, so adjacent. I can move to (3,2) then attack Lens.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Enemies are clustered around (3,1)-(4,2), all out of range. Orders say push forward aggressively. Moving to (2,3) gets me closer while staying near Longshot at (3,4) and Lens at (3,3). From (2,3) I can shield_wall facing East toward the enemy cluster, protecting my allies Longshot and Lens from incoming fire.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Patch",
+          "class": "medic",
+          "side": "player",
+          "hp": 16,
+          "maxHp": 16,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Patch (medic) is unscanned and at dist=2 — high priority target. Bulwark attacked me last turn and is adjacent (dist=1), blocking scan if I stay. I need to move away from Bulwark to avoid adjacency blocking scan, then scan Patch. Moving to (4,3) gets me away from Bulwark while keeping Patch at dist=3 and Marksman at dist=2, both in scan range. From (4,3), Patch is at dist=3, still in scan range (≤4). Scan Patch to reveal their prompt.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Patch",
+          "class": "medic",
+          "thinking": "All allies are at full HP, so no healing needed. Orders say to use overclock on the damage dealer when all healthy. Marksman (striker) at (4,2) is the damage dealer, distance 2. I need to move adjacent to them first. Moving to (3,2) would put me adjacent but Bulwark is there. Moving to (4,1) puts me adjacent to Marksman at (4,2). That's a valid move and then I can overclock Marksman.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Orders say medics first, but Patch at dist=4 is out of range. Marksman is a damage dealer at dist=3 — also out of precision_shot range (≤2). Bulwark sentinel is at dist=2, in range. I haven't moved yet, so precision_shot does full 2dmg. Bulwark is lower priority than Marksman/Patch, but it's the only viable precision_shot target. Alternatively, I could move toward Patch to get in range, but that closes distance and risks getting adjacent to Bulwark (suppressing_fire trigger zone). Best play: precision_shot Bulwark now (2dmg, no move penalty), then wait. Don't move — maintain distance and stay out of adjacency.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "I'm overclocked with 2 ability uses. Lens (oracle) is adjacent at (4,3) — but precision_shot is blocked when adjacent to an enemy. I can move first to create distance from Lens, then use precision_shot. Moving to (4,4) puts me 1 tile from Lens still. Moving to (5,3) gives dist=2 from Lens and keeps range on her. From (5,3), Lens at (4,3) is dist=1 — still adjacent. Best is to move to (4,4): Lens is at (4,3) so dist=1, still adjacent. Move to (5,2): Lens at (4,3) dist=sqrt(2)~1.4, but game uses Chebyshev or Manhattan — likely Manhattan = 2, so not adjacent. From (5,2), Lens dist = |5-4|+|2-3|=2, so precision_shot is valid. Then use both ability charges on Lens (priority target as oracle) and possibly suppressing_fire on another.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I'm at (3,2) fortified with 7/8 HP. Enemies are at dist=2: Longshot(3,4), Bastion(2,3), Lens(4,3). No enemies in melee range. Orders say push forward aggressively and shield_wall facing enemy cluster. Moving to (3,3) puts me adjacent to both Longshot at (3,4) and Lens at (4,3), and gets me in melee range. After moving I lose fortify but can attack. Move to (3,3) then attack Longshot at (3,4) — wounded Lens is priority but Longshot is directly north at dist=1 after move. Actually Lens is wounded so higher value target. From (3,3), Lens at (4,3) is adjacent (dist=1), Longshot at (3,4) is adjacent (dist=1). Attack the wounded Lens to try to eliminate.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Bulwark is adjacent at (3,3). I'm fortified with 50% damage reduction. Orders say attack when possible and shield_wall facing the enemy cluster. I'll attack Bulwark first, then shield_wall facing East to cover Lens and block incoming fire from Marksman/Patch cluster.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Patch",
+          "class": "medic",
+          "side": "player",
+          "hp": 15,
+          "maxHp": 16,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "I'm at 2/6 HP and Bulwark is adjacent (dist=1) — extremely dangerous. Foresight confirms Marksman will precision_shot me at (4,3) this turn, and Bulwark attacked me last turn. I must move away immediately. Bastion is shielding me with shield_wall facing E. I need to escape the Marksman's range and Bulwark's adjacency. Moving to (5,4) puts me at dist=2 from Bulwark and dist=2 from Marksman (who is at 5,2), but away from both. Better: move to (4,5) — dist=2 from Bulwark, dist=3 from Marksman. Bulwark hasn't been scanned yet — scan it from safe position. If I move first then scan, I need Bulwark within 4 tiles. From (4,5), Bulwark at (3,3) is dist=sqrt(1+4)=~2.2, in range. Move to (4,5) first, then scan Bulwark to reveal its prompt and deal 1 damage.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Patch",
+          "class": "medic",
+          "thinking": "Bulwark is at (3,3) with 5/8 HP and needs a heal. I need to move adjacent to them first. From (4,1) I can move to (4,2) or (3,2) but those are dist=1-2 from (3,3). Moving to (4,2) puts me at dist=2 from Bulwark — not adjacent. Moving to (3,2) puts me adjacent to Bulwark at (3,3). (3,2) is in my valid moves list. From (3,2) I can patch Bulwark at (3,3) which is adjacent.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Patch (medic) is highest priority target at dist=2, in range. However, Bulwark is adjacent (dist=1), which blocks precision_shot if it's a Vector — but Bulwark is a sentinel, not a Vector, so precision_shot should be fine. Wait: the warning says precision_shot is blocked when adjacent to enemy Vector specifically. Bulwark is a sentinel, so no block. But I haven't moved yet, so precision_shot deals 2dmg. I should fire precision_shot on Patch first (medic priority), then move away from Bulwark to maintain distance.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Longshot is at distance 3, within precision_shot range (≤2 tiles... wait, range is ≤2 tiles). Dist=3 means Longshot is OUT of precision_shot range. No enemies in precision_shot range from current position. I need to close distance to Longshot. Moving to (4,3) puts me at dist 1 from Longshot (4,4) — adjacent, so precision_shot won't work (needs non-adjacent? No, needs LoS and range ≤2). Actually at (4,3) dist to (4,4) is 1, which is ≤2, so precision_shot works. But I'm healthy and orders say maintain distance. Let me move to (5,4) — dist to Longshot (4,4) is sqrt(1+0)=1... no, (5,4) to (4,4) is dist 1. Better: move to (4,3) gives dist 1 to Longshot, within range 2. Or stay and Longshot is dist 3 — out of range. I should move closer. (5,3) to (4,4) is dist=sqrt(1+1)=~1.4, counts as 2 in grid — within range 2. Move to (5,3) then shoot Longshot.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Bastion is adjacent at (2,3) — attack it. Then shield_wall facing East to protect against Longshot at (4,4) and Lens at (4,5). Staying put preserves Fortify for 50% damage reduction.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Bulwark is adjacent at (3,3). Orders say attack when possible and shield_wall facing enemy cluster. Enemies are to my east/southeast. I'll attack Bulwark first, then shield_wall facing East to cover Longshot and block Marksman/Patch cluster.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Patch",
+          "class": "medic",
+          "side": "player",
+          "hp": 14,
+          "maxHp": 16,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Patch",
+          "class": "medic",
+          "thinking": "Bulwark is wounded at (3,3) adjacent to me at (3,2). I have 1 patch use remaining and should heal Bulwark now. I'm currently adjacent to Bulwark (dist=1, directly north). Bastion enemy is at (2,3) dist=2 from me — not adjacent so patch is not blocked. I'll heal Bulwark first, then wait since I'm already in good position next to the most threatened ally.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "I'm at 2/6 HP — very fragile. Patch is at (3,2) which is distance 4, just out of scan range. Both Bulwark and Marksman are already scanned. Foresight shows Marksman will precision_shot (4,4) where Longshot is — I should recalibrate Longshot to warn them, but Longshot is at (4,4) which is adjacent to me at (4,5). I can recalibrate Longshot to warn about incoming precision_shot. Also, Patch will heal Bulwark at (3,3) next turn. I should stay safe — moving to (5,5) keeps me at range while avoiding getting closer to enemies. Actually staying put and recalibrating Longshot is valuable since Marksman is targeting them. I can recalibrate Longshot (adjacent at (4,4)) then move away to safety at (5,5).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 4,
+              "y": 4
+            },
+            "addendum": "Warning: Marksman will precision_shot your position this turn. Move away before taking action. Patch is healing Bulwark — consider targeting Patch at (3,2) instead."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Marksman will precision_shot my position at (4,4). I need to move first. Orders say target Patch (medic) first. Moving to (4,5) gets me away from Marksman's shot and keeps range to enemies. From (4,5), Patch at (3,2) is dist=3 — out of range for precision_shot (range≤2). Marksman at (5,3) is dist=2, in range. Bulwark at (3,3) is dist=2, in range. Orders: medics first, but Patch is out of range after move. Target Marksman with precision_shot — didn't move this turn so full 2dmg. Wait, I AM moving so precision_shot does 1dmg. Still worth it on Marksman to reduce DPS threat.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": "Out of range"
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Lens is wounded and only 2 tiles away — priority target. I can use precision_shot without moving to finish or heavily damage Lens. No movement needed since Lens is already in range at distance 2. Staying put avoids the 1dmg penalty from moving and maximizes damage output.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (2,3) with Bulwark adjacent at (3,3). Orders say attack when possible and shield_wall facing enemy cluster. Patch is at (3,2) and Marksman at (5,3) — enemy cluster is to my East/Southeast. If I attack Bulwark first, I lose fortify bonus but deal damage. Better to shield_wall East (facing Bulwark+cluster direction) then attack Bulwark while staying put to keep fortify. Wait — I can ability first then attack. Shield_wall facing E to protect against the cluster, then attack Bulwark at (3,3).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "direction": "E"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Bastion is adjacent at (2,3) to my west. I'm fortified with 50% damage reduction. Orders say attack when possible and shield_wall facing enemy cluster. Longshot and Lens are to the north. I'll attack Bastion first, then shield_wall facing North to protect allies from Longshot/Lens.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Patch",
+          "class": "medic",
+          "side": "player",
+          "hp": 14,
+          "maxHp": 16,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "I'm at 1HP — extremely fragile. Marksman already targeted me last turn with precision_shot, and knows to focus oracles/medics. I must avoid being in Marksman's sights. All three enemies already scanned. My priority: survive and still contribute. Moving to (5,4) keeps me close but still lets me scan... but Marksman is at (5,3) — if I move to (5,4) I'm adjacent to Marksman, very dangerous. Better to move away. (4,4) puts me 2 tiles from Marksman, still within scan range (dist=2). From (4,4), Marksman at (5,3) is dist=2, scannable. Also from (4,4), Bulwark at (3,3) is dist=2, but already scanned. All enemies already scanned so scan utility is low. I should recalibrate Longshot at (4,5) — adjacent from (4,4) — to help with their failed precision_shot. Move to (4,4), then recalibrate Longshot.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 4,
+              "y": 5
+            },
+            "addendum": "Marksman is at (5,3). Move closer to within 3 tiles before using precision_shot to ensure range. Prioritize eliminating Marksman — they are targeting our oracle."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Patch",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses remaining). Bulwark is wounded at (3,3), adjacent to me at (3,2). I should use overclock on Bulwark to boost their effectiveness since I can't heal. Bastion enemy is at (2,3), dist=2, so I need to be careful about Vector adjacency blocking abilities - Bastion is a sentinel not a Vector, so overclock is not blocked. Bulwark is adjacent at (3,3), I can overclock them to give them 2 abilities next turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Lens (oracle) is critical and in range at distance 2. Priority target — finish it with precision_shot. I haven't moved yet so no damage penalty. Stay at (5,3) to keep distance from enemies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Marksman at (5,3) will shoot my current position (4,5). I need to move first to avoid the shot. Moving to (3,5) puts me 2 tiles from Marksman (5,3) — dist=sqrt(4+4)=2.8, still in range. Better: move to (3,4) — dist to Marksman=sqrt(4+1)=2.2, still in range for precision_shot. Moving to (3,5) keeps me away from Marksman's likely shot trajectory. Marksman is the priority target per orders. From (3,5), dist to Marksman (5,3) = sqrt(4+4)≈2.83 which is ≤3 tiles but precision_shot only has range≤2 tiles. Need to check: precision_shot range is ≤2 tiles. Marksman at (5,3) from (3,5) = dist 2.83 — OUT of range. From (5,4), dist to Marksman (5,3) = 1 — in range but adjacent to enemy means precision_shot blocked if Vector adjacent (no Vector here). From (5,4) I can precision_shot Marksman. But moving to (5,4) keeps me near Marksman's position. Orders say maintain distance but also eliminate Marksman. Move to (5,4) to get adjacent range on Marksman — but that's very close. Actually at (5,4) dist to Marksman=1, that's adjacent, precision_shot needs LoS but not adjacency-blocked (only blocked by adjacent Vector). So move to (5,4), fire precision_shot on Marksman for 2dmg (but I moved, so 1dmg). Alternatively stay and fire: currently at (4,5), Marksman at (5,3) dist=sqrt(1+4)=2.24 which is >2 tiles. Out of range. Move to (5,4): dist to Marksman=1, fire precision_shot for 1dmg (moved penalty). Move to (4,4): dist to Marksman=sqrt(1+1)=1.41≤2, fire precision_shot for 1dmg (moved). Move to (4,3): dist to Marksman=1≤2, fire precision_shot for 1dmg (moved). Best option: move to (4,4) — repositions away from (4,5) to dodge Marksman's shot, stays within precision_shot range of Marksman (dist≈1.41≤2), and I can fire for 1dmg. Marksman has 4HP so 1dmg brings to 3HP. That's progress.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Bulwark is adjacent at (3,3) to my north. I'm fortified (50% dmg reduction). Orders say attack when possible and shield_wall facing enemy cluster. Enemies are mostly to my east/northeast. Attack Bulwark first, then shield_wall facing E to cover against Marksman and Patch cluster.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I have OVERCLOCKED (2 ability uses) and FORTIFIED (50% dmg reduction). Bastion is adjacent at (2,3) — I can attack twice. Orders say attack when possible. With fortify active I want to stay put to keep the damage reduction. Two attacks on Bastion is the optimal play.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Patch",
+          "class": "medic",
+          "side": "player",
+          "hp": 14,
+          "maxHp": 16,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Patch",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses left). Bulwark is adjacent at (3,3) and wounded at 6/8 HP. I should use overclock on Bulwark to boost our sentinel's effectiveness. I could also move closer to Marksman but they're dist=3 away and I can't heal anyway. Stay adjacent to Bulwark and overclock them.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Marksman at (5,3) will shoot my current position (4,4). I need to move to dodge. Valid moves include (4,5) which puts me at distance 2 from Marksman (5,3) — still in range but I've moved so precision_shot does 1dmg instead of 2. More importantly, priority target is Patch (medic) healing Bulwark, but Patch is at dist 3 from current pos and would still be dist 3+ from (4,5). Marksman is the immediate threat targeting our oracle. From (4,5): Marksman at (5,3) is dist sqrt(1+4)=~2.2 — out of range 2? No, range is tile distance (Chebyshev or Manhattan). Dist to Marksman from (4,5): |5-4|+|3-5|=1+2=3 — out of range. From (5,4): Marksman at (5,3) dist=1, Bulwark at (3,3) dist=3 out of range, Patch at (3,2) dist=4 out. From (5,5): Marksman dist=|5-5|+|3-5|=2 in range, but I've moved so precision_shot deals 1dmg. Best plan: move to (4,5) to dodge Marksman's precision_shot (they'd need to re-target), then use precision_shot on Marksman from (4,5). Marksman at (5,3) from (4,5): Manhattan dist=|5-4|+|3-5|=1+2=3 — out of range 2. So I can't hit Marksman from (4,5). Move to (5,4): Marksman at (5,3) dist=1 — adjacent, so precision_shot blocked if Marksman is Vector? No, Marksman is striker. But precision_shot requires range ≤2 tiles and dist=1 is adjacent — check if precision_shot works at adjacent range. It says range ≤2 tiles, adjacent is 1 tile, should work. But I moved, so 1dmg. From (5,4) I can hit Marksman at dist=1. Let me move to (5,5) instead to not be adjacent: Marksman at (5,3) dist=2, exactly in range, moved so 1dmg. Or move to (4,5) and use suppressing_fire on Marksman — suppressing_fire range ≤2 tiles. From (4,5) to Marksman (5,3): dist=3, out of range. Best: move to (5,4), precision_shot Marksman for 1dmg (moved penalty). This damages Marksman and I've repositioned away from (4,4).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Longshot is adjacent at (5,4) — precision_shot is blocked when adjacent to enemy. I'm at 2HP, so survival is priority. Move away to (4,2) to gain distance, then use precision_shot on Longshot from range 2.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": "Out of range"
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "I'm fortified with 50% damage reduction, and Bulwark is adjacent at (3,3). Orders say attack when possible and shield_wall facing enemy cluster. Marksman and Patch are both to my east/southeast. I'll attack Bulwark first (free damage while fortified), then shield_wall facing East to protect against the cluster of Marksman+Patch. Staying put preserves Fortify bonus.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Bastion is adjacent at (2,3) - attack it while fortified for passive damage reduction. With OVERCLOCKED I get 2 ability uses. Attack Bastion first, then shield_wall facing West to block Longshot's line or protect allies. Marksman and Patch are behind me at (4,2) and (3,2).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 2
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Patch",
+          "class": "medic",
+          "side": "player",
+          "hp": 14,
+          "maxHp": 16,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Patch",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses left). Marksman is critically low at 2/4 HP and is my most threatened ally. I should move adjacent to Marksman at (4,2) to use overclock on them — giving them 2 abilities next turn could be decisive. Moving to (4,3) puts me adjacent to Marksman. Bastion enemy is at (2,3), moving away from it is safer.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "I have 2 ability uses this turn (overclocked). I'm at 2HP so survival matters. Longshot is healthy at dist 3, Bastion is wounded at dist 3. Priority is medics first then damage dealers, but no medic in range. Bastion (sentinel, wounded) is lower priority than Longshot (striker, healthy damage dealer). I should use both precision_shot charges on Longshot to eliminate or heavily damage the striker. At dist 3, precision_shot is in range (range ≤2 tiles means max dist 2... wait, dist=3 but inRange=true per recon data). The recon says Longshot is inRange so I can fire. Use first precision_shot on Longshot, then second precision_shot on Longshot to maximize damage on the high-value damage dealer.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": "Out of range"
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Marksman at (4,2) will shoot my current position. I need to move first. Move to (5,5) to dodge Marksman's shot and maintain range. From (5,5), Patch at (4,3) is dist=2, still in range for precision_shot. Patch is priority target — healing Bulwark keeps enemies healthy. At (5,5) I haven't moved away from Marksman's LoS significantly but I'm out of their likely target tile. Precision shot Patch to disrupt healing.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": "Out of range"
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "I'm at 3/8 HP, fortified, with Bulwark adjacent at (3,3). Orders say attack when possible and shield_wall facing enemy cluster. Marksman and Patch are to my east. I should attack Bulwark first, then shield_wall facing East to block damage from the Marksman/Patch cluster. Staying put preserves Fortify.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Bastion is adjacent at (2,3) and wounded — attack to finish them off. I'm fortified with 50% damage reduction, so staying put is fine. After attacking, I'll use shield_wall facing West to block any incoming from that direction, protecting allies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "direction": "W"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Patch",
+          "class": "medic",
+          "side": "player",
+          "hp": 14,
+          "maxHp": 16,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 9,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Patch",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses left). Bulwark is at 4/8 HP and Marksman at 2/4 HP - both wounded but I cannot heal. Marksman at (4,2) is critically wounded at 2/4 HP and adjacent to my current position. I should use overclock on Marksman to give them 2 abilities next turn, maximizing their damage output. Marksman is at (4,2), which is adjacent to me at (4,3). Then I can move closer to Bulwark at (3,3) to stay near the most threatened ally. Bastion is critical and at dist=2 - not an immediate threat this turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Patch is in range at dist=3 and is healing enemies — high priority target. Marksman at (4,2) will shoot my current position. I should move first to dodge Marksman's shot, then use precision_shot on Patch. Moving to (4,4) reduces dist to Patch to 2 tiles (within range 2), keeps me at safe distance from Marksman at (4,2), and avoids current position. From (4,4), Patch at (3,4) is exactly 1 tile away — adjacent, so precision_shot requires non-adjacent. Wait — precision_shot needs LoS and range ≤2. From (4,4), Patch at (3,4) is dist=1 (adjacent). Precision_shot works at range ≤2 tiles but is blocked if I'm adjacent to enemy Vector — no Vector present, so adjacent is fine. Actually re-reading: precision_shot range ≤2 tiles. Dist=1 is within range. Move to (4,5) instead — Patch at (3,4) would be dist=2, safe range, and I'm out of Marksman's current line of fire from (5,3). From (4,5): Patch at (3,4) is dist=2, in range. Good.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "I'm overclocked with 2 ability uses. Bastion is critical at dist 3 — killing it removes a tank. Longshot is healthy at dist 3. Priority: eliminate Bastion first with precision_shot (2dmg will finish a critical enemy), then hit Longshot with second precision_shot. I'm at (4,2), both targets are in range at dist 3. I haven't moved so no penalty on precision_shot. Stay put to keep range and avoid adjacency issues.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": "Out of range"
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Bastion is adjacent (dist=1) and critical — attack to eliminate. I'm fortified so staying put preserves 50% damage reduction. After attacking, use shield_wall facing W to block Longshot's fire toward my allies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "I'm at 1HP with fortify active giving 50% damage reduction. Bulwark is adjacent at (3,3) and wounded - I should attack to finish them off. I must NOT move to keep fortify active. Attack Bulwark, then shield_wall facing East toward the enemy cluster (Marksman at (4,2), Patch at (3,4)).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Patch",
+          "class": "medic",
+          "side": "player",
+          "hp": 13,
+          "maxHp": 16,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 10,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Patch",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses left). Bulwark is critically wounded at (3,3) adjacent to me - I should use overclock on them to help them act more effectively. Marksman is too far to help. Longshot is nearby at (4,5) - threat. I'll overclock Bulwark at (3,3) since they're adjacent and most threatened, then consider positioning.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Marksman at (4,2) will shoot my current position. I need to move first. Moving to (5,5) gets me away from Marksman's likely shot and keeps me at range. Patch at (3,4) is dist=2, a high-value target healing Bulwark — priority target. After moving to (5,4), Patch is still in range at dist=2+1=3, within precision_shot range. Actually moving to (5,5) keeps dist to Patch at ~2.8 tiles (still ≤2? No, sqrt(4+1)=2.24). Let me check: from (5,5) to Patch (3,4) = sqrt(4+1)=2.24, which is >2, out of range. From (5,4) to Patch (3,4) = dist 2, in range. Move to (5,4) — away from Marksman at (4,2) (now dist=2.8), and I can precision_shot Patch at (3,4) dist=2. I moved, so precision_shot does 1dmg. Worth it to disrupt healing.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Bastion is at critical HP — priority target to eliminate. Both Bastion and Longshot are at dist=3, which is within precision_shot range (≤2 tiles means dist≤2, so dist=3 may be out of range). Wait — precision_shot range is ≤2 tiles. Dist=3 means OUT of range for precision_shot. Need to close to dist≤2. Moving to (4,4) puts me at dist=sqrt(1+0)=1 from Longshot at (5,4) — but orders say medics first, then damage dealers. No medic visible. Longshot is healthy striker = damage dealer. Bastion is critical sentinel at (2,3). If I move to (3,2), dist to Bastion = sqrt(1+1)=1.4 → dist=1 (adjacent), and dist to Longshot = sqrt(4+4)=2.8 → dist=3. Better: move to (4,3) — dist to Bastion = sqrt(4+0)=2, dist to Longshot = sqrt(1+1)=1.4→dist=2. From (4,3): Bastion at (2,3) is dist=2 (in range), Longshot at (5,4) is dist=sqrt(1+1)≈1.4→dist=2. Can shoot Bastion (critical) to eliminate. I'm not adjacent to any Vector, so precision_shot not blocked. Move to (4,3), then precision_shot Bastion to eliminate.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I'm at (3,3) with 3/8 HP, fortified and overclocked (2 ability uses). Longshot is at (5,4), dist=3, out of melee range. Marksman is wounded at (4,3). My orders say push forward and shield_wall facing enemy. I should move toward Longshot to close distance, then use shield_wall to protect Marksman from the east where Longshot threatens. Moving to (4,4) puts me adjacent to Marksman and closer to Longshot. Then shield_wall facing E to block Longshot's shots at Marksman. With overclocked I get a second ability — I can use intercept on Marksman to protect them if Longshot fires.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Patch",
+          "class": "medic",
+          "side": "player",
+          "hp": 12,
+          "maxHp": 16,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "player",
+    "totalTurns": 11,
+    "reason": "player eliminated all enemies"
+  },
+  "endedAt": "2026-02-24T02:06:07.250Z"
+}

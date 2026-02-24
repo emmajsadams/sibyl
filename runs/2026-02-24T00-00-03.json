@@ -1,0 +1,2381 @@
+{
+  "id": "2026-02-24T00-00-03",
+  "startedAt": "2026-02-24T00:00:03.676Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 4,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 4,
+        "movement": 2,
+        "range": 2,
+        "speed": 2
+      },
+      "oracle": {
+        "maxHp": 6,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 16,
+        "movement": 3,
+        "range": 2,
+        "speed": 3
+      },
+      "vector": {
+        "maxHp": 9,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 1,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 12,
+        "healAmount": 10
+      },
+      "overclock": {
+        "selfDamage": 0
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Watcher",
+        "class": "oracle",
+        "prompt": "Scan early to give your team intel on enemy prompts. Target enemy specters with scan to track them after cloak. Use recalibrate on allies who need tactical adjustments. Stay safe at range behind your front line."
+      },
+      {
+        "name": "Bolt",
+        "class": "striker",
+        "prompt": "Stay at maximum range. Use precision_shot on the most wounded enemy to secure kills. If no one is wounded, target the enemy medic. Never move adjacent to enemies."
+      },
+      {
+        "name": "Warden",
+        "class": "sentinel",
+        "prompt": "Push forward aggressively. Shield_wall facing the enemy cluster. If flanked, turn to face the biggest threat. Attack when possible."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Bolt",
+        "class": "striker",
+        "prompt": "Maintain distance. Use precision_shot on high-value targets — medics first, then damage dealers. Use suppressing_fire if enemies close in."
+      },
+      {
+        "name": "Prophet",
+        "class": "oracle",
+        "prompt": "Use scan to reveal enemy prompts and cloaked units. Stay at max range (≤4 tiles for scan). Use recalibrate on wounded allies to buff them. Keep distance from enemies and avoid adjacent vectors."
+      },
+      {
+        "name": "Weaver",
+        "class": "vector",
+        "prompt": "Control chokepoints with traps. Place them between enemy positions and your allies. Use denial to block adjacent enemy abilities. Pulse groups when possible."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "All enemies are out of scan range (closest is Watcher at dist 5, need ≤4). I need to advance south to close distance. Moving to (3,2) gives me dist 3 to Watcher at (2,1) — within scan range. That's my best move: advance to (3,2) then scan Watcher.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Round 1: Two enemies in scan range. Enemy Prophet (oracle) at (3,2) is higher priority target — scanning their prompt reveals their strategy and deals 1 damage. They're closer (dist=2) and knowing oracle tactics is more valuable than knowing striker. After scanning, I should reposition to maintain range advantage. Moving to (1,2) keeps me behind my front line while staying in range of key targets.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "No enemies in range from current position (1,0). All enemies are 4-6 tiles away, max range is 2. I need to advance toward the nearest enemy. Prophet at (3,2) is closest at dist 4. Moving to (3,0) gets me closer. From (3,0), Prophet would still be at dist 2+y=2, so (3,2) would be dist 2 - exactly in range! Let me verify: from (3,0) to (3,2) = 2 tiles. That's within precision_shot range of 2. I can move to (3,0) then use precision_shot on Prophet.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Watcher (oracle) is in range at dist=3 and is high value. I'm at (2,4), Watcher at (1,2). I haven't moved yet so precision_shot deals 2dmg. Shoot first, then move to maintain distance from enemies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Prophet is at (3,2), distance 3 - closest threat. Orders say push forward aggressively. I can move to (4,2) to close distance and threaten Prophet. Then shield_wall facing N toward the enemy cluster (Prophet at (3,2), Bolt at (2,5)). Moving to (4,2) puts me closer and I can protect allies with shield_wall facing N.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 2
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Round 1, starting at (0,5). All enemies are out of range. Watcher is closest at dist=4 at (1,2). I should move toward the center to control chokepoints and place a trap in a likely enemy path. Moving to (1,4) puts me closer while staying safe. Then I'll place a trap at (1,3) which is on the path between Watcher at (1,2) and my position - enemies moving north will step on it.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 9,
+          "maxHp": 9,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Weaver is 2 tiles away at (1,4) — if I move north toward Bolt I risk getting adjacent. Prophet is already scanned. Enemy Bolt at (2,5) is just out of scan range (dist=4 from current, but recon says outRange). I should scan Prophet — already known — or find value elsewhere. Actually Prophet is already scanned. Weaver is in scan range at dist=2 but scan is blocked when adjacent to Vector, not at dist=2, so scan should work. Scanning Weaver would reveal its prompt and deal 1 damage. Alternatively scan enemy Bolt but it's out of range. Best play: move to (2,1) to increase distance from Weaver while staying in scan range of enemies, then scan enemy Bolt from (2,1) — dist to (2,5) = 4, exactly in range. That gets us intel on the enemy Bolt's prompt.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "I'm at half HP (4/6) and Warden is adjacent at (4,2) — dangerous. Foresight shows Watcher will scan me again and Bolt will precision_shot me. Warden already used shield_wall facing N toward me. I need to get out of Warden's adjacency to avoid melee. Moving to (3,3) puts me 2 tiles from Warden and keeps scan range on enemies. From (3,3) I can scan Bolt at (3,0) — dist=3, in range — to reveal their prompt. Warden is already adjacent so I should move first, then scan Bolt who we haven't scanned yet.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Prophet is in range at dist 3 (within my range 2? No, range 2 means ≤2 tiles). Dist 3 is out of precision_shot range. All enemies are out of range. No valid targets. I should move closer to Prophet to get within range 2, but not adjacent. Prophet is at (3,3), I'm at (3,0). Moving to (3,2) puts me at dist 1 from Prophet - too close. Moving to (3,1) puts me at dist 2 from Prophet - perfect range, not adjacent. Check valid moves: (3,1) is in valid moves list. From (3,1), Prophet at (3,3) is dist 2, in range. I haven't moved yet so precision_shot does full 2dmg. No enemies are adjacent to me at (3,1) so precision_shot is not blocked.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "All enemies are out of range (dist 4-5, max range 2). No targets to shoot. Orders say maintain distance — enemies are clustered around rows 1-2, I'm at row 5. Moving toward (3,4) gets me slightly closer to engage next turn while staying safe. Trap at (1,3) to avoid. Weaver is at (1,4) so I'll move to (3,4) to keep spread and positioning for next turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Prophet is wounded at (3,3), dist=2. Moving to (4,3) closes distance to 2, still no melee range. Move to (3,3) would be best but that's occupied by Prophet. Move to (4,3) then shield_wall facing N toward enemy cluster (Bolt at 3,4, Prophet at 3,3). This protects allies behind me and keeps fortify next turn if I don't move again. Actually, I can move to (3,2) to get adjacent to Prophet at (3,3) — dist=1, that's melee range! Then attack Prophet who is wounded.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "I already have a trap at (1,3). Enemies are clustered around (2-3, 1-2). I should advance to (2,3) to be closer to the action and place a trap at (2,2) to block the approach corridor between the enemy cluster and my allies. This creates a trap corridor they'll have to navigate through.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 9,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Critical situation: I'm at 2/6 HP. Foresight shows Warden will attack me at (3,3) and enemy Bolt will precision_shot me - I'll likely die if I stay. I must move away. Warden is adjacent at (3,2) blocking north. Valid moves that escape: (4,4), (4,5), (2,4), (2,5) are furthest. Moving to (4,4) gets me away from Warden and enemy Bolt's line. I still need to use scan on Warden since it's unscanned and in range. I'll scan Warden first (dist=1, in range), then move to (4,4) to escape the incoming attacks. Warden is dist=1 so scan works. After move to (4,4), I'm still at dist=2 from Warden so scan must happen before move.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Weaver is 2 tiles away at (2,3) - I must NOT move adjacent to it or my scan ability gets blocked. Weaver's foresight shows it will trap (2,2) this turn, so I should avoid (2,2). I need to scan Weaver to reveal its prompt. From current position (2,1), Weaver is at dist=2 and in scan range. I can scan Weaver now before moving, then reposition. Moving to (1,1) or (0,1) keeps distance from Weaver. Let me scan Weaver first (it's in range at dist=2, not adjacent so scan works), then move away from the trap at (2,2).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Warden(sentinel) is at dist=2, adjacent threat. Bolt(striker) at dist=3. Orders say maintain distance and use precision_shot on high-value targets. I'm at 3HP so need to be careful. If I move to (3,5) I increase distance from both Warden and Bolt while staying in range for precision_shot. From (3,5) Warden is at dist=3 and Bolt at dist=4 — Bolt goes out of range but Warden stays in range. Better to shoot first then move back. Precision_shot on Warden at dist=2 from current pos (3,4) — valid, no adjacent enemy Vector blocking. Then move to (3,5) to increase distance.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Prophet is wounded and priority target, but at dist=4, out of range. Bolt also at dist=4. Weaver(vector) is at dist=3 and in range, but orders say target wounded enemies first, and Weaver is healthy. My precision_shot has range≤2 tiles, so Weaver at dist=3 is also out of range. No valid precision_shot targets from current position. I need to close range on Prophet (wounded, priority) without going adjacent to Weaver at (2,3). Moving to (4,2) gets me closer to Prophet at (4,4) — dist would be 2, in range — while staying away from Weaver. From (4,2), Prophet at (4,4) is dist=2, within precision_shot range. I haven't moved yet so no penalty. Let me verify: (4,2) to (4,4) = 2 tiles. Valid. Distance from (4,2) to Weaver at (2,3) = |4-2|+|2-3|=3, not adjacent. Safe.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "I'm at (3,2) with 6/8 HP, fortified. Weaver(vector) is at (2,3) distance 2 — moving adjacent would block my abilities, so I must avoid (2,2) and (3,3). Enemies are clustered north: Bolt at (3,5), Prophet at (4,4) critical. I should push toward the enemy cluster. Moving to (3,3) would put me adjacent to Weaver — avoid. Moving to (4,3) gets me closer to Prophet/Bolt without triggering Weaver's denial zone. From (4,3) I'm still not in attack range but better positioned. I'll shield_wall facing North to protect against the striker/oracle cluster.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 2
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Warden(sentinel) is adjacent at dist=2, within pulse range. Two enemies clustered on x=4. I have traps at (1,3) and (2,2) already placed. Watcher is at (1,1) and could step into (1,3) trap naturally. Priority: pulse Warden to deal AoE damage, then move to (3,3) to tighten denial zone on Warden and get closer to place trap on (3,2) blocking enemy advance. Actually, moving first to (3,3) keeps Warden in pulse range (dist=1 from 3,3 to 4,3) and puts me adjacent for denial. Let me move to (3,3) then pulse center at (4,3) to hit Warden. Bolt(enemy) at (4,2) is also 1 tile from (4,3) so pulse from (3,3) targeting (4,3) center would hit both Warden and enemy Bolt.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "I'm at 1/6 HP — critically wounded. Foresight shows enemy Bolt used precision_shot on my position (4,4) last turn, and Warden moved to (4,3) adjacent to me. I need to escape immediately. Warden is adjacent which would block scan anyway. Move away first to survive — (5,5) gives distance from both Warden at (4,3) and Bolt at (4,2). After moving to (5,5), Bolt is at distance 3 from (5,5) so scan is valid. All enemy prompts already known, so scan isn't urgent. I should just flee and wait — I'm too fragile to do anything useful. Move to (5,5) to maximize distance from threats.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Foresight shows enemy Watcher (oracle) is scanning (2,3) then moving to (1,1) — my current position. I need to move away. Weaver is at (3,3) and will pulse (4,3), so it's staying put. I have no enemies in scan range from (1,1). I should reposition to get Weaver or Prophet in scan range. Moving to (2,3) puts me 2 tiles from Weaver at (3,3) — within scan range of 4. But Weaver has denial (adjacent only), so as long as I'm not adjacent I can scan. From (2,3), Weaver is 1 tile away — that's adjacent, which means denial could block my scan. Better to move to (1,3) — distance to Weaver is 2 tiles (not adjacent), and Weaver is at dist 4 from (1,3) via Manhattan: |3-1|+|3-3|=2, so scan range ≤4 works. Actually Weaver denial is about blocking adjacent enemy abilities, not scan range. Scan is blocked by adjacent Vector. From (1,3), Weaver at (3,3) is 2 tiles away — not adjacent, so scan works. Let me move to (2,3) first: dist to Weaver = |3-2|+|3-3|=1, adjacent — scan blocked. Move to (1,3): dist to Weaver = |3-1|+|3-3|=2, not adjacent, scan works. Weaver is within 4 tiles. I'll move to (1,3) then scan Weaver at (3,3). This also gets me away from (1,1) where Watcher plans to move.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Warden(sentinel) is in range at dist=3. Orders say precision_shot high-value targets — Warden is the closest threat. I'm at (3,5), haven't moved yet so precision_shot deals full 2dmg. Warden is at (4,3) — dist=3 which is >2 tiles range for precision_shot, so it's out of range. Only valid target in range is Warden at dist=3 but precision_shot max range is 2 tiles. So no ability targets in range without moving. Moving to (4,4) would put me adjacent to Warden at (4,3) — bad, that's adjacent. Move to (2,4) gets me closer to Watcher but doesn't help range on Warden. Actually let me reconsider: from (3,5), Warden at (4,3) is dist = |4-3|+|3-5| = 1+2 = 3. precision_shot range is ≤2 tiles. If I move to (4,4), Warden at (4,3) is dist=1 (adjacent) — can't use precision_shot adjacent to enemy (only blocked by Vector adjacency, not sentinel). Wait, the warning is about Vector adjacency. Warden is sentinel, not Vector. So from (4,4), Warden at dist=1 — precision_shot needs LoS and range≤2, dist=1 works. But moving first means 1dmg instead of 2dmg. Better: move to (2,4) then use suppressing_fire or check if any target reachable. Actually from (4,5): Warden at (4,3) dist=2 — precision_shot in range! Move to (4,5) first (valid move), then precision_shot Warden at full 2dmg since I moved (1dmg penalty applies). Hmm, moved = 1dmg. Without moving, Warden is dist=3, out of range. So I must move to get in range, accepting 1dmg. Move to (4,5) → Warden at (4,3) dist=2, use precision_shot for 1dmg (moved penalty).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Prophet is critical but out of range at dist=4. Bolt is healthy at dist=3, in range. Weaver is at dist=2 — I must not move adjacent. I moved last turn so precision_shot deals 1dmg if I moved, but I haven't moved yet this turn. I'll use precision_shot on Bolt (in range, dist=3, no adjacent Vector blocking from current position). Then stay put or reposition. Actually, Weaver is at (3,3) dist=2 — not adjacent, so precision_shot is not blocked. Bolt is healthy, Prophet is critical but out of range. Best play: precision_shot Bolt first, then consider moving toward Prophet. Moving to (5,3) keeps distance from Weaver and reduces dist to Prophet to 2. Wait — if I move first then precision_shot does 1dmg. Better to shoot first (2dmg on Bolt), then move to (5,3) to close on Prophet.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Weaver is adjacent at (3,3) and has DENIAL active, blocking my abilities except basic attack. I'm fortified with 50% damage reduction. I should attack Weaver since it's in range and the denial zone is a threat. After attacking, I can stay put to maintain fortify next round or reposition. Since only basic attack works in denial zone, I'll attack Weaver. Then wait to keep fortified status.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Warden is adjacent at (4,3) — my Denial passive is blocking their abilities. Watcher is at (1,3) range 2, Bolt at (5,3) range 2. Prophet is critical at (5,5) — need to help protect. I have a trap at (2,2) already. Warden is wounded and adjacent, pulse will hit them for 1dmg. After pulse, I can move to (4,4) to stay adjacent to Warden (keeping Denial active) and closer to Prophet for protection. Actually, pulse now hits Warden (dist 1) for damage, then move to cut off Bolt's approach to Prophet.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "All enemies are out of scan range from current position (1,3). Weaver is at distance 4 which is exactly at scan limit, but I need to check adjacency — Weaver is at (4,4), I'm at (1,3), distance is |4-1|+|4-3|=4, so scan would work BUT Weaver is a Vector and scan is blocked when adjacent to enemy Vector. I'm not adjacent to Weaver (distance 4), so scan isn't blocked. However, Weaver is already scanned. Prophet at (5,5) is distance 6, out of range. Bolt at (4,5) is distance 5, out of range. I should move closer to bring enemies into scan range. Moving to (3,4) gets me closer — distance to Prophet would be |5-3|+|5-4|=3, in range! Distance to Bolt would be |4-3|+|5-4|=2, in range. But wait — Weaver at (4,4) would be adjacent to (3,4) at distance 1, which would block scan. Moving to (3,3) instead: Weaver at (4,4) is distance |4-3|+|4-3|=2, not adjacent, scan not blocked. Prophet at (5,5) distance |5-3|+|5-3|=4, in range. Bolt at (4,5) distance |4-3|+|5-3|=3, in range. But Warden attacked (3,3) last turn and Weaver pulsed (3,3) — could be dangerous. Moving to (2,4): Weaver distance |4-2|+|4-4|=2, not adjacent. Prophet distance |5-2|+|5-4|=4, exactly in range. I can scan Prophet from (2,4) — but Prophet is already scanned. All enemies already scanned. I should recalibrate Warden who is wounded. Warden is at (4,3), I'm at (1,3) — not adjacent. Move toward Warden to recalibrate. Moving to (3,3) puts me distance 1 from Warden at (4,3) — adjacent! Then I can recalibrate Warden. But (3,3) was hit by pulse last turn. Let me move to (3,4) instead — Warden at (4,3) is distance |4-3|+|3-4|=2, not adjacent. Actually move to (3,3): Warden at (4,3) is distance 1 — adjacent, I can recalibrate. Weaver denial is adjacent range, Weaver at (4,4) — if I'm at (3,3) I'm not adjacent to Weaver. Good. Recalibrate Warden with tactical advice about the enemy striker using precision_shot targeting him.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "addendum": "Enemy Bolt striker at (4,5) is using precision_shot targeting you — you're their priority. Enemy Weaver at (4,4) uses denial on adjacents and has traps. Reposition north or use cover. Enemy Prophet at (5,5) is critical HP — priority kill target for our Bolt."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "I'm at 1HP — critical priority is survival. Enemy Bolt at (5,3) used precision_shot on (4,5) last turn (failed) then moved to (5,3). It targets wounded enemies — I'm at 1HP so I'm prime target. Warden is wounded and pushing forward. I need to stay alive. Moving to (5,4) keeps me adjacent to ally Bolt but closer to enemy Bolt. Better to move to (3,5) to increase distance from enemy Bolt at (5,3) — that's 3 tiles away. From (3,5) I can scan Watcher at (3,3) which is dist=2, well within range 4. Watcher is already scanned though. All enemies already scanned. I should recalibrate our ally Bolt at (4,5) — they're adjacent. Recalibrate can buff them. But priority: survive. Move away from enemy Bolt. From (3,5), enemy Bolt at (5,3) is dist=sqrt(4+4)≈2.8, still possibly in precision_shot range. Let me move to (2,5) — dist from enemy Bolt = sqrt(9+4)≈3.6. Still at risk. All enemies already scanned. Best action: move to maximize survival, then recalibrate ally Bolt to help them fight. Ally Bolt is at (4,5). From (3,5) I'm adjacent to ally Bolt — can recalibrate. Move to (3,5), then recalibrate Bolt at (4,5).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 4,
+              "y": 5
+            },
+            "addendum": "Enemy Bolt at (5,3) uses precision_shot on most wounded targets — you are now its primary target. Enemy Warden is wounded at (4,3) pushing forward. Focus fire on wounded Warden to eliminate it first, then coordinate with Weaver to take down enemy Bolt. Stay mobile to avoid being an easy precision_shot target."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Prophet is critical but at dist=4, out of range. Bolt is healthy at dist=3, in range. Weaver is at dist=2 — must not move adjacent. I can use precision_shot on Bolt (dist=3, within range=2? No — dist=3 exceeds range≤2). Wait, precision_shot range is ≤2 tiles. Bolt is dist=3, out of precision_shot range. Weaver is dist=2, in precision_shot range but I'm not adjacent so not blocked. I should shoot Weaver with precision_shot. But orders say target most wounded — Weaver is healthy, Bolt is healthy. No medic on enemy team. Both in-range targets are healthy. Weaver at dist=2 is reachable with precision_shot (range≤2). I haven't moved so full 2dmg. Take the shot on Weaver to reduce vector threat.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Warden is wounded at (4,3) distance 2 — prime target for precision_shot to eliminate. I haven't moved so no penalty. Enemy Bolt targets me at (5,3), so I should move after shooting to break LoS. Move to (5,5) after shooting to reposition while staying in range for next turn. Warden at dist 2 is within precision_shot range.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "I'm at 2/8 HP, fortified, adjacent to Weaver's denial zone which blocks my abilities. I need to escape the denial zone to use shield_wall. Moving to (4,5) puts me adjacent to Weaver but gets me north. Better: move to (5,4) to escape denial and stay close to ally Bolt at (5,3). Then attack Weaver if in range, or shield_wall to protect allies. Actually, Weaver is at (4,4) — denial affects adjacents, so I must move away first. Moving to (5,4) escapes denial zone and keeps me near ally Bolt. From (5,4), Weaver at (4,4) is dist=1, still in range for attack. Attack Weaver to finish them off (wounded). This removes the denial zone threat.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Warden is at (5,4) distance 1 - critical HP, I can finish it with attack. I'm also adjacent to it which triggers Denial, blocking some abilities. After attacking Warden, I could pulse to hit nearby enemies. Warden at dist 1 is attackable. Bolt enemy at (5,3) dist 2 also in range. Watcher at (3,3) dist 2. Priority: attack critical Warden to eliminate it, then pulse to hit Bolt at (5,3) if within 1 tile - but pulse hits within 1 tile AoE, Bolt is at (5,3) which is 2 away from me at (4,4), so pulse won't reach Bolt. After eliminating Warden, I could move to (4,3) to get closer, but I should attack first then consider pulse. Attack Warden to finish it, then pulse - at current position (4,4), pulse hits within 1 tile: (3,4),(5,4),(4,3),(4,5),(3,3)... wait pulse is 1 tile radius so it hits all units within 1 tile. Warden at (5,4) is dist 1, so pulse would hit it too. But attacking is more reliable to finish Warden. Let me attack Warden first, then pulse to hit anything remaining nearby. After Warden dies, no enemies within 1 tile at current position, so pulse would be wasted. Better: pulse first to hit Warden (guaranteed 1dmg, likely finish at critical), then if anything survives use attack. Actually attack does 1dmg too. Warden is critical so likely 1-2 HP. Attack Warden to finish, then move to better position or place trap.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "I'm at 1HP — extremely fragile. Watcher is at (3,3), distance 2, already scanned. I need to stay alive. Foresight shows Watcher moved to (3,3) last turn and recalibrated to (4,3). Enemy Bolt used precision_shot on (4,4) and (4,3) — Weaver is in danger. I should recalibrate Weaver (wounded, at (4,4)) to help them, but they're not adjacent. I can move to (4,5) to get adjacent to... no, Weaver is at (4,4) and (4,5) is a valid move — that puts me adjacent to Weaver for recalibrate. But I'm at 1HP and moving closer to enemies risks death. Actually, Watcher is at (3,3) and already scanned — no value in scanning again. Watcher's prompt says stay safe at range. My best play: move to (4,5) to get adjacent to Weaver at (4,4), then recalibrate Weaver with a tactical addendum about the enemy Bolt's prompt (stay max range, precision_shot wounded). This helps my wounded ally. Bolt enemy is at (5,3) targeting wounded units — Weaver needs to know to be careful.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 4,
+              "y": 4
+            },
+            "addendum": "Enemy Bolt stays max range and uses precision_shot on wounded units — you are their priority target. Enemy Watcher is at (3,3) scanning and recalibrating allies. Prioritize survival: move away from enemy Bolt's range (5,3) and avoid (4,4)/(4,3) which were targeted last turn."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Prophet is critical and within scan range (dist 3). Scanning Prophet deals 1 damage which could finish them off, and reveals their prompt (already known but scan still damages). Weaver is adjacent-ish at dist 2 — if I move closer I risk being adjacent and losing abilities. I should stay at current position or move slightly to maintain safe distance from Weaver while scanning Prophet. Current position (3,3): Prophet at (4,5) dist 3 = within scan range. Weaver at (4,4) dist 2 — not adjacent so scan not blocked yet. I'll scan Prophet to deal damage (possibly kill) then consider moving away from Weaver. After scanning, I should move to safer position away from Weaver. Move to (2,3) puts me further from Weaver.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Weaver(vector) is wounded and at dist=2. Priority is to secure the kill on Weaver with precision_shot. I'm currently at (5,3) and Weaver is at (4,4) — dist=2, in range. I must not move adjacent to Weaver (which would be at (4,3),(5,4),(3,4),(4,5)) — (5,4) is a valid move tile but that would put me adjacent to Weaver at (4,4). Stay put and fire precision_shot on Weaver to eliminate the wounded target.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Enemy Bolt at (5,3) is targeting me and is at distance 2 — within precision_shot range. I'm at 3HP so I need to be careful. I can shoot first before moving to avoid the 1dmg penalty. Fire precision_shot on Bolt for 2dmg, then move to (4,5) to create lateral distance and make myself harder to target next turn. Weaver is at (4,4) so I'll stay close for coordination.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "I'm at 3/9 HP and enemy Bolt at (5,3) is prioritizing me. I need to survive. Moving to (3,5) gets me further from Bolt while staying near my ally Bolt at (4,5). From (3,5) I can place a trap at (4,4) — the tile I'm vacating — which becomes a chokepoint between enemy Bolt's position and my ally. This denies that corridor and potentially catches Bolt if they advance.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Weaver is wounded and within scan range (dist 3, ≤4). I already know Weaver's prompt, so scanning again would be wasted. Bolt(enemy) is at dist 4, out of range. My ally Bolt is wounded at (5,3) and could use a recalibrate to boost effectiveness. But recalibrate is adjacent-only and ally Bolt is 3 tiles away. I can't reach adjacent to ally Bolt without getting close to Weaver. Best play: move to (4,3) to get adjacent to ally Bolt at (5,3) for recalibrate — but Weaver is at (3,5), and (4,3) is 2 tiles from Weaver, safe. Actually wait — if I move to (4,3), Weaver at (3,5) is dist=sqrt(1+4)≈2.2, not adjacent. Safe. Then recalibrate ally Bolt telling them to focus the wounded Weaver first. This helps coordinate the kill. Move to (4,3), then recalibrate ally Bolt.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 5,
+              "y": 3
+            },
+            "addendum": "Priority target: Weaver(vector) at (3,5) is wounded — finish them first to remove trap control. Then push Bolt(striker) at (4,5)."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Weaver(vector) is priority target but at dist=4, out of my range-2. Bolt(striker) is at dist=3, also out of range-2. I need to close distance to get Weaver in range. Moving to (4,4) puts me dist=2 from Weaver at (3,5) — within precision_shot range. I must avoid getting adjacent to Weaver (vector denial). (4,4) is not adjacent to either enemy. From (4,4), Weaver at (3,5) is dist=2, in range. I have 2HP so I need to be careful. Move to (4,4) then precision_shot Weaver to finish them.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Enemy Bolt is adjacent at (4,4) — precision_shot is blocked when adjacent to enemy. I need to move first to create distance, then use precision_shot on the critical Watcher at (4,3) which is higher value. Moving to (5,5) puts me at distance 2 from Bolt and distance ~2 from Watcher, enabling precision_shot. Actually, moving to (5,4) keeps Bolt at dist 1 still. Best move is (5,5) — Bolt at (4,4) is dist ~1.4, Watcher at (4,3) is dist ~2.8. Instead move to (5,4): Bolt at (4,4) dist=1 still adjacent, blocks precision_shot. Move to (2,5): Bolt dist=2, Watcher dist=3, out of range. Move to (5,5): Bolt dist=1.4 (not adjacent), Watcher dist=2.8 (out of range 2). Hmm. Orders say focus wounded Watcher first. Watcher is at (4,3) dist=2, healthy not wounded — actually the orders mention 'wounded Warden at (4,3)' which maps to Watcher oracle. It's healthy per recon. Bolt is critical at (4,4) adjacent. I can't use precision_shot while adjacent. Move to (5,5) first, then Bolt is no longer adjacent (diagonal ~1.4 tiles away). Precision_shot requires LoS and range ≤2. From (5,5) Watcher at (4,3) is dist=2.8 — out of range. From (5,4) Watcher is dist=1.4, Bolt is at dist=1 adjacent — blocks precision_shot. Best: move to (5,5), then use attack on Bolt if it's in range, or suppressing_fire toward Watcher. Actually from (5,5) Bolt at (4,4) is dist ~1.4 not adjacent, so precision_shot works on Bolt (critical, will likely finish it). Range check: dist ~1.4 ≤ 2, yes in range.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "I'm at 2/9 HP and critically wounded - survival is top priority. Enemy Bolt at (5,5) uses precision_shot on wounded units, so I need to get out of range. Moving to (1,5) puts maximum distance from enemy Bolt and keeps me away from (4,4)/(4,3) danger zones. After moving, I'll place a trap at (2,4) to create a chokepoint between enemy positions and my allies - this controls the approach path from the south where Watcher is operating.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 9,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Both enemies are already scanned — no scan targets remain. Bolt is at (5,5) within scan range (dist 3) but already known. Weaver is at (1,5), out of range and critical. My priority now is recalibrate to help allies. Last turn I recalibrated (5,3) — likely an ally there. Foresight shows Bolt moved to (5,5) and used precision_shot toward (4,4). I'm at (4,3) at 4HP, somewhat vulnerable. Bolt at (5,5) could shoot me. I should reposition to stay safe while supporting. Move to (3,3) to stay at range and out of Bolt's easy reach, then recalibrate an adjacent ally if possible. Actually, checking adjacency — if I move to (4,4), that's where Bolt shot last turn. Better to move to (3,4) or (3,3). No allies shown adjacent. With no adjacent allies to recalibrate and enemies already scanned, I'll move to a safer position and wait. Move to (3,3) to reduce exposure to Bolt.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "No enemies in range from current position. Watcher is at dist=4, out of range. Enemy Bolt at (5,3) is targeting me — I need to move to avoid being an easy target while getting into range. Moving to (5,4) keeps me mobile but stays exposed. Moving to (4,4) shifts position and could bring Watcher into range next turn. Orders say focus on wounded Warden — but I don't see Warden in current data, only Watcher at (3,3). I should move closer to get Watcher in range for precision_shot. Moving to (4,4) gets me closer to (3,3) at dist=2, which would put Watcher in range. Then I can use precision_shot on Watcher.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "I'm at (1,5) with only 2HP — critically low. Enemy Bolt at (5,3) uses precision_shot on wounded units, making me their priority. I need to survive. Moving to (0,4) or (0,5) keeps me far from Bolt. I have traps at (2,2) and (2,4) already placed. I should move away from danger and place a trap on (2,5) to control the approach path between enemy positions and my ally Bolt at (4,4). Moving to (0,5) keeps max distance from Bolt. Then place trap at (2,5) to create a chokepoint on the top row approach.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 9,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 9,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Bolt is about to precision_shot me at (3,3) for likely heavy damage — I'm at 3HP, this could be lethal. I need to move out of (3,3) to dodge. Bolt is at (4,4) moving to (4,4) then shooting (3,3), so I must not be at (3,3) after my move. I'll move to (2,2) to break line of sight and get distance. Weaver is placing a trap at (2,4) so avoid that area. After moving, I can scan Bolt since dist from (2,2) to (4,4) is 3 tiles — within range 4. Bolt is already scanned though. I could recalibrate an ally but no allies are adjacent. Best play: move to (3,2) to dodge the precision_shot targeting (3,3), then wait since no useful ability targets are in range from there and I need to survive.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Enemy Bolt at (5,3) has me as primary target - I need to stay mobile. Watcher (oracle) is wounded at (3,2), distance 3, within range. Enemy Warden is wounded at (4,3) pushing forward - but I don't see Warden in recon data, so focus on Watcher. I should move to avoid being an easy precision_shot target for Bolt at (5,3), then use precision_shot on wounded Watcher. Moving to (3,5) gets me away from Bolt's line of fire and keeps Watcher in range. Actually (5,5) moves away from Bolt at (5,3) - no that keeps me in its column. Move to (3,5) to dodge Bolt and maintain angle on Watcher at (3,2) - dist would be 3, still in range. Then precision_shot Watcher.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": "Out of range"
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "I'm at 2HP - critical survival priority. Enemy Bolt at (5,3) is targeting me with precision_shot. I need to move away from their range and hide. Moving to (0,2) puts me further from enemy Bolt and behind cover. I can place a trap at (2,4) to block enemy approach toward our side. Valid moves include (0,2), (0,3), (0,5). Moving to (0,2) gets me further south-west away from Bolt's range. Then place a trap to control the chokepoint at (1,3) to block enemy advance.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 9,
+          "position": {
+            "x": 0,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 10,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Round 10, I'm at 3/6 HP. Bolt is at (3,5) at range 3 — already scanned. Weaver is at (0,2) critical — already scanned. Both enemy prompts are known. Bolt tried precision_shot on me last turn but failed due to range. Weaver placed a trap at (1,3). I should avoid (1,3). My priority: Weaver is critical, scan would deal 1 damage but I already have their prompt. I should attack or reposition. I can't attack Bolt or Weaver from here (attack is adjacent only). Weaver is at distance 3 — I could scan them again to deal 1 more damage and potentially finish them off (they're critical). Scan deals 1 dmg and range is ≤4, Weaver at dist 3 qualifies. But wait — Weaver is at (0,2) dist 3, and I need to check if scan is blocked by adjacency to Weaver's vector denial. Denial blocks adjacent enemy abilities. I'm at (3,2), Weaver at (0,2) — distance 3, so I'm NOT adjacent to Weaver. Scan should work. Scanning Weaver deals 1 damage — if they're critical (1-2 HP) this could eliminate them. Let me scan Weaver to finish them off. Then I should move to safety — Bolt tried to shoot me, I should move to break line of sight or get to better range. Move to (3,4) to stay at range from Bolt while avoiding (1,3) trap.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 0,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "No enemies in range from current position. Watcher is at dist=4, out of my range-2. Enemy Bolt at (5,3) is targeting me as primary target - I need to stay mobile. Moving to (4,4) closes distance to Watcher (now dist ~2) while staying out of Bolt's easy line of sight. From (4,4) I can attempt precision_shot on Watcher at (4,2) which is 2 tiles away - within range. Let me move to (4,4) first, then shoot Watcher.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "I'm at 1HP and extremely vulnerable. Enemy Bolt at (4,4) with precision_shot is prioritizing me. I need to survive by moving away and staying out of range. Moving to (0,4) gets me further from the center but keeps me on the west edge away from Bolt's range. I'll place a trap at (1,3) area to deny enemy approach — wait, (1,3) already has a trap. Let me move to (0,4) to increase distance from Bolt, then place a trap at (1,3) or (2,2) to further control the corridor. Actually (2,2) and (1,3) already have traps. I should move north along the west edge to stay safe and place a trap at (1,2) to block any eastern approach.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 9,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 11,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "I'm at 2HP — critical state. Bolt is at (4,4) and will likely target me again with precision_shot. I need to break line of sight and get to safety. Valid moves show I can reach (2,3) or (3,4) — moving to (3,4) keeps me away from Bolt's last target pattern. Actually, (2,3) puts more distance and breaks the column. Bolt targeted (4,2) last turn, so staying in column 4 is death. Move to (2,3) to escape, then wait — I have no useful ability at this HP since scan costs exposure and recalibrate requires adjacency.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Enemy Bolt at (5,3) has me as primary target - I need to stay mobile. Watcher(oracle) is wounded at (2,3), distance 3, in range. I can precision_shot the wounded Watcher to potentially eliminate it. I should also move to avoid being an easy target for Bolt. Moving to (5,4) keeps distance from Watcher while making me harder to hit, then shoot. Actually, better to shoot first then move away from Bolt's position. Watcher is at dist 3 which is within precision_shot range (≤2 tiles... wait, range is ≤2 tiles). Dist=3 means out of precision_shot range (needs ≤2). So I cannot precision_shot from current position. Valid moves include (3,3) which would put me at dist=1 from Watcher - too close. (3,4) gives dist to Watcher of sqrt(1+1)≈1.4, adjacent diagonal. (4,3) is dist=2 from Watcher - in precision_shot range. Move to (4,3) then precision_shot Watcher. But (4,3) is in valid moves. However Bolt is at (5,3) - moving to (4,3) puts me adjacent to Bolt! That blocks precision_shot if Bolt is a Vector... Bolt is a striker not vector, so no blocking. But being adjacent to enemy Bolt is dangerous. Move to (3,4) instead - dist to Watcher becomes 1+1=2 diagonal... actually dist = |3-2|+|4-3|=1+1=2, in range for precision_shot! Then shoot wounded Watcher. This also moves away from Bolt at (5,3).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "I'm at 1HP and critically endangered. Enemy Bolt is at (5,3) using precision_shot on wounded units - I'm their priority target. I need to survive. Moving to (0,2) puts maximum distance from enemy Bolt at (5,3) and gets me away from the contested center. The traps at (1,3) and (2,4) are already blocking approaches. I'll move north-west to (0,5) to get further from threats, then place a trap to continue area denial. Actually, (0,5) moves me away from Bolt's range. Let me place a trap at (1,4) to block the corridor approach while I retreat to safety.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 9,
+          "position": {
+            "x": 0,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 12,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Critical situation: 1HP remaining. Foresight shows Bolt will precision_shot at (2,3) — my current position. I must move away immediately. Bolt is at (3,4) targeting me. I need to get out of range or behind cover. Moving to (0,3) puts me 3 tiles from Bolt — still in their range 5 striker. Moving to (0,2) gets distance. My priority is survival. Weaver has a trap at (1,4) so avoid that. Best escape: move to (0,2) to maximize distance from Bolt. I have no useful ability at 1HP — wait as second action to conserve.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Enemy Bolt at (5,3) has me as primary target. I'm at (3,4) with 3HP. Watcher is out of range at dist=5. No enemies in range from current position. I need to move to get Watcher in range while staying mobile to avoid Bolt's precision_shot. Moving to (2,3) gets me closer to Watcher and behind trap coverage. From (2,3) Watcher at (0,2) is dist=3, still out of range 2. Best play: move toward Watcher to close distance. From (2,4) Watcher is at dist=4. I can't reach Watcher in range this turn. I should reposition toward Watcher - move to (2,3) to close distance. Watcher dist from (2,3) = sqrt(4+1)=~2.2, still out of range 2. Move to (3,2) for dist to Watcher = sqrt(9+0)=3, no. Move to (2,3): Watcher at (0,2), dist = sqrt(4+1) ~2.2 - out of range. All moves keep Watcher out of range. Best tactical move: stay mobile, move away from Bolt at (5,3) by going to (1,4) or (2,5). Moving to (2,3) is closer to Watcher for next turn positioning. Wait as second action.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "I'm at 1HP — survival is critical. Enemy Bolt is at (5,3) with precision_shot targeting wounded units (me). I need to move away. Valid moves: (0,3), (0,4), (1,4), (1,5), (2,5). Moving to (1,5) keeps me away from Bolt's range and off the targeted tiles. After moving, I can place a trap at (1,4) to deny approach from the south corridor — useful chokepoint between enemy positions and allies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 6,
+          "position": {
+            "x": 0,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 9,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 13,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "I'm at 1HP — survival is critical. Weaver has denial (adjacent) so I must avoid (1,3) and (0,4)/(1,4) near Weaver at (1,5). Bolt is at (2,3) and targets wounded units — I need to move away. Foresight shows Bolt waited last turn at (2,3), so they may move or shoot this turn. I should move to maximize distance from Bolt while avoiding Weaver's denial range. Moving to (3,2) puts me farther from Bolt but closer to danger. Best survival move: go to (0,0) or (0,1) to escape — but Bolt has range. Actually, I should move to (0,4) to get distance... but Weaver is at (1,5), denial is adjacent, so (0,4) is adjacent to (1,5) — risky. (0,5) is also adjacent to Weaver. Safe distant tiles: (3,2) or (2,1) or (1,0). Moving to (3,2) gets me farther from Weaver but potentially in Bolt's range. Move to (0,0) to flee south and away from both. Bolt at (2,3) with range likely 3-4 tiles — (0,0) is dist 5 from Bolt, safe. I have no useful ability at 1HP with scan already done on both enemies. Wait after move.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Watcher is at (0,0) dist=5, out of range. Enemy Bolt at (5,3) is targeting me. I need to move closer to Watcher to get in range for precision_shot, while also staying mobile. Valid moves include (4,3) which gets me closer to where the action is, but enemy Bolt is nearby at (5,3) and would make me adjacent. Moving to (3,3) keeps distance from Bolt while repositioning. Actually, priority is to focus wounded Warden at (4,3) - but I see no Warden in the enemy list, only Watcher. Watcher is at (0,0) at dist=5. I should move toward Watcher to get in range. Move to (1,2) gets me closer to (0,0), dist would be ~2-3. Let me move toward Watcher - moving to (0,3) puts me at dist=3 from (0,0), still out of range 2. Moving to (1,2) puts me at dist ~sqrt(1+4)=2.2, still out of range. Watcher needs dist≤2. From (0,1) I'd be at dist=1 from (0,0) but that's not a valid move tile. Best I can do is move to (0,3) then wait, or (1,2). Neither gets me in range this turn. I'll move to (1,2) to close distance, then wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "I'm at (1,5) with only 1HP — critical danger. Enemy Bolt at (5,3) targets wounded units with precision_shot. I need to survive. Move to (3,5) to get further from Bolt's range. Then place a trap at (2,4) — there are already traps clustered around (2,4) and (1,4) area but I can reinforce chokepoints. Actually, (2,4) already has traps. Let me place at (2,5) to create a barrier, or better yet place at a fresh tile. From (3,5) I can place trap at (2,5) to block approach. Priority: survive by moving away from Bolt at (5,3), staying near top edge.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 6,
+          "position": {
+            "x": 0,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "opponent",
+    "totalTurns": 14,
+    "reason": "opponent eliminated all enemies"
+  },
+  "endedAt": "2026-02-24T00:07:39.311Z"
+}
