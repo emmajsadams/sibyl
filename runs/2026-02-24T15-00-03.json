@@ -1,0 +1,3134 @@
+{
+  "id": "2026-02-24T15-00-03",
+  "startedAt": "2026-02-24T15:00:03.430Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 4,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 4,
+        "movement": 2,
+        "range": 2,
+        "speed": 2
+      },
+      "oracle": {
+        "maxHp": 6,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 16,
+        "movement": 3,
+        "range": 2,
+        "speed": 3
+      },
+      "vector": {
+        "maxHp": 9,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 1,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 12,
+        "healAmount": 10
+      },
+      "overclock": {
+        "selfDamage": 0
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Marksman",
+        "class": "striker",
+        "prompt": "Stay at maximum range. Use precision_shot on the most wounded enemy to secure kills. If no one is wounded, target the enemy medic. Never move adjacent to enemies."
+      },
+      {
+        "name": "Shade",
+        "class": "specter",
+        "prompt": "Cloak immediately on turn 1. Move toward the enemy medic or weakest target. Use shadow_strike when adjacent while cloaked. Use breach to sabotage high-value targets."
+      },
+      {
+        "name": "Weaver",
+        "class": "vector",
+        "prompt": "Control chokepoints with traps. Place them between enemy positions and your allies. Use denial to block adjacent enemy abilities. Pulse groups when possible."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Bastion",
+        "class": "sentinel",
+        "prompt": "Advance toward the nearest enemy. Use shield_wall facing the direction with the most enemies. If an enemy is adjacent, attack them."
+      },
+      {
+        "name": "Longshot",
+        "class": "striker",
+        "prompt": "Position for clear sight lines. Prioritize killing wounded enemies with precision_shot. If forced to move, retreat away from threats. Suppressing_fire to slow rushers."
+      },
+      {
+        "name": "Grid",
+        "class": "vector",
+        "prompt": "Control chokepoints with traps. Place them between enemy positions and your allies. Use denial to block adjacent enemy abilities. Pulse groups when possible."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Round 1 — cloak immediately as ordered. Then move north toward Longshot at (2,4), closing distance while invisible. Best move is (1,3) to advance 3 tiles north along my column.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 1,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Marksman is at dist 3, in range for precision_shot (2dmg). I'm at (2,4), enemy at (2,1) - direct line of sight along x=2 column. I haven't moved, so full 2dmg applies. No adjacent enemies blocking. Fire first, then hold position.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Longshot is in range at dist=3, within my range-2 precision_shot... wait, range is ≤2 tiles. Longshot is at dist=3, so out of precision_shot range. No enemies are within range 2 from current position (2,1). I need to move closer to get Longshot in range, but not adjacent. Moving to (2,3) gets me to dist=1 from Longshot at (2,4) — too close, risks adjacency issues. Moving to (2,2) puts me at dist=2 from Longshot — perfect for precision_shot and not adjacent. I haven't moved yet so precision_shot does full 2dmg.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Round 1, no enemies adjacent. Marksman is at (2,2) dist=4, Weaver at (3,0) dist=5. I should move toward the center to control approach routes and place a trap between enemy positions and my allies. Moving to (4,3) brings me closer to center. Then place a trap at (3,3) — a key chokepoint between Marksman at (2,2) and my allies. This denies that corridor and threatens any enemy moving north.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "No enemies adjacent. Advance south toward Marksman at (2,2). Move to (3,3) is blocked by trap, so move to (3,4) gets me closer. Then use shield_wall facing south (direction of enemies) to protect allies Grid at (4,3) and Longshot at (2,4).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Round 1, enemies are 4-5 tiles away. I should advance and place a trap on a likely approach path. Moving to (3,2) puts me centrally and lets me place a trap at (3,3) — directly in the path between enemies and my allies. Grid is the biggest threat with denial aura, but it's not adjacent yet.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 9,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 9,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Cloak has 1 turn remaining — I must use it now. I can reach (2,5) which is directly behind Longshot (facing S, so behind = north of them = y+1 = y=5). That position is adjacent and behind Longshot, perfect for breach. Move to (2,5), then breach Longshot to take control. This neutralizes the striker and avoids the trap at (3,3).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 2,
+              "y": 4
+            },
+            "addendum": "Move away from allies and toward the edge. Do not attack."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "All enemies are healthy, so I should target based on orders (no wounded to finish off, no medic present). Longshot is closest at dist=2 and within precision_shot range. I haven't moved this action so precision_shot deals full 2dmg. Grid is adjacent-denial but is 3 tiles away so no adjacency risk. I'll fire precision_shot on Longshot then wait — no need to move since I'm already at good range and moving could reduce precision_shot damage.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Orders are to move away from allies and toward the edge. I'm at (2,4). Allies are at (3,4) and (4,3). Shade is adjacent at (2,5) to my north. Valid moves include (0,4) and (1,4) which move me west toward the edge and away from allies. (0,4) gets me furthest from allies and to the west edge. No attacking ordered.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "No enemies adjacent, so no attack. Shade is at (2,5) dist=2 to my north, Weaver at (3,2) dist=2 to my south. Orders say advance toward nearest enemy. Shade and Weaver are both dist=2. Shade is to my NW. Moving to (2,4) closes on Shade to dist=1 (adjacent) but must avoid getting adjacent to Weaver - Weaver is at (3,2) so moving to (2,4) keeps me 2 away from Weaver (safe). Actually (2,4) to (3,2) = dist 2, still safe. After moving to (2,4), Shade at (2,5) is adjacent - can then attack. But wait, trap at (3,3) - avoid. Most enemies are to my south/west: Weaver(3,2) is S, Marksman(2,2) is SW, Shade(2,5) is NW. Shield wall facing S or W would cover most. If I move to (2,4), Shade becomes adjacent and I can attack. Let me move to (2,4) to get adjacent to Shade, then attack Shade.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Grid is 2 tiles away at (4,3) — adjacent denial is a threat but not yet blocking me. There's already a trap at (3,3). I should place a trap on a chokepoint between enemy positions and my allies. Moving to (3,4) would put me closer to Bastion and potentially in denial range of Grid if it advances. Better to place a trap at (4,2) or (4,3) area to block Grid's path, but I can't place on occupied tile. I'll place a trap at (4,2) to threaten Grid's movement south, then move to maintain position. Actually, Grid is at (4,3) and moving adjacent would get my abilities blocked. I'll place trap at (3,4) — between Bastion at (2,4) and my allies — then stay put or reposition. Wait, (3,3) already has a trap. Placing at (3,4) costs a move to get in range (it's within 2 tiles from current pos (3,2) — distance is 2, so in range). Place trap at (3,4) to create a kill zone between Bastion and my current position. Then move to (4,2) to flank and keep distance from Grid.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Weaver is adjacent at (4,2) and has Denial active, blocking my trap ability. I need to move away from Weaver to place traps, or use basic attack on Weaver to pressure them. There's already a trap at (3,3). Best play: attack Weaver (adjacent, 1dmg) then move to (4,4) to get distance and set up for trap placement next turn. Alternatively, move first to break adjacency then trap. Moving to (5,3) breaks adjacency with Weaver and lets me trap next turn. But attacking Weaver while adjacent is safe and deals damage. Attack Weaver first (no range restriction for basic attack), then move to (5,3) to escape denial zone.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 9,
+          "maxHp": 9,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Breach cooldown is 1 turn, so can't use breach this round. Bastion is adjacent at (2,4) and I'm not behind them - they face W so behind is (3,4). I can move to (3,4) to get behind Bastion, then shadow_strike from there for 1 damage while staying cloaked. Longshot is wounded at distance 3 - priority target but can't reach this turn. Moving to (3,4) puts me behind Bastion and adjacent, enabling shadow_strike. Shadow_strike keeps cloak active, which is valuable. Avoid trap at (3,3) and (3,4) - wait, (3,4) IS a trap location. I need to avoid that. Valid moves show (3,4) is listed but it's a trap. Better to shadow_strike Bastion from current position (2,5) - Bastion is at (2,4), adjacent, so shadow_strike works. This deals 1 damage and keeps cloak. Then I can move toward Longshot after.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Orders say move away from allies and toward the edge, do not attack. I'm at (0,4) facing W. Allies are at (2,4) and (5,3). The edge is to my left (x=0) or top/bottom. Valid moves: (0,2), (0,3), (0,5), (1,3), (1,5). Moving to (0,5) keeps me on the left edge and moves away from Bastion at (2,4). Then (0,3) or stay. Actually I can move twice: first to (0,5) which is away from allies and on the edge. That uses my move. No attack per orders.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Longshot is wounded and highest priority kill, but at dist=5, out of range. Bastion is healthy and adjacent at dist=2. Orders say target most wounded, then enemy medic if none wounded. Longshot is wounded but unreachable this turn. Bastion is in range at dist=2 — use precision_shot on Bastion (no adjacent enemies blocking, not adjacent to enemy Vector Grid which is at dist=4). Stay at current position (2,2) to maintain max range and avoid closing on enemies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Grid is 2 tiles away at (5,3) — I'm not adjacent so my trap ability is available. I should place a trap on a tile that cuts off Grid's approach or blocks the path between enemies and allies. (4,3) is a good chokepoint — it's adjacent to Grid's position and would threaten them if they step there. I'll place the trap first, then move to (3,2) to maintain distance from Grid while staying in a controlling position.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Shade is adjacent at (1,4). Orders say attack adjacent enemies. I'm fortified so I have 50% damage reduction — but if I attack I don't need to move. Most enemies are to the south (Marksman at (2,2), Weaver at (3,2)). Attack Shade first, then use shield_wall facing south to protect against Marksman/Weaver.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 4
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "I'm at (5,3), no enemies in range. There's a trap at (3,3) already. Weaver is at (3,2) and is the biggest threat at dist=3. I need to move closer while staying out of denial range (adjacent). Moving to (4,2) gets me within range 2 of Weaver at (3,2) — that's exactly 2 tiles away (manhattan: |4-3|+|2-2|=1), wait that's 1 tile — too close, I'd be adjacent. Let me recalculate: (4,2) to (3,2) is distance 1 — adjacent, that triggers denial. Move to (4,3) instead: distance to Weaver (3,2) = |4-3|+|3-2|=2, safe. From (4,3) I can place a trap at (3,3) — but there's already a trap there. I can place trap at (4,2) to threaten Weaver's path, or at (3,4) to block the corridor. Weaver is at (3,2), Marksman at (2,2). If Weaver moves toward allies it might step through (3,3) which is already trapped. I'll move to (4,3) and place a trap at (4,2) — blocking a likely Weaver approach path. Distance from (4,3) to (4,2) is 1, within trap range of 2.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "I'm at 2/4 HP, adjacent to Bastion (healthy sentinel). Bastion is facing W, and I'm at (1,4) which is to the east of Bastion at (2,4) — that means I'm actually behind Bastion (behind tiles are [3,4], wait no — behind check says I'm NOT behind from current position). I need to get behind Bastion to breach. The behind tile is (3,4) but that's a trap! Longshot is wounded at (0,5) and I can get behind them from (0,4). With only 2HP left, I should go for the wounded Longshot — move to (0,4) which is behind Longshot, then breach to make Longshot obey me next turn (great sabotage). Or I could shadow_strike Bastion from here to deal damage while staying cloaked — but I'm not cloaked. At 2HP I need to be careful. Longshot is wounded so shadow_striking them would be better value. Move to (0,4) puts me adjacent and behind Longshot. Then breach Longshot — they're a striker so having them attack their own allies is high value. Let me do: move to (0,4), then breach Longshot at (0,5) facing N (I'd be approaching from south, behind them).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 0,
+              "y": 5
+            },
+            "addendum": "Attack your nearest ally with your strongest attack."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Longshot is wounded but at distance 5, out of range. Bastion is at distance 2 and healthy. Grid is at distance 3. Orders say target most wounded first, then enemy medic if none wounded. Longshot is wounded but unreachable. Bastion is in range at dist 2 — I can use precision_shot on Bastion. I haven't moved, so full 2dmg applies. Stay at current position to avoid moving adjacent to any enemy.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Orders say attack nearest ally with strongest attack. My allies are Bastion at (2,4) dist=2 and Grid at (4,3) dist=6. Bastion is nearest. Strongest attack is precision_shot (2dmg, range≤2). Bastion is at dist=2, within range. I need LoS and must not be adjacent to enemy Vector (Weaver is at dist=6, not adjacent). No Vector adjacent, so precision_shot is valid. Target Bastion at (2,4).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Grid is 2 tiles away at (4,3) — I'm in denial range if I stay put. I need to be careful. Traps already at (3,3) and (3,4). I should pulse Grid to deal 1 damage since it's within range 1 if I move adjacent, but that would put me adjacent and under denial. Better to place a trap on a chokepoint to funnel enemies. I can trap at (2,3) to block approach toward Marksman at (2,2). I'm not adjacent to Grid so trap is not blocked. Let me place trap at (2,3) which is a valid move tile and within range 2 of my position (3,2) — distance is sqrt(1+1)=~1.4, within range 2. Then move away from Grid toward (2,1) to maintain distance.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "I'm at (2,4) with 5/8 HP, fortified. Marksman is at (2,2) dist=2, Shade is at (0,4) dist=2. Orders say advance toward nearest enemy and use shield_wall facing direction with most enemies. Moving to (2,3) puts me adjacent to Marksman at (2,2) — I can then attack. Shade is to my W, Marksman is to my S — most enemies are to the S/SW. Move to (2,3) first, then attack Marksman who will be adjacent.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "I'm at (4,3) with traps already at (3,3) and (4,2). Marksman is at (2,2) moving north, Weaver at (2,1). Enemies are approaching from the west. I should move west toward (3,4) to get closer and place a trap at (3,2) to cover the approach corridor between enemy positions and my allies. This creates a trap corridor: (3,3) already covered, adding (3,2) blocks the path from Weaver/Marksman toward Bastion at (2,3).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Longshot is adjacent at (0,5), wounded, and I'm already behind them (Longshot faces N, I'm at (0,4) which is south = behind). Shadow_strike does 1dmg, keeps cloak, and works from adjacent. I'm at 2HP so staying cloaked is critical. Shadow_strike Longshot to finish them off (they're wounded). No need to move first.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Bastion is adjacent (dist=1) and wounded — but precision_shot requires LoS and range ≤2, and being adjacent doesn't block it (only Vector adjacency blocks it). However, orders say never move adjacent to enemies, and Bastion is already adjacent at dist=1. I need to move away first to maintain max range. Best move: (2,0) puts me 3 tiles from Bastion, out of its melee threat, while keeping Bastion at dist=3 which is out of my range. Actually let me check: moving to (3,2) keeps dist=1 from Bastion still. Moving to (1,1) puts dist=2 from Bastion at (2,3) — that's within my range 2 and not adjacent. Or move to (2,0) — dist from Bastion=(2,3) is 3, out of my range. Better: move to (1,1), dist to Bastion is |2-1|+|3-1|=1+2=3, out of range 2. Hmm. Move to (3,2): dist to Bastion=(2,3) is 1+1=2, within range! And Grid is at (3,4), dist from (3,2)=2, not adjacent. No trap at (3,2)... wait trap at (3,3). (3,2) is safe. From (3,2): Bastion at (2,3) is dist=2, in range, LoS likely clear. precision_shot deals 2dmg (1dmg if moved). Bastion is wounded — 1dmg may finish it. Worth moving to (3,2) then precision_shot Bastion at (2,3).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Orders say to attack my nearest ally with my strongest attack. My allies are Bastion at (2,3) and Grid at (3,4). Bastion is closer — distance from (0,5): |2-0|+|3-5|=4. Grid: |3-0|+|4-5|=4. Both equidistant. I'll target Bastion at (2,3). My strongest attack is precision_shot (2dmg, range ≤2). Bastion is at distance 4, out of range. I can move 2 tiles toward Bastion. Moving to (0,3) gets me to distance |2-0|+|3-3|=2 — in range for precision_shot. I'm not adjacent to any enemy Vector (Weaver is far away), so precision_shot is not blocked. However, I will have moved, so precision_shot deals 1dmg instead of 2. Still my strongest available attack. Move to (0,3), then precision_shot Bastion at (2,3).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Both Shade and Marksman are wounded and in range. Marksman at (3,2) is adjacent to trap at (3,3) - they may step on it. I'm at (3,4), facing N. There's already a trap at (3,3) between me and Marksman. I should attack one of the wounded enemies to potentially finish them. Shade is wounded at (1,4) dist=2, Marksman wounded at (3,2) dist=2. Attack Marksman first since they're directly south and possibly near the trap. Then place a trap to cover approach routes - (2,4) would block Shade's eastern advance toward allies at (2,3).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": "No unit at target",
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Bastion is critical at (2,3), distance 2 - within attack range. I can attack to finish them off. Then place a trap at (3,3) - wait, there's already a trap there. Place trap at (2,2) to block approach paths. Actually, attack Bastion first to potentially eliminate them, then move to better position. I'm at (2,1), Bastion at (2,3) is in range (dist=2, my range=2). Attack Bastion to finish off the critical unit.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "I'm at (2,3) with 2HP, fortified. No enemies adjacent. Moving to (3,3) closes distance to Marksman at (3,2) — will be adjacent after move, enabling attack. Marksman is wounded so I can finish them. Avoid moving to (2,4) which has a trap. After moving to (3,3), Marksman at (3,2) is adjacent (south), so I can attack.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "I'm at (1,4) with 2HP, cloaked. Longshot is critical at (0,3) facing S — I'm already behind them. I can move to (0,4) which is adjacent and behind Longshot, then shadow_strike for 1 damage to finish them off (critical = low HP). Breach is unavailable. Grid is 2 tiles away so I need to avoid getting adjacent to them. Moving to (0,4) keeps me away from Grid at (3,4).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Bastion is critical and adjacent (dist=1). I need to use precision_shot but it requires range ≤2 and LoS - however I'm adjacent to Bastion. Check: precision_shot is blocked when adjacent to enemy Vector, not sentinel. Bastion is a sentinel at dist=1 (adjacent). precision_shot requires range ≤2 tiles and needs LoS - being adjacent to a sentinel doesn't block it. But orders say never move adjacent to enemies. I'm already adjacent to Bastion. I should move away first to a safe position while keeping Bastion in range, then fire. Move to (3,1) which is dist=2 from Bastion at (3,3) - still in range. Grid is at (3,4) dist=2 from me now, moving to (3,1) puts Grid at dist=3. From (3,1), Bastion at (3,3) is dist=2, still in range. Grid won't be adjacent. Fire precision_shot on Bastion (critical) to finish it.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Grid is at (3,4), 4 tiles away - out of my current range. Marksman is critical at (3,1) and needs protection. I should move toward the center to control chokepoints and place a trap on a likely approach path. Grid will likely move south toward our allies. Moving to (2,3) puts me in a better control position and lets me place a trap at (3,3) - blocking Grid's path south toward Marksman.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Weaver is at (2,3), 2 tiles away — denial range is adjacent only so I'm safe here. There's already a trap at (3,3) between me and Marksman. Traps at (2,4) and (3,3) cover approaches. I should place a trap at (4,3) to control the eastern flank and deny movement through that chokepoint. Then move to (4,4) to stay mobile and maintain distance from Weaver while covering more ground.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "I'm at (0,4) with 2HP, cloaked. Grid is at (4,4) facing E - behind tile is (3,4) which is reachable in my move range. I should move to (3,4) to get adjacent behind Grid, then use shadow_strike which deals damage and keeps cloak. This is an ideal assassination setup.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "I'm at 1HP, very vulnerable. Grid is at distance 4, out of my range 2. No enemies in range. I need to move closer but avoid getting adjacent to Grid (Vector denial). Moving to (4,2) would put me at distance 2 from Grid at (4,4), within my precision_shot range, and not adjacent. But (3,3) has a trap - avoid it. Let me move to (4,2): that's dist 2 from Grid, in range for precision_shot, not adjacent. From valid moves, (4,2) is available.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Shade (specter) is adjacent at (3,4), wounded — prime target. I can pulse to hit Shade for 1dmg (they're within 1 tile). Then move away to (5,5) to avoid being adjacent to Weaver and to reposition. Pulse first since I'm at (4,4) and Shade is at dist=1. After pulse, move to (5,5) to open distance from both enemies and prepare trap next turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Grid is at (5,5) wounded and distant. Shade is critical at (3,4). Trap at (3,3) already placed. I need to protect Shade and control the approach. Grid is moving north, likely approaching through center. I should move to (3,2) to get closer to the action and place a trap at (4,3) to block Grid's southern approach path. Moving to (3,2) first, then placing trap at (4,3) to cover the eastern corridor.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 9,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "I'm at 1HP, critical condition. Grid is at (5,5) wounded and I need to finish them. I can move to (5,4) which is directly behind Grid (behind tile confirmed), then use shadow_strike which keeps cloak if I still have it active. Move to (5,4) first, then shadow_strike Grid at (5,5). This is my best shot at eliminating a wounded enemy while staying safe.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Grid is at (5,5) wounded and moving toward us. Shade is critical at (5,4) - need to protect ally. Traps already at (3,3) and (4,3). I should move closer to Grid to use denial aura and place traps to cut off Grid's movement. Moving to (4,2) gets me closer. Then place a trap at (4,3) - wait, that's already trapped. Place trap at (5,3) to block Grid's path south toward Shade, but I need to be within 2 tiles. From (4,2), (5,3) is dist ~1.4, within range 2. This would trap the path between Grid and Shade.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Shade is adjacent at (5,4) and critical - this is a kill opportunity. I can pulse to hit Shade for 1 damage (may finish them off if at low HP), or attack for 1 damage. Pulse hits all units within 1 tile including Shade. Since Shade is critical, any damage could finish them. I'll attack Shade directly for reliable 1 damage, then move to (4,4) to reposition away from the corner and get better map control. My denial aura will keep blocking Shade's cloak if they survive.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 9,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Grid is at (4,4) wounded, 2 tiles away. There are already traps at (3,3), (4,3), (5,3) forming a barrier. Grid is moving south toward me. I should place a trap to reinforce the chokepoint or attack. I can't trap if adjacent to Grid, but Grid is 2 tiles away so trapping is allowed. (4,3) already has a trap. I could place at (5,3) — already trapped. Let me place a trap at (3,3) — already trapped too. All chokepoints covered. I should move to maintain distance and use pulse or attack. Grid is at dist=2, so pulse (range 1 tile AoE) won't reach. Attack requires adjacent. I can't attack without moving adjacent, which would trigger denial. Best move: stay put or reposition, and place a trap somewhere useful. Valid moves include (5,1), (5,2) — moving east keeps distance. Let me place a trap at a new location. Valid tiles include (3,1), (4,1), (5,1) — these could block flanking routes. Place trap at (3,1) to extend the trap network, then move to (5,2) to reposition east away from Grid.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Traps already at (3,3), (2,4), (4,3) blocking approaches. Weaver is at (5,2), dist 3 — not adjacent so trap placement is allowed. I should extend trap coverage toward Weaver's likely approach paths. Moving to (5,4) puts me closer but risks getting adjacent. Stay at (4,4) or move to (5,5) to place a trap at (5,3) — that covers the corridor between Weaver and my position. Let me move to (5,5) and place trap at (5,3) to create a minefield between Weaver and me.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 9,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 10,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "I'm at (5,5) with 4HP, facing Weaver at (5,2) dist=3. There's already a trap at (5,3) blocking that column. Valid moves include (5,4) which would put me at dist=2 from Weaver — still safe from denial. I should place another trap to reinforce the chokepoint. (4,4) is a good move to control the area without getting adjacent to Weaver. From (4,4) I can place a trap at (4,3) — wait, (4,3) already has a trap. Let me place at (3,4) to extend the trap line. Move to (4,4) then trap (3,4) to create a wider barrier.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Grid is at (4,4) moving south, wounded. Traps already at (3,3), (4,3), (5,3), (3,1). I need to control the path Grid is likely to take moving south. (4,2) is a valid move tile and would be a good trap placement — directly in Grid's southward path. I should move to place a trap there, but I need to stay out of adjacent range. I'm at (5,2). I can move to (4,1) first, then place a trap at (4,2) — wait, trap range is ≤2 tiles so I can place from (5,2) directly. But (4,3) already has a trap. (4,2) is open and in Grid's likely path south. I can place a trap at (4,2) from my current position (dist=1, within range 2). Then move to (5,1) to stay safe.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 5,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 11,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "I'm at (4,4) with 4HP, enemy Weaver is at (5,1) dist=4. Many traps already placed at (3,3),(2,4),(4,3),(5,3),(3,4). Weaver is moving south toward me. I should move to (5,5) to reposition and place a trap at (5,4) or (4,5) to intercept Weaver's likely path northward. Valid moves include (5,5) and (5,4). Moving to (5,5) then placing trap at (5,4) would block the (5,x) corridor Weaver might use.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Grid is at (5,5) dist=4, out of range. I have traps at (3,3),(4,3),(5,3),(3,1),(4,2). Moving to (5,2) advances toward Grid while staying safe. From (5,2) I can place a trap at (5,3) - wait, (5,3) already has a trap. I could place at a new position. From (5,2), valid trap targets within 2 tiles that aren't already trapped: (4,4),(5,4) would be good to block Grid's path south. Move to (5,2) first, then place trap at (5,4) to extend the trap line northward, cutting off Grid's approach route.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 9,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 12,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Grid is at (5,5), 3 tiles north. Many traps already placed around rows 1-4. (5,4) is trapped. Moving to (4,1) or staying put. I should advance northward to pressure Grid while staying out of denial range (adjacent). Moving to (5,3) is trapped. I can move to (4,2) which is also trapped. Valid moves: (3,2),(4,1),(4,2),(4,3),(5,0),(5,1),(5,3),(5,4) — many are trapped. Safe untrapped move options: (3,2),(4,1),(5,0),(5,1). I'll move to (5,1) to reposition south and place a trap at (5,2) to block Grid's path south. Actually, Grid is north at (5,5) moving south eventually. The column 5 path has (5,4) and (5,3) trapped already. I should place trap at (3,2) or advance. Move to (3,2) and place trap there to extend control westward. Grid is wounded — maintain pressure. Place trap at an untrapped tile near chokepoint. From (3,2) I can trap nearby. Let me move to (4,1) (untrapped) and then trap (4,2) — wait (4,2) is already trapped. From (4,1) I can trap (3,1) — already trapped. Trap (4,0) or (5,1). Move to (5,1) then trap (5,2) — my current position, that should be valid as empty after I move.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "I'm at (5,5) with 4HP. Weaver is at (5,1) distance 4, out of range. Valid moves include (5,3) and (5,4) which already have traps. I can move to (4,4) or (4,5) to reposition. The area around (3,3)-(5,4) is heavily trapped already. I should move toward Weaver while staying safe, but (5,3) and (5,4) are trapped so I can't safely move through those. Moving to (4,4) puts me adjacent to traps at (3,4),(4,3),(5,4). Best play: move to (4,5) to stay back and place a trap at (4,4) to add more denial coverage between me and Weaver.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 5,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 13,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Weaver is at (5,1), distance 5, out of range. The area around me is heavily trapped already (3,3), (2,4), (4,3), (5,3), (3,4), (5,4), (4,4). I should move toward Weaver to close distance while placing a trap in a gap. Moving to (5,5) puts me closer and I can place a trap at (5,4) - wait, that's already trapped. Valid moves include (5,5). I'll move to (5,5) to approach Weaver and place a trap at an untrapped tile. From (5,5) I can trap nearby - but most adjacent tiles are already trapped. Let me place a trap at (3,5) which is untrapped and on a likely approach path.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Grid is at (5,5) dist=4, out of range. Many traps already placed. (5,3) and (5,4) are trapped, blocking direct approach from north. (5,2) is also trapped. I can move to (4,0) or (4,1) to reposition, or place more traps to reinforce the chokepoint. Valid moves include (5,3) but that's trapped - dangerous for me too. Let me place a trap at (4,1) to extend the trap line westward, then move to (4,0) to stay safe and deny approach routes.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 9,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 14,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Grid is at (5,5), dist=6, out of range. Many traps already placed in the mid-field (rows 1-4). Valid moves include (5,1) which extends my presence toward the right flank. I should advance and place another trap to further choke Grid's approach path. Moving to (5,1) and placing a trap at (5,2) - but (5,2) already has a trap. (4,2) also trapped. Let me place at (3,1) - already trapped. Available trap spots from (5,1): could target (5,3) which is already trapped, (4,1) trapped. From (3,0) I could trap somewhere new. Let me move to (5,0) and place a trap at (5,1) to seal that corridor, since (5,2) is already trapped - this would create a chain 5,1/5,2/5,3/5,4 blocking the right column entirely.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 5,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "I'm at (5,5) with 4HP. Weaver is at (5,0), distance 5, not a threat yet. The area is heavily trapped already. Valid moves are limited. I should wait or consolidate position since I can't place more traps in already-trapped tiles. Let me check if there are any untapped positions - (4,5) and (3,5) are available. I'll move to (4,5) and place a trap at (3,5) if possible, or just reinforce denial coverage.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": "Position occupied"
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 5,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 15,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Weaver is at (5,0), distance 6 - far away and out of range. The area around me is heavily trapped already: (3,3), (2,4), (4,3), (5,3), (3,4), (5,4), (4,4), (3,5). I need to place traps to fill remaining gaps. Moving to (5,5) gives me a new position and I can trap (5,4) - wait, (5,4) already trapped. From (5,5) I could trap further south toward Weaver. Let me move to (5,5) and then trap (5,4) - already placed. Best option: move to (5,5) and place trap at (5,3) - already placed too. Most adjacent tiles are already trapped. I'll move to (2,5) to cover a new area and trap (2,4) - already trapped. Let me check valid moves and trap viable tiles. Moving to (3,4) is valid but trapped. Moving to (5,5) and trapping somewhere new like (4,5) - my current position. Actually I should trap my current tile before moving. Trap (3,5) - already placed. Trap (5,5) from current pos (4,5) - dist=1, valid empty tile. Then move to (2,5) to extend coverage.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Grid is far away at (2,5), distance 8. I'm at (5,0) facing East. My trap network is already extensive in the 3-5 x-range. Valid moves include (3,0),(4,0),(4,1),(5,1),(5,2) but (5,1) and (5,2) already have traps. I should advance toward the enemy while placing traps in their likely approach paths. Moving to (3,0) gets me closer and lets me place a trap in the corridor. Let me move to (4,0) to advance and place a trap at (3,0) to cover the bottom corridor approach.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 16,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "I'm at (2,5) with 4HP, facing west. Weaver is far away at (4,0), dist=7. I have many traps already placed forming a dense field. Valid moves include (4,5) which is untrapped and could extend coverage. My trap ability is blocked if adjacent to enemy Vector, but Weaver is far away so I can place traps freely. I should move toward (4,5) to place a trap there, extending the trap field eastward and covering more approach routes.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": "Position occupied"
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Grid is far away at (4,5), dist=5, out of range. I'm at (4,0) with many traps already placed around me. Valid moves include (5,0) and (2,0). The area around rows 1-3 is heavily trapped already. I should look to advance north toward Grid while staying safe. Moving to (5,0) keeps me on the east flank. Most nearby tiles are already trapped. I can try to place a trap at a tile not yet trapped — looking at valid moves, (3,0) is already trapped. (5,0) is available and not trapped. After moving to (5,0), I could try placing a trap somewhere to further deny movement paths. (5,3) and (5,4) are trapped. What about placing a trap at a new position? From (5,0) with range ≤2, I could reach (5,2) [already trapped], (4,2) [already trapped], (3,0) [trapped]. Most nearby tiles are trapped. I'll move toward Grid — move to (5,0) then wait, or move to (3,0) but it's trapped so I can't. Move to (2,0) to reposition westward. Actually, advancing north makes more sense. Move to (4,2) — but that's trapped, can't move there. Move to (3,1) — trapped. Move to (4,1) — trapped. Move to (5,1) — trapped. Only safe valid moves are (2,0) and (5,0). I'll move to (5,0) to hold the east side, then wait since most trap positions nearby are already covered.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 5,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 17,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Grid is at (4,5), distance 6, out of range. My valid moves are limited: [3,0],[4,0],[4,1],[5,1],[5,2]. Most nearby tiles already have traps: (5,1),(5,2),(4,1),(3,0) are trapped. Only (4,0) is open. I should move to (4,0) and place a trap there to further deny the southern corridor. This extends my trap coverage toward the center.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Weaver is at (4,0) heading W, distance 5. Most adjacent tiles are already trapped. Valid moves: (2,5),(3,4),(3,5),(4,3),(4,4),(5,4),(5,5). Many nearby tiles are trapped already. I should move to extend trap coverage toward enemy approach paths. Moving to (3,5) and placing a trap to cover remaining gaps - but (3,5) is already trapped. (5,5) is trapped. (5,4) is trapped. (4,4) trapped. (3,4) trapped. (4,3) trapped. Let me move to (2,5) to place a trap in a new area, extending denial zone westward where Weaver may approach.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 18,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Weaver is at (4,0), dist 7, far away. I'm at (2,5) with 4HP. The area around me is heavily trapped already: (2,4), (3,5) are occupied. Valid moves include (4,5) which is untrapped and extends coverage eastward toward Weaver's approach. I should move east to (4,5) and place a trap there to extend the trap field blocking Weaver's northern approach routes.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": "Position occupied"
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "I'm at (4,0) moving west. Grid is far away at (4,5), dist=5, out of range. The trap field is dense already - (3,0), (4,1), (4,2), (3,1) are all trapped. Valid moves include (2,0), (5,0). I should advance northward to close distance or place traps in uncovered chokepoints. (5,0) is open and I could trap there or move toward the enemy. Let me move to (3,0)... wait, (3,0) already has a trap. Move to (2,0) to extend west flank, then place a trap at a gap. Actually, looking at gaps: (2,0) has no trap, neither does (5,0). I'll move to (5,0) to cover eastern approach, then place a trap somewhere useful like further north if possible - but range is ≤2 tiles from position. From (5,0) I could trap (5,1) - already trapped. Could trap (4,0) - current spot will be vacated. Actually trap range from (5,0): could reach (3,0) already trapped, (4,0), (5,0) self, (5,2) already trapped. Let me move to (2,0) instead - from there I can trap (2,1), (2,2), (3,1) already trapped, (4,0). (2,1) is a good chokepoint. Move to (2,0), trap (2,2).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 19,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Grid is far away at (4,5), dist=7, out of range. I'm at (2,0) moving west. Many traps already placed in the mid-field. I should advance toward center to extend denial coverage and place a trap at (2,2) which is reachable - wait, (2,2) already has a trap. Valid moves include (1,1), (2,1), (3,1), (4,0). (3,0) is listed as a trap location (twice, possibly duplicate). I should move to extend my position and place a trap in a gap. Moving to (2,1) then placing trap at (1,2) or nearby - but I need to check trap range. From (2,1), trap range is ≤2 tiles, so I can place at tiles within 2. (1,2) would be reachable. Or move to (1,1) and trap at (1,3) to extend the defensive line northward. Let me move to (2,1) and trap at (1,2) to fill a gap in the western corridor, helping control the left flank.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "I'm at (4,5) with 4HP. The board is heavily trapped already. Weaver is at (2,1), dist=6, far away. Most nearby tiles are trapped: (3,4), (4,3), (4,4), (3,5), (5,4), (5,5). Valid moves include (2,5), (3,5), (5,5) etc. I should place a trap on an untrapped tile to continue controlling the area. (2,5) is a valid move tile and appears untrapped - moving there could cut off approaches. But first, let me check what tiles I can trap from current position (range ≤2). I can trap any empty tile within 2 tiles. Looking at traps list, (2,5) seems untrapped. I'll trap (2,5) from current position first, then move to maintain positioning. Actually, checking valid moves - I can move to (2,5) or (3,5). Let me place a trap at (2,5) from current position (within range 2: dist from (4,5) to (2,5) = 2, valid). Then wait or move to a safe spot. I'll trap (2,5) to block the left flank approach, then move to (3,5) - wait, (3,5) is trapped. Move to (2,5) after trapping there would be bad. I'll trap (2,5) first, then wait in place.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 20,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Grid is far away at (4,5), distance 6, out of range. The board is heavily trapped already. I'm at (2,1) facing N. Valid moves include (2,2) and (2,3) which would advance toward the enemy. I should look to place a trap in a chokepoint. (2,2) already has a trap. Moving to (2,3) puts me further north and I could place a trap at (3,3) but that's already trapped too. Let me check: traps at (2,2) and (1,2) block my left flank. Moving to (3,1) then placing a trap at (3,2) would add coverage in the middle corridor. Actually (3,1) is a valid move and from there I could trap (3,2) which isn't listed as trapped. That covers the central approach path.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "I'm at (4,5) with 4HP, enemy Weaver is at (3,1) dist=5, out of range. The area is heavily trapped already. Valid moves are limited. I should place a trap on an untrapped tile to continue chokepoint control. Looking at valid moves: (2,5),(3,4),(3,5),(4,3),(4,4),(5,4),(5,5) - but many nearby tiles already have traps. (4,3) is trapped, (4,4) is trapped, (3,4) is trapped, (3,5) is trapped, (5,4) is trapped, (5,5) is trapped. (2,5) appears untrapped. I can move to (2,5) and place a trap there, or stay and place trap on current position area. Actually I can place a trap from current position at range ≤2. Let me check untrapped tiles within range 2 of (4,5): I don't see (4,5) itself trapped or (5,4) wait (5,4) is trapped. Let me move to (5,5) wait that's trapped too. Move to (2,5) which is not listed as trapped, then trap somewhere. Actually I'll wait and place a trap - I can trap from current position. Tiles within 2 of (4,5) not yet trapped: need to find one. The trap list is dense. I'll move to (2,5) to reposition and then place a trap to extend coverage.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "draw",
+    "totalTurns": 21,
+    "reason": "Max rounds reached"
+  },
+  "endedAt": "2026-02-24T15:07:50.861Z"
+}
