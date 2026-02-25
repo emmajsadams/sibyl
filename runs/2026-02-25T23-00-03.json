@@ -1,0 +1,1984 @@
+{
+  "id": "2026-02-25T23-00-03",
+  "startedAt": "2026-02-25T23:00:03.767Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 4,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 4,
+        "movement": 2,
+        "range": 2,
+        "speed": 2
+      },
+      "oracle": {
+        "maxHp": 6,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 16,
+        "movement": 3,
+        "range": 2,
+        "speed": 3
+      },
+      "vector": {
+        "maxHp": 9,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 1,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 12,
+        "healAmount": 10
+      },
+      "overclock": {
+        "selfDamage": 0
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Watcher",
+        "class": "oracle",
+        "prompt": "Use scan to reveal enemy prompts and cloaked units. Stay at max range (≤4 tiles for scan). Use recalibrate on wounded allies to buff them. Keep distance from enemies and avoid adjacent vectors."
+      },
+      {
+        "name": "Bastion",
+        "class": "sentinel",
+        "prompt": "Push forward aggressively. Shield_wall facing the enemy cluster. If flanked, turn to face the biggest threat. Attack when possible."
+      },
+      {
+        "name": "Weaver",
+        "class": "vector",
+        "prompt": "Trap the paths enemies must take to reach your backline. Stay at medium range. Use pulse on clustered enemies. Denial blocks adjacent threats."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Wraith",
+        "class": "specter",
+        "prompt": "Stay cloaked and flank. Prioritize assassinating the enemy damage dealer. Use breach on sentinels to break their defensive posture. Recloak whenever it drops."
+      },
+      {
+        "name": "Hawk",
+        "class": "striker",
+        "prompt": "Maintain distance. Use precision_shot on high-value targets — medics first, then damage dealers. Use suppressing_fire if enemies close in."
+      },
+      {
+        "name": "Seer",
+        "class": "oracle",
+        "prompt": "Scan priority targets each turn to reveal their strategy. Use recalibrate on your damage dealer to boost effectiveness. Stay behind allies and maintain range. Never get adjacent to enemy vectors."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Round 1 — cloak immediately per orders and tip. All enemies are far (dist 5-8), no adjacent threats. Cloak first, then advance south toward Watcher at (2,1) who is the closest target. Move to (1,2) to close distance while staying cloaked.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Watcher (oracle) is in scan range at dist=3. Scanning reveals their strategy and deals 1dmg. Bastion is at dist=4 (out of range from current pos per range data). After scanning Watcher, I can recalibrate Hawk who is adjacent at (3,5) — wait, I'm at (2,4) and Hawk is at (3,5), that's dist=2, not adjacent. Wraith is at (1,2), dist=3, not adjacent either. No allies are adjacent for recalibrate. Best play: scan Watcher to reveal their prompt, then move toward Hawk to set up recalibrate next turn. Move to (3,4) gets me closer to Hawk at (3,5) — that would be adjacent, enabling recalibrate next turn. Or I could scan first then move.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Seer is at dist=4, exactly in scan range. I need to move to get scan range on Seer. Currently at (2,1), Seer at (3,4) is dist=4 but shows inRange:false. I need to close distance slightly. Moving to (2,2) keeps me safe and reduces dist to Seer to 3 tiles (Manhattan: |3-2|+|4-2|=1+2=3), bringing Seer into scan range. No enemies are adjacent so scan won't be blocked.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "All enemies are out of range (closest is Watcher at dist 4, need dist ≤2). Orders say maintain distance. I should advance toward Watcher to get in range next turn while staying back from the frontline. Moving to (3,3) reduces distance to Watcher to 2, putting it in precision_shot range. No ability this turn since nothing is in range.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Round 1, enemies at dist 4-5, out of range. Move forward to (4,2) to get closer while maintaining area control position. Then place a trap at (3,2) to cover the likely approach path from Hawk at (3,3) - they'll need to pass through that area to reach our backline. This denies the central corridor.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Enemies are at dist 4-5, out of range. Orders say push forward aggressively. Move to (2,1) to advance toward enemy cluster while staying near allies Watcher at (2,2). Then shield_wall facing North toward the enemy cluster.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 2
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 9,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Hawk is at (3,3) dist=2, in scan range. I haven't scanned Hawk yet — scanning will reveal their prompt and deal 1dmg. Wraith cloaked and moved to (1,2) last turn — dangerous, could threaten me. I'm at (2,2). Weaver placed trap at (3,2). I should scan Hawk to get their prompt. Then move away from (1,2) where Wraith is — moving to (2,4) keeps distance from Wraith and stays out of trap at (3,2).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Watcher is adjacent (dist=1) and already scanned. Weaver is 3 tiles away - must not move adjacent. Priority: scan Weaver to reveal their prompt (dist=3, in scan range). Then move away from Watcher who is right next to me at (2,4). Moving to (4,4) keeps distance from Weaver (would be dist=2, not adjacent) and away from Watcher. Actually scan first then move - scan Weaver at (4,2) from current pos (3,4), dist=3 which is ≤4, valid. Then move to (5,4) to increase distance from Watcher and stay safe.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Cloak has 1 turn remaining. Orders say prioritize assassinating the enemy damage dealer, and use breach on sentinels. Watcher is an oracle (damage dealer) and I can reach (2,3) which is directly behind Watcher at (2,4) facing N. That's perfect for breach. But wait — orders say breach sentinels, prioritize assassinating damage dealers. The oracle Watcher is the priority target. I can move to (2,3) which is behind Watcher and adjacent, then use breach on Watcher. Breach requires being BEHIND the enemy by facing — Watcher faces N, so behind is south side, tile (2,3). I'll be at (2,3) which is behind and adjacent. Breach will make Watcher obey me next turn. This is excellent — neutralize the oracle. Weaver (vector) is at dist 3 from my current pos, and I'd be moving to (2,3) which is dist 1 from Watcher at (2,4), dist from Weaver would be ~2 tiles, need to check. Weaver is at (4,2), my new pos (2,3): dist = |4-2|+|2-3| = 2+1 = 3, so still 3 tiles from Weaver — safe, not adjacent. Execute: move to (2,3), then breach Watcher.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 2,
+              "y": 4
+            },
+            "addendum": "Move south toward my allies and away from enemy frontline"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Watcher is an oracle (high-value target) at dist=2, in range for precision_shot. I'm at 3HP and facing south, haven't moved yet so no movement penalty. Weaver is a vector at dist=2 — must not move adjacent to it. I'll fire precision_shot at Watcher first (2dmg, priority target), then move to (3,4) to maintain distance and keep away from Weaver at (4,2).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Enemies at dist 3 are approaching. I have a trap at (3,2) already covering one approach path. Hawk at (3,4) and Wraith at (2,3) are likely to push through center. I should move to (4,3) to stay at medium range and place a trap at (5,3) or (4,4) to cover the eastern approach Seer might take. Moving to (4,3) keeps me mobile while threatening the cluster forming around (3,3)-(3,4). Place trap at (5,3) to cover Seer's likely advance path.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Wraith is 2 tiles away at (2,3) — moving to (2,2) puts me adjacent for a melee attack. Orders say push forward aggressively and attack when possible. Moving north to (2,2) closes to adjacent range on Wraith. Then attack Wraith. Losing fortify is acceptable given the aggressive orders.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "I'm already behind Watcher (oracle) at (2,4) — I'm at (2,3) which is behind them since they face N. Watcher is the priority target (damage dealer oracle). Breach is on cooldown, so I'll use shadow_strike to hit Watcher while staying cloaked. I'm currently cloaked and adjacent to Watcher. Shadow_strike hits adjacent targets and keeps cloak — perfect. After striking Watcher, I can move to (2,1) to get behind Bastion for a future breach next round when cooldown clears.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Watcher is wounded at (2,4), dist=3, already scanned. Priority: recalibrate Hawk at (3,4) to boost damage, then scan Watcher to deal 1dmg to the wounded oracle. But recalibrate is adjacent-only and Hawk is at (3,4) — I'm at (5,4), that's dist=2, not adjacent. I can move to (4,4) to get adjacent to Hawk, then recalibrate. But Weaver is at (4,3) — moving to (4,4) puts me adjacent to Weaver, blocking scan. Better: scan Watcher first (dist=3, in range, not blocked since I'm not adjacent to Weaver at current pos (5,4)), then move to (4,5) to stay safe and position. Actually Weaver is 2 tiles away so I'm not adjacent — scan is NOT blocked. Scan Watcher to deal 1dmg (already wounded, this helps finish). Then move away from Weaver to (5,5) or (4,5) to maintain distance.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Critical situation: 2/6 HP. Foresight shows Wraith moving to (2,3) then breaching (2,4) — my current position — and Hawk using precision_shot on (2,4). I must move away immediately. Orders say move south toward allies. Moving to (1,3) or (2,3) puts me in Wraith's path. Moving to (1,4) or (0,4) gets me away from both Wraith's breach target and Hawk's shot at (2,4). I'll move to (1,4) to dodge all predicted attacks while moving somewhat toward Bastion at (2,2). Then I can scan Wraith who is in range to reveal their strategy.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Watcher is a wounded oracle (medic/support) at dist=2 — priority target per orders. I can precision_shot from current position since Weaver is at dist=2 (not adjacent, so no block). Shoot Watcher first. Then move away to maintain distance from Weaver who is at (4,3) — moving to (3,5) keeps distance and repositions north.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Wraith is adjacent at (2,1) to my south — wounded, so attacking could finish it. I'm fortified (50% DR) since I haven't moved. If I attack first without moving, I keep fortify active. Then shield_wall facing S to block any counterattack from that direction. Watcher is critical to the NW but Wraith is the immediate threat. Stay put, attack Wraith, then shield_wall S.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 1
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Hawk at (3,5) and Seer at (5,5) are both healthy and approaching from the north. I have traps at (3,2) and (5,3). I should place a trap on a likely approach path. Hawk is at (3,5) moving toward us — tile (4,4) or (4,5) could intercept. Seer at (5,5) might move toward (5,4) or (4,4). Moving to (4,4) puts me closer to both northern enemies and I can place a trap at (5,4) to catch Seer's approach. No enemies are adjacent so trap is not blocked by Denial restriction.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Watcher is at critical HP at (1,4) and already breached. Weaver is adjacent-ish at dist 2 — must not move adjacent. All enemies already scanned. Hawk is my damage dealer at (3,5). I should recalibrate Hawk to boost effectiveness against remaining threats, then reposition. Moving to (4,5) keeps me close to Hawk for recalibrate range (adjacent). From (4,5) Hawk at (3,5) is 1 tile away — adjacent, so recalibrate works. This also keeps me away from Weaver at (4,4) — (4,5) is adjacent to (4,4), that's only 1 tile away which is fine as long as I'm not adjacent to Weaver myself... wait, (4,5) to (4,4) is dist 1, that IS adjacent. Weaver is a vector so scan gets blocked if adjacent, but recalibrate should still work. However the caution says avoid moving adjacent to Weaver. Stay at (5,5) and recalibrate Hawk at (3,5) — dist is 2, not adjacent. Can't recalibrate from here. Move to (4,5) risks adjacency to Weaver. Move to (3,4): dist from Weaver(4,4)=2, not adjacent. From (3,4) Hawk at (3,5) is dist 1 — adjacent, recalibrate works. Safe move.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 5
+            },
+            "addendum": "Focus fire on Watcher at (1,4) — critical HP, eliminate them this round. Then shift to Bastion."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "I'm at (2,1) with 1HP — critical danger. Bastion is adjacent at (2,2) facing N, and I'm already behind them (behindTile [2,1]). Watcher is at critical HP at (1,4) — priority target. I can breach Bastion now (cooldown ready, I'm behind them, dist=1), then move toward Watcher. Breaching Bastion neutralizes their sentinel threat for a turn and lets me reposition safely. After breach, move to (2,4) which puts me adjacent and behind Watcher — then next turn I can shadow_strike or breach to finish them. This is better than shadow_striking Bastion for 1dmg since Watcher is critical and breach gives more tactical value.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 2,
+              "y": 2
+            },
+            "addendum": "Move away from allies, toward corner (0,0)"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "I'm at 1HP — critically low. Orders say move south toward allies. Foresight shows Hawk will precision_shot (1,4) this round and Watcher will scan (2,1). I need to get away from Hawk's shot. Moving to (1,2) gets me south toward allies at (2,2). Scan Wraith at (2,4) is possible but I'm adjacent to Wraith which blocks scan. Attack Wraith at 1HP risk is suicide. Best play: move south first to (1,2) to dodge Hawk's shot on my current position, then wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Orders say focus fire on Watcher at critical HP, but Watcher is at (1,2) dist=5, out of range. Weaver is in range at (4,4) dist=2 and is a vector blocking my precision_shot if I get adjacent. I should NOT move adjacent to Weaver. Current position (3,5) has Weaver in range at dist=2 — I can use precision_shot on Weaver without moving (preserving full 2dmg). That eliminates the denial threat and removes a high-value enemy. Moving toward Watcher would require moving closer to Weaver risk zone. Best play: precision_shot Weaver from current position for 2dmg (they're healthy, this won't eliminate them but damages them significantly), then wait or reposition. Actually Weaver is healthy — 2dmg precision_shot is good damage. I'll shoot Weaver first, then move toward a better position to get Watcher in range next round. Move to (1,5) or (2,5) would be 5 tiles from Watcher — still out of range 2. Let me move to (3,3) to close on Watcher while staying safe from Weaver.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Seer is adjacent (dist=1), triggering Denial to block their abilities. Wraith is critical at dist=2 — I can finish them with attack. But Seer is right next to me at (3,4) and healthy. Three enemies clustered: Wraith@(2,4), Seer@(3,4), Hawk@(3,3). Pulse from current position hits all units within 1 tile — Seer at dist=1 would be hit. But Wraith is at dist=2, outside pulse range. Better play: pulse to hit Seer (adjacent) and potentially Hawk if I reposition. Actually from (4,4), pulse hits within 1 tile = (3,4)Seer, (3,5),(4,3),(4,5),(5,4),(5,3),(5,5) — only Seer is in range. Use pulse to hit Seer, then move to (5,4) to place a trap on a key approach path. Wait — (5,4) already has a trap. Move to (4,5) instead, and use pulse now to hit Seer. Pulse hits Seer for 1dmg. Then move to (5,5) or (4,5). Actually, Seer is healthy so pulse alone won't kill. Wraith is critical — attack would finish them at dist=2. Use attack on Wraith to eliminate them, then move to (4,5) to stay at range and deny Seer.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Orders are to move away from allies toward corner (0,0). Current position (2,2). Valid moves toward (0,0) direction: (1,1) gets me closer to corner. Then (2,0) or similar. Best path: move to (1,1) first step toward (0,0). With mv2 I can reach (2,0) or (1,1). Moving to (2,0) puts me closer to (0,0) corner. No enemies in melee range so wait as second action.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "I'm at (1,2) with 1HP — critical danger. Orders say move south toward allies. Bastion is at (2,0), so I want to head south. Wraith used breach on (2,2) last turn and is now at (2,4) — going to (2,2) risks being in that path again. I'll move to (1,1) first, then (1,0) to stay on the west edge and close to Bastion without stepping on traps. No ability worth using at 1HP — survival is priority.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "I'm adjacent to Weaver's DENIAL zone, blocking my scan ability. I need to move away first. Moving to (3,5) gets me away from Weaver and maintains range. From there I can recalibrate Hawk (my damage dealer at (3,3)) to boost effectiveness — but Hawk would be at distance 2 from (3,5), which is not adjacent. Let me check: recalibrate is adjacent only. From (3,5), Hawk at (3,3) is distance 2 — not adjacent. Wraith is at (2,4), distance from (3,5) is 2 — also not adjacent. Better to move to (2,5) — Wraith at (2,4) would be distance 1 (adjacent), so I can recalibrate Wraith who is critical and needs help. Or move to (4,5) to escape Weaver denial and scan Weaver (dist would be ~2). From (4,5), Weaver at (4,4) is dist=1 — still adjacent, scan blocked. Move to (5,4): Weaver at (4,4) dist=1 still adjacent. Move to (3,5): Weaver at (4,4) dist=2, no longer adjacent — scan unblocked! From (3,5) I can scan enemies in range 4. Watcher at (1,0) dist=|3-1|+|5-0|=2+5=7 out of range. Bastion at (2,0) dist=|3-2|+|5-0|=1+5=6 out of range. Only Weaver at (4,4) dist=2 in range but already scanned. No new scan targets. Recalibrate Hawk at (3,3) — from (3,5) dist=2, not adjacent. Move to (3,5) then recalibrate Wraith at (2,4) — dist from (3,5) to (2,4) = 1+1=2, not adjacent. Move to (2,5): Wraith at (2,4) dist=1, adjacent — can recalibrate! Wraith is critical and a damage dealer (specter). That's the best play: move to (2,5), recalibrate Wraith to boost their damage output.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 2,
+              "y": 4
+            },
+            "addendum": "You are critical but still dangerous. Focus on eliminating Watcher at (1,0) — they are critical and isolated. Avoid Weaver's denial zone. Strike from the north."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "I'm at 1HP and critical. Breach is unavailable. Watcher is critical and priority target at (1,0) but no reachable behind positions. I need to close distance. Best move is toward (2,2) or (2,1) to get adjacent to Watcher next turn. Weaver at (4,4) is 2 tiles away — must avoid moving adjacent to (3,4),(4,3),(4,5),(5,4). Moving to (2,2) keeps me safe and closes on Watcher. From (2,2) I can reach (2,1) next turn for shadow_strike on Watcher. Shadow_strike does 1dmg and Watcher is critical — should finish them. Move to (2,2) this turn, shadow_strike not yet in range so just advance.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Orders say focus fire on Watcher at (1,4) — but recon shows Watcher is at (1,0) dist=5, out of range. The only enemy in range is Weaver(vector) at (4,4) dist=2. Weaver is a denial threat and healthy. I'm at (3,3). I can fire precision_shot on Weaver now without moving (staying non-adjacent preserves LoS and no movement penalty). Then I should reposition toward Watcher or Bastion. Moving to (3,1) gets me closer to Watcher/Bastion but still out of range this turn. Or move to (3,2) which is dist=3 from Bastion at (2,0). Best play: shoot Weaver with precision_shot for 2dmg (didn't move, in range, not adjacent), then move toward Bastion/Watcher. Move to (3,2) brings me closer for next round.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Hawk at (3,2) and Wraith at (2,2) are approaching from the south. I have traps at (5,3) and (5,4) already covering the east flank. I should move to (3,3) to get closer and place a trap on (2,3) to block the central corridor enemies must use to reach our backline at (1,0)/(2,0). This cuts off Hawk and Wraith's most direct path.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Orders are to move away from allies toward corner (0,0). Currently at (2,0), valid moves include (0,0) which is exactly the target corner. Moving there puts me at max distance from allies and fulfills orders. No ability needed.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 0,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Weaver is 3 tiles away and already scanned — no new intel needed there. Watcher is at (1,0) critical but out of scan range (dist=6). Bastion out of range too. Best play: recalibrate Hawk (wounded damage dealer at (3,2)) to boost effectiveness, then move to maintain distance from Weaver who placed a trap at (2,3) last turn — avoid (2,3) and (2,4) area. Move to (1,4) keeps distance from Weaver (now at 3,3), stays away from trap at (2,3), and keeps me in range for next turn actions.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "addendum": "Focus fire on Watcher at (1,0) — critical and vulnerable. Use precision_shot to finish them off and reduce enemy turn count."
+          },
+          "firstResult": "No ally at target",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "I'm at 1 HP — extremely fragile. Foresight shows Watcher moving to (1,0) which is my current position, so I must move away. Wraith is critical at (2,2) and within scan range (dist 3). I should move first to avoid Watcher, then scan Wraith to finish it off or weaken it further. Moving to (1,2) keeps me at distance from Watcher and maintains scan range on Wraith. Avoid (2,3) trap. Stay away from Weaver at (3,3) — vectors block scan. After moving to (1,2), Wraith at (2,2) is dist 2, still in scan range.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "I'm adjacent to Weaver at (3,3) which triggers DENIAL zone — precision_shot is blocked. I can only use basic attack or move. Priority is eliminating Watcher at (1,2) who is at critical HP. I need to move away from Weaver first to escape denial zone, then use precision_shot on Watcher. Moving to (2,2) puts me at dist=1 from Watcher and dist=2 from Weaver — outside denial zone. From (2,2), Watcher at (1,2) is adjacent so precision_shot won't work (needs LoS but adjacent restriction applies). Actually precision_shot requires range ≤2 tiles and needs LoS, no adjacency restriction mentioned except the denial warning. Let me re-read: 'precision_shot blocked when adjacent to enemy Vector' — Weaver is the vector. If I move to (2,2), Weaver is at (3,3), dist=sqrt(2)≈1.4 — still adjacent diagonally. Move to (4,2) instead: Weaver at (3,3) is dist=sqrt(2)≈1.4 still adjacent. Move to (3,1): Weaver at (3,3) is dist=2, no longer adjacent. From (3,1), Watcher at (1,2) is dist=sqrt(4+1)≈2.2 — out of range 2. Try (2,2): Watcher at (1,2) is dist=1, within range 2. Weaver at (3,3) from (2,2) is dist=sqrt(1+1)≈1.41 — adjacent. Try (2,3): Weaver at (3,3) dist=1 — adjacent. Move to (4,2): Weaver dist=sqrt(1+1)=1.41 adjacent. Best option: move to (2,1) — Weaver at (3,3) dist=sqrt(1+4)≈2.24 not adjacent. Watcher at (1,2) dist=sqrt(1+1)≈1.41 within range 2. Can use precision_shot on Watcher from (2,1). I haven't moved yet so full 2dmg applies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Both enemies are at dist 3, out of range. Hawk at (2,1) is wounded and moving south toward our backline at (0,0). Seer at (1,4) is healthy. I should move toward a position that intercepts Hawk's approach while placing a trap on likely enemy paths. Moving to (2,2) puts me adjacent to Hawk's current position and threatens denial. Better: move to (3,2) to stay at medium range and place a trap at (2,2) which is directly in Hawk's path toward (0,0). Trap at (2,3) already exists. I can place at (1,2) or (2,2) to block Hawk's southern advance.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Orders say move toward corner (0,0) and away from allies. I'm already at (0,0). No enemies in range. Best to wait and maintain Fortify bonus for damage reduction.",
+          "firstAction": {
+            "type": "wait"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 0,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Weaver is at dist=4, just out of scan range. I need to close to ≤4 tiles to scan. Moving to (2,3) puts me at dist=sqrt(1+1)=~1.4 from Weaver... wait, Weaver is at (3,2). From (2,3): dist=sqrt(1+1)=1.4, adjacent — that would enable scan but also put me adjacent to enemy Vector which blocks scan. Better: move to (2,4) gives dist to Weaver=sqrt(1+4)=~2.2, not adjacent (not blocked). Distance from (2,4) to (3,2): dx=1, dy=2, Manhattan=3 ≤4, so scan works. Also want to recalibrate Hawk at (2,1) — from (2,4) that's dist=3, too far (recalibrate is adjacent only). Hawk is wounded at (2,1). Priority: scan Weaver to confirm strategy, reposition. Move to (2,4) first, then scan Weaver at (3,2) — Manhattan dist=3 ≤4, not adjacent to Weaver (not blocked).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Weaver is wounded and only 2 tiles away at (3,2) — priority target. I'm at (2,1), haven't moved yet so precision_shot deals full 2dmg. Weaver is wounded so 2dmg should finish them. I must NOT move adjacent to Weaver or precision_shot gets blocked. Current position (2,1) is fine — dist=2 to Weaver. Fire precision_shot on Weaver first, then consider position. After eliminating Weaver, I can reposition if needed. No target 'Watcher' exists on field — orders reference outdated info. Focus: kill Weaver now.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Hawk is at (1,1), distance 2 — wounded and close. Moving to (1,0) puts me adjacent to Hawk for a melee attack. Orders say push forward and attack when possible. Weaver is at (3,2) and wounded — not adjacent so shield_wall won't help them from here. Priority: close on Hawk and attack.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "I'm at (3,2) with 4HP, acting last this round. Hawk is critical at (1,1) dist=3, Seer is healthy at (2,4) dist=3. Traps already at (2,2), (2,3), (5,3), (5,4). The trap at (2,2) covers Hawk's likely path. Seer is moving toward our backline from (2,4). I should move toward (3,3) or (3,4) to stay at medium range and place a trap on a path Seer might use — (3,3) is valid and not yet trapped, blocking the central corridor. Moving to (4,3) gives me good position and I can trap (3,3) to cover approach routes.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Weaver is in scan range (dist=3) and already scanned, but wounded - could scan again for damage. However, Hawk is critical and needs support. Recalibrating Hawk would help but Hawk is at (1,1) and I'm at (2,4) - too far for adjacent recalibrate. Priority: scan Weaver for 1 damage to finish it off while it's wounded, then move to better position. Weaver is at dist=3 which is ≤4 so scan is valid. Need to stay 2+ tiles from Weaver at (4,3) to avoid scan block - current dist is 3, safe. After scanning, move away from Weaver toward Hawk to set up recalibrate next turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "I'm at 1HP — critical condition. Bastion is adjacent at (1,0) which blocks precision_shot. I need to move away first to enable precision_shot, then shoot. Moving to (2,1) increases distance from Bastion to 2 tiles (no longer adjacent), enabling precision_shot. From (2,1), Bastion at (1,0) is dist=sqrt(2)≈1.4, so within range 2. That gets me out of adjacency to use precision_shot. However, I moved so precision_shot does only 1dmg. Still worth it to stay alive and deal damage.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 1,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Hawk is critical at (2,1), dist=2. I need to close to adjacent range to attack. Moving to (2,0) puts me adjacent to Hawk (dist=1 diagonal... actually (2,0) to (2,1) is dist=1, adjacent). Valid moves include (2,0). From (2,0) I can attack Hawk. Orders say push forward aggressively and attack when possible. Seer is at (1,3) healthy but further away. Priority: move to (2,0) to get adjacent to Hawk, then attack.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Seer is at (1,3) distance 3, out of range. I'm at 3/9 HP so I should be cautious. There are already traps at (2,3), (3,3), (5,3), (5,4), (2,2). Seer is heading south toward my position. I should move to maintain medium range and trap a likely approach path. Moving to (4,4) or (3,4) keeps distance. Tile (3,4) is a valid move and I can then trap (2,4) to block the northern approach corridor — Seer facing south at (1,3) might move south or toward backline. Actually, trap at (1,4) or (2,4) would block paths but I need to be within 2 tiles of target. From (3,4), trap range 2 reaches (1,4), (2,4), (3,2), etc. Let me move to (3,4) and trap (1,4) to block Seer's approach path.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 9,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Bastion at (2,0) is unscanned and dist=4 — exactly in scan range. I need to move to get Bastion in range. Currently at (1,3), Bastion is dist=4 but out of range per recon. I can move to (2,2) which puts me closer. From (2,2) dist to Bastion(2,0) = 2, well in scan range. Weaver is at (3,4) wounded and already scanned. Need to avoid moving adjacent to Weaver (3,4) — moving to (2,2) keeps me safe at dist=3 from Weaver. After moving to (2,2), scan Bastion at (2,0).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "I'm at (3,4) with 3HP, wounded. Seer is at (2,2) distance 3, out of range. Heavy trap coverage already exists around (2,3),(3,3),(1,4) blocking approaches. I should move to close distance and place a trap on a likely path. Moving to (3,2) brings me closer to Seer. Then I can trap (2,2) adjacent area or an escape route. Wait - (3,3) already has a trap. Move to (4,3) to stay at medium range and threaten Seer's approach paths, then trap (3,2) to cover the corridor Seer would use moving north or west.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Seer is at (2,2), distance 2 — just out of melee range. I need to close to adjacent. Moving to (2,1) puts me directly south of Seer at distance 1, enabling a melee attack. Traps at (2,3) and (3,2) are beyond Seer so not an immediate concern. Moving to (2,1) then attacking Seer at (2,2).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 10,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Critical situation: 2HP, Bastion is adjacent at (2,1) and Foresight shows it will attack me at (2,2) this turn. I need to escape. Move away first to break adjacency with Bastion and stay out of Weaver's denial range. Moving to (1,3) puts me 2 tiles from Bastion, 3+ from Weaver. Then scan Weaver (already know Bastion's prompt) — wait, both already scanned. I should recalibrate an ally or just reposition safely. No allies to recalibrate visible. Move to (1,3) to escape Bastion's attack range, then wait or scan to maintain intel.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "I'm at (4,3) with 3HP, wounded. Seer is at (1,3) dist=3, out of range. Many traps already placed. I need to be careful - I'm low on HP. I can't use trap at (3,3) or (2,3) as they're already trapped. I should move to maintain medium range and place a trap on an approach path. Moving to (4,4) keeps distance, then I can trap (3,4) to block approach from the left side. Wait - (3,3) already trapped. The Seer approaching from (1,3) would likely path through (2,3) or (3,3) - both already trapped. I should move to (4,4) and trap (3,4) to add another barrier.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Seer is at (1,3), distance 3, not in melee range. Weaver is wounded at (4,4). Orders say push forward aggressively. Moving to (2,3) gets me adjacent to Seer's position area but (2,3) is a trap. Moving to (1,2) closes distance to Seer at (1,3) - that puts me adjacent and able to attack. From (1,2) I can attack Seer at (1,3). Let me verify: (1,2) is in valid moves? Valid moves include [1,2] yes. From (1,2) to (1,3) is adjacent. Attack is valid.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "player",
+    "totalTurns": 11,
+    "reason": "player eliminated all enemies"
+  },
+  "endedAt": "2026-02-25T23:06:11.167Z"
+}
