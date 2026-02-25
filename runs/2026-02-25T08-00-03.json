@@ -1,0 +1,1874 @@
+{
+  "id": "2026-02-25T08-00-03",
+  "startedAt": "2026-02-25T08:00:03.763Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 4,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 4,
+        "movement": 2,
+        "range": 2,
+        "speed": 2
+      },
+      "oracle": {
+        "maxHp": 6,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 16,
+        "movement": 3,
+        "range": 2,
+        "speed": 3
+      },
+      "vector": {
+        "maxHp": 9,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 1,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 12,
+        "healAmount": 10
+      },
+      "overclock": {
+        "selfDamage": 0
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Phantom",
+        "class": "specter",
+        "prompt": "Cloak immediately on turn 1. Move toward the enemy medic or weakest target. Use shadow_strike when adjacent while cloaked. Use breach to sabotage high-value targets."
+      },
+      {
+        "name": "Lens",
+        "class": "oracle",
+        "prompt": "Use scan to reveal enemy prompts and cloaked units. Stay at max range (≤4 tiles for scan). Use recalibrate on wounded allies to buff them. Keep distance from enemies and avoid adjacent vectors."
+      },
+      {
+        "name": "Aegis",
+        "class": "sentinel",
+        "prompt": "Advance toward the nearest enemy. Use shield_wall facing the direction with the most enemies. If an enemy is adjacent, attack them."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Deadeye",
+        "class": "striker",
+        "prompt": "Position for clear sight lines. Prioritize killing wounded enemies with precision_shot. If forced to move, retreat away from threats. Suppressing_fire to slow rushers."
+      },
+      {
+        "name": "Wraith",
+        "class": "specter",
+        "prompt": "Stay cloaked and flank. Prioritize assassinating the enemy damage dealer. Use breach on sentinels to break their defensive posture. Recloak whenever it drops."
+      },
+      {
+        "name": "Remedy",
+        "class": "medic",
+        "prompt": "Stay adjacent to the most threatened ally. Use patch on the most wounded teammate. If all healthy, use overclock on your damage dealer."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Round 1 — cloak immediately as ordered. Then advance toward Deadeye at (4,4), moving to (4,3) to close distance while cloaked. Next turns I can reach Deadeye or Remedy for shadow_strike.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 4,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Both Deadeye and Remedy are at dist=4 but the recon shows them as out of range from current position. I need to move closer to bring them into scan range. Moving to (3,2) adds 1 to y, giving dist=3 to Remedy at (3,5) and dist=3 to Deadeye at (4,4). From (3,2) I can scan Remedy to reveal their prompt.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Round 1, good time to cloak as the TIP suggests. Both enemies are out of range. Lens is the priority target (oracle = damage dealer) at dist 4, behind tile at (3,1). I need to advance toward Lens while cloaking. Move toward Lens first, then cloak to stay hidden as I approach.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": "Specter can move through but not end on occupied tile",
+          "secondAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "All allies are at full HP, so no healing needed. Orders say to use overclock on damage dealer if all healthy. Deadeye is the striker (damage dealer) at (4,4), distance 2. I need to get adjacent to Deadeye to use overclock. Moving to (4,5) puts me adjacent to Deadeye at (4,4). Then I can use overclock on Deadeye to boost their damage output next turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "I'm overclocked with 2 ability uses. Lens (oracle) is at (3,2), dist=3, which is within my range of 2... wait, dist=3 means it's 3 tiles away and my precision_shot range is ≤2 tiles. I need to move closer. If I move to (3,3), Lens at (3,2) would be dist=1, in range. But if I move first, precision_shot deals 1dmg instead of 2dmg. Better to shoot first, then move. But Lens is at dist=3 from current position — out of precision_shot range (≤2). So I must move first to get in range. Move to (3,3) puts Lens at dist=1. Then use precision_shot for 1dmg (moved penalty). With overclocked I have 2 ability uses — use precision_shot twice on Lens for 1+1=2dmg total. That would kill a healthy Lens (assuming 3-4HP). Actually let me reconsider: move to (4,3) puts me at dist=2 from Lens at (3,2) — still in range, closer. Or (3,3) is dist=1. Either way I moved so it's 1dmg per shot. Two shots = 2dmg. Worth doing.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": "Position occupied",
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": "Out of range"
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "No enemies in range. Need to advance toward nearest enemy Deadeye at (4,4). Moving to (4,0) gets me closest while staying on valid tiles. Then shield_wall facing N where enemies are concentrated.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 0
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 15,
+          "maxHp": 16,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Remedy is at dist 4 from current position — just out of scan range. If I move one tile closer toward Remedy (e.g. to (3,3)), Remedy will be at dist 3 and scannable. Deadeye is already at dist 3 and in range. Priority: move to (3,3) to bring Remedy into scan range (dist=3), then scan Deadeye to reveal their prompt and deal 1 damage. Remedy's prompt is already known. Deadeye is the damage threat — scanning them is high value.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Cloak expires after this turn. Remedy medic is high-value target. I can move to (3,5) to get behind Remedy (facing E, so behind is west side at (3,5)), then shadow_strike to deal damage while maintaining cloak. This removes the enemy healer threat.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Cloak expires end of this turn. Phantom is a specter (enemy damage dealer) and I can reach position (3,4) which is directly behind them (they face N, so south is behind). Move to (3,4) then breach Phantom to control them next turn. This eliminates the enemy specter threat and wastes their turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 3,
+              "y": 5
+            },
+            "addendum": "Move away from allies and toward the edge, do not attack"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "Deadeye is wounded at (4,4) with 3/4 HP and is adjacent to me (dist=1). I need to patch Deadeye. However, Phantom is at (3,5) which is adjacent to me — my patch ability is blocked when adjacent to enemy Vector, not enemy in general. Phantom is a specter, not a Vector, so patch is not blocked. Wait — the rule says 'patch/overclock blocked when adjacent to enemy Vector' — Vector is a class/unit type. Phantom is a specter class, so no block. I can use patch on Deadeye at (4,4). After patching, I should move away from Phantom if possible, or stay to support Deadeye.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Two enemies in range from current position: Phantom at (3,5) dist=2 and Lens at (3,3) dist=2. I haven't moved this turn, so precision_shot does full 2dmg. Phantom is a specter (high threat/mobility), Lens is an oracle. Both are healthy. I'll fire precision_shot at Phantom to chunk them down, then wait or hold position. No adjacent enemies so precision_shot is not blocked.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "All enemies are to the north. Nearest is Deadeye at (4,4), dist 4. I can move up to 2 tiles. Moving to (4,2) gets me closer (dist 2 from Deadeye). Then use shield_wall facing N to protect against incoming fire from the north.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 2
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 14,
+          "maxHp": 16,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "I'm already behind Phantom (facing N, I'm at 3,4 which is south of them). Breach is on cooldown (1 turn remaining), so I can't use it. But I can shadow_strike Phantom since they're adjacent — this keeps cloak if I have it, but I'm not cloaked. I should use shadow_strike on Phantom (adjacent, dist=1) to deal damage without breaking cloak status concerns. Then I can move to (3,2) to get behind Lens for next turn's breach. Actually, let me shadow_strike Phantom first (they're the enemy specter — dangerous flanker), then reposition behind Lens at (3,2) to set up a breach next turn when cooldown expires.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Orders are to move away from allies and toward the edge, no attacking. Allies are at (4,2) and (3,3). Moving to (0,5) takes me to the top-left corner edge, far from allies. Then wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "All allies are at full HP, so no healing needed. Orders say use overclock on damage dealer if all healthy. Deadeye (striker) is the damage dealer at (4,4), adjacent to me at (5,4) — distance 1, so adjacent. I can use overclock on Deadeye immediately. No need to move first.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Wraith is adjacent at (3,2) — scan is blocked when adjacent to enemy Vector, but Wraith is a specter not a vector, so scan should work. However, Wraith is only dist=1 which is within scan range (≤4). I should scan Wraith to reveal their prompt. But wait — I'm at (3,3) and Wraith is at (3,2), dist=1. Scan deals 1 dmg and reveals prompt. That's useful. After scanning, I should move away from Wraith to avoid being adjacent next turn. Moving to (2,4) keeps distance from Wraith and stays in range of enemies. Or I could move first then scan. If I move to (2,4), Wraith is at dist=2+1=... (3,2) to (2,4) = |3-2|+|2-4|=1+2=3, still in scan range. Let me move to (2,4) first to get away from Wraith adjacency, then scan Wraith from safer distance. Actually scan is blocked by adjacent VECTOR not specter — so I can scan Wraith now. Better to scan first (while certain of position), then move away. Scan Wraith at (3,2), then move to (2,5) or (1,3) to increase distance.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "I'm overclocked with 2 ability uses. Both Aegis and Lens are in range at dist=2. I haven't moved so precision_shot deals full 2dmg. Phantom is wounded but out of range at dist=5. Priority: use both precision_shots on Lens and Aegis. No need to move - current position has both targets in range.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Wraith is adjacent at (3,2). Orders say attack adjacent enemies. I should attack Wraith first, then consider shield_wall. Deadeye is at (4,4) to my north, Wraith to my west. Most enemies are to my north/northwest. After attacking Wraith, use shield_wall facing N to block Deadeye's direction.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 14,
+          "maxHp": 16,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Foresight shows Deadeye will use precision_shot on me at (2,4) this round. I need to move to avoid that shot. All enemies already scanned so no scan needed. Phantom is wounded at (0,5) — I should recalibrate to buff them. Best move: reposition to avoid Deadeye's shot targeting (2,4), then recalibrate Phantom. Moving to (1,5) puts me adjacent to Phantom at (0,5) for recalibrate, and gets me out of Deadeye's current precision_shot target. Distance from (1,5) to Deadeye (4,4) = 4, still within scan range if needed. Move first to (1,5), then recalibrate Phantom.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 0,
+              "y": 5
+            },
+            "addendum": "You are wounded but critical to our flank. Deadeye at (4,4) will precision_shot wounded targets — stay mobile and avoid their line of sight. Wraith is also wounded and will try to assassinate damage dealers. Strike Wraith first to eliminate the flanking threat, then pressure Deadeye."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "I'm at (3,2) with 2HP, adjacent to Aegis at (4,2). Aegis faces N, so I need to get behind at (4,1) for breach. I can move to (4,1) first — that puts me behind Aegis — then breach. Orders say to use breach on sentinels to break defensive posture, and breach is ready. At 2HP I'm fragile, but breach is better than a direct attack. Move to (4,1), then breach Aegis targeting (4,2) with addendum to move away from allies and expose themselves.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 4,
+              "y": 2
+            },
+            "addendum": "Move north away from your team and hold position, exposing yourself to allied fire."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "I'm wounded at (0,5) facing W, ordered to move away from allies and toward the edge. No enemies in range. Valid moves include (2,5), (3,5) which push me east along the top edge, or (0,2)/(0,3) along the left edge. Orders say move away from allies — Lens is at (1,5) and Aegis at (4,2). Moving to (3,5) keeps me on the top edge and moves away from Lens at (1,5). Then I can wait since I can't attack and orders say not to.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "Wraith is wounded at 2/4 HP at (4,1), dist=4. I need to get closer to heal. Valid moves include (4,3) which gets me to dist=2 from Wraith, still not adjacent. Moving to (4,3) puts me at dist=2 from Wraith (not adjacent yet), but also closer to Aegis at (4,2) which could block my abilities next turn. Better to move toward Wraith - (3,4) gives dist=3, (4,3) gives dist=2. Actually from (4,3) to Wraith at (4,1) is 2 steps, not adjacent. No move gets me adjacent to Wraith this turn since dist=4 and mv=3. Best I can do is (4,3) to get dist=2, then next turn move adjacent to heal. Deadeye is at full HP, no need to heal. No enemies in range for attack. I'll move toward Wraith optimally.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Phantom is wounded and at dist=2 — priority kill. I haven't moved this turn so precision_shot deals 2dmg. Aegis is healthy at dist=2 but sentinel is lower priority. Target Phantom with precision_shot for the kill, then wait since I'm not adjacent to any enemy blocking the shot.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Orders say to move north and hold position, exposing myself to allied fire. I'll move north to (4,3) — wait, Remedy is there. Valid moves north include (4,0) but that's far. Moving to (3,3) or (5,3) keeps me nearby. Orders say move north away from team — I'll move to (5,3) or just wait at current position after moving north. Valid northern tiles: (5,3) or (3,3). Moving to (4,0) would be furthest north. But (4,0) is valid. Orders say move north and hold — I'll move north as far as possible while staying in valid moves. (4,0) is north and valid. Then wait to hold position and lose fortify bonus, exposing myself.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 14,
+          "maxHp": 16,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Orders say move away from allies and toward the edge, do not attack. I'm at (3,5) facing E with 1HP. Deadeye at (4,4) facing S — I'm behind them but orders forbid attacking. I need to move away from allies Lens(1,5) and Aegis(4,0) and toward the edge. Moving to (5,5) gets me to the corner edge, away from both allies, and keeps me mobile. No attack per orders.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "I'm at (4,1) with 2HP, behind Aegis at (4,0) facing S. Breach is unavailable (2/2 used). Aegis is adjacent and I'm already behind it. Shadow_strike keeps cloak and deals 1 damage — but I'm not cloaked currently. Attack deals 1 damage but I'm at 2HP and hitting a healthy sentinel is risky. Phantom is at critical HP at (5,5) — priority target for assassination, but 5 tiles away and unreachable this turn. My allies Deadeye and Remedy are nearby. Best play: shadow_strike Aegis (1 dmg, if I'm cloaked) — but I'm not cloaked. Regular attack on Aegis deals 1 dmg. Aegis is healthy so won't kill. Actually, I should consider: Aegis is a sentinel (defensive), Phantom is the critical enemy specter and priority kill target per orders, but I can't reach Phantom. With 2HP I'm vulnerable. Deadeye is a striker at (4,4) who can likely handle Aegis. My best move might be to reposition toward Phantom for next turn while attacking Aegis now to soften it. Attack Aegis first (1 dmg), then move toward Phantom direction. Or move first to get distance from danger. Given I'm at 2HP, I'll attack Aegis (it's right there, I'm behind it), then move toward Phantom to set up next turn assassination.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "All enemies already scanned. Phantom is critical at (5,5) — Deadeye will precision_shot (3,5) next, so Phantom should avoid moving there. I need to recalibrate Phantom to warn them. Phantom is at (5,5), I'm at (1,5) — distance is 4, not adjacent. I can move closer then recalibrate. Moving to (4,5) puts me adjacent to Phantom at (5,5) and within recalibrate range. But (4,5) is in my valid moves list. From (4,5) I can recalibrate Phantom at (5,5) — that's adjacent. Deadeye targets (3,5) so Phantom should stay at (5,5) or move away from (3,5). I'll move to (4,5) then recalibrate Phantom with advice to avoid (3,5) and stay safe.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 5,
+              "y": 5
+            },
+            "addendum": "Deadeye will precision_shot at (3,5) — do NOT move there. Stay at (5,5) or retreat north. You are critical HP, avoid all exposure."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "Wraith is at (5,3) with 2/4 HP and needs healing. I'm at (4,3). Moving to (5,4) would put me adjacent to Wraith at (5,3) — wait, I need to check adjacency. Wraith is at (5,3), I'm at (4,3). We're already adjacent (distance 1 horizontally)! I can patch Wraith right now without moving. After healing, I should move to stay close to threatened allies. Lens is at (4,5) and Phantom at (5,5) — enemies clustering near Wraith. I'll patch Wraith first, then move to (5,4) to stay adjacent to Wraith and between the enemies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Phantom is at critical HP at (5,5) distance 2 — priority kill. Lens is adjacent at (4,5) which blocks precision_shot due to adjacency rule (Vector check doesn't apply here, Lens is oracle not Vector). Wait — the adjacency block is only for enemy Vectors. Lens is an oracle, so precision_shot should still work at range 2 against Phantom. But Lens is at dist=1 (adjacent). I need to check: precision_shot requires range ≤2 tiles. Phantom is at dist=2. I can fire precision_shot at Phantom for 2dmg which should finish them (critical). Lens being adjacent doesn't block unless they're a Vector. So: fire precision_shot at Phantom to kill, then move away from Lens to safety.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Orders are to move north away from team and hold position. Valid moves north include (4,1) and (4,2). Moving to (4,2) gets me furthest north while staying on valid tiles. I'll move there and wait — no enemies in range so no ability use.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 14,
+          "maxHp": 16,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "All three visible enemies already scanned. Remedy is adjacent to Wraith and keeping them healed. I'm at 5/6 HP. Aegis is at (4,2) healthy. I should recalibrate Aegis to help them push forward, but Aegis is at (4,2) and I'm at (4,5) — not adjacent. I need to move closer to Aegis to recalibrate. Valid moves include (4,4) and (4,3) which get me closer. If I move to (4,4), Aegis at (4,2) is still 2 tiles away — not adjacent. If I move to (4,3), Aegis is 1 tile away — adjacent! But wait, Deadeye at (3,4) used precision_shot last turn targeting (5,5). This turn Deadeye will likely target wounded enemies. I'm at 5HP so I'm slightly wounded. Moving to (4,3) puts me 1 tile from Deadeye at (3,4) which is dangerous (adjacent means scan blocked and attack range). Let me reconsider. Wraith is moving and attacking — dangerous. Remedy is healing Wraith. No new enemies to scan. I should recalibrate Aegis. Move to (4,3) to be adjacent to Aegis at (4,2), then recalibrate. Risk: adjacent to Deadeye. Alternative: stay and wait or move to (3,5) which is farther from enemies. Actually Aegis needs a buff to be more effective. Move to (4,3) then recalibrate Aegis at (4,2) with addendum to focus on Wraith/Remedy cluster.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 4,
+              "y": 2
+            },
+            "addendum": "Priority: advance toward (5,4) cluster. Engage Remedy first to stop healing, then Wraith. Enemies are grouped at (5,3)-(5,4). Lens is providing overwatch from behind."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "All allies are at full HP, so no healing needed. Orders say to use overclock on my damage dealer if all are healthy. Deadeye is my striker (damage dealer) at (3,4), distance 2 from me. I need to get adjacent to Deadeye to use overclock. Moving to (4,4) puts me at distance 1 from Deadeye at (3,4) — adjacent. Then I can overclock Deadeye to give them 2 abilities next turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Lens (oracle) is adjacent at (4,3) and is the enemy damage dealer — priority target. I'm currently at (5,3) facing N. Shadow_strike works on adjacent enemies and keeps cloak. I can shadow_strike Lens first, then check options. Actually, I'm already cloaked (no mention of cloak dropping). Shadow_strike Lens at (4,3) to deal 1 damage while staying cloaked. Then I can move to (5,2) or (4,1) to reposition. Alternatively, attack Lens for 1 dmg. Since breach is unavailable, focus on shadow_strike to eliminate Lens. After shadow_strike, Lens will be at 1HP (oracles typically have 2HP) or possibly eliminated. Let me shadow_strike Lens, then move to (4,1) to be behind Aegis for next turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "I'm OVERCLOCKED with 2 ability uses. Both Lens and Aegis are healthy. Lens is at dist=2 (in precision_shot range), Aegis is at dist=3 (also in range). I'm not adjacent to any enemy Vector, so precision_shot is not blocked. I should use precision_shot twice - first on Lens (dist=2, closer target) then on Aegis. I haven't moved so I deal full 2dmg each shot. This could eliminate or heavily wound both enemies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": "Out of range"
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Orders say move north away from team and hold, but priority is advance toward (5,4) cluster to engage Remedy then Wraith. Wraith is adjacent at (4,1) — I can attack it now, then move to (5,3) to close on the cluster. Moving to (5,3) puts me adjacent to the enemy group for next turn. Attack Wraith first while in range, then reposition north toward priority targets.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 14,
+          "maxHp": 16,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Lens (oracle) is wounded at (4,3) and is the enemy damage dealer — priority target. I'm at (4,1). Breach is unavailable (2/2 used). I can move to (4,2) which puts me adjacent to Lens at (4,3), then shadow_strike to deal damage while staying cloaked. Shadow_strike works adjacent and doesn't break cloak — perfect for staying hidden while eliminating the oracle.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "Wraith is wounded at (4,2) with 3/4 HP and dist=2. I need to move adjacent to Wraith to heal. Moving to (4,3) would put me dist=1 from Wraith at (4,2), but Lens enemy is at (4,3) - can't move there. Moving to (3,3) puts me at dist=2 from Wraith. Moving to (4,1) puts me adjacent to Wraith at (4,2). Let me check: (4,1) to (4,2) is dist=1, adjacent. But wait - patch is blocked when adjacent to enemy Vector. I need to check if any enemy is adjacent. From (4,1), Aegis at (5,3) is dist=3, Lens at (4,3) is dist=2. No Vector-class enemies mentioned. Move to (4,1) then patch Wraith at (4,2).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "I'm at 2HP — critical danger. Foresight shows Wraith shadow_struck (4,3) last turn and Deadeye precision_shot me. Wraith is adjacent at (4,2), which blocks my scan ability. I need to escape Wraith's adjacency first. Moving to (5,4) puts me at distance from Wraith (now at 4,2) and keeps me in scan range of enemies. All prompts already known, so I should recalibrate Aegis to help them fight — but Aegis is at (5,3), adjacent to my destination (5,4). Move to (5,4) first, then recalibrate Aegis to buff them against the clustered enemies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 5,
+              "y": 3
+            },
+            "addendum": "Wraith is at (4,2) flanking — prioritize intercepting it. Deadeye at (3,4) is targeting wounded allies. Engage Wraith to protect our oracle."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Lens is wounded and at dist=2, within precision_shot range. I'm at (3,4) not adjacent to any enemy, so precision_shot is not blocked. Fire precision_shot at Lens to finish them off. I haven't moved so full 2dmg applies. After the shot, I can reposition if needed, but killing Lens is priority.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Wraith is at (4,2), distance 2 from my current position (5,3). I need to close in to attack. Moving to (4,3) puts me adjacent to Wraith at (4,2) — I can then attack it. Lens at (5,4) is critical and needs protection. Moving SW to (4,3) intercepts Wraith's path and lets me attack.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 14,
+          "maxHp": 16,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Lens is at critical HP — priority target. Position (5,3) is behind both Aegis and Lens and is reachable. Moving to (5,3) puts me adjacent to Lens from behind. Breach is unavailable, so I'll shadow_strike Lens to finish them off. Shadow_strike keeps cloak active and deals 1dmg — enough to kill a critical enemy.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses left). Wraith is wounded at (5,3), dist=3. I'm at (4,1). I need to move toward Wraith to use overclock and stay adjacent. Moving to (4,2) brings me dist=1 from Aegis at (4,3) — risky, Vector-adjacent blocks patch/overclock. Better to move to (5,2) which is dist=1 from Wraith at (5,3) and dist=2 from Aegis. From (5,2) I can use overclock on Wraith (adjacent). Wraith is specter/damage dealer and wounded — overclock gives them 2 abilities next turn which could be decisive.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Aegis is at (4,3), dist=3, which is just at my range limit of 2. Wait - precision_shot has range ≤2 tiles. Dist 3 is out of range for precision_shot. I need to close to dist ≤2. Moving to (3,4) puts me at dist=sqrt(1+1)=1.4, or (3,3) is dist=sqrt(1+0)=1. Moving to (3,4) gets me adjacent diagonally at dist ~1.4, within range 2. From (3,4), Aegis at (4,3) is dist=sqrt(1+1)≈1.41 which is ≤2. But I haven't moved yet so precision_shot does full 2dmg. Let me move to (3,4) then fire precision_shot at Aegis.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Wraith is adjacent at (5,3) and I'm fortified with 50% damage reduction. Orders say to attack adjacent enemies. I should attack Wraith first, then use shield_wall facing East where all three enemies are clustered to protect allies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 5,
+              "y": 3
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 14,
+          "maxHp": 16,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 9,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "Wraith is wounded at (5,3) adjacent to me at (5,2). Patch is unavailable (0 uses left). I can use overclock on Wraith since they're adjacent and wounded — giving them 2 abilities next turn could help. But Aegis is at (4,3), dist=2 from me, so overclock is not blocked (enemy must be adjacent to block). Wraith needs support — overclock gives them extra actions. I should stay close to Wraith. My position (5,2) is already adjacent to Wraith at (5,3). Use overclock on Wraith, then wait.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "I'm at (5,3) behind Aegis who faces W. I have 2HP and 2 ability uses (overclocked). Breach is unavailable (2/2 used). I'm already behind Aegis and adjacent. Best play: shadow_strike twice since it doesn't break cloak and I'm already in position. Two shadow_strikes deal 2 damage total which should finish Aegis (healthy = full HP, sentinels typically have 4HP but 2 hits is progress). With overclocked I get 2 ability uses - use both on shadow_strike to maximize damage while staying cloaked.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Aegis is wounded and at distance 2 - perfect range for precision_shot. I'm not adjacent to any enemy so precision_shot is not blocked. I haven't moved so full 2dmg. Take the shot to finish off the wounded sentinel.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm at 2HP with fortify active (50% dmg reduction). Wraith is adjacent at (5,3) — I can attack it without moving, preserving fortify. Staying put and attacking Wraith is optimal: keep damage reduction, deal damage to the wounded specter.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 14,
+          "maxHp": 16,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "opponent",
+    "totalTurns": 10,
+    "reason": "opponent eliminated all enemies"
+  },
+  "endedAt": "2026-02-25T08:05:42.818Z"
+}

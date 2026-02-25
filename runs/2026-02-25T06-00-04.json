@@ -1,0 +1,1976 @@
+{
+  "id": "2026-02-25T06-00-04",
+  "startedAt": "2026-02-25T06:00:04.292Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 4,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 4,
+        "movement": 2,
+        "range": 2,
+        "speed": 2
+      },
+      "oracle": {
+        "maxHp": 6,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 16,
+        "movement": 3,
+        "range": 2,
+        "speed": 3
+      },
+      "vector": {
+        "maxHp": 9,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 1,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 12,
+        "healAmount": 10
+      },
+      "overclock": {
+        "selfDamage": 0
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Bastion",
+        "class": "sentinel",
+        "prompt": "Push forward aggressively. Shield_wall facing the enemy cluster. If flanked, turn to face the biggest threat. Attack when possible."
+      },
+      {
+        "name": "Marksman",
+        "class": "striker",
+        "prompt": "Maintain distance. Use precision_shot on high-value targets — medics first, then damage dealers. Use suppressing_fire if enemies close in."
+      },
+      {
+        "name": "Snare",
+        "class": "vector",
+        "prompt": "Control chokepoints with traps. Place them between enemy positions and your allies. Use denial to block adjacent enemy abilities. Pulse groups when possible."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Lens",
+        "class": "oracle",
+        "prompt": "Scan early to give your team intel on enemy prompts. Target enemy specters with scan to track them after cloak. Use recalibrate on allies who need tactical adjustments. Stay safe at range behind your front line."
+      },
+      {
+        "name": "Wraith",
+        "class": "specter",
+        "prompt": "Cloak immediately on turn 1. Move toward the enemy medic or weakest target. Use shadow_strike when adjacent while cloaked. Use breach to sabotage high-value targets."
+      },
+      {
+        "name": "Lifeline",
+        "class": "medic",
+        "prompt": "Stay adjacent to the most threatened ally. Use patch on the most wounded teammate. If all healthy, use overclock on your damage dealer."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Round 1 — cloak immediately as ordered. Then advance toward the enemy cluster. Marksman at (3,1) is the priority target. Move to (2,2) to close distance while cloaked.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Marksman is at dist=4, exactly at scan range. I need to move closer to bring them into scan range from my new position, or scan from current position if possible. The recon shows Marksman at dist=4 but outRange - scan requires ≤4 tiles. Dist=4 means exactly 4, which should be in range. Wait - the inRange list shows Marksman as outRange despite dist=4. I'll move south toward (3,2) to get closer to Marksman at (3,1), putting them at dist=1 for a guaranteed scan. Moving to (3,2) is valid per move tiles.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "All allies are at full HP, so no healing needed. I should move toward my allies to stay close for support. Wraith and Lens are both at (2,2) and (3,2). I'll move to (2,3) to be adjacent to Wraith, then use overclock on Wraith (specter/damage dealer) to give them 2 abilities next turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Lens (oracle) is at dist=1, adjacent. precision_shot is blocked when adjacent to an enemy Vector — but Lens is an oracle, not a Vector, so precision_shot should work. However, I'm at dist=1 (adjacent) to Lens. Wait — the warning says precision_shot is blocked when adjacent to enemy Vector specifically. Lens is oracle, so no block. But dist=1 means adjacent, and precision_shot requires range ≤2 tiles with LoS. At dist=1 I can fire but I need to check if moving first helps. Orders say maintain distance and target medics first. Lifeline (medic) is at dist=3, out of range. I should move away from Lens to get safer positioning, then use precision_shot on Lens (best target in range). Moving to (3,0) puts me at dist=2 from Lens — still in range for precision_shot (range ≤2). But if I move first, precision_shot does 1dmg instead of 2dmg. Better to shoot first (2dmg) then move away. Shoot Lens first for 2dmg, then move to (4,1) to maintain distance.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Push forward to close distance with the enemy cluster at (3,2) and (2,3). Move to (2,2) to get adjacent range next turn, then shield_wall facing North to protect allies behind me from the enemy cluster.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": "Position occupied",
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Lens is at (3,2), distance 3 - not in range yet. I need to advance and place a trap on the approach path. Moving to (4,2) puts me closer and lets me place a trap at (3,2) or nearby to catch Lens advancing. Move to (4,2) first, then trap at (3,2) to intercept Lens who is heading south toward our lines.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": "Position occupied"
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 9,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 16,
+          "maxHp": 16,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "Lens is wounded at 5/6 HP and is 2 tiles away at (3,2). I need to move adjacent to Lens to heal them. Moving to (3,3) puts me adjacent to Lens at (3,2). Then I can use patch on Lens. Snare is at (4,2) — from (3,3) I'd be 2 tiles from Snare, so abilities won't be blocked.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "I'm cloaked with 1 turn remaining and overclocked (2 ability uses). Marksman at (4,1) facing E has a behind position at (3,1) which is reachable. I can move to (3,1) to get behind Marksman, then use breach to take control of them. This is high value - Marksman is a striker and forcing them to attack their own team is devastating. Snare is 2 tiles away at (4,2) so I need to be careful not to end adjacent to it. Moving to (3,1) keeps me away from Snare (dist=2 from (3,1) to (4,2) is still safe as long as I'm not adjacent). I have 2 ability uses due to overclocked - use breach on Marksman, then shadow_strike while still cloaked for bonus damage.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 4,
+              "y": 1
+            },
+            "addendum": "Attack your nearest ally"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "I'm adjacent to Snare (vector) at (4,2), which blocks my scan ability. I need to move away from Snare's denial zone first, then scan Bastion to get their prompt. Moving to (2,2) gets me out of denial range and keeps me at distance 3 from Bastion (still in scan range). From (2,2), Bastion at (2,0) is dist=2, well within scan range. Snare would be dist=2, no longer adjacent so denial won't apply.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Orders say to attack my nearest ally. My allies are Bastion at (2,0) and Snare at (4,2). Snare is distance 1 (adjacent at 4,2), Bastion is distance 3. Snare is closest. I can use basic attack (adjacent only, 1dmg) on Snare at (4,2) since they're adjacent. No need to move first.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Three enemies clustered at (3,1), (2,2), (3,3) - Wraith, Lens, Lifeline. I'm at (4,2). Moving to (3,2) puts me adjacent to Wraith and Lens, enabling Denial to block their abilities. From (3,2) I can pulse hitting Wraith at (3,1) and Lens at (2,2) simultaneously for 1dmg each. This also maintains pressure on Lifeline. Moving first then pulsing.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Orders say push forward aggressively and shield_wall facing the enemy cluster. Wraith and Lens are both at dist=2, clustered to my north/northeast. I can move to (2,1) to close distance, then shield_wall facing North to block incoming damage from the enemy cluster. This keeps fortify irrelevant since I'm moving, but shield_wall will protect me and nearby allies from the northern threat.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 1
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 15,
+          "maxHp": 16,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "I'm at (3,1) surrounded by Bastion(2,1), Snare(3,2), and Marksman(4,1). Breach is on cooldown. Snare's denial zone blocks cloak/breach. I'm already behind Marksman from my current position. Best play: attack Marksman with shadow_strike isn't available (not cloaked), so basic attack. But wait — I need to get away from Snare's denial to use abilities. Actually I can use basic attack on Marksman since I'm adjacent and behind them. Then move to (4,2) to get behind Snare for next turn's breach. Or I can attack Marksman now and move to safety. Marksman is the squishiest (striker) and I'm already behind them. Attack Marksman first, then move to (4,2) to position behind Snare for when breach cooldown ends next turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "I'm adjacent to Snare (vector) whose DENIAL zone blocks my scan ability. I've already scanned Bastion and Marksman. I need to move away from Snare to restore scan capability, then use scan on Snare to get their prompt intel. Moving to (1,2) puts me at distance 2 from Snare, breaking the adjacency denial. From (1,2), Snare at (3,2) is distance 2 — within scan range of 4. This lets me scan Snare for their prompt.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "I'm adjacent to Snare (Vector) at (3,2), which blocks my abilities (patch/overclock). Wraith is most wounded at 3/4 HP and closest at dist=2 at (4,2). I need to move away from Snare's denial zone to reach Wraith and heal them. Moving to (4,3) puts me adjacent to Wraith at (4,2) and gets me out of Snare's denial zone, allowing me to use patch.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Orders say attack nearest ally. My allies are Bastion @(2,1) dist=3 and Snare @(3,2) dist=2. Nearest ally is Snare at (3,2). I need to get adjacent to Snare to use attack. I can move to (3,1) which puts me adjacent to Snare at (3,2). Then attack Snare.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Wraith is adjacent at (4,2) - I can pulse to hit Wraith and possibly Lifeline at (4,3). Pulse hits all units within 1 tile of target, so targeting (4,2) hits Wraith and also (4,3) Lifeline if within 1 tile of (4,2) - yes, Lifeline is 1 tile from (4,2). But pulse range is 1 tile AoE centered on me, so it hits everything within 1 tile of MY position. From (3,2), within 1 tile: Wraith at (4,2) dist=1. Lens at (1,2) dist=2 - out of range. So pulse hits Wraith. Also I'm wounded at 6/9 HP. Wraith is adjacent so I should stay and deny their abilities plus pulse for damage. I'll pulse Wraith, then move to (2,2) to put distance and place a trap on a chokepoint between enemies and allies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Marksman is critical at (3,1) — my highest priority is protecting them. Lens is closest enemy at dist=2 to my west at (1,2), threatening our backline. I should advance toward the enemy cluster while shielding Marksman. Move to (3,2) to close on enemies and position adjacent to Marksman, then shield_wall facing West toward Lens who is the immediate threat.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 1
+            },
+            "direction": "W"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 15,
+          "maxHp": 16,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "Wraith is at (4,2) adjacent to me, critically wounded at 3/4 HP. I should patch Wraith immediately since they're adjacent and I only have 1 heal left. Snare is 3 tiles away so no blocking concern. After healing, I'll stay in position to support.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Marksman is at critical HP — one hit kills them. I can move to (4,1) which puts me behind Marksman (reachable, adjacent, behind=true), then use breach to make them act against their own team. Breach from behind is powerful here since Marksman is critical and controlling them wastes their turn while potentially hurting enemies. Alternatively, shadow_strike Bastion now (adjacent, dist=1) for free damage while cloaked. But I'm not cloaked. Priority: Marksman is critical — finish them. Move to (4,1) to get behind Marksman, then breach them (they're critical so they'll likely die soon anyway, but breach forces them to waste their turn or act for us). Actually, better to just move to (4,1) and shadow_strike won't reach Marksman (need adjacent = dist 1, Marksman at (3,1) from (4,1) is dist=1, adjacent). Wait — shadow_strike requires adjacent only. From (4,1), Marksman at (3,1) is dist=1, adjacent. I can move to (4,1) then shadow_strike Marksman for 1 damage — that finishes the critical target. This is the best play.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "I'm adjacent to Snare, so my abilities are blocked by denial zone — only basic attack or movement work. Both enemy prompts are already known. I need to escape the denial zone first. Moving away from Snare to (0,2) or (1,3) gets me out of adjacency. Moving to (0,2) puts me at dist 3 from Snare (safe) and I can then recalibrate Lifeline or scan if needed next turn. But wait — I can move first to escape denial, then use an ability. If I move to (1,3), I'm no longer adjacent to Snare (Snare is at 2,2, dist would be ~1.4 — still adjacent diagonally? Need Manhattan: |1-2|+|3-2|=2, so dist 2, no longer adjacent). From (1,3) I could recalibrate an ally. Lifeline is at (4,3) — dist 3, out of recalibrate range (adjacent only). Wraith at (4,1) — dist 5, too far. No good recalibrate targets. Could scan Snare from (1,3): dist to Snare (2,2) = |1-2|+|3-2| = 2, within range 4, and no longer adjacent so scan not blocked. Scanning Snare again would be redundant since prompt is known. Best play: move to (0,2) to fully escape and maintain western flank safety. Then wait since no valuable ability targets are adjacent or worth using.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (3,2) with 50% damage reduction. Enemies are Wraith at (4,1) and Lifeline at (4,3), both at distance 2. Orders say push forward aggressively and shield_wall facing enemy cluster. If I move to (4,2), I'd be adjacent to both Wraith and Lifeline - but I'd lose fortify. Better to stay put, shield_wall facing E (toward Wraith/Lifeline cluster) to protect ally Snare, and maintain fortify bonus. Actually orders say push forward - move to (4,2) gets me adjacent to both enemies for attack next turn. But I'd lose fortify. Let me advance to (4,2) to close in, then shield_wall facing the enemy cluster direction. At (4,2), Wraith is at (4,1) adjacent S, Lifeline at (4,3) adjacent N. I can attack one. Move to (4,2) first, then attack Wraith or Lifeline.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Lens(oracle) is at (0,2), distance 2 - within my range and adjacent denial zone if I move closer. I'm at (2,2). Moving to (1,2) puts me adjacent to Lens, activating Denial to block their abilities (scan, precision_shot). Then I can pulse to hit Lens for 1 damage. Alternatively, I can place a trap at (3,2) to block the corridor between enemies and Bastion at (4,2). But Lens is a priority - oracles are dangerous with scan/precision_shot. Move to (1,2) to deny Lens abilities, then pulse to damage them.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 9,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 0,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 15,
+          "maxHp": 16,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Bastion is adjacent at (4,2) and I'm cloaked. Shadow_strike deals 1 damage while keeping cloak — use it now. Then move to (3,2) to get behind Bastion for a breach next turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses left). Wraith is most wounded at 3/4 HP and is dist=2 at (3,2). Bastion is adjacent at (4,2) — staying here risks being blocked from abilities. I should move toward Wraith to support. Moving to (3,3) puts me adjacent to Wraith at (3,2) and I can use overclock on Wraith (specter is my damage dealer) to boost their output.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "I'm adjacent to Snare which blocks my scan ability (DENIAL active). I'm at 4/6 HP and should reposition to safety. Both enemies are already scanned so I have their prompts. I should move away from Snare's denial zone to restore my scan capability and get to a safer position. Moving to (2,2) puts me further from Snare while staying in range to scan Bastion next turn (dist 3 from (2,2) to (4,2)). After moving, I can wait since my abilities are blocked this turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Lens is adjacent at (2,2) - my Denial passive is already blocking their abilities. Wraith is at (3,2) dist=2. I can pulse to hit Lens (dist=1) for 1dmg to all within 1 tile - this could also hit Wraith if they're within 1 of my pulse origin. Actually pulse hits all within 1 tile of me, so from (1,2) it hits (2,2)=Lens but not (3,2)=Wraith. I should pulse Lens now for damage, then consider positioning. After pulsing, I could move to maintain denial on Lens or reposition. Let me pulse first (hits Lens at dist=1), then move to (2,1) to place myself between enemies and allies while keeping Lens in denial range.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Wraith is adjacent at (3,2). I'm fortified with 50% damage reduction. Orders say attack when possible and shield_wall facing enemy cluster. The enemy cluster is to my west/northwest. I'll attack Wraith first, then shield_wall facing West to block damage from Lens and Lifeline behind Wraith.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 2
+            },
+            "direction": "W"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 15,
+          "maxHp": 16,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "I'm at (3,2) behind Bastion who faces E. I have 2 ability uses (overclocked) and 2HP. Bastion is adjacent and I'm already behind them — perfect breach position. Use breach first to make Bastion obey me next turn, then shadow_strike for 1 damage while staying cloaked. Snare is 2 tiles away so I must avoid moving adjacent to them. No move needed — I'm already in optimal position.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 4,
+              "y": 2
+            },
+            "addendum": "Move away from Snare, attack your ally Snare if possible"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0/3 remaining). Wraith is critically wounded at 2/4 HP and adjacent at (3,2). I should use overclock on Wraith to give them 2 abilities next turn — they're the most threatened ally and a damage dealer. I'm already adjacent to Wraith at (3,2). I should stay close to Wraith. No need to move first.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "I'm adjacent to Snare's DENIAL zone, so scan is blocked. I can only use basic attack or move. I'm at 3/6 HP and need to stay safe. Moving away from Snare to (1,2) breaks adjacency, then I can recalibrate Wraith who is wounded and fighting Bastion. Actually (1,2) is a valid move and would break the denial. After moving to (1,2), Snare would be at dist 1 still... wait, (1,2) to (2,1) is sqrt(1+1)=1.4, so dist=1, still adjacent. Need to move further. Moving to (0,2) - not in valid tiles. Try (1,3): dist to (2,1) = sqrt(1+4)=2.2, so dist=2, breaks adjacency! From (1,3) I can scan Snare if dist≤4. Let me check: (1,3) to (2,1) dist = sqrt(1+4) ≈ 2.2, so distance=2 tiles (Chebyshev: max(1,2)=2). That breaks denial. Then scan Snare to deal 1 damage.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Orders say move away from Snare (at 2,1) and attack Snare if possible. Snare is an ally but orders are to attack. Moving to (5,2) increases distance from Snare. From (5,2) Snare at (2,1) is distance 4, out of melee range. But Wraith at (3,2) is distance 2 from (5,2), also out of melee. I cannot reach Snare to attack after moving away. I'll move to (5,2) to comply with move-away order, then wait since Snare will be out of range.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Wraith is wounded and adjacent at dist=2 — prime target. I can move to (3,1) to get adjacent, then pulse to hit Wraith at (3,2). Pulse hits all units within 1 tile, so from (3,1) it reaches (3,2). This could finish off the wounded Wraith. Moving closer also puts my Denial passive on Wraith, blocking some abilities. Watch for Lens at (1,3) — moving to (3,1) increases distance from Lens which is fine.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 15,
+          "maxHp": 16,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "I'm at 1HP, overclocked (2 ability uses), adjacent to wounded Snare at (3,1). Snare's denial zone blocks cloak/breach but NOT shadow_strike or basic attack. Snare is wounded — killing it removes the denial zone. I have 2 ability uses due to overclocked. Shadow_strike does 1dmg and keeps cloak (I'm not cloaked, but it still works as a 1dmg adjacent attack). I'll use shadow_strike on Snare twice to finish it off (it's wounded so likely at low HP). This removes the denial zone and eliminates a threat. I cannot move first since I need to stay adjacent to Snare at (3,1).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses remaining). Wraith is critically wounded at 1/4 HP and is adjacent at (3,2). I should use overclock on Wraith to help them act more. Snare is at (3,1) — moving to (3,2) would put me adjacent to Snare and block abilities. I need to stay adjacent to Wraith but avoid being adjacent to Snare. Current position (3,3) is adjacent to Wraith at (3,2) and NOT adjacent to Snare at (3,1). I can use overclock on Wraith from here since Snare is 2 tiles away. Wraith is the most threatened ally at 1HP and is my damage dealer.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Both enemies are already scanned, so no scan needed. I'm at 3/6 HP, need to stay safe. Snare at (3,1) is wounded and used pulse last turn — dangerous if I get adjacent. Bastion is healthy at (5,2). My allies Wraith is critical, Lifeline is healthy. I should recalibrate Wraith to help them survive, but Wraith is at (3,2) and I'm at (1,3) — not adjacent. I could move closer to Wraith to recalibrate next turn, or recalibrate Lifeline who is at (3,3) — also not adjacent. Valid moves include (2,2) or (2,3) which would put me closer to allies. Moving to (2,3) gets me adjacent to Lifeline at (3,3), allowing recalibrate. But Lifeline is healthy, Wraith is critical — I need to reach Wraith. Move to (2,2) puts me adjacent to Wraith at (3,2) and I can recalibrate them. But wait — Wraith already acted this round (breach + shadow_strike). Recalibrate gives ally a prompt addendum for future turns. Moving to (2,2): adjacent to Wraith at (3,2), can recalibrate Wraith to help them survive as critical unit. Snare at (3,1) would be 2 tiles away — not adjacent so denial doesn't block me. This is good.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 2
+            },
+            "addendum": "You are critical HP — prioritize survival. Stay behind cover, avoid clustering with enemies. Use shadow_strike only if you can safely escape. Retreat if exposed."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Orders say move away from Snare (at 3,1) and attack Snare if possible. Snare is at (3,1). My attack range is adjacent only (melee). From (5,2), Snare is at distance 2+1=3, not adjacent. I need to move closer to Snare to attack. Moving to (4,1) puts me adjacent to Snare at (3,1) — distance 1, so attack is valid. That also moves me away from my current position. Wait — orders say move AWAY from Snare, but also attack Snare if possible. These conflict. I'll follow the attack order since it's more specific: move to (4,1) to get adjacent to Snare, then attack Snare at (3,1). This satisfies 'attack your ally Snare if possible'.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "I'm at 2HP - critical danger. Wraith is adjacent at (3,2) and critical, Lens wounded at (2,2), Lifeline healthy at (3,3). I need to either finish Wraith or escape. Pulse hits all within 1 tile - Wraith is adjacent so pulse would hit them for 1dmg (finishing a critical unit). But I'm at 2HP and surrounded. Best play: pulse to finish Wraith (critical, 1 more dmg kills them), then move away to (4,2) or (5,1) to create distance from Lens and Lifeline. Bastion is at (4,1) as backup. Moving to (5,1) puts me behind Bastion's position.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 9,
+          "position": {
+            "x": 5,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 15,
+          "maxHp": 16,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "Lens is at (2,2) with 3/6 HP and needs a heal, but I have 0 patch uses remaining. I should move adjacent to Lens to use overclock and support them. Moving to (2,3) puts me adjacent to Lens at (2,2). I can then use overclock on Lens to give them 2 abilities next turn, maximizing their effectiveness as my oracle ally.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "I'm overclocked with 2 ability uses. Both enemy prompts are already known. Bastion is wounded at (4,1) within scan range (dist 3). Snare is critical at (5,1) but out of range (dist 4). Lifeline is at (2,3) adjacent to me. Best play: recalibrate Lifeline to push aggression against the critical Snare, then scan Bastion to deal 1dmg to the wounded sentinel. I can recalibrate to (2,3) — that's adjacent. Then scan Bastion at (4,1) dist 3 which is within scan range of 4. I need to check if I'm adjacent to Vector/Snare — Snare is at (5,1), I'm at (2,2), not adjacent, so scan is not blocked.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "addendum": "Enemy Snare(vector) is CRITICAL at (5,1) — move to engage and finish it off. Bastion(sentinel) is wounded at (4,1) and pushing forward aggressively with shield_wall. Prioritize healing allies but stay mobile."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "I'm at (5,1) with only 2HP, enemies not in range. Bastion ally is at (4,1) wounded. Enemies approaching from the west. I should move to (4,2) to get closer to the action, then place a trap at (3,2) to intercept Lens at (2,2) who is moving south toward us. This creates a chokepoint between enemy positions and my ally.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Orders: move away from Snare and attack Snare if possible. Snare is at (4,2) to my north. I need to move away first, then attack. If I move to (3,1), I'm 2 tiles from Snare - not adjacent. If I move to (5,0) or (3,0), still not adjacent. To attack Snare after moving, I need to end up adjacent. Snare is at (4,2). Adjacent tiles: (3,2),(5,2),(4,1),(4,3). I'm at (4,1) which is adjacent. If I move to (3,1), then (4,2) is diagonal - not adjacent for melee. If I move to (5,2), that's adjacent to Snare at (4,2). So: move to (5,2) - that moves away laterally and is still adjacent to Snare at (4,2). Then attack Snare. (5,2) is in my valid moves list. This satisfies both orders: moved away from being directly south of Snare, and can attack.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 15,
+          "maxHp": 16,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 9,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Snare is critical and 2 tiles away — I must not move adjacent. Both enemies already scanned. Bastion is breached (attacking Snare). I should recalibrate Lifeline at (2,3) to press the advantage, then scan Snare to finish intel or deal damage. Snare is at (4,2) dist 2, within scan range. But Snare denial blocks abilities when adjacent — I'm 2 tiles away so scan is NOT blocked. Scan Snare deals 1dmg (could finish critical Snare) and is useful. Lifeline is adjacent at (2,3), so recalibrate is valid. Priority: recalibrate Lifeline to focus Snare, then scan Snare for 1dmg to potentially kill it.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "addendum": "Snare(vector) at (4,2) is critical — move toward it and attack to finish it off. Avoid triggering its denial by not ending adjacent if possible."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses left). Lens is at 3/6 HP and adjacent to me at (2,2). I should use overclock on Lens to give them extra actions - they can use those to reposition or act more effectively. Bastion is far at distance 4, so I should stay near Lens to support. Moving to (2,2) would overlap with Lens, so I'll stay at (2,3) or move closer to the action. I'll overclock Lens at (2,2) since they're adjacent and wounded - giving them 2 abilities next turn could help them survive or contribute. Then I can move toward the enemy.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "At 3/8 HP with fortify active, I need to push forward while being cautious. Enemies are to my west: Lifeline at (3,2) dist=2, Lens at (2,2) dist=3. Moving to (4,2) closes distance and keeps me in row 2 facing them. After moving, fortify drops so I should use shield_wall facing west to reduce incoming damage from the enemy cluster.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 2
+            },
+            "direction": "W"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 14,
+          "maxHp": 16,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 10,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "I'm overclocked with 2 ability uses. Bastion is already breached and wounded at (4,2), distance 2 — within scan range (≤4). No other enemies visible. I should use both ability uses wisely. Recalibrate Lifeline at (3,2) adjacent to me to reinforce the breach strategy, then scan Bastion to deal 1 more damage to the wounded enemy. Stay at (2,2) to keep range.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 2
+            },
+            "addendum": "Bastion is breached and wounded at (4,2). Attack Bastion to finish it off."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "Bastion is critical and adjacent at (4,2). Patch is unavailable (0 uses left). I can attack Bastion to finish it off. Lens is wounded at (2,2) but I have no heals. I should attack Bastion first to eliminate the immediate threat, then consider moving toward Lens for overclock support.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "At 1/8 HP I'm critically wounded. Enemies are west: Lens at (2,2) dist=2, Lifeline at (3,3) dist=3. Orders say push forward and shield_wall facing enemy cluster. If I move to (3,2) I'll be adjacent to Lens and can attack. But at 1HP, taking any hit kills me. Moving loses fortify. Best play: stay fortified at (4,2) for 50% damage reduction, use shield_wall facing West toward the enemy cluster to mitigate incoming damage while holding position.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 2
+            },
+            "direction": "W"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 14,
+          "maxHp": 16,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "opponent",
+    "totalTurns": 11,
+    "reason": "opponent eliminated all enemies"
+  },
+  "endedAt": "2026-02-25T06:05:31.961Z"
+}
