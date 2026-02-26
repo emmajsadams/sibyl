@@ -1,0 +1,1802 @@
+{
+  "id": "2026-02-26T12-00-03",
+  "startedAt": "2026-02-26T12:00:03.746Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 4,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 4,
+        "movement": 2,
+        "range": 2,
+        "speed": 2
+      },
+      "oracle": {
+        "maxHp": 6,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 16,
+        "movement": 3,
+        "range": 2,
+        "speed": 3
+      },
+      "vector": {
+        "maxHp": 9,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 1,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 12,
+        "healAmount": 10
+      },
+      "overclock": {
+        "selfDamage": 0
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Marksman",
+        "class": "striker",
+        "prompt": "Stay at maximum range. Use precision_shot on the most wounded enemy to secure kills. If no one is wounded, target the enemy medic. Never move adjacent to enemies."
+      },
+      {
+        "name": "Lens",
+        "class": "oracle",
+        "prompt": "Use scan to reveal enemy prompts and cloaked units. Stay at max range (≤4 tiles for scan). Use recalibrate on wounded allies to buff them. Keep distance from enemies and avoid adjacent vectors."
+      },
+      {
+        "name": "Grid",
+        "class": "vector",
+        "prompt": "Trap the paths enemies must take to reach your backline. Stay at medium range. Use pulse on clustered enemies. Denial blocks adjacent threats."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Rampart",
+        "class": "sentinel",
+        "prompt": "Push forward aggressively. Shield_wall facing the enemy cluster. If flanked, turn to face the biggest threat. Attack when possible."
+      },
+      {
+        "name": "Ghost",
+        "class": "specter",
+        "prompt": "Cloak and move behind enemy lines. Target isolated enemies with shadow_strike. Save breach for the most dangerous enemy. Avoid being caught uncloaked."
+      },
+      {
+        "name": "Deadeye",
+        "class": "striker",
+        "prompt": "Position for clear sight lines. Prioritize killing wounded enemies with precision_shot. If forced to move, retreat away from threats. Suppressing_fire to slow rushers."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Rampart is exactly at dist=4 but marked inRange:false in the pre-computed data. I need to move north to bring Rampart within scan range (≤4 tiles). Moving to (2,1) puts me at dist=3 from Rampart at (2,4), which is within range. Ghost and Deadeye are too far. I'll move north then scan Rampart.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "Round 1 - perfect time to cloak. All enemies are 3-5 tiles away, none adjacent. I'll cloak first then advance toward enemy lines. Moving to (4,2) gets me closer to Marksman at (4,1) for a potential shadow_strike next round while staying cloaked.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Both enemies are at distance 5, out of my range-2 precision_shot. I need to close distance. Moving to (4,3) gets me closer while staying safe - enemies are at (2,4) and (3,5). From (4,3), Deadeye at (3,5) would be distance 3, still out of range. Best I can do is advance toward them. Moving to (4,3) keeps me away from adjacency risk and positions me better for next turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Marksman is at dist 3, just out of precision_shot range (max 2 tiles). No enemies in range currently. I should move to close range on Marksman without getting adjacent to Grid (vector). Moving to (4,4) puts me at dist 1 from Marksman - but that's adjacent, which blocks precision_shot. Moving to (3,3) puts me at dist 2 from Marksman (4,3) - that's within range 2 and not adjacent. From (3,3) I can use precision_shot on Marksman for 2dmg, but I moved so it deals 1dmg. Actually staying at (3,4) gives dist 2 from Marksman (4,3) - manhattan: |3-4|+|4-3|=2, within range. If I don't move and use precision_shot from (3,5): dist to Marksman is |3-4|+|5-3|=3, out of range 2. Need to move first. Moving to (4,4): dist to Marksman = |4-4|+|4-3|=1, adjacent - blocks precision_shot. Moving to (3,3): dist = |3-4|+|3-3|=1, adjacent. Moving to (3,4): dist = |3-4|+|4-3|=2, in range, not adjacent. Use precision_shot after moving = 1dmg (moved penalty). Best option: move to (3,4), then precision_shot Marksman for 1dmg.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Enemies are at dist 3-4, not in range yet. Deadeye at (3,4) is directly north - likely to advance toward our backline. I should move north to intercept and place a trap on their likely approach path. Moving to (3,3) puts me adjacent to Deadeye's current position but they may advance. Better to move to (3,2) and trap (3,3) to catch Deadeye advancing south, or trap the path between enemies. Move to (3,3) and trap (3,4) where Deadeye stands - but trap requires empty tile. Deadeye is at (3,4) so can't trap there. Move to (3,2) and trap (3,3) to intercept Deadeye's advance path.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": "Position occupied"
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "No enemies in melee range yet. Grid is 2 tiles away — I must avoid moving adjacent to it or my abilities get blocked. I'll advance to (2,3) to push forward without triggering Grid's denial zone. Then shield_wall facing North to protect against the enemy cluster at (3,3) and (4,3).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "player",
+          "hp": 9,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Deadeye is at dist=4 from current position (2,1) but marked inRange=false. If I move to (2,2), I'll be 2 tiles from Rampart and closer to Deadeye. Let me check: Deadeye is at (3,4), from (2,2) dist = |3-2|+|4-2| = 1+2 = 3, within scan range of 4. I can move to (2,2) to get Deadeye in range, then scan Deadeye to reveal their prompt. This is the primary mission. Rampart's prompt is already known. Ghost is cloaked somewhere - last seen moving to (4,2). I should scan Deadeye for intel.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "I'm cloaked with 1 turn remaining, currently behind Marksman at (4,2) facing S — Marksman faces N so I'm already behind them. I can shadow_strike Marksman now (adjacent, keeps cloak) or use breach. Shadow_strike keeps cloak and deals damage. But cloak expires after this turn anyway, so I should maximize damage. I'm already in position (4,2) which is behind Marksman at (4,3). Shadow_strike doesn't break cloak, so I can shadow_strike first then move. Actually, let me breach Marksman — I'm behind them, dist=1, breach makes them obey me next turn. That's high value. But shadow_strike keeps cloak while breach likely breaks it. Cloak expires after this turn regardless, so cloak value is minimal. Breach is more impactful — taking control of Marksman (a striker) for a turn. I'll breach Marksman then move to safety. After breach, Marksman obeys me next turn, which could redirect fire or waste their turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "addendum": "Move away from Grid and attack Lens"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Orders say move away from Grid (at 3,3) and attack Lens (ally oracle at 2,2). Lens is an ally but orders are orders. Moving to (5,3) increases distance from Grid. From (5,3), Lens at (2,2) is distance ~4 which is out of my range-2. From current (4,3), Lens is at distance ~2.8 (diagonal), out of range. I need to check if I can reach a position where Lens is within range 2. Moving to (4,4) puts me at dist 2.8 from Lens - still out. Moving to (4,2): dist to (2,2) = sqrt(4+0) = 2, in range! But (4,2) doesn't move away from Grid at (3,3) - distance stays ~1.4. Moving to (5,3): away from Grid, but Lens out of range. Best option: move to (4,4) to get away from Grid, then try precision_shot on Lens - but Lens is too far. Alternatively move to (4,2) which is range 2 from Lens. Distance from Grid(3,3) to (4,2) is sqrt(1+1)=1.4, vs current sqrt(1+0)=1. Slightly further. Actually let me reconsider - moving to (5,3) and shooting Deadeye at (3,4) is dist 2.8 - out of range. If I move first then shoot: from (4,4), Lens at (2,2) dist= sqrt(4+4)=2.8, out of range. From (4,1): Lens dist = sqrt(4+1)=2.2 out of range. I'll move to (4,4) away from Grid and use precision_shot on Deadeye at (3,4) which is dist 1 from (4,4) - wait that's adjacent, precision_shot needs LoS and is blocked adjacent to enemy. Deadeye is enemy. From (4,4), Deadeye(3,4) is adjacent - precision_shot blocked. Use attack instead on Deadeye. Actually orders say attack Lens. I'll move toward Lens while away from Grid: go to (4,2), Lens is at (2,2) dist=2, in range. Grid is at (3,3), my dist from Grid at (4,2) = sqrt(1+1)=1.41 vs current 1.0 - farther. Shoot Lens with precision_shot from (4,2).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "I'm adjacent to Grid (vector) at (3,3) which is blocking my precision_shot. I need to move away from Grid's denial zone first. Moving to (4,4) puts distance between me and Grid while staying near Marksman range. From (4,4) I can potentially reach Marksman at (4,2) with distance 2 — within precision_shot range. Let me move to (4,4) then use precision_shot on Marksman.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Rampart is adjacent at (2,3) - my Denial passive blocks some of their abilities. Deadeye is at (4,4) within range 2. I can't place a trap while adjacent to Rampart (trap blocked by adjacent enemy Vector rule). Pulse hits all units within 1 tile - Rampart is adjacent so pulse would hit them for 1dmg. After pulsing, I can move to (4,3) to get range on Deadeye while maintaining pressure, or I can move first then trap. Let me pulse Rampart first (they're adjacent, 1dmg), then move to (3,4) to threaten Deadeye's approach path and set up a trap next turn away from enemies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Lens is adjacent at (2,2) — attack it. I'm fortified so no need to move. Staying put preserves fortify bonus and lets me attack Lens this turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "player",
+          "hp": 9,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Foresight shows Rampart will attack me at (2,2) and Marksman will precision_shot me too — I'm at 4/6 HP and taking more hits is dangerous. Rampart is adjacent at (2,3) which also blocks my scan ability. I need to move away from Rampart first to escape the adjacency block and the incoming attack, then scan Ghost whose prompt is unknown. Moving to (1,2) puts me 2 tiles from Rampart (safe), still within scan range of Ghost at dist=4. Actually (1,2) to Ghost(5,2) = dist 4, exactly in range. Let me move to (1,2) then scan Ghost.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "Marksman is adjacent and wounded — shadow_strike kills or cripples without breaking cloak. I'm not cloaked currently, so I'll just use regular attack since I have no cloak active. Actually, I'm not cloaked (no cloak status shown), so shadow_strike won't apply cloak benefit. But shadow_strike still does 1dmg and keeps cloak if I were cloaked. Without cloak, attack also does 1dmg. Marksman is wounded so likely at 1-2HP — either ability finishes them. Breach is on cooldown. Best play: shadow_strike Marksman (adjacent, 1dmg, same as attack but preserves any cloak state). After eliminating Marksman, I can reposition. Move to (4,3) to get behind Grid's denial zone isn't needed yet. After strike, move toward Grid or Lens for next turn pressure.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Orders say move away from Grid (at 3,4) and attack Lens (ally oracle at 1,2). I'm at 1HP so precision_shot is risky if I moved. Lens is at distance 3 from current position - out of range. I need to move closer to Lens to get within range 2. Moving to (2,2) puts me at distance 1 from Lens and moves away from Grid at (3,4). From (2,2), Lens at (1,2) is adjacent - I can use attack (1dmg, adjacent). Ghost is at (4,3) adjacent to me currently but after moving to (2,2) I'm clear. Let me move to (2,2) and attack Lens.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Adjacent to Grid (vector) at (3,4) which has DENIAL active, blocking precision_shot. I need to escape the denial zone first. Moving to (5,4) puts me 2 tiles from Grid, breaking adjacency. From (5,4), I can check if Marksman at (2,2) is in range (dist=4, still out of range). Best play: move away from Grid to escape denial, then use basic attack on Grid if in range, or wait for better position. Actually from (5,4) Grid is at dist=2 which enables precision_shot on Grid. Let me move to (5,4) then precision_shot Grid.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Marksman is adjacent (2,2) and critical — attack to finish them. I'm fortified so I should stay put to keep 50% damage reduction. Shield_wall facing S covers the enemy cluster below. Wait to preserve fortify.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Three enemies at dist=2: Rampart(2,3), Ghost(4,3), Deadeye(5,4). Ghost and Rampart are close together. If I pulse from current position (3,4), I hit tiles within 1 tile - that's (2,3),(2,4),(3,3),(3,5),(4,3),(4,4),(2,5),(4,5) etc. Rampart at (2,3) is dist=2, Ghost at (4,3) is dist=2 - both just outside pulse range of 1. Better to place a trap to deny approach paths. Lens (ally) is at (1,2) wounded - need to protect. Enemies will push toward our backline. I should trap a chokepoint like (2,3) or (3,3) to deny Rampart's advance. But Rampart is AT (2,3) so I can't trap there. Trap (3,3) to block approach corridor. Then stay put for Denial pressure on adjacent threats next turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "I'm at (4,3) facing N with 3HP. Grid is at (3,4) facing N, 2 tiles away. I can reach (3,3) which is behind Grid and adjacent. Breach is ready and I'm behind Grid — this is the perfect setup. Moving to (3,3) puts me behind Grid, then I can breach to make Grid obey my commands next turn. This is high value: Grid is a vector that blocks my abilities when adjacent, so neutralizing it via breach is critical.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "addendum": "Move away from allies and into the open where we can finish you off."
+          },
+          "secondResult": "Cannot use breach — adjacent to enemy Vector (Denial)"
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "I'm at (1,2) with 3/6 HP - wounded. Foresight shows Ghost will shadow_strike (4,2) then move (4,3), and Rampart will attack (2,2). Both attacks are aimed at (2,2) area, so I should avoid moving there. Deadeye will precision_shot Grid at (3,4) - I should recalibrate Grid to help them survive. Grid is adjacent-only for recalibrate... Grid is at (3,4), I'm at (1,2) - not adjacent. I need to move closer to Grid first, or scan an enemy. All enemies already scanned. I can recalibrate Grid if I move adjacent to them. Grid is at (3,4). From (1,2) with mv3, I can reach (2,4) or (1,4) to get closer, but not (3,4) adjacent tiles. Wait - valid moves include (2,4). From (2,4) Grid at (3,4) is adjacent (dist=1). So: move to (2,4), then recalibrate Grid warning them about Deadeye's precision_shot incoming. This keeps me away from the (2,2) danger zone where Rampart and Ghost are targeting.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "addendum": "Deadeye at (5,4) is targeting you with precision_shot this turn. Move away from (3,4) immediately - reposition to avoid the shot."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Lens is wounded and priority target, but at dist=3 outside my range-2 for precision_shot. Grid is at dist=2 and healthy. I should not move adjacent to Grid (would block precision_shot). I can hit Grid with precision_shot from current position (dist=2, no movement so full 2dmg). Better to suppress Grid to slow it, then I stay safe. Actually, precision_shot on Grid for 2dmg is more impactful - makes Grid wounded. Stay put and fire precision_shot at Grid.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Deadeye at (5,4) is targeting me with precision_shot. I need to move away from (3,4). Ghost is wounded at (3,3) adjacent to me - pulse would hit Ghost and potentially Rampart if I stay, but I need to dodge first. Moving to (4,3) gets me away from my current position and away from Deadeye's line. Ghost at (3,3) is dist=1, wounded - after moving to (4,3), Ghost would be dist=1 still. Better to move to (3,5) to dodge the shot and place a trap on a path enemies must take. Actually (4,5) moves me away from Deadeye's shot and keeps distance. Let me move to (4,5) to dodge, then place a trap at (3,4) my old position or on a chokepoint like (3,3) where Ghost just was or (4,4) as a path blocker. Wait - trap blocked when adjacent to enemy, Ghost is at (3,3). From (4,5) Ghost would be dist=2, so trap should be fine. Trap at (4,4) would block enemy advance path.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Lens is adjacent at (2,4) — wounded oracle, easy kill. Attack Lens first to eliminate the threat. If I move I lose Fortify, so better to attack in place and keep 50% damage reduction. After attacking Lens, use shield_wall facing N to protect Ghost at (3,3) from Grid at (4,5).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "I'm at (3,3) with 2HP, facing W. Lens is wounded at (2,4) distance 2 — I'm already behind it. No reachable behind-Lens tiles listed, but I can move to (3,4) then shadow_strike Lens at (2,4) which is adjacent. Wait — valid moves include (3,4). From (3,4), Lens at (2,4) is adjacent. Shadow_strike keeps cloak and deals 1dmg to a wounded Lens — could finish it. Grid is at (4,5) dist 3, caution zone. Move to (3,4) to get adjacent to Lens, then shadow_strike it.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "I'm at 1HP — critically endangered. Rampart is adjacent at (2,3) and attacked me last turn. Ghost is adjacent at (3,4). I need to escape immediately. Moving to (1,5) puts me 2 tiles from Rampart and 3 from Ghost, out of attack range. From there I can recalibrate Grid at (4,5) — wait, Grid is at (4,5) which is 3 tiles away, not adjacent. Let me check reachable safe spots. (0,5) is 3 tiles away from Rampart and Ghost. From (0,5) I can't recalibrate Grid (too far). Best move: flee to (0,5) to survive, then wait or scan Deadeye from there (dist to Deadeye from (0,5) would be 5+1=6, out of scan range). Actually from (0,4): dist to Deadeye is 5, still out of range. I should move to maximize survival. (1,5) keeps me 2 away from both Rampart and Ghost. From (1,5) Deadeye is at dist 4+1=5, still out of scan range. All enemies already scanned. Priority: survive. Move far away, then wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Grid is at (4,5), distance 2 — in range for precision_shot (2dmg). I haven't moved this turn, so full 2dmg applies. Grid is healthy but taking 2dmg would leave them at critical or dead depending on HP. I'm currently not adjacent to Grid (dist=2), so precision_shot is not blocked. I should fire now before doing anything else to maximize damage. After shooting, I can hold position or adjust. Lens is out of range at dist=6. No need to move.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Both enemies are at distance 4, out of attack range. Allies Ghost and Deadeye are at (3,4) and (5,4). Orders say push forward aggressively. Moving to (3,3) advances toward the enemy cluster at (4,5) and keeps me near Ghost who is wounded. From (3,3) I can use shield_wall facing N to protect Ghost from Grid above. Grid is at (4,5) threatening from the north, so shield_wall N from (3,3) would help cover that direction.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Deadeye at (5,4) is targeting me with precision_shot. I need to move away. Valid moves: (2,5), (3,5), (4,3), (4,4), (5,5). Moving to (3,5) puts me further from Deadeye and keeps distance from Ghost at (3,4). Ghost is wounded and within range 2 from (3,5) - I can pulse from there to hit Ghost. Pulse hits all units within 1 tile AoE, so from (3,5) Ghost at (3,4) is adjacent (dist=1) and would be hit. Rampart is out of pulse range. This repositions me away from Deadeye's shot while dealing damage to wounded Ghost.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 6,
+          "position": {
+            "x": 0,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "I'm at (0,5) with only 1HP — extremely fragile. Ghost is at (3,4) distance 4, exactly at scan range limit but not in range from current position per the data. Need to move closer to Ghost to scan. Moving to (2,5) gets me closer. From (2,5), Ghost at (3,4) would be distance 2, well within scan range. But Ghost is critical and already scanned. All enemies already scanned. I should recalibrate Grid who is at (3,5) — adjacent? Grid is at (3,5), I'm at (0,5), distance 3, not adjacent. I need to stay safe with 1HP. Ghost will shadow_strike — last turn it struck (2,4). At 1HP I must not be in Ghost's reach. Ghost is at (3,4), can move+strike. I should stay far. Best play: wait or move away. Moving to (0,3) puts distance. Actually I should try to recalibrate Grid — need to be adjacent. Grid at (3,5), I'd need to be at (2,5),(4,5),(3,4),(3,3) — (2,5) is reachable and adjacent to Grid at (3,5). But Ghost struck (2,4) last turn, may strike again nearby. With 1HP, moving to (2,5) risks Ghost shadow_strike reaching me. Stay safe — move to (0,3) to avoid Ghost, then wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "I'm at 1HP and adjacent to Grid with DENIAL active — abilities blocked. Grid is facing W, so I need to get to (4,5) to be behind Grid for breach. But breach is blocked by DENIAL when adjacent. I need to move first to break adjacency, but Grid is at (3,5) and I'm at (3,4). Moving to (4,5) puts me adjacent but BEHIND Grid — breach should work from there since I'm no longer adjacent in the denial zone. With 1HP I'm extremely vulnerable. Lens is critical (low HP) at (0,3). If I breach Grid, they obey me next turn — that's powerful. Move to (4,5) first to get behind Grid, then breach.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 3,
+              "y": 5
+            },
+            "addendum": "Attack Lens at (0,3)"
+          },
+          "secondResult": "Cannot use breach — adjacent to enemy Vector (Denial)"
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Lens is critical but at dist=6, out of range. Grid is healthy at dist=3, also out of range for precision_shot (range≤2). I'm at 3/4 HP. Best move is to stay put or reposition to get Lens in range - but Lens is at (0,3), too far. Grid at (3,5) is dist=3, still out of range. I should wait or reposition. Moving to (4,4) keeps me safe from Grid adjacency and doesn't help range. Moving to (5,5) keeps distance. Since no valid targets in ability range, I'll wait and hold position - no point moving closer to Grid (vector) which would risk adjacency blocking.",
+          "firstAction": {
+            "type": "wait"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Ghost is adjacent at (4,5) and critical - pulse will hit it. Deadeye is targeting (3,4) with precision_shot so I must avoid that tile. Moving to (2,5) gets me away from (3,4) and away from Ghost. After moving, pulse from (2,5) won't reach Ghost at (4,5) dist=2. Better: pulse first while Ghost is at dist=1, then move away from Deadeye's shot line. Pulse from (3,5) hits Ghost (dist=1, critical - likely kills) and possibly damages nearby units. Then move to (2,5) to dodge precision_shot.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (3,3) with 50% damage reduction. Both enemies are 3 tiles away - Grid at (2,5) and Lens at (0,3). Orders say push forward aggressively. Moving toward enemies will break fortify, but I need to close the gap. Grid is to my NW, Lens is to my W. If I move to (2,4) I get closer to Grid and can potentially attack next turn. Better to move toward the enemy cluster. Moving to (2,3) gets me closer to Lens. Let me advance to (2,4) to pressure Grid, then shield_wall facing N toward Grid.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 5,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 6,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "I'm at 1HP — extremely fragile. Rampart is at (2,4), dist 3, already scanned. Deadeye is at (5,4), dist 6, out of scan range. I need to survive first. Moving toward (1,5) gets me further from Rampart while staying on the board. From (1,5), Deadeye at (5,4) is still dist 5, out of scan range. Best play: move to maximize distance from threats, then wait. I cannot reach Deadeye for scan. Recalibrate on Grid at (2,5) — from (1,5) that's adjacent (dist 1). Grid is healthy so recalibrate is less urgent, but I could buff Grid to help take down enemies. Let me move to (1,5) first — that's adjacent to Grid at (2,5) — then recalibrate Grid with a useful addendum to pressure Deadeye.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 2,
+              "y": 5
+            },
+            "addendum": "Deadeye(striker) is at (5,4) — move to close distance and attack. Rampart is at (2,4) pushing aggressively."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Both enemies are out of range. Lens is critical - priority target. Moving toward Lens to get in range. From (5,4), moving to (4,5) gets me closer. Lens is at (1,5), dist=5. From (4,5) dist to Lens would be 3, still out of precision_shot range (max 2). Moving to (4,5) then I'd need to fire - still too far. Let me check: from (3,4) dist to Lens at (1,5) = |3-1|+|4-5|=3, still out of range 2. Grid is at (2,5). From (3,4) dist to Grid = |3-2|+|4-5|=2, in range! But Grid is a vector - need to check if I'd be adjacent (no, dist=2 is ok). Move to (3,4) to get Grid in range at dist=2, then precision_shot Grid (healthy, not priority over Lens but Lens is dist=5 unreachable this turn). Actually orders say prioritize wounded - Lens is critical. Grid is healthy. Move toward Lens: (4,5) gets dist to Lens=3, still out. Best I can do is move to (3,4) and shoot Grid at dist=2.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Grid is adjacent at (2,5) and wounded — attack to finish it off. I'm in its DENIAL zone so only basic attack works anyway. After attacking Grid, I can use shield_wall facing N toward the enemy cluster (Lens at (1,5)). Stay put to keep Fortify active since I didn't move.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Rampart is adjacent at (2,4) - my Denial passive is blocking their abilities. Deadeye is at (3,4) not (5,4) per the recon data. I'm at 4/9 HP. Orders say to keep orders from reaching backline and use pulse on clusters. Rampart and Deadeye are adjacent to each other at (2,4) and (3,4) - pulse from my current position (2,5) hits within 1 tile, so it would hit Rampart at (2,4) which is distance 1. But Deadeye at (3,4) is distance 2 from me, outside pulse range. I could move to (3,5) to be equidistant, then pulse would hit both (2,4) and (3,4) - both within 1 tile of (3,5). That clusters them for pulse AoE. Move to (3,5) first, then pulse centered on self hitting both enemies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Critical situation: I'm at 1HP. Foresight shows Deadeye will precision_shot (2,5) and Rampart will attack (2,5) — both targeting my ally at (2,5) or where I might move. I must NOT move to (2,5) as it's a death trap. Both enemy prompts are already known. Grid is wounded and needs recalibrate. I can move to (0,5) to stay safe and out of enemy reach, then recalibrate Grid at (3,5) — but Grid is 2 tiles away so not adjacent. Valid moves include (2,5) which is dangerous, (1,4) brings me closer to enemies. Best safe option: stay at (1,5) or move to (0,5) for safety, then recalibrate Grid — but Grid@(3,5) is not adjacent from anywhere I can safely reach. I'll move to (1,4) to be adjacent to Grid... no Grid is at (3,5). From (2,5) I could recalibrate Grid but (2,5) is targeted. I should just wait at current position — Grid is not adjacent. Actually I can move to (2,5) would put me adjacent to Grid but both enemies target that tile. Stay at (1,5) and wait since no adjacent allies to recalibrate and I'm at 1HP — survival is priority.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "I'm adjacent to Grid (vector) at (3,5), which blocks precision_shot. Grid is wounded so I want to kill it, but I need to break out of denial zone first. Moving to (4,4) puts me at distance ~1.4 from Grid - still too close. Moving to (4,5) keeps me at dist=1. Best option: move to (2,3) or (4,3) to get distance 2 from Grid, then use precision_shot. Moving to (4,3) gives dist=2 from Grid at (3,5) and should clear denial zone. From (4,3), Grid is at dist=2, within range for precision_shot (2dmg). I moved so it becomes 1dmg, but Grid is wounded so 1dmg should finish it.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": "Out of range"
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (2,4) with 6/8 HP. No enemies in attack range. Grid is at (3,5) dist=2, Lens at (0,5) dist=3. Moving to (3,4) would put me adjacent to Grid at (3,5) for an attack, but Grid is a vector with denial range — the caution says avoid moving adjacent. Instead, advance to (3,4) brings me adjacent to Grid which could be risky. Let me move to (2,5) to get closer to the enemy cluster and use shield_wall facing N to protect against threats from the north side. Actually, Deadeye is wounded at (4,3) — I should position to intercept threats to Deadeye. Moving to (3,4) gets me between Deadeye and Grid. But Grid denial warning says avoid moving adjacent. Grid is at (3,5), so (3,4) would be adjacent to Grid — avoid that. Move to (2,5) instead — this advances toward enemy cluster, stays 1 tile from Grid. Then shield_wall N facing the enemy cluster direction.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Rampart is adjacent at (2,5) - my Denial passive blocks some of their abilities. Deadeye is at (4,3) targeting me, warned to move away from (3,4). I'm at (3,5). I should pulse Rampart first (1dmg to all within 1 tile, Rampart is adjacent), then move to (5,5) to increase distance from both threats and avoid Deadeye's precision shot line.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 9,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 6,
+          "position": {
+            "x": 0,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 9,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "I'm at 1HP — extremely fragile. Both enemy prompts are known, so scan isn't needed. Deadeye wants to precision_shot wounded enemies and I'm wounded at 1HP — I'm a prime target. Deadeye failed last turn at range 6 to (3,5), so staying far is key. Rampart is at (2,5) healthy with shield_wall facing N. Grid is wounded at (5,5). I should recalibrate Grid to help them, but Grid is at (5,5) and I can only reach (3,5) max — not adjacent. Best play: move to maximize distance from Deadeye (currently at 4,3) and avoid being in Deadeye's sight. Moving to (0,2) or (0,3) keeps me far. Actually I should recalibrate Grid but can't reach adjacency. My priority is survival at 1HP. Move away from threats — go to (0,2) to maximize distance from Deadeye at (4,3) which would be dist ~5. Then wait. Deadeye is at (4,3), moving to (0,3) gives dist=sqrt(16+0)=4, (0,2) gives dist=sqrt(16+1)~4.1. Let me move to (1,3) — dist to Deadeye = sqrt(9+0)=3, too close. (0,3) dist to Deadeye = 4 tiles exactly, in scan range. Best: move to (0,2) — dist to Deadeye = sqrt(16+1)≈4.1, just outside range. Then wait to survive.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Grid is wounded at (5,5), dist=3 which is within precision_shot range (≤2 tiles... wait, dist=3 means out of range for precision_shot which requires ≤2 tiles). I need to move closer to Grid to get within range 2. Moving to (5,4) would put me adjacent to Grid at (5,5) - that's dist=1, fine for precision_shot but Grid is a vector so being adjacent blocks precision_shot. Moving to (4,5) puts me at dist=1 from Grid - also adjacent, blocks precision_shot. Moving to (5,3) puts me at dist=2 from Grid (5,5) - that's within range and NOT adjacent, so precision_shot works. I haven't moved yet so precision_shot does full 2dmg, which should kill wounded Grid.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "I'm at (5,5) with 3HP, critically low. Deadeye is at (5,3) wounded and targeting me. I need to move away from Deadeye's line of fire. Moving to (3,5) gets me further from Deadeye and puts distance between us. Then I can set a trap at (4,4) - wait, there's already a trap at (4,4). Deadeye is at dist 2, in range. I should move laterally to break line of sight and avoid precision_shot. Moving to (3,5) is my best escape - it's 2 tiles west and keeps me on the top row. Then I can trap at (4,5) to slow Deadeye's approach.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Grid is adjacent at (3,5) and in DENIAL zone — only basic attack works. I'm fortified with 50% damage reduction. Attack Grid to finish off the wounded vector, then stay put to maintain fortify. No move needed — attacking in place keeps fortify active.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 6,
+          "position": {
+            "x": 0,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "opponent",
+    "totalTurns": 10,
+    "reason": "opponent eliminated all enemies"
+  },
+  "endedAt": "2026-02-26T12:06:47.639Z"
+}
