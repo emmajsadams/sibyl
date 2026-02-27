@@ -37,7 +37,7 @@ export const BALANCE: BalanceConfig = {
   maxRounds: 20,
   unitStats: {
     specter: { maxHp: 4, movement: 3, range: 1, speed: 3 },
-    striker: { maxHp: 4, movement: 2, range: 2, speed: 2 },
+    striker: { maxHp: 5, movement: 2, range: 2, speed: 2 },
     oracle: { maxHp: 6, movement: 3, range: 3, speed: 3 },
     medic: { maxHp: 16, movement: 3, range: 2, speed: 3 },
     vector: { maxHp: 9, movement: 2, range: 2, speed: 1 },
@@ -48,7 +48,7 @@ export const BALANCE: BalanceConfig = {
     shadowStrike: { damage: 1 },
     breach: { maxUses: 2, cooldown: 2, duration: 3, range: 2 },
     cloak: { duration: 2 },
-    precisionShot: { damage: 1, movedDamage: 1 },
+    precisionShot: { damage: 2, movedDamage: 1 },
     scan: { damage: 1 },
     suppressingFire: { damage: 1 },
     patch: { maxUses: 12, healAmount: 10 },

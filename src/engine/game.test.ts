@@ -561,7 +561,7 @@ describe("useAbility - recalibrate", () => {
 });
 
 describe("useAbility - precision_shot", () => {
-  test("deals 1 damage at range when not moved", () => {
+  test("deals 2 damage at range when not moved", () => {
     const g = createGame();
     const s = unit("s1", "striker", "player", { x: 0, y: 0 });
     const t = unit("e1", "sentinel", "opponent", { x: 2, y: 0 });
@@ -569,7 +569,7 @@ describe("useAbility - precision_shot", () => {
     const hpBefore = t.hp;
     const err = useAbility(g, s, "precision_shot", { x: 2, y: 0 });
     expect(err).toBeNull();
-    expect(t.hp).toBe(hpBefore - 1);
+    expect(t.hp).toBe(hpBefore - 2);
   });
 
   test("deals 1 damage when moved", () => {

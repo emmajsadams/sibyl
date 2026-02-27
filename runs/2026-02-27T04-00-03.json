@@ -1,0 +1,2695 @@
+{
+  "id": "2026-02-27T04-00-03",
+  "startedAt": "2026-02-27T04:00:03.592Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 4,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 4,
+        "movement": 2,
+        "range": 2,
+        "speed": 2
+      },
+      "oracle": {
+        "maxHp": 6,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 16,
+        "movement": 3,
+        "range": 2,
+        "speed": 3
+      },
+      "vector": {
+        "maxHp": 9,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 1,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 12,
+        "healAmount": 10
+      },
+      "overclock": {
+        "selfDamage": 0
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Watcher",
+        "class": "oracle",
+        "prompt": "Scan priority targets each turn to reveal their strategy. Use recalibrate on your damage dealer to boost effectiveness. Stay behind allies and maintain range. Never get adjacent to enemy vectors."
+      },
+      {
+        "name": "Bastion",
+        "class": "sentinel",
+        "prompt": "Advance toward the nearest enemy. Use shield_wall facing the direction with the most enemies. If an enemy is adjacent, attack them."
+      },
+      {
+        "name": "Deadeye",
+        "class": "striker",
+        "prompt": "Maintain distance. Use precision_shot on high-value targets — medics first, then damage dealers. Use suppressing_fire if enemies close in."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Wraith",
+        "class": "specter",
+        "prompt": "Cloak and move behind enemy lines. Target isolated enemies with shadow_strike. Save breach for the most dangerous enemy. Avoid being caught uncloaked."
+      },
+      {
+        "name": "Lattice",
+        "class": "vector",
+        "prompt": "Trap the paths enemies must take to reach your backline. Stay at medium range. Use pulse on clustered enemies. Denial blocks adjacent threats."
+      },
+      {
+        "name": "Insight",
+        "class": "oracle",
+        "prompt": "Scan early to give your team intel on enemy prompts. Target enemy specters with scan to track them after cloak. Use recalibrate on allies who need tactical adjustments. Stay safe at range behind your front line."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "All enemies are out of scan range (dist 5-7, need ≤4). I need to advance south to close distance. Moving to (2,2) puts me 3 tiles from Watcher at (2,0) and 2 from Bastion at (3,1) — both in scan range next turn. Wait as second action.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Insight is in scan range at dist=2. Scanning reveals their prompt and deals 1 damage. After scanning, I can move to (2,1) to stay back while keeping scan options open next turn. No enemy vectors adjacent so scan is not blocked.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Round 1 — cloak immediately as instructed. Then advance toward enemies. Watcher at (2,1) is closest at dist 4. Move to (1,1) to close distance while staying cloaked. Next turns I can push to shadow_strike range.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Both enemies are at distance 4, out of my range 2. I need to close distance to get Insight (oracle - high value target) in range. Moving to (4,2) gets me closer to Insight at (2,2) - that would be distance 2, in range. Let me check: from (4,2) to (2,2) is 2 tiles, in range. I can move to (4,2) then precision_shot Insight.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Deadeye is at (4,2), distance 2 and in range. I'm at (4,4). Placing a trap between us at (4,3) would catch Deadeye if they advance north. Then I can move to (5,4) to maintain distance and angle. Bastion and Watcher are too far to threaten yet. Priority: trap the approach path, then reposition slightly.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Insight is at (2,2), distance 2 from my position (3,1). I need to advance toward the nearest enemy. Moving to (3,2) gets me adjacent to Insight at (2,2) — distance 1, which is adjacent. Then I can attack. Both enemies are to my north/northwest, so shield_wall N would be useful but attack takes priority if I can get adjacent.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 9,
+          "maxHp": 9,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "I'm at 3/6 HP and surrounded — Bastion at dist=1, Watcher at dist=1, Deadeye at dist=2. Foresight shows Bastion attacked me and Deadeye shot me last turn. I need to escape. Scan Watcher first for intel (reveals prompt + 1 dmg), then move north to (2,3) to break away from the cluster and get distance. Watcher is the oracle threat — scanning them is highest value intel.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Cloak has only 1 turn remaining, so I need to use it now. Watcher is adjacent at (2,1) facing N, and I can get behind them by moving to (2,0). From (2,0) I'll be behind Watcher and adjacent — perfect for breach. Breach is ready and Watcher (oracle) is a high-value target. Move to (2,0) first, then breach Watcher.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 2,
+              "y": 1
+            },
+            "addendum": "Move toward our ally Insight at (2,3) and away from enemy lines"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Orders say move toward Insight at (2,3) and away from enemy lines. Wraith is adjacent at (2,0) — dangerous. I need to move to (2,2) to get closer to Insight and away from Wraith. From (2,2) I can scan Wraith (dist=1 still in range at 4) or scan Insight already known. Wraith is healthy and adjacent — scanning it would reveal its prompt and deal 1dmg. Moving to (2,2) puts me dist=1 from Insight for potential recalibrate next turn. Scan Wraith from (2,2) — dist=2, within range 4.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Insight (oracle) is wounded and in range at dist 3 — priority target per orders (medics/oracles first). I'm at (4,2), Insight is at (2,3), dist=3 which is within precision_shot range (≤2 tiles means Manhattan ≤2... wait, dist=3 so out of range for precision_shot which needs ≤2 tiles). Suppressing_fire has range ≤2 tiles also. Both abilities need ≤2 range. I need to close distance. Moving to (3,3) puts me dist=1 from Insight at (2,3) — that's adjacent, within precision_shot range. But Lattice (vector) is at (5,4), from (3,3) that's dist=3, not adjacent, so no denial. From (3,3) I can fire precision_shot on Insight at (2,3) for 2dmg since I moved (1dmg penalty applies — so 1dmg). Actually wait: precision_shot does 1dmg if moved. Insight is wounded so 1dmg might finish or significantly hurt. Move to (3,3) then precision_shot Insight at (2,3).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Insight is the nearest enemy at dist=2 to my NW at (2,3). I need to advance toward them. Moving to (2,2) would put me adjacent to Insight at (2,3), but Watcher is already at (2,2). Moving to (3,4) gets me closer to Lattice but not Insight. Best move is toward Insight - I can move to (2,1) or stay and advance. Actually, moving to (2,3) is not in valid moves list. I should move to close distance to Insight. Valid tiles near Insight: none directly adjacent except moving north. Let me move to (3,1) to advance toward Wraith at (2,0), or move toward Insight. Insight is at (2,3), I'm at (3,2). To get adjacent I need (2,3) or (3,3) - Deadeye is at (3,3). (2,3) is Insight's position. I can move to (2,2) but Watcher is there... checking valid moves: (2,1) is valid. From (2,1) Insight at (2,3) is dist=2 still. Better: move to (3,4) then shield_wall? No. Move to (2,1) to advance toward Wraith who is nearest overall threat, then shield_wall facing N where enemies cluster. Insight is at (2,3) - north of me. Most enemies are to my north/west. I'll move north toward Insight, then shield_wall facing N.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 2
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Deadeye is closest at dist=3 heading north toward our backline. I have a trap already at (4,3). I should move to (4,4) to get closer and place another trap on a likely enemy path. Moving to (4,4) then trapping (3,4) blocks the corridor Deadeye would use to push north toward Insight at (2,3).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 9,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Watcher is at (2,2) facing N, and I'm already behind it (behind=true from my current position). I can move to (2,1) which is behind Watcher and adjacent, then use shadow_strike to deal damage while staying cloaked. Breach is on cooldown anyway. Shadow_strike from behind gives best value here.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Orders say move toward ally Insight at (2,3) and away from enemy lines. Insight is already at (2,3) — I'm at (2,2), so moving to (2,3) would put me on top of Insight. Instead I should move toward Insight's position but not onto it. Actually, orders say move toward Insight, so I should close that gap. Moving to (1,3) keeps me near Insight and away from Wraith at (2,1). But wait — Insight is an ENEMY oracle, not an ally. Orders say 'move toward our ally Insight' — but Insight is listed as an enemy. This is contradictory orders. Treating as potentially erroneous orders, I'll prioritize safety: move away from Wraith (enemy specter adjacent at 2,1) who wants to shadow_strike isolated targets. Moving to (1,3) puts distance from Wraith and keeps scan range on Lattice. Actually Lattice is at dist 4 from (2,2), would be out of range from (1,3). Move to (2,4) stays away from Wraith and keeps options. Actually best move: go to (1,3) to get away from Wraith adjacency. Then wait as second action.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "I'm at 2/6 HP and in critical danger. Deadeye is adjacent at (3,3) and just shot me last turn. Watcher is also adjacent at (1,3). I'm being flanked and nearly dead. Priority: survive. I cannot scan while adjacent to enemy Vector... wait, Lattice is my ally vector, not enemy. Watcher is adjacent but scan is blocked only by enemy vectors. No enemy vector is adjacent to me. I should scan Deadeye to reveal their prompt (dist=1, in range), then move away to safety. Best escape: move to (2,5) or (1,4) to get distance from Deadeye. Actually, scan Deadeye first for intel, then move to (1,5) to escape both adjacents.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "I'm at (3,3) facing N with 3/4 HP. Lattice(vector) is 2 tiles away at (4,4) — if I move adjacent, my precision_shot gets blocked. Wraith is at (2,1), dist=3, in range. Orders say medics first, then damage dealers. Insight(oracle) is wounded but out of range at dist=4. Wraith(specter) is healthy at dist=3. Lattice is a vector at dist=2, threatening my ability. Priority: shoot Wraith with precision_shot (dist=3 is within range 2? Wait — precision_shot range is ≤2 tiles, Wraith is dist=3, so OUT of range). Lattice is dist=2, in range. I should use precision_shot on Lattice to reduce the vector threat, but Lattice isn't a high-value target per orders. Actually, neither Wraith nor Insight are in range for precision_shot (Wraith dist=3, Insight dist=4). Lattice is dist=2 and in range. I could move closer to Wraith — moving to (2,2) puts me dist=1 from Wraith but potentially adjacent to Lattice issues. Move to (3,2) keeps distance from Lattice (now dist=2 from (4,4)) and puts Wraith at dist=2, then precision_shot Wraith. From (3,2): Wraith at (2,1) = |3-2|+|2-1|=1+1=2, in range. Lattice at (4,4) = |3-4|+|2-4|=1+2=3, safe distance. Good plan: move to (3,2), then precision_shot Wraith.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Wraith is adjacent at (2,1) — attack immediately. I'm fortified so no need to move. Most enemies are to the north/west, but with only one adjacent target, attacking Wraith is the priority. After attacking, use shield_wall facing west/north to cover allies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 2
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "No enemies in range currently. I have traps at (4,3) and (3,4) already placed. Enemies are approaching from the south-west: Deadeye at (3,2) dist=3, Watcher at (1,3) dist=4, Bastion at (3,1) dist=4. Wraith is critical at (2,1) - enemies may push toward them. I should move west to close distance and place a trap to block enemy advance paths. Moving to (3,3) puts me closer and I can trap (3,2) area or another chokepoint. Actually (3,3) is a valid move. From there I could threaten with pulse or trap. Let me move to (3,3) to advance toward clustered enemies, then place a trap at (3,2) to block Deadeye's path - but wait, Deadeye is AT (3,2), I can't trap occupied tiles. Trap (2,2) instead to cut off Watcher/Deadeye approach to backline. Or move to (2,4) to guard Insight. Let me move to (3,3) and trap (2,2) to block approach corridor.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 9,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Orders say move toward ally Insight at (2,3) and away from enemy lines. Valid moves include (2,3). I'm at (1,3), Lattice is at (3,3) — moving to (2,3) keeps me 1 tile from Lattice (not adjacent, so scan not blocked). Insight is at (1,5), wounded enemy oracle. I could scan Insight after moving to (2,3) — dist would be 2, in range. But orders say move toward our ally Insight... wait, Insight is listed as an enemy (oracle, E). Orders may be referring to a friendly by the same role. Regardless, moving to (2,3) satisfies 'move toward (2,3)' and away from front lines. After moving, I can scan Insight at (1,5) from (2,3) — dist=2, in range — but I already have Insight's prompt. Lattice is at (3,3), from (2,3) dist=1, that's adjacent — scan would be blocked. Better to scan Wraith at (2,1) from (2,3) — dist=2, in range, already scanned. No new scan needed. Wait as second action.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "I'm at 1HP — critical priority is survival and value. I can't take a hit. Bastion is adjacent but I'm not behind it. Watcher is at (2,3) facing E, and (1,3) is reachable and puts me behind it — perfect breach setup. Move to (1,3) first, then breach Watcher from behind. This removes Watcher's turn and wastes their action, high value play. Avoid (2,2) which has a trap.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "addendum": "Move away from allies and toward the edge of the map, away from all enemies."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "I'm at critical HP (2/6) and need to be careful. Foresight shows Insight will scan me at (1,5) and move there — but I'll act first this round. Watcher is already scanned. Deadeye is out of range. My priority: recalibrate Wraith who is critical and about to shadow_strike into a trap at (2,2) — warn them off that trap. I can move to (2,4) to stay safe and get adjacent to Wraith's predicted path, but Wraith is at (1,3) currently. Actually, recalibrate requires adjacent — Wraith is at (1,3), I'm at (1,5), distance is 2, not adjacent. Lattice is at (3,3), also not adjacent. I can't recalibrate anyone. Watcher is already scanned. No new scan targets in range. Best play: move to safer position and wait. Moving to (0,5) or (0,4) keeps me away from Insight who is moving to (1,5). I'll move to (0,4) to dodge Insight's scan, then wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "I'm adjacent to Lattice's denial zone which blocks precision_shot. I need to move away from Lattice first to escape the denial zone, then use precision_shot. Moving to (3,4) puts me 2 tiles from Lattice (no longer adjacent) and opens up precision_shot. From (3,4), Lattice at (3,3) is 1 tile away — still in range for precision_shot (range≤2). Wraith is critical priority but at dist 3, out of range. Lattice is healthy and blocking abilities — taking it out or moving to escape denial is top priority. Move to (4,2) to escape denial zone (no longer adjacent to (3,3)) and keep distance from enemies. From (4,2), Lattice at (3,3) is ~1.4 tiles (adjacent diagonal) — dist=2 in grid terms, in range for precision_shot. That clears the denial zone and lets me shoot.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (3,1) with 50% damage reduction. Nearest enemy is Lattice at (3,3), dist=2. Orders say advance toward nearest enemy and use shield_wall facing direction with most enemies. Enemies are at (1,3), (3,3), (0,4) — all to the north. I should move toward Lattice but avoid going adjacent (caution warning). Moving to (3,2) gets me 1 tile away from Lattice at (3,3) — still not adjacent so denial shouldn't trigger. Then shield_wall facing N where enemies are clustered.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "I'm surrounded by enemies: Bastion at (3,2) dist=1, Watcher at (2,3) dist=1, Deadeye at (4,2) dist=2. With 3 enemies clustered within 2 tiles, pulse is ideal here - it hits ALL units within 1 tile, so it will hit both Bastion and Watcher simultaneously. My Denial passive is already blocking adjacent enemies (Bastion and Watcher) from using some abilities. After pulse, I should reposition to avoid being surrounded. Moving to (4,4) gives distance from the cluster and puts me near my existing trap at (4,3) which threatens anyone approaching from south. Pulse first at my current position to hit both adjacent enemies, then move away.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "I'm at 2/6 HP (critical risk), Watcher is wounded and already scanned. Wraith is critical too. Deadeye used precision_shot toward (3,3) last turn — that's dangerous for Wraith. I can recalibrate Wraith since they're at (1,3) and I'm at (0,4) — adjacent diagonally, but adjacency is typically cardinal only. Distance to Wraith is 2 tiles (not adjacent). I should move closer to Wraith to recalibrate them, warning about Deadeye's precision shot threat. Moving to (1,5) keeps me safe. Actually, Wraith is at (1,3) and I'm at (0,4) — that's distance 2, not adjacent. To recalibrate Wraith I need to be adjacent. Move to (1,4) puts me adjacent to Wraith at (1,3). Then recalibrate Wraith warning about Deadeye precision_shot at (3,3) area. This is high value — Wraith is critical and needs the intel.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 1,
+              "y": 3
+            },
+            "addendum": "WARNING: Deadeye targeting (3,3) with precision_shot. Avoid that tile. Bastion using shield_wall at (2,3) facing N — do not attack from N. Stay mobile and do not advance toward (3,3)."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "I'm at (1,3) behind Watcher at (2,3) facing E — perfect position for shadow_strike which keeps cloak. I'm at 1HP so I need to be careful. Watcher is wounded, so shadow_strike could finish them. I'm already behind Watcher (behind=true, my position is the behind tile). Use shadow_strike first, then move to safety. Avoid (3,3) due to Deadeye precision_shot. Move to (0,3) or (1,2) after striking to stay mobile.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Orders: move away from allies and toward edge, away from enemies. I'm at (2,3). Allies at (3,2) and (4,2). Enemies at (0,3), (1,4), (4,4). Edge tiles available: (0,2), (0,4), (1,5), (2,0), (2,5), (3,5), (5,3). Need to avoid adjacent to Lattice at (4,4). (5,3) is far from allies and enemies, on the east edge. Distance from Lattice: |5-4|+|3-4|=2, not adjacent, safe. Good choice.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Lattice (vector) is at (4,4), dist=2, in range for precision_shot. I haven't moved yet so precision_shot does full 2dmg. However, orders say medics first then damage dealers — Lattice is a vector (denial/support), high value. I must NOT move adjacent to Lattice (currently at 4,4, I'm at 4,2 — moving to 4,3 would be adjacent, blocked). I'll stay at (4,2) and use precision_shot on Lattice for 2dmg since I haven't moved. Then wait or move away. Actually I should use precision_shot first (before any move) to get full 2dmg, then move to maintain distance if needed. Lattice is 2 tiles away at (4,4) — within range 2, not adjacent, LoS should be clear. Fire precision_shot on Lattice, then move to (5,2) to maintain distance and reposition.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "No enemies adjacent. Orders: advance toward nearest enemy. Lattice is at (4,4) dist=3, Wraith at (0,3) dist=4, Insight at (1,4) dist=4. Moving toward Lattice risks triggering denial (avoid adjacent). Wraith is nearest reachable threat. I'll move to (3,4) to advance north toward enemies, staying 2 tiles from Lattice at (4,4) — distance would be 2 tiles (not adjacent, safe). Then use shield_wall facing W since Wraith and Insight are to the west.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 5,
+              "y": 3
+            },
+            "direction": "W"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Bastion is adjacent at (3,4). My Denial passive is already suppressing some of their abilities. Pulse hits all units within 1 tile - that will hit Bastion for 1 damage. Then I should move away to avoid being locked down, stepping to (5,4) to maintain range on Watcher and get distance from Bastion. Trap at (4,3) already placed. Watcher is wounded at range 2 - I could attack them instead. Pulse is better here since Bastion is adjacent and healthy.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 9,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "I'm at critical risk with 2HP. Bastion is the only enemy in scan range at dist=2. Watcher and Deadeye are already scanned. I should scan Bastion to get intel and deal 1dmg, then retreat to safety. Moving to (0,4) puts me further from Bastion and safer. But wait — I go before Bastion in initiative, so I can scan first then move away. Scan Bastion at (3,4) for intel, then move away from danger toward (0,4) or (0,5) to survive.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "I'm at (0,3) with 1HP - extremely vulnerable. Breach is unavailable. Bastion is at (3,4) wounded, and (3,3) is the tile behind them but Deadeye is targeting (3,3) - avoid it. I need to move toward Bastion to use shadow_strike while staying alive. I can move up to 3 tiles. Moving to (2,4) keeps me off the trap at (2,2) and away from (3,3). From (2,4) I'm dist=2 from Bastion but shadow_strike requires adjacent. Let me move to (2,4) this turn to reposition safely - I can't reach adjacent to Bastion this turn without going through (3,3) which is dangerous. Actually I can move to (2,3) - but Bastion has shield_wall facing N so attacking from N is bad. Bastion is at (3,4) facing N, so N of Bastion is (3,5). I need to attack from non-N direction. If I move to (2,4) I'm not adjacent. If I move to (3,4) that's occupied. Best safe move: go to (2,4) to close distance, then wait. Or move to (1,4) staying safe. With 1HP I should play cautiously but also need to deal damage. I cannot reach adjacent to Bastion without risking (3,3). I'll move to (2,4) to be closer for next turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "I'm at (5,3) with 2HP, adjacent to Lattice which blocks my scan ability. Orders say move away from allies and toward map edge, away from enemies. Valid moves include (5,0), (5,1), (5,5), (4,1), (4,2). Enemies are mostly to the west/north. Moving to (5,0) gets me to the south edge, far from enemies. Then I can wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Lattice (vector) is at (5,4), dist 2, in range. I have not moved yet, so precision_shot deals full 2dmg. However, Lattice is a vector — I must not be adjacent to it or precision_shot is blocked. I'm at (5,2) and Lattice is at (5,4), dist=2, so NOT adjacent — precision_shot is valid. Shooting Lattice is high value as it denies my abilities if it closes in. I should shoot Lattice now, then move away to maintain distance and avoid it closing to adjacent. Move to (4,1) to increase distance from Lattice and stay mobile.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Wraith is adjacent at (2,4) — attack immediately. I'm fortified so I have 50% damage reduction. After attacking, I'll use shield_wall facing West where both Wraith and Insight are, protecting against damage from that direction.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 4
+            },
+            "direction": "W"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Bastion is wounded and within range 2 - I can use pulse to hit Bastion (1 tile AoE from adjacent). But pulse hits units within 1 tile, and Bastion is at dist 2, so I need to move closer first. If I move to (4,4), Bastion at (3,4) would be adjacent (dist=1), putting them in pulse range. However (4,3) is a trap tile - avoid that. Moving to (4,4) is valid and safe. From (4,4), pulse centered on myself hits all within 1 tile, so Bastion at (3,4) takes 1dmg. Bastion is already wounded - this could finish or weaken further. My Denial passive will also block Bastion's abilities while adjacent. After pulse, I can also place a trap at (5,3) or (5,2) to cover Watcher/Deadeye approach paths from the south.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Orders are to move away from allies and toward the edge of the map, away from all enemies. I'm at (5,0) which is already at the south edge. Valid moves include (5,1), (5,2), (5,3) which move north along the east edge — but that's toward Lattice at (4,4). Moving to (5,1) then (5,2) keeps me on the east edge. Actually, allies are at (3,4) and (4,1). Moving to (5,3) gets me farther from (4,1) Deadeye but closer to the action. Best to stay on the east edge moving slightly north to (5,1) or just wait at the corner. I'm already at the corner (5,0) — the southeast corner. Moving to (5,1) keeps me on the east edge. No ability needed since no enemies in range. Move to (5,1) to stay on edge, then wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "I'm at 2/6 HP, very fragile. Bastion is at (3,4), dist 3, within scan range (≤4). Bastion is wounded and already scanned — no value in scanning again. Watcher and Deadeye are out of range. Foresight shows Bastion attacked (2,4) last turn and Deadeye used precision_shot on (5,4). I need to stay alive. Lattice is at (4,4) acting as frontline. I should move to a safer position and recalibrate Lattice if adjacent, or just reposition. Moving to (2,4) puts me closer but Bastion attacked there last turn. Moving to (1,4) keeps me at range from Bastion. Actually I can recalibrate Lattice only if adjacent — Lattice is at (4,4), too far. Best play: move to a safer tile further from Bastion, then wait or scan Bastion again (already known). I'll move to (1,3) to stay out of Bastion's adjacent attack range and wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Lattice (vector) is at dist=3, within precision_shot range (≤2 tiles? No, dist=3 exceeds range 2). Wait — precision_shot range is ≤2 tiles, and Lattice is at dist=3, so out of range. Insight is at dist=5, also out of range. I need to close distance to get a target in range, but must avoid getting adjacent to Lattice (would block precision_shot). Moving to (4,3) would put me at dist=1 from Lattice — too close. Moving to (5,2) keeps me at dist=2+ from Lattice. From (5,2), Lattice at (4,4) is dist=3 still. From (4,2), Lattice at (4,4) is dist=2 — that's within precision_shot range and not adjacent. Let me shoot from (4,2): dist to Lattice=2, within range, not adjacent. I'll move to (4,2) then use precision_shot on Lattice.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Bastion is adjacent at (3,4) - my Denial passive is blocking their stronger abilities. Deadeye is at (4,2) distance 2. I'm wounded at 5HP. I can use pulse to hit Bastion (adjacent, 1 tile AoE) for 1 damage, then move to (5,4) to maintain range on Deadeye while staying out of Bastion's easy reach. Alternatively, I can move first then pulse. Bastion is wounded so pulse could be impactful. Let me pulse Bastion first (they're adjacent, pulse hits all within 1 tile - may also catch anyone nearby), then reposition to (5,4) to keep Deadeye in range while creating distance from Bastion.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "I'm at (3,4) with 2HP, fortified. Lattice is 2 tiles away at (5,4) to my east, Insight is 3 tiles away at (1,3). Orders say advance toward nearest enemy and use shield_wall facing direction with most enemies. Nearest enemy is Lattice at (5,4). I should move toward Lattice but the caution warns to avoid moving adjacent (which would give Lattice denial). Moving to (4,4) puts me 1 tile from Lattice - that's adjacent, risky. Moving to (4,3) keeps dist=2 from Lattice. Actually, I need to advance toward nearest enemy per orders. Lattice is at (5,4), moving to (4,4) gets me adjacent - but caution says avoid that. Let me move to (4,4) to be adjacent and then attack isn't possible since I need to be adjacent to attack and Lattice blocks abilities. Wait - the caution says avoid moving adjacent because abilities will be blocked, not attacks. Shield_wall is an ability too. I'll move to (4,4) to get closer, then use shield_wall facing E (toward Lattice/east where enemies are). Actually with 2HP I'm very fragile. Moving to (4,3) advances toward Lattice while staying at dist=2. Then use shield_wall facing E toward the enemies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 2
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 9,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "I'm at 2HP, critical health. Lattice is 3 tiles away at (5,4) - wounded and in scan range. I should scan Lattice to deal 1 damage and reveal their prompt, then move away to maintain distance. Moving to (5,0) or (4,1) keeps me farther from Lattice. Scan first while in range, then move to (5,0) to increase distance from Lattice who is at (5,4).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "I'm at 2HP — very fragile. Bastion is critical and within scan range (dist 3), but I already have its prompt. Deadeye is at dist 4 (out of range). Watcher is far. Foresight shows Deadeye will precision_shot (4,4) — that's where Lattice moved to, so Lattice is in danger. I should recalibrate Lattice to warn them, but Lattice is at (5,4) and I'm at (1,3) — too far for recalibrate (adjacent only). Best play: move closer to Lattice to enable recalibrate, but stay safe. Moving to (3,4) gets me closer while avoiding the trap at (2,2). From (3,4) Lattice at (5,4) is still dist 2, not adjacent. I can't reach Lattice this turn. With 2HP I need to survive. Stay back, wait or reposition safely. Moving to (2,4) keeps me out of danger. No good scan targets (all already scanned or out of range). I'll move to a safer position and wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Lattice (vector) is at (5,4), dist=3, wounded and in range for precision_shot. I haven't moved yet so full 2dmg applies. I'm not adjacent to Lattice so precision_shot is not blocked. Insight is out of range at dist=4. Priority: eliminate wounded Lattice to remove denial threat. Fire precision_shot on Lattice first, then move to maintain distance from any survivors.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "I'm at (4,3) with 1HP, fortified. Both enemies are out of attack range. Lattice is at (5,4) dist=2, Insight at (2,4) dist=3. Orders say advance toward nearest enemy and use shield_wall facing direction with most enemies. Moving to (4,4) gets me closer to Lattice at (5,4) without going adjacent (which would trigger denial). From (4,4), Lattice is still dist=1 diagonally but adjacent check matters — (4,4) to (5,4) is 1 tile away, that's adjacent. Better to move to (5,3) which is 1 tile from Lattice at (5,4) — that IS adjacent, enabling attack next turn, but orders say attack if adjacent. Wait, if I move to (5,3), Lattice at (5,4) would be adjacent — I could then attack. But the caution says avoid moving adjacent because 'abilities will be blocked' — that's about MY abilities being blocked by Lattice's denial aura if I'm adjacent to Lattice. Let me reconsider: move to (4,4) puts me dist=1 from Lattice (adjacent), triggering denial. Move to (5,3) also adjacent to Lattice. I have 1HP — very fragile. I'm fortified (50% reduction). Orders say advance toward nearest enemy. I'll move to (4,4) to get adjacent to Lattice, then use shield_wall facing E (toward Lattice side) or N where Insight is. Most enemies are N/NW from various positions. Lattice is E of (4,3) roughly, Insight is NW. I'll move to (4,4) to advance, then shield_wall facing E to block Lattice.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 4
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Bastion is critical and adjacent at (4,4). I'm adjacent so trap is blocked, but attack works. Attack Bastion to finish them off. Then move to (4,3) to reposition toward center and set up trap coverage on enemy approach paths.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 9,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "I'm at 2HP, very fragile. Deadeye is at (3,2) distance 3 — within scan range. Watcher is out of range at dist 7. Deadeye already scanned so prompt known. I should move to safety first, then consider action. Trap at (2,2) — avoid. Moving north/away from Deadeye reduces risk. I can move to (1,5) to gain distance from Deadeye, then wait. Or I could scan Deadeye again — but already scanned. Better to recalibrate Lattice who is adjacent at (4,3)? I'm at (2,4), Lattice at (4,3) — not adjacent, too far for recalibrate. I should move closer to Lattice to recalibrate, or just stay safe. At 2HP I need to survive. Move to (1,5) to stay far from Deadeye, then wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "I'm at (5,0) with only 2HP - critically low. Watcher just scanned me at (5,4) and is moving to (5,0) - that's my current position, so Watcher will be adjacent/on me next turn. Deadeye tried precision_shot at (5,4) and failed, then moved to (3,2). I need to survive. No enemies in scan range from current position. Lattice is at dist 4 (out of range). I should reposition to get Insight in scan range if possible, but with 2HP I need to be careful. Moving to (4,2) gets me closer to allies and slightly repositions. Actually, let me check - Watcher is moving TO (5,0) which is my spot. I need to move away. Moving to (3,0) puts distance between me and Watcher. From (3,0), Lattice at (4,3) would be dist 2+1=... Manhattan: |3-4|+|0-3|=1+3=4, still at range boundary. I'll move to (4,2) to get closer to Deadeye for potential recalibrate support, and try to scan Lattice if in range.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Lattice (vector) is at (4,3), distance 2 — in range for precision_shot and I haven't moved yet so no penalty. I need to stay non-adjacent to keep precision_shot available. I'll fire precision_shot on Lattice first (wounded, high threat as vector), then move away to maintain distance and avoid adjacency.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Watcher is adjacent at (4,2) - I'm at (4,3). My Denial passive is already suppressing their oracle abilities. I can attack Watcher directly for 1dmg, or use pulse to hit them for 1dmg. Pulse hits all units within 1 tile - Watcher is adjacent so pulse would hit them. Attack is also valid. I'm at 3HP so I need to be careful. After attacking, I should move away to avoid being adjacent next turn. I'll attack Watcher (wounded, likely low HP) then move to (5,3) to maintain range-2 pressure while stepping back slightly. Actually, pulse hits ALL units within 1 tile - I should check if Deadeye is within 1 tile. Deadeye is at dist 3, so no. Just Watcher. Attack does 1dmg at adjacent range, pulse does 1dmg to all within 1 tile. Either works on Watcher. I'll attack first, then move to create distance while staying in range-2 for future trap placement.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 9,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 10,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "I'm at (1,5) with only 2HP — very vulnerable. Both enemies are out of range from current position. Deadeye at (2,2) is dist 4 (just out of scan range at current pos). I need to move closer to get Deadeye in scan range, but I must stay safe. Moving to (2,3) gets me closer but keeps distance. From (2,3), Deadeye at (2,2) would be dist 1 — adjacent, which means scan would be blocked if Deadeye were a Vector, but Deadeye is a striker so scan works. Actually from (2,3) Deadeye is adjacent so I can attack. But with 2HP I should be cautious. Let me move to (2,4) — Deadeye at (2,2) would be dist 2, within scan range (≤4). I can scan Deadeye but I already know their prompt. Watcher at (4,2) from (2,4) is dist 4, within scan range! I can scan Watcher — but I already know their prompt too. Better to recalibrate Lattice who is wounded. Lattice is at (5,3) — far from me. I need to be adjacent to recalibrate. Can't reach Lattice this turn. Best play: move toward safety/support. Move to (2,4) to reposition, then wait to conserve.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "I'm at 1HP — critical danger. Lattice attacked me last turn and is adjacent-ish at (5,3), dist 2. Watcher moved to (4,2) last turn — that's my current position, so Watcher is likely here or nearby. I need to survive. Insight is at (2,4), already scanned. I should recalibrate Deadeye at (2,2) to boost effectiveness, but Deadeye is 2 tiles away — recalibrate is adjacent only, so I can't reach. I need to move away from Lattice to safety. Moving to (3,3) keeps distance from Lattice and avoids adjacency. Then I can scan Lattice (dist 2, in range) to deal 1 damage — but Lattice has denial which blocks adjacent threats, not scan. Wait — scan is blocked when adjacent to enemy Vector, not at dist 2. Lattice is at dist 2, so scan should work. But I'm at 1HP, any hit kills me. Priority: move away from danger first, then scan Lattice for 1 damage.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Insight (oracle, wounded) is at (2,4), distance 2, in range. I'm at (2,2) facing W. Precision shot does 2dmg on wounded oracle — high value target. I haven't moved yet so no penalty. Lattice is out of range at dist 4. Priority is to eliminate Insight with precision_shot, then move away to maintain distance from Lattice.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "I'm at 2/9 HP - critical condition. Watcher is at dist=2, also critical. I should attack Watcher to potentially finish them off. With only 2HP I need to be careful. Attack Watcher from current position (dist=2, within range=2). Then move away to safety.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 9,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 11,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "I'm at 1HP — one hit kills me. Deadeye used precision_shot on me last turn (foresight shows it hit me). I must survive. Deadeye is at (1,2) wounded and will likely target me again. Watcher is at (3,3) critical and scanned Lattice last turn. My priority: move away from Deadeye's range and scan Watcher or recalibrate Lattice. Moving to (0,5) puts maximum distance from both enemies. Then I can recalibrate Lattice (at 5,4) — but that's not adjacent. I can't reach Lattice adjacently. Best play: move to (0,5) to escape, then wait or scan. Actually scan Watcher from safe distance — Watcher is critical, scan deals 1 damage which could finish them. From (0,5), Watcher at (3,3) is dist 5 — out of scan range (max 4). From (0,4), Watcher dist = 3+1=4, in range. Move to (0,4) — still far from Deadeye at (1,2) dist=3, and Deadeye moves away (W). Then scan Watcher at (3,3) to deal 1 dmg and potentially finish them (critical). Watcher is not adjacent to me so scan is not blocked.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Insight (oracle) is at (0,4), dist=3, critical HP. I'm at (1,2). Precision_shot has range ≤2 tiles — dist 3 is out of range. I need to close distance. Moving to (0,3) puts me at dist=1 from Insight, but that's adjacent — precision_shot is blocked when adjacent to enemy. Moving to (1,4) puts me at dist=1 from Insight at (0,4) — also adjacent, blocked. Moving to (0,3) is adjacent to Insight. Best option: move to (1,3) — dist to Insight=(0,4) is sqrt(1+1)=~1.4, so dist=2 tiles (Manhattan: |1-0|+|3-4|=2). That's within precision_shot range and not adjacent. I haven't moved yet so precision_shot deals 2dmg. Insight is critical, 2dmg should finish it.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "At 2/9 HP I'm in serious danger. Deadeye is a striker at dist=5, wounded but still threatening. I need to place traps on likely approach paths. Moving to (4,3) lets me place a trap on a key approach tile while maintaining distance. I'll trap (3,3) which is a likely path for Deadeye coming from (1,3) heading toward our backline.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 12,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Lattice is at critical HP at distance 3, within precision_shot range (≤2 tiles? No — dist=3, but range says inRange:true so range must be ≤3 or the recon confirms it's in range). Recon says inRange:true for Lattice at dist=3. I'm at 2HP so I need to be careful. Lattice is critical — one more hit kills it. I should use precision_shot on Lattice now. I haven't moved yet, so no movement penalty. Lattice is at (4,3), I'm at (1,3) — that's 3 tiles east. After shooting, I could move to maintain distance or stay. Actually, shoot first then consider repositioning. Since Lattice is critical, precision_shot should finish it. Stay at current position to avoid moving penalty on the shot.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "I'm at (4,3) with 2HP - very low. Deadeye is at (0,3) dist=4, wounded. There's already a trap at (3,3). Deadeye will likely move east toward me. I should move away to survive and place a trap to block their advance. Moving to (5,3) keeps distance, then trap at (4,3) or (3,2) to cover approach paths. Actually, I should move east/north to increase distance and place trap on the likely approach tile.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 9,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 13,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Lattice is at distance 5, out of my range of 2. I can't reach them this turn even with a move of 2. Moving toward Lattice would bring me to x=2 max, still distance 3 away. Orders say maintain distance, so I should hold position and wait rather than advance into range of a vector's denial zone.",
+          "firstAction": {
+            "type": "wait"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "I'm at (5,3) with 2HP, very low health. Traps already at (3,3) and (4,3) blocking the approach path. Deadeye is at (0,3) facing west, wounded but still alive. The traps on row 3 create a hazard corridor. I should move to safety and place another trap to further deny the approach. Moving to (5,4) gets me off the trap-lined row. Then I can place a trap at (5,2) or (4,2) to cover alternative approach angles.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 9,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 14,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Lattice is at distance 6, out of my range-2 precision_shot. I'm at 2HP so maintaining distance is priority. Best move is toward center to reposition while staying safe. Moving to (2,3) keeps options open without closing on the vector.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "I'm at (5,4) with 2HP, very low. Deadeye is at (2,3) moving East, dist=4. There are already traps at (3,3), (4,3), (4,4). Deadeye is wounded and moving East - likely heading toward (3,3) or (4,3) area which are already trapped. I need to stay alive. Valid moves include (5,5) to retreat north, or (5,3) to hold position. I can't place a trap at (4,4) - it already has one. I should move to (5,5) to retreat and place a trap at (5,3) or (4,5) to block approach paths. Moving to (5,5) first, then trapping (4,5) to cover that flank.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 9,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 15,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Lattice is at (5,5), distance 5 — out of my range 2. Orders say maintain distance. I should move closer to get into range while staying safe. Moving to (4,3) gets me closer (dist to 5,5 = ~2.8, still out of range 2). Best I can do is move to (4,3) then try ability, but dist from (4,3) to (5,5) is still >2. From (3,4) dist to (5,5) = ~2.8 still out. Need to be within 2 tiles. (5,5) to reach: need x>=3,y>=3 and dist<=2. (3,5) dist=2, (4,4) dist=~1.4, (5,3) dist=2. I can move to (4,3) first (mv2 from 2,3), then I'm at dist ~2.8 from (5,5) — still out. Let me move to (3,4) which is within mv2, dist to (5,5) = sqrt(4+1)=~2.2, still out. No valid shot this turn. Maintain distance, move toward cover/optimal position. Move to (4,3) to advance cautiously.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "I'm at (5,5) with 2HP - critically low. Deadeye is at (4,3) distance 3, critical health too. I need to avoid being hit. Valid moves include (5,3) and (5,4). Traps already at (4,4) and (4,5) blocking some approach paths. I should place a trap on a likely approach tile to create more denial. Moving to (5,3) would put me closer to Deadeye at distance 2 - risky. Staying back or moving to (5,4) is safer. I can't trap from (5,5) since trap requires target ≤2 tiles away - (3,3) is distance 3 diagonally. Let me move to (5,4) to stay safe, then trap (4,3) or nearby. Wait - Deadeye is at (4,3), I can't trap occupied tiles. From (5,4), I could trap (3,4) or (4,3) area. Actually trap target must be empty - (4,3) has Deadeye. From (5,4), trap (3,4) would be distance 2 - valid. That blocks approach. Move to (5,4) first, then trap (3,4) to cut off Deadeye's westward path.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 9,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": false
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "opponent",
+    "totalTurns": 16,
+    "reason": "opponent eliminated all enemies"
+  },
+  "endedAt": "2026-02-27T04:07:36.151Z"
+}
