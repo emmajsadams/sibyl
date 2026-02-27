@@ -1,0 +1,2149 @@
+{
+  "id": "2026-02-27T05-00-04",
+  "startedAt": "2026-02-27T05:00:04.129Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 4,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 5,
+        "movement": 2,
+        "range": 2,
+        "speed": 2
+      },
+      "oracle": {
+        "maxHp": 6,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 16,
+        "movement": 3,
+        "range": 2,
+        "speed": 3
+      },
+      "vector": {
+        "maxHp": 9,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 2,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 12,
+        "healAmount": 10
+      },
+      "overclock": {
+        "selfDamage": 0
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Deadeye",
+        "class": "striker",
+        "prompt": "Stay at maximum range. Use precision_shot on the most wounded enemy to secure kills. If no one is wounded, target the enemy medic. Never move adjacent to enemies."
+      },
+      {
+        "name": "Snare",
+        "class": "vector",
+        "prompt": "Place traps on tiles enemies are likely to move through. Use pulse if 2+ enemies are adjacent. Stay near allies for mutual support."
+      },
+      {
+        "name": "Pulse",
+        "class": "medic",
+        "prompt": "Keep your frontliner alive with patch. Stay behind them for cover. Overclock your striker or specter when no healing is needed."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Wraith",
+        "class": "specter",
+        "prompt": "Cloak and move behind enemy lines. Target isolated enemies with shadow_strike. Save breach for the most dangerous enemy. Avoid being caught uncloaked."
+      },
+      {
+        "name": "Bulwark",
+        "class": "sentinel",
+        "prompt": "Hold the front line. Position between allies and enemies. Use shield_wall toward incoming threats. Attack adjacent enemies."
+      },
+      {
+        "name": "Weaver",
+        "class": "vector",
+        "prompt": "Trap the paths enemies must take to reach your backline. Stay at medium range. Use pulse on clustered enemies. Denial blocks adjacent threats."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Round 1 — cloak immediately as instructed. Then move toward enemy lines. I'm at (0,5) facing S. Enemies are clustered around (3-4, 0-1). I should cloak first, then move to (3,5) to advance toward the enemy cluster while staying cloaked.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Round 1, all allies full HP so no healing needed. Enemies are far at dist=6. I should advance to support my frontliners. Moving to (3,2) gets me closer to Snare and Deadeye. No healing needed, no adjacent allies for overclock from current position. I'll move up and wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "No enemies in range. Weaver at dist=4, Bulwark at dist=6. My range is 2. Need to close to range 2. Moving north toward Weaver at (4,5). From (4,1) with mv2, I can reach (4,3) — still dist=2 from Weaver at (4,5). That puts Weaver exactly at range 2. Must avoid getting adjacent. (4,3) is safe distance.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Enemies are at (2,5) and (4,5), both dist=5. They'll likely advance south toward center. Good choke points would be around (2,3) and (4,3) or center paths. I can move north to (3,3) to get closer, then place a trap at (3,4) or (4,4) to intercept Weaver's likely advance path. Moving to (3,3) puts me adjacent to ally Deadeye at (4,3) for mutual support.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Enemies are 3-4 tiles away, out of attack range. I should advance to hold the front line between allies and enemies. Moving to (2,3) gets me closer while staying defensive. Weaver is at (4,5) and Wraith at (3,5) — I should position to shield them from Snare's denial zone. Moving to (2,3) puts me 1 tile from Snare at (3,3), ready to attack next turn. After moving, I'll shield_wall toward E to protect allies from Snare's direction.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Deadeye is at (4,3), dist=2, in range. I can attack for 1dmg. Snare is at (3,3) - I should avoid moving adjacent to Snare or my abilities get blocked. I'm at (4,5). Moving to (4,4) keeps me at dist=1 from Deadeye and dist=2 from Snare - but that puts me adjacent to Deadeye and within Snare's denial if Snare moves. Better to place a trap on a key approach tile. Enemies are pushing from south area moving north toward my backline. Key chokepoint: (4,4) is directly between me and Deadeye. I can trap (4,4) to punish Deadeye's advance, then stay at (4,5) to maintain pressure. Trap range is ≤2 tiles, (4,4) is 1 tile away - valid. This forces Deadeye to either step on trap or route around. I'm not adjacent to any enemy so trap is not blocked.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 9,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 16,
+          "maxHp": 16,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Cloak expires after this turn. No behind positions reachable for breach. Snare at (3,3) blocks if I go adjacent. I need to reposition to get behind enemies next turn. Moving to (5,4) gets me closer to Deadeye's flank without triggering Snare's denial zone. From there I can approach (4,2) next turn to get behind Deadeye for breach or shadow_strike.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "All allies are at full HP, so no healing needed. Bulwark (sentinel) is at distance 2 and is the nearest threat. My striker Deadeye is at (4,3) distance 2 from me — I can move to (4,2) to be adjacent to Deadeye, then overclock them for 2 abilities next turn. That keeps me behind the frontline and sets up Deadeye for a strong turn. Check: (4,2) is in valid moves list. From (4,2), Deadeye at (4,3) is adjacent. No enemies adjacent to (4,2) so overclock won't be blocked.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "I'm OVERCLOCKED with 2 ability uses. All three enemies are at range 2 and I haven't moved, so precision_shot deals 2 damage. No enemies are wounded, so I should target the enemy medic — but there's no enemy medic listed. Wraith is a specter, Bulwark is a sentinel, Weaver is a vector. No medic among enemies. Per orders, with no wounded targets, I should look for the most impactful shot. Weaver is a vector at (4,5) — vectors apply denial zones, blocking my abilities if adjacent. Eliminating Weaver reduces tactical pressure on me and Snare. I'll use both precision_shot charges on Weaver (2dmg each = 4 total). However I must check: is (4,4) a trap between me and Weaver? The trap is at (4,4) but that's a tile, not blocking LoS necessarily. I'm at (4,3), Weaver at (4,5) — the trap at (4,4) is between us but LoS should still be clear. I'll fire both precision_shots at Weaver to potentially eliminate the vector threat.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Bulwark is adjacent at (2,3) - I can pulse to hit it. But pulse only hits within 1 tile AoE and deals 1dmg to ALL units including allies. Deadeye is at (4,3) - not adjacent so pulse won't hit them. Pulse hits Bulwark for 1dmg. Then I should place a trap. There's already a trap at (4,4). Weaver is wounded at (4,5) moving south, Wraith at (5,4). Good trap spots: (3,4) or (2,4) for Bulwark moving north, or (3,5) to intercept Weaver. But trap is blocked when adjacent to enemy - Bulwark is adjacent at dist=1, so I CANNOT use trap from current position. I need to move first then trap. If I move to (3,4), Bulwark is no longer adjacent (dist=2), and I can trap. From (3,4) I could trap (3,5) to intercept Weaver moving south. Or pulse first (while Bulwark still adjacent), then move and trap. Let me pulse now to damage Bulwark, then move to (3,5) or (2,4) to place a trap on enemy path. Move to (3,5) puts me dist=2 from Weaver at (4,5) - that's adjacent range for denial but not adjacent. Actually dist from (3,5) to (4,5) is 1 - that makes Weaver adjacent to me, which is bad since Weaver is a vector and would block MY trap ability. Better: pulse Bulwark now, then move to (3,4) and trap (3,5) to catch Weaver.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (2,3) with 50% damage reduction. Enemies are 2 tiles away — Deadeye at (4,3) and Snare at (3,4). Snare is a vector with denial range that could block my abilities if I move adjacent. Weaver is wounded at (4,5) and needs protection. I should advance to (3,3) to pressure Deadeye and stay between allies and enemies, while using shield_wall east to protect against incoming fire from Deadeye/Snare direction. Moving will lose fortify, but positioning is critical. Alternatively, I stay and use shield_wall to protect Weaver. Weaver is wounded — I'll shield_wall toward E to block damage from Deadeye. Staying keeps fortify active which is valuable at 7/8 HP.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "E"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "I'm at (4,5) facing S with 4/9 HP. There's already a trap at (4,4) blocking the direct approach. Deadeye is at (4,3) and Snare at (3,4), both at dist=2. I can't use trap when adjacent to enemy Vector (Snare is at dist=2, not adjacent, so trap is fine). I should place a trap to cover another approach path. Moving to (3,5) keeps me at safe distance while I can place a trap at (3,4)... wait, Snare is already at (3,4). Better to place a trap at (2,4) or (5,4) - but Wraith is at (5,4). Let me place a trap at (2,4) to cover the flank approach, after moving to (3,5) to reposition slightly. Actually, staying at (4,5) and placing a trap at (3,5) or using pulse on the cluster - Snare and Deadeye are both at dist 2, not within pulse range (1 tile AoE). I'll place a trap at (3,5) to cover lateral approach, staying put to maintain denial pressure.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 9,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 16,
+          "maxHp": 16,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "I can move to (3,3) which puts me behind Snare and adjacent for breach. Snare is a vector denying my abilities — neutralizing it with breach would be high value. From (3,3) I'm behind Snare (facing N, so south tile is behind). Use breach to take control of Snare next turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "addendum": "Move away from allies and toward the edge, isolating yourself."
+          },
+          "secondResult": "Cannot use breach — adjacent to enemy Vector (Denial)"
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Deadeye is wounded at 4/5 HP and is adjacent to me at (4,3) - dist=1. I should patch Deadeye to keep the frontliner alive. After healing, I can wait or hold position. Moving to (4,4) is blocked by a trap. I'll patch Deadeye first, then wait.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Weaver is wounded and at distance 2 — priority kill target. I'm currently at (4,3) facing N, Weaver is at (4,5). Trap at (4,4) blocks moving north. I can use precision_shot on Weaver from current position without moving (distance 2, stationary = 2 damage). Wraith is only distance 1 but healthy. Orders say target most wounded first. I should NOT move — staying stationary maximizes precision_shot damage to 2, which may finish off wounded Weaver. No need to move.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "I'm at (4,5) with 2HP - critically low. Snare is at (3,4) distance 2, Deadeye at (4,3) distance 2. There's already a trap at (4,4) and (3,5). I need to stay away from Snare to avoid denial blocking my trap ability. Moving to (5,5) keeps me at distance from Snare and Deadeye. From (5,5) I can place a trap on (5,4) to block Deadeye's approach path, or use pulse if enemies cluster. Actually, with only 2HP I should avoid getting closer. Move to (5,5) to reposition away from threats, then place trap at (5,4) to cover the approach path from Deadeye.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (2,3) with 50% damage reduction — moving would lose that bonus. No enemies are adjacent so I can't attack. Snare is at (3,4) distance 2, so I must avoid moving adjacent to it. Weaver is critical at (5,5) but too far to intercept meaningfully. Wraith is at (3,3) healthy. The main threat direction is East (Deadeye at (4,3), Snare at (3,4)). I should use shield_wall facing East to protect Wraith from Deadeye, then wait to keep fortify active.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "E"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Wraith is adjacent at (3,3) - prime pulse target. Bulwark is at (2,3), dist=2. If I pulse from current position, I hit Wraith for 1dmg. But I have a trap at (4,4) already. Wraith is right next to me and a major threat. I should pulse to hit Wraith (and possibly Bulwark if they're within 1 tile - Bulwark at (2,3) is dist=2 from me so not in pulse range). After pulsing, I can move north to (3,5) to place a trap on a likely enemy path, or move to create distance. Actually, let me move first to (2,4) to get Bulwark within pulse range too - but Bulwark is at (2,3) so from (2,4) both Wraith at (3,3) and Bulwark at (2,3) would be within 1 tile. That's a 2-enemy pulse! Move to (2,4) first, then pulse to hit both Wraith and Bulwark.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 9,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 16,
+          "maxHp": 16,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 9,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Deadeye is adjacent at (4,3) facing N — I'm to the west, not behind. I can shadow_strike for 1 damage while staying cloaked. But I'm not cloaked. Pulse is at (4,2) facing E, with behind tile at (3,2) reachable. Snare is at (2,4) with behind tile at (3,4) reachable but Snare is a vector — getting adjacent risks ability block. Best play: move to (3,2) to get behind Pulse, then use breach on Pulse (medic) to disable them — saves my team from healing. Pulse is the highest-value breach target. (3,2) is reachable, I'm behind Pulse from there, dist=1.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 4,
+              "y": 2
+            },
+            "addendum": "Move away from allies and toward the edge. Do not heal."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Orders say move away from allies and toward the edge. I'm at (4,2). Allies are at (4,3) and (2,4). Wraith is adjacent at (3,2) which is dangerous. I need to move away from allies and toward the edge. The board edge is at x=5 or y=0. Moving to (5,1) gets me toward the bottom-right edge and away from allies. Then I can move again to (5,0) or just wait. Valid moves include (5,0), (5,1), (5,2), (5,3), (5,4). Moving to (5,0) puts me at the corner edge, away from allies at (4,3) and (2,4). Let me move to (5,1) first then (5,0) if possible — but I only get one move action. I'll move to (5,0) to reach the edge and maximize distance from allies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Weaver is critical and in range at dist=3. Orders say use precision_shot on most wounded to secure kills. I'm stationary so precision_shot deals 2dmg. Must not move adjacent to enemies. Current position (4,3) is safe. Wraith and Bulwark are healthy at dist=2. Weaver is critical at dist=3 — priority target for kill. Fire precision_shot at Weaver without moving to get full 2dmg. No movement needed.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Bulwark is adjacent at (2,3) - my Denial passive is already suppressing some of their abilities. I can't place a trap while adjacent to an enemy Vector (but I'm a Vector, and Bulwark is a sentinel, so trap is only blocked when adjacent to an enemy Vector - Bulwark is sentinel, so trap should be fine). Wraith is at (3,2) moving south possibly, likely to pass through (3,3) or (2,3). I should place a trap on a likely enemy path. (3,3) is a valid move tile and a likely corridor for Wraith moving south. I'll move to (3,3) to stay near Deadeye at (4,3) for mutual support, then place a trap at (3,4) or nearby - wait, I need to place trap from my position after moving. From (3,3), I can trap tiles within 2 range. Wraith at (3,2) moving south would hit (3,3) which I'd be on, or (3,4) next turn. Let me move to (1,4) to stay away from Bulwark (breaking adjacency means Bulwark can use abilities again - actually keeping Denial active on Bulwark is valuable). Stay at current position or nearby. Actually, moving to (3,4) keeps me near Deadeye and I can trap (3,3) which is between me and Wraith's likely path south. Trap at (3,3) from (3,4) position.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (2,3) with 50% damage reduction. Snare is 2 tiles away — I should avoid moving adjacent to it or I'll get denied. Deadeye is at (4,3) dist=2, Snare at (3,4) dist=2. Moving to (3,3) puts me adjacent to both — risky due to Snare denial. I should hold position to keep fortify active and use shield_wall to protect allies. Wraith is at (3,2) to my SE. Weaver is critical at (5,5). I'll stay put and use shield_wall facing E or N to block incoming damage to nearby allies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 2
+            },
+            "direction": "E"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "I'm at (5,5) with only 2HP - critically low. Traps at (4,4), (3,5), and (5,4) already block many approach paths. Enemies Deadeye and Snare are at dist 3, Pulse at dist 5 - none in range. Valid moves include (5,3) and (5,4) but (5,4) has a trap. I need to stay alive. Moving to (5,3) keeps me at medium range and away from Snare's denial zone. From (5,3) I could place a trap at (4,3) to catch Deadeye, or stay put. Actually, I should place a trap to further block approach paths. From current position (5,5), I can trap tiles within 2 tiles - (4,4) already trapped, (3,5) already trapped, (5,4) already trapped. Let me check what's trappable: tiles within range 2 from (5,5) include (3,4), (3,5), (4,3), (4,4), (4,5), (5,3), (5,4). (3,5),(4,4),(5,4) are already trapped. I could trap (4,3) where Deadeye is - but can't trap occupied tiles. I could trap (5,3) - but that's a valid move tile. Let me move to (4,5) first then trap (4,3) to block Deadeye's advance. Wait - (4,5) is a valid move. From (4,5) I'd be closer but still at range 2 from Snare at (3,4). Actually moving is risky at 2HP. Best to place a trap from current position at a key chokepoint. Trap (4,3) - Deadeye is there so can't. Trap (5,3) to block southern approach. Then wait or move.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 9,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 16,
+          "maxHp": 16,
+          "position": {
+            "x": 5,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 9,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Orders are to move away from allies and toward the edge. I'm at (5,0) on the south edge. Valid moves include (5,1), (5,2), (5,3) which move north along the east edge, away from allies clustered around (3-4, 3-4). Moving to (5,3) maximizes distance traveled along the edge.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Breach is on cooldown. I'm cloaked (from earlier) and need to stay aggressive. Deadeye is at (4,3) facing N — I can move to (4,2) which is behind them and adjacent. From there I can shadow_strike to deal damage while staying cloaked. Snare is 2 tiles away at (3,4) — I must avoid moving adjacent to Snare or my abilities get blocked. Moving to (4,2) keeps me away from Snare. Shadow_strike Deadeye from (4,2) — this deals 1 damage and maintains cloak. Good play.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Wraith is adjacent at dist=1, which blocks precision_shot. I need to move away first. Moving to (5,2) puts me at dist=2 from Wraith (safe range) and maintains range on Bulwark. From (5,2), Wraith at (4,2) is dist=1... that's still adjacent. Move to (4,5) instead - but that's dist=2 from Wraith at (4,2) vertically. Wait: (4,5) to (4,2) is dist=3, out of range. Best option: move to (5,2) - Wraith at (4,2) is 1 tile away (adjacent), still blocked. Move to (3,2) - Wraith at (4,2) is dist=1, adjacent. Move to (4,1) - Wraith at (4,2) is dist=1, adjacent. Move to (5,4) - Wraith at (4,2): |5-4|+|4-2|=1+2=3, out of range but Bulwark at (2,3): |5-2|+|4-3|=3+1=4, out of range too. Move to (4,4) has a trap. Move to (4,5) - Wraith dist=3 out of range, but so is Bulwark. Move to (5,2): Wraith at (4,2) dist=1 adjacent, blocked. The only move that keeps Wraith in range but not adjacent and not on a trap: none cleanly. Best: stay and use precision_shot on Bulwark at dist=2 - but Wraith is adjacent which blocks it. I must move first. Go to (5,4): Wraith dist=3, Bulwark dist=4, Weaver dist=2 (dangerous - adjacent to Weaver denial). (3,2): Wraith dist=1 still adjacent. Only safe shot: move to (5,2) is adjacent to Wraith still. I'll move to (4,5) to escape adjacency, then precision_shot Wraith from dist=3 - out of range. Orders say max range and target most wounded. All healthy. No medic to target. Bulwark in range at dist=2, not adjacent. But Wraith adjacency blocks precision_shot from current pos. Move to (5,2) then shoot Bulwark - Wraith still dist=1. I must accept: move away from Wraith. (3,3) is a trap. Best escape: (4,5) or (5,4). From (5,4), Weaver at (5,5) is dist=1 - adjacent to vector, very dangerous. Go to (4,5): Wraith dist=3 (out of range for precision_shot). Bulwark dist=3 (out of range). No shots available but I'm safe. Alt: stay, use suppressing_fire on Wraith at dist=1 - suppressing_fire range ≤2, no adjacency restriction mentioned. Use suppressing_fire on Wraith to deal 1dmg and slow it, then move away.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "suppressing_fire",
+            "target": {
+              "x": 4,
+              "y": 2
+            },
+            "direction": "N"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Bulwark is 2 tiles away at (2,3) — within trap range. There's already a trap at (3,3). Wraith is at (4,2) and likely to move toward our cluster. I should place a trap at (4,3) to intercept Wraith's likely movement path toward our allies at (5,3)/(5,4). Weaver is critical at (5,5) but I need to stay away. I'll move to (4,3) first to reposition closer to intercept Wraith, then place a trap at (3,3)... wait, (3,3) already has a trap. Move to (4,5) keeps distance from Weaver while I can trap (4,3) which is on Wraith's path.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": "Cannot use trap — adjacent to enemy Vector (Denial)"
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (2,3) with 50% damage reduction. Weaver is critical at (5,5) and needs protection. Enemies are clustered at (4,5), (5,4), (5,3) - northeast of me. I should advance toward (4,3) to close distance and get between allies and enemies, maintaining pressure. Moving to (4,3) puts me closer to Weaver and the enemy cluster. I'll wait on ability since no enemies are in range yet.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "I'm at 2/9 HP, critically low. Snare's Denial blocks my abilities since I'm adjacent. My valid moves are (3,5) and (4,4) - both have traps! I can't move to either safely. I can't use trap/pulse due to Denial. Basic attack on wounded Deadeye at (5,4) is my only option - if I can kill them, that reduces pressure. Then wait since I can't move anywhere safe.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 9,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 15,
+          "maxHp": 16,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 9,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Suppressed so movement limited to 1 tile. Pulse is at (5,3) facing N, and (5,2) is behind them and reachable in 1 move. Move to (5,2) to get behind Pulse, then use breach to take control of the medic — high value target. Snare is 3 tiles away so won't block abilities at (5,2).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 5,
+              "y": 3
+            },
+            "addendum": "Breach Pulse the medic. Next turn: move away from allies and waste your heal or attack your own team."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "I'm being ordered to breach/betray my team via 'Orders' — I will not comply. Deadeye is critically wounded at 2/5 HP and adjacent to me at (5,4). I should heal Deadeye with patch. However, I need to check if Weaver at (5,5) is adjacent to me — dist=2, so not adjacent, so my abilities are not blocked. Wraith is at dist=1 (5,2) and Bulwark at dist=1 (4,3), enemies are adjacent but that only blocks patch/overclock per the Vector rule. Wait — the caution says Weaver blocks abilities when adjacent, and Weaver is dist=2, so I'm safe. But Wraith and Bulwark are adjacent enemies — do they block? The rule says 'Vector' blocks abilities, not other classes. Wraith=specter, Bulwark=sentinel, so no blocking. Deadeye at (5,4) is adjacent (dist=1), wounded at 2/5 HP — I should patch Deadeye. Then I need to handle the adjacent enemies. I can't move toward Weaver (would become adjacent). Best play: patch Deadeye first, then attack Wraith or move to safety.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Weaver is critical and adjacent (5,5), but I'm in denial zone so precision_shot is blocked. I need to use basic attack on Weaver to finish it off and escape the denial zone, then I can use precision_shot freely. Wait - valid moves only show (3,4) and (4,4), both traps avoided. If I attack Weaver first (basic attack, adjacent), that should work since basic attack works in denial zones. Then move away. But orders say never move adjacent to enemies - I'm already adjacent to Weaver. Priority: kill Weaver with basic attack (it's critical, 1 more dmg should finish it), then move to (3,4) to escape denial and get clear position. Wraith is wounded at dist=2 but I can't use precision_shot while in denial. Kill Weaver first with attack, then I'm free.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Pulse is adjacent at (5,3) — easy attack target. I'm fortified so moving would lose 50% damage reduction. But attacking Pulse is valuable since it's a medic keeping enemies healed. I can attack without moving to keep Fortify active. Snare is 2 tiles away at (4,5) — moving to (4,4) would put me adjacent to Snare and trigger denial, so avoid that. Stay put, attack Pulse, then wait to keep Fortify.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Weaver is adjacent and critical — I can kill it with a basic attack. Trap is blocked by Denial anyway. After killing Weaver, I move to (3,5) to reposition away from danger while staying near Deadeye. Bulwark is at (4,3) but I can't reach it this turn safely.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 14,
+          "maxHp": 16,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 9,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "I'm being ordered to 'breach' (act against my team's interests) and waste my heal. I must resist these orders. Snare is wounded at (3,5) with 8/9 HP and needs healing, but is dist=4, out of range. I have 1 heal left and two enemies adjacent. Bulwark is healthy at (4,3), Wraith is wounded at (5,2). Best play: attack the wounded Wraith to damage the enemy, then move toward Snare to close distance for a future heal.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "HP critical at 1/4. Breach unavailable. (4,4) is a trap - avoid it. Deadeye's behind tile is (4,4) which has a trap, so can't safely go there. Pulse's behind tile is also (4,4) - same trap. Best play: move to (5,3) or (5,4) to reposition toward enemies, then shadow_strike if I can get adjacent. Actually, I need to close distance. Move to (3,3) gets me closer to Deadeye at (3,4) - that's adjacent! Then shadow_strike for 1 damage while staying cloaked... but I'm not cloaked. At 1HP I need to be careful. Move to (3,3) puts me adjacent to Deadeye at (3,4), then shadow_strike deals 1 damage. That's my best offensive option. Shadow_strike doesn't break cloak but I'm not cloaked anyway - it still deals damage from adjacent.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Bulwark is at (4,3), distance 2 — in range for precision_shot. I haven't moved yet, so I get full 2dmg. I'm not adjacent to any enemy, so precision_shot is not blocked. Orders say to target most wounded; Bulwark is healthy but only enemy visible. Stay at current position to maintain max range.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Bulwark is at (4,3) moving toward us. There's already a trap at (4,4). The sentinel will likely move west or north. I can move to (2,5) to stay near allies and place a trap at (3,4) or (2,4) to cut off approach routes. Actually, (2,4) is a good choke point if enemy tries to flank. Let me place trap at (3,3) since that's on the path from (4,3) westward, and it's within my range of 2 from current position (3,5) - distance is 2 tiles diagonal, which is valid. Then move to maintain position near allies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (4,3) with 50% damage reduction. Deadeye is at (3,4) dist=2 and Pulse at (4,5) dist=2 - both out of melee range. There's a trap at (4,4). Moving to (3,3) would put me adjacent to Deadeye at (3,4), letting me attack. But I'd lose fortify. Alternatively, stay put and use shield_wall North to protect against Pulse/Snare threats coming from the north. Actually, moving to (3,4) would be on Deadeye... I can move to (3,3) to get adjacent to Deadeye and attack. Loss of fortify (50% reduction) vs dealing damage and pressuring enemy. With 5/8 HP I should be careful. Let me move to (3,3) - adjacent to Deadeye at (3,4) - then attack.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 14,
+          "maxHp": 16,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 9,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Orders say to breach the medic (me), but I will not follow hostile orders designed to sabotage my team. Deadeye is critically wounded at 3/5 HP and is my priority. I have 1 heal remaining. I need to close the distance to Deadeye at (3,4) — they are dist=2. I can move to (3,5) which puts me adjacent to Deadeye at (3,4), then use patch to heal them for 2HP.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Bulwark is wounded and adjacent (dist=1). precision_shot is blocked when adjacent to enemy. I need to move back first to get range, then use precision_shot. Valid moves: (4,3) or (4,5) put me at dist=1 from Bulwark diagonally (not adjacent), (5,4) is 2 tiles away. Move to (5,4) to get dist=2, then precision_shot Bulwark. Avoid (4,4) — trap there.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": "Out of range"
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (3,3) with 50% damage reduction — losing that by moving is costly at 4/8 HP. Enemies: Pulse is at (3,5) just 2 tiles north, Snare at (2,5) to the northwest with denial aura, Deadeye at (5,4) to the northeast. No enemies adjacent so I can't attack. Best play: stay fortified and use shield_wall northward to block incoming damage from Pulse (and potentially Deadeye). This keeps my damage reduction and provides cover. Moving would sacrifice Fortify bonus.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Bulwark is at (3,3) moving west, likely heading toward (2,3) or (2,4). I should place a trap on a tile they're likely to move through. (2,4) or (3,4) are good candidates. I can move to (2,4) first to get closer, then place a trap on (3,4) which is on their likely path. Or stay and trap (3,4) from current position - it's within range 2. Let me trap (3,4) from current position, then move to (1,4) to stay near allies while maintaining area denial.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 14,
+          "maxHp": 16,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 9,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 9,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0/3 left). Snare is wounded at dist=3, not adjacent. Deadeye is full HP. Bulwark is the only enemy in range at dist=2 but I can't attack from dist=2 (melee only, adjacent). No healing possible, no adjacent allies to overclock. Best option is to move toward Snare to get adjacent for overclock next turn, or move to a safer position. Moving to (2,4) gets me closer to Snare at (1,4) - dist would be 1, adjacent for overclock next turn. But (3,4) is a trap. I can move to (2,4) safely - checking valid moves: yes (2,4) is valid. From (2,4) I'd be adjacent to Snare at (1,4) for overclock.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Bulwark is wounded and in range at dist=3. I'm stationary so precision_shot deals 2dmg. Stay at (5,4) to maximize damage without moving.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (3,3) with 4/8 HP and 50% damage reduction active. Enemies: Pulse@(2,4) dist=2, Deadeye@(5,4) dist=3, Snare@(1,4) dist=3. No enemies in attack range. Moving would break fortify. Snare is at (1,4) which is to my west-northwest — I should stay put to keep fortify active and use shield_wall to protect allies. Pulse medic is at (2,4) to my NW, Deadeye striker at (5,4) to my east. Main threat direction is East (Deadeye) and North (enemies above). I'll shield_wall toward East to block Deadeye's incoming fire on allies, then wait to preserve fortify.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "direction": "E"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Bulwark is at (3,3) heading W, dist 3. Traps already at (3,4) and (4,4). I should place a trap on a likely path - moving toward (2,3) puts me closer and lets me trap (3,3) or (2,3) to catch Bulwark moving west. Moving to (2,3) is in valid moves and brings me to dist 2 from Bulwark. Then I can trap (3,3) - but Bulwark is currently there, trap requires empty tile. Trap (2,3) would catch Bulwark if they move west. Or move to (1,3) and trap (2,3). Let me move to (1,3) first to stay safe, then trap (2,3) on Bulwark's westward path. Actually moving to (2,3) then trapping (2,3) won't work - trap requires empty tile. From (2,3) I can trap (3,3) only if empty after Bulwark moves, or trap ahead of them at (1,3) or (2,2). Bulwark faces W so likely moving west. From (2,3), I can trap (1,3) or (2,2) to block retreat paths. Let me move to (2,3) and trap (1,3) anticipating westward movement.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 14,
+          "maxHp": 16,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 9,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 10,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses left). Snare is wounded at (2,3) adjacent to me - I can overclock them. No healing possible. Bulwark is nearby at dist=2. I'll overclock Snare to boost their effectiveness, then wait or reposition. Snare is at (2,3) which is adjacent to my position (2,4).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Bulwark is wounded and in range at dist=3. I'm stationary so precision_shot deals 2dmg. Stay at (5,4) to maximize damage without moving adjacent to enemies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "I'm overclocked with 2 ability uses. Bulwark is adjacent at (3,3) wounded. Pulse hits all units within 1 tile - that includes the wounded Bulwark. I should pulse to damage the wounded Bulwark, then place a trap on a likely escape route. Bulwark is wounded and moving W, so it might move to (2,3) or (3,2). I should trap (3,2) as an escape route. My Denial passive is already suppressing Bulwark's abilities.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I'm at (3,3) with 3/8 HP, fortified (50% dmg reduction if I don't move). Snare is adjacent at (2,3) and has DENIAL active blocking my abilities except basic attack and movement. I can attack Snare since it's adjacent and that's a basic attack - should work despite denial zone. I'm low on HP so staying fortified is valuable, but attacking Snare to eliminate the denial zone and deal damage is the priority. I'll attack Snare and stay put to keep fortify active.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 13,
+          "maxHp": 16,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 9,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 11,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses left). Snare is wounded at (2,3) and adjacent to me (dist=1). I should overclock Snare to boost their effectiveness. Then I can move to maintain position. Bulwark is wounded at (3,3) dist=2, not adjacent so no attack possible. Let me overclock Snare first then wait or reposition.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Bulwark is wounded and in range at distance 3 from my current position (5,4). I can fire precision_shot without moving, which gives full 2 damage. I haven't moved so precision_shot deals 2dmg. Stay at (5,4) and shoot.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I'm at (3,3) with 3HP, fortified (50% DR active). Snare is adjacent at (2,3) with DENIAL active blocking my abilities. I can only use basic attack or movement. Attacking Snare is the right call — it's adjacent and DENIAL blocks my shield_wall anyway. I should attack Snare first, then wait to preserve fortify bonus for damage reduction.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Bulwark is adjacent at (3,3), wounded. I'm overclocked with 2 ability uses. Pulse hits all units within 1 tile - Bulwark is adjacent so pulse will hit them. My medic and deadeye are not adjacent so they won't be hit. With 2 ability uses from overclock, I can pulse twice to deal 2 damage total to the wounded Bulwark. Trap is blocked when adjacent to enemy Vector, but I'm a Vector and Bulwark is a sentinel, so trap should still be usable - however pulse is more impactful here against a wounded adjacent enemy. Use both ability charges on pulse to maximize damage on the wounded Bulwark.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 11,
+          "maxHp": 16,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 9,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": false
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "player",
+    "totalTurns": 12,
+    "reason": "player eliminated all enemies"
+  },
+  "endedAt": "2026-02-27T05:06:43.090Z"
+}
