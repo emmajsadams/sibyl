@@ -649,7 +649,7 @@ describe("useAbility - patch", () => {
 });
 
 describe("useAbility - overclock", () => {
-  test("applies overclocked with no self-damage", () => {
+  test("applies overclocked with self-damage cost", () => {
     const g = createGame();
     const m = unit("m1", "medic", "player", { x: 2, y: 2 });
     const a = unit("a1", "striker", "player", { x: 2, y: 3 });
@@ -657,7 +657,7 @@ describe("useAbility - overclock", () => {
     const hpBefore = a.hp;
     const err = useAbility(g, m, "overclock", { x: 2, y: 3 });
     expect(err).toBeNull();
-    expect(a.hp).toBe(hpBefore);
+    expect(a.hp).toBe(hpBefore - 1); // overclock selfDamage = 1
     expect(a.statusEffects.some((e) => e.type === "overclocked")).toBe(true);
   });
 });

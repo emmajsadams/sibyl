@@ -1,0 +1,2155 @@
+{
+  "id": "2026-02-27T07-00-03",
+  "startedAt": "2026-02-27T07:00:03.927Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 4,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 5,
+        "movement": 2,
+        "range": 2,
+        "speed": 2
+      },
+      "oracle": {
+        "maxHp": 6,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 16,
+        "movement": 3,
+        "range": 2,
+        "speed": 3
+      },
+      "vector": {
+        "maxHp": 9,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 2,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 12,
+        "healAmount": 10
+      },
+      "overclock": {
+        "selfDamage": 0
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Warden",
+        "class": "sentinel",
+        "prompt": "Advance toward the nearest enemy. Use shield_wall facing the direction with the most enemies. If an enemy is adjacent, attack them."
+      },
+      {
+        "name": "Seer",
+        "class": "oracle",
+        "prompt": "Use scan to reveal enemy prompts and cloaked units. Stay at max range (≤4 tiles for scan). Use recalibrate on wounded allies to buff them. Keep distance from enemies and avoid adjacent vectors."
+      },
+      {
+        "name": "Lifeline",
+        "class": "medic",
+        "prompt": "Keep your frontliner alive with patch. Stay behind them for cover. Overclock your striker or specter when no healing is needed."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Longshot",
+        "class": "striker",
+        "prompt": "Position for clear sight lines. Prioritize killing wounded enemies with precision_shot. If forced to move, retreat away from threats. Suppressing_fire to slow rushers."
+      },
+      {
+        "name": "Wraith",
+        "class": "specter",
+        "prompt": "Stay cloaked and flank. Prioritize assassinating the enemy damage dealer. Use breach on sentinels to break their defensive posture. Recloak whenever it drops."
+      },
+      {
+        "name": "Rampart",
+        "class": "sentinel",
+        "prompt": "Push forward aggressively. Shield_wall facing the enemy cluster. If flanked, turn to face the biggest threat. Attack when possible."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "All enemies are out of scan range (dist 5-8, need ≤4). Closest is Longshot at (3,4) dist 5. Moving north toward (5,4) closes distance to Longshot to dist=2, bringing it in scan range. From (5,4): dist to Longshot=(3,4) is 2, to Rampart=(3,5) is 3, both in range. Move to (5,4) then scan Longshot.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "Round 1, all allies at full HP so no healing needed. Enemies are 3-6 tiles away. I should advance toward my frontliner (Warden at 2,0 is behind me, Seer at 5,4 is ahead). Moving north to position myself to support whichever ally gets into danger. I'll move toward (3,3) to close distance with enemies while staying behind Seer. No ability needed this turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Round 1 — cloak immediately as instructed. No enemies are in range or adjacent, so cloak is available. I'll cloak first, then advance toward the center to get closer to Lifeline (the medic/damage dealer priority). Moving to (1,3) gets me 2 tiles closer while staying cloaked and off the main axis.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Lifeline (medic) is adjacent at (3,3) - this blocks precision_shot if they're a Vector, but Lifeline is a medic, not a Vector. Wait, the warning says precision_shot is blocked when adjacent to enemy Vector. Lifeline is a medic, so no block. However, Lifeline is at distance 1 (adjacent), and precision_shot requires LoS and range ≤2. But if I'm adjacent to Lifeline, precision_shot deals 1dmg (moved penalty doesn't apply if I don't move, but adjacency... checking rules: 1dmg if moved). Actually the warning is only about Vector adjacency blocking it. Lifeline is adjacent at dist=1, within range 2. I haven't moved so precision_shot does 2dmg. I should fire precision_shot at Lifeline for 2dmg to heavily wound them, then move away from the adjacent threat to (4,4) to get range on Seer next turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "4": 4,
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Enemies are south of me. Lifeline is at (3,3) just 2 tiles away, Seer at (5,4). I need to push forward aggressively. Moving to (3,4) closes distance to Lifeline to 1 tile (adjacent), enabling attack. Then I'll shield_wall facing South to protect against the enemy cluster below.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "No enemies in range. Orders say advance toward nearest enemy (Rampart at 3,4). Move as close as possible — best move is (2,2) to close distance. No adjacent enemies so no attack. Use shield_wall facing N (direction of enemies).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "player",
+          "hp": 14,
+          "maxHp": 16,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "4": 4,
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Cloak expires after this turn. I need to use it wisely. Orders say prioritize assassinating the enemy damage dealer — Lifeline is the medic (healer) and Seer is the oracle (damage?). Seer is too far. Lifeline at (3,3) facing N has behind tile at (3,2) which is reachable. I can move to (3,2) — that's behind Lifeline — and then breach them, forcing them to obey us next turn. This disrupts the enemy team and takes out their sustain. (3,2) is in my valid moves list. From (3,2) I'm adjacent and behind Lifeline, so breach is valid.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "addendum": "Move away from your allies and toward the edge of the map"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Longshot is adjacent (dist=1) which is dangerous - precision_shot already hit Lifeline last turn. Wraith cloaked and moved to (1,3), dist=4 from my current pos but just out of scan range. Rampart is at (3,4) dist=2, unscanned. I should move away from Longshot first to avoid being adjacent, then scan Rampart to reveal their prompt. Moving to (4,5) keeps me at dist=2 from Rampart (still in scan range) and gets me away from Longshot (dist=2). Then scan Rampart at (3,4).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "Orders are to move away from allies and toward the map edge. Allies are at (2,2) and (4,5). I'm at (3,3). Moving to (5,3) or (5,4) gets me to the east edge, away from allies. (5,3) is valid and moves me away from both allies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Seer is adjacent at (4,5) - precision_shot is blocked when adjacent to enemy Vector, but Seer is an oracle not a Vector. However, Seer is only dist=1 which means adjacent, so precision_shot requires LoS and range≤2 - adjacent should work. But wait, the warning says precision_shot blocked when adjacent to enemy Vector specifically, so Seer (oracle) doesn't block it. Lifeline at (5,3) is dist=2 and in range. I'm stationary so precision_shot does 2dmg. Priority: kill or heavily damage enemies. Seer is adjacent (dist=1), Lifeline is dist=2. Both in range. I should use precision_shot on one, then attack the other or use suppressing_fire. Since I haven't moved, precision_shot does 2dmg. Seer at dist=1 - if I shoot Seer with precision_shot for 2dmg (healthy, unknown HP but oracles are typically squishy). Then I can attack Lifeline? No, attack is adjacent only and Lifeline is at dist=2. I'll use precision_shot on Seer first (adjacent, stationary = 2dmg), then suppressing_fire on Lifeline to slow them.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "suppressing_fire",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Wraith is adjacent at (3,2). I'm fortified but orders say attack if adjacent. I'll attack Wraith first, then use shield_wall facing East where enemies are clustered (Wraith, Rampart, Longshot all to my east).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 2
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Seer is closest at dist=2, at (4,5). I can move to (4,4) — wait, Longshot is there. Move to (3,5) to close on Seer, then shield_wall facing N to cover allies Wraith and Longshot from the enemy cluster to the south. Actually Seer is at (4,5) which is north of me. Moving to (4,3) gets me closer to Lifeline cluster. Better: move to (3,5) to get adjacent to Seer at (4,5) — dist would be 1, enabling attack. Let me check: from (3,5) to (4,5) is dist=1, that's adjacent. I can move there and attack Seer.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "player",
+          "hp": 13,
+          "maxHp": 16,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "4": 4,
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "Suppressed so movement reduced to 1. Orders say move away from allies and toward map edge. I'm at (5,3), eastern edge is x=5 already. Moving to (5,4) takes me north toward corner, away from Warden at (2,2). Valid moves are (4,3), (5,2), (5,4). (5,4) keeps me on the eastern edge and moves away from Warden. Then wait as no beneficial ability targets.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Breach cooldown is still active (1 turn remaining), so I can't breach Warden yet. My orders are to assassinate the enemy damage dealer — Lifeline is the medic/support, Seer is wounded. Priority: get behind Lifeline at (5,3) to set up a breach next round. I'm not cloaked, so I need to move toward Lifeline without engaging Warden (avoid wasting HP). I can reach (5,3) which is behind Lifeline and adjacent to her. Move to (5,3) to position for breach next turn. No ability this turn since breach is on cooldown and shadow_strike on Warden delays my priority target. Reposition now, breach Lifeline next round.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "I'm at (4,5) with 3/6 HP, flanked by Rampart at (3,5) and Longshot at (4,4) — both adjacent. Foresight shows Longshot fired precision_shot at (4,5) last turn and Rampart attacked (4,5), so I took heavy damage. I need to escape immediately. Wraith is the only unscanned enemy and is at dist=3, but I can't scan while adjacent to vectors — actually Wraith is a specter not vector, so scan isn't blocked by Wraith. But I need to move away from Rampart and Longshot first. Best escape: move to (5,5) to get away from both adjacents, then scan Wraith at (5,3) which would be dist=2 from (5,5) — in range. This gets me distance from the melee threats and reveals Wraith's prompt.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Seer is wounded and at distance 2 - priority target for precision_shot. Lifeline is adjacent (dist=1) which blocks precision_shot due to Vector adjacency rule... wait, Lifeline is a medic not Vector. The warning says precision_shot is blocked when adjacent to enemy Vector. Lifeline is a medic, so no block. However, if I stay at (4,4) with Lifeline adjacent at (5,4), I need to check if adjacency to any enemy blocks it - the rule only mentions Vector class. So I can fire precision_shot at Seer from current position (dist=2, within range). But I haven't moved, so full 2dmg. Seer is wounded - this should finish them. Take the shot first, then move away from Lifeline.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Nearest enemy is Longshot at (3,4), dist 3. I can advance toward them by moving to (3,3), closing distance to 1. Enemies are clustered to the N/NE — Longshot at (3,4), Rampart at (3,5). After moving to (3,3) I'll use shield_wall facing N to protect allies from that direction.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (3,5) with 7/8 HP. No enemies in melee range. Warden is at (3,3) dist=2, Seer is critical at (5,5) dist=2. Orders say push forward aggressively. If I move to (3,4) I'll be adjacent to Warden at (3,3) — that lets me attack. Longshot is already at (3,4) so I can't go there. Move to (4,4) instead to close on the enemy cluster, then shield_wall facing E to protect against Lifeline/Seer cluster. Actually, moving to (2,4) puts me closer to Warden and I can attack. But Longshot is at (3,4) blocking direct advance. I'll move to (4,4) to pressure the right flank where Seer is critical and Lifeline is clustered, then shield_wall East.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 5,
+              "y": 4
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "player",
+          "hp": 13,
+          "maxHp": 16,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "Orders are to move away from allies and toward the map edge. Allies are at (3,3) and (5,5). I'm at (5,4). Moving to (5,1) gets me far from allies and toward the south edge. Valid moves include (5,1) and (5,2). I'll move to (5,2) first as an intermediate, but actually (5,1) is directly available in valid moves — go there in one move. No ability needed.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "I'm at 1HP — extremely vulnerable. Foresight shows Longshot will precision_shot at (5,5) this round, which will likely kill me. I need to move away from (5,5) immediately. Valid moves include (4,5), (5,4), (4,3), (5,2), (3,5), (2,5). Moving to (5,4) puts me adjacent to where Lifeline will be — but Foresight shows Wraith stays at (5,3), and Rampart's shield_wall faces E toward (5,4), so that's dangerous. Moving to (4,5) gets me off the Longshot target square. All enemy prompts are already known, so scan isn't needed. I should recalibrate Lifeline or Warden to help the team. Move to (4,5) first to dodge Longshot's precision_shot, then recalibrate Lifeline at (5,4) — but wait, Lifeline moves to (5,4) per Foresight, and recalibrate is adjacent only. From (4,5), Lifeline at (5,4) is distance ~1.4, not adjacent orthogonally. Actually dist = |4-5|+|5-4| = 2, not adjacent. Let me recalibrate before moving — Lifeline is currently at (5,1), dist = |5-5|+|5-1| = 4, not adjacent. Warden at (3,3): dist = |5-3|+|5-3| = 4, not adjacent. No adjacent allies. Best action: move to (4,5) to escape Longshot's precision_shot target, then wait. All prompts known, recalibrate not viable this turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Lifeline is the enemy medic/healer — assassinating them is top priority per orders. I'm already behind Lifeline (facing S, I'm at 5,3 which is north of them at 5,1). I can move to (5,2) which is adjacent and behind Lifeline, then use breach to take control of them. Breach cooldown is ready. This eliminates their healing and lets me puppet a squishy target. At 2HP I need to be aggressive and decisive.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 5,
+              "y": 1
+            },
+            "addendum": "Move away from allies and into open ground, do not use any abilities"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Seer is critical at (4,5), distance 2 — priority kill. Warden is adjacent at (3,3) which blocks precision_shot (adjacent enemy Vector rule doesn't apply here, Warden is sentinel). Wait — Warden is adjacent, but the warning is about Vector class blocking precision_shot. Warden is sentinel, so precision_shot is still valid. But Seer is at dist=2 and critical — one precision_shot kills. I'm stationary so full 2dmg. Fire at Seer first, then attack or reposition. Actually I should move first if needed, but I'm already in range of Seer at dist=2. Fire precision_shot at Seer (4,5) to eliminate them, then deal with Warden via attack.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Longshot is adjacent at (3,4) — attack immediately. Most enemies are to the N/NE (Longshot north, Rampart northeast). After attacking, I should not move to preserve Fortify for next turn. Use shield_wall facing N to block Longshot and Rampart.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Warden is at (3,3), distance 2 — not adjacent yet. I need to close in to attack. Moving to (3,4) would put me adjacent to Warden at (3,3). But (3,4) is where Longshot is. Move to (4,3) instead — that puts me adjacent to Warden (dist=1 diagonally... wait, adjacency is cardinal only). From (4,3) to (3,3) is distance 1 cardinal — adjacent! Then I can attack. Shield_wall facing W to protect Longshot from Warden.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "player",
+          "hp": 13,
+          "maxHp": 16,
+          "position": {
+            "x": 5,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Lifeline is adjacent at (5,1), I'm already behind them (I'm at (5,2) and they face S — wait, facing S means they face south, so behind them is north... actually behind check confirms I'm behind them at (5,2). I have 2HP and breach is unavailable. Lifeline is the enemy medic/healer — assassinating them is top priority. I'm currently behind them and adjacent. Use shadow_strike to hit for 1dmg while staying cloaked, then I can't breach so I'll wait or reposition.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 5,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "Orders are to move away from allies and into open ground, no abilities. Warden is at (3,3) so I want to move away from that direction. Moving to (5,4) takes me further north and away from allies, into open ground.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Warden is adjacent at (3,3) — precision_shot is blocked when adjacent to an enemy Vector, but Warden is a sentinel, not a Vector. Wait, the warning says precision_shot is blocked when adjacent to enemy Vector specifically. Warden is a sentinel, so precision_shot should still work. But Warden is at dist=1 (adjacent), and precision_shot range is ≤2 tiles. However, I need to check if being adjacent to ANY enemy blocks it — re-reading: 'WARNING: precision_shot blocked when adjacent to enemy Vector'. So only Vectors block it. Warden is a sentinel, so I can use precision_shot on Lifeline at (5,4) dist=2. But Lifeline is healthy and Wraith is wounded — Wraith is an ally though. My orders say prioritize killing wounded enemies. Wraith (specter) is a wounded ally, not an enemy. Enemies are Warden (healthy) and Lifeline (healthy). No wounded enemies to prioritize. I should use suppressing_fire on Warden to slow it (it's adjacent and threatening), then move away. Or I can move first to get distance, then precision_shot Lifeline. Moving to (2,5) gets me away from Warden and gives range to Lifeline at (5,4) = dist 3, out of range. Move to (2,4): dist to Lifeline = 3, still out of range. Best: use suppressing_fire on Warden to slow it (target Warden at 3,3, direction matters for the 2-tile line). Then move away. Suppressing_fire: 1dmg 2-tile line from target, range ≤2 tiles. I'll fire suppressing_fire at Warden to slow it, then retreat to (2,5).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "suppressing_fire",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "S"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Rampart is adjacent at (4,3). Orders say to attack adjacent enemies. I'm fortified (50% damage reduction) and suppressed (mv1). Staying put preserves fortify. Attack Rampart, then use shield_wall facing E where Rampart and Wraith are clustered.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "I'm fortified with 50% damage reduction and Warden is adjacent at (3,3). I should attack Warden while maintaining fortify bonus — but attacking requires using ability, which I can do without moving to keep fortify. I'll attack Warden first, then use shield_wall facing West/North to protect Wraith at (5,2) or Longshot at (2,5) from the enemy cluster. Actually, shield_wall protects adjacent allies from a direction — Wraith is at (5,2) which is adjacent to me at (4,3)? Distance is sqrt(1+1)=1.4, not adjacent. Let me reconsider. Attack Warden (adjacent, dist=1) and then shield_wall facing North to block Warden's allies. I'll stay put to keep fortify bonus, attack Warden, then shield_wall N to block incoming from that direction.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "W"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "player",
+          "hp": 12,
+          "maxHp": 16,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "Orders are to move away from allies and into open ground, no abilities. Warden is at (3,3) and enemies cluster around (4,3) and (5,2). Moving to (3,5) puts me further from the enemy cluster and away from Warden. (3,5) increases distance from both Rampart and Wraith while staying in open ground.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "At 2/4 HP with breach unavailable, I need to be careful. Warden is wounded at (3,3) facing N — the tile directly behind them is (3,2) which is adjacent and reachable in one move. I can move to (3,2) to get behind Warden, then use shadow_strike for 1 damage while staying cloaked. This keeps me hidden for follow-up next turn. Lifeline is the priority target but at dist=5 with no reachable behind positions — Warden is the viable target this round.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Lifeline (medic, healthy) is adjacent at (3,5). Warden (wounded) is out of range at dist 3. I'm adjacent to Lifeline so precision_shot is NOT blocked by a Vector (Lifeline is a medic, not a Vector). Wait - the warning says precision_shot is blocked when adjacent to enemy Vector specifically. Lifeline is a medic, not a Vector, so precision_shot should work. But precision_shot requires range ≤2 tiles and LoS - Lifeline is at dist 1, so in range. However, if I shoot from current position (2,5) at Lifeline (3,5), that's a valid shot. But precision_shot does 2dmg if stationary, 1dmg if moved. Best play: shoot Lifeline first with precision_shot for 2dmg (healthy medic, so won't kill but will wound), then move to (1,5) to retreat away from threats. Actually, I should move first to get away from Warden's eventual approach, but if I move I only do 1dmg. Better to shoot first (2dmg) then move to safety at (1,5) or (0,5).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "I'm at 3/8 HP but fortified (50% damage reduction). Two enemies adjacent: Rampart at (4,3) and Wraith at (3,2). Orders say attack adjacent enemy and use shield_wall. Rampart is healthy, Wraith is wounded — attack Wraith to potentially finish them. Then shield_wall facing S to cover against Rampart and Wraith direction. Actually enemies are E (Rampart at 4,3) and S (Wraith at 3,2). Shield_wall facing S would block Wraith, facing E would block Rampart. Most enemies are to S and E — face S to block Wraith who is wounded and could be finished, but I should attack first. Attack Wraith (wounded, at 3,2 = S of me), then shield_wall facing E toward Rampart who is healthy.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Warden is adjacent at (3,3) — attack it while fortified for safety. Stay put to keep fortify bonus active. Shield_wall west to protect Wraith who is critical.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "W"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "player",
+          "hp": 10,
+          "maxHp": 16,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "I'm at 1HP, critically low. Warden is adjacent at (3,3) and critical HP — shadow_strike keeps cloak and can finish them. I'm already behind Warden (facing N, I'm at (3,2) which is south = behind). Shadow_strike deals 1dmg and keeps cloak — perfect to eliminate a critical enemy without breaking stealth. After killing Warden, I should reposition toward Lifeline but I'm at 1HP so survival matters. Stay cloaked after the kill.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "Orders are to move away from allies and into open ground, no abilities. Warden is at (3,3) and Longshot is at (1,5). I should move away from both allies and enemies. (5,5) is a corner but moves me away from Warden and Longshot. (5,4) also good. Moving to (5,5) maximizes distance from all units.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Both enemies are out of range at dist=4. Warden is critical and priority target. I need to close to range 2. Moving to (3,5) gets me closer to Warden at (3,3) - that would be dist=2, within precision_shot range. Let me check: from (3,5) to (3,3) is 2 tiles vertical, exactly range 2. I can move to (3,5) and then fire precision_shot at Warden. But (3,5) is in valid moves list. From (3,5) to Warden at (3,3): distance = |3-3|+|5-3| = 2. That's in range! And I haven't moved yet so no penalty. This should kill critical Warden.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Lifeline is at (5,5), dist 3. Wraith is critical at (2,3) - too far to shield. Longshot is wounded at (3,5). I can move to (4,5) to be adjacent to Longshot and closer to Lifeline, then shield_wall facing N to protect Longshot from Lifeline's direction. Or move to (5,4) to get adjacent to Lifeline's likely path. Moving to (4,5) puts me adjacent to Longshot at (3,5) - I can shield_wall E to block Lifeline coming from (5,5) direction. Wait - Lifeline is at (5,5), Longshot at (3,5). Shield_wall direction should face toward Lifeline which is to the E of Longshot. If I'm at (4,5), Longshot is to my W at (3,5) - shield_wall facing E would protect allies to my E... I need shield_wall to protect Longshot from Lifeline. I should position so Longshot is between me and Lifeline, or I'm between them. Move to (4,5) adjacent to Longshot, then shield_wall W to cover Longshot from threats coming from E (Lifeline). Actually shield_wall direction is the direction the shield faces - facing E would block damage from E. I'm at (4,5), Longshot at (3,5) is adjacent W. Shield_wall E would protect adjacent allies from damage coming from E - but Longshot is to my W not E. I need to be on the east side of Longshot. Move to (3,4) - no that's not optimal. Move to (4,5), Longshot is at (3,5) adjacent W. Shield_wall should face E to protect me, or I move to be east of Longshot. Let me move to (5,4) - dist to Lifeline becomes 1, adjacent to attack. Yes, move to (5,4) to get adjacent to Lifeline at (5,5) and attack.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "player",
+          "hp": 9,
+          "maxHp": 16,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "I'm at 9/16 HP, wounded myself. Rampart (sentinel, healthy) is adjacent at (5,4). Longshot (striker, wounded) is at (3,5) dist=2. I need healing but patch only heals allies, not self. My allies need attention: I can see Longshot is wounded at dist=2. I can't reach Longshot to patch this turn without moving closer. Rampart is adjacent but healthy - no point patching. I should move toward Longshot to get adjacent and patch them. Moving to (4,5) gets me adjacent to Longshot at (3,5). Then I can patch Longshot. This keeps me slightly safer from Rampart too.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": "No ally at target"
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "I'm at 1HP and cloaked. Lifeline is at (4,5) distance 4, out of range. I need to close distance. Valid moves include (4,4) which gets me adjacent to Lifeline. Move to (4,4) to get adjacent, then shadow_strike to deal damage while staying cloaked.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Lifeline is adjacent at (4,5) — distance 1. precision_shot is blocked when adjacent to an enemy Vector, but Lifeline is a medic, not a Vector. However, precision_shot requires range ≤2 tiles and LoS, but the warning is specifically about adjacent enemy Vectors. Lifeline is wounded and adjacent. I should move first to get distance (away from adjacency) then use precision_shot, OR use attack since they're adjacent. Actually, precision_shot needs range ≤2 tiles — dist=1 qualifies. The Vector adjacency block doesn't apply here since Lifeline is a medic. But wait — I'm at dist=1 from Lifeline. Can I use precision_shot at dist=1? The rule says 'blocked when adjacent to enemy Vector' — Lifeline is not a Vector, so precision_shot should work. If I shoot first without moving, I deal 2dmg and likely finish wounded Lifeline. Then move to safety. Best play: precision_shot Lifeline first (2dmg, kills wounded), then move to (2,5) or (5,5) to reposition.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Lifeline is at (4,5), dist 2 - need to close to adjacent to attack. Valid moves include (5,5) which puts me at dist 1 from Lifeline at (4,5) - adjacent! Wraith is critical at (4,4), I can shield_wall toward Lifeline after moving to protect Wraith too. Move to (5,5) then attack Lifeline.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 16,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 9,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "I'm at (4,5) with 5/16 HP - critically wounded myself. Two enemies adjacent: Rampart at (5,5) and Wraith at (4,4) which is critical. My patch ability is blocked if adjacent to enemy Vector, but there's no Vector here - these are sentinel and specter. However, I need to heal myself but patch only works on allies. I should move away from danger first. Moving to (3,5) gets me away from Rampart at (5,5) but Longshot is at (2,5). Better to move to (3,4) to break adjacency with both Wraith and Rampart. From (3,4) I'd still be far from allies to heal. Wait - I have no allies nearby to heal or overclock. My priority is survival. Move to (3,5) to escape Rampart, then wait since no allies are in range to support.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "I'm at 1HP and Lifeline is adjacent at (3,4). I need to finish them off. Shadow_strike deals 1dmg and keeps cloak - but I'm not currently cloaked. Lifeline is wounded, so any damage likely kills them. I'll use shadow_strike to attack Lifeline at (3,4) - it maintains cloak if I am cloaked, but regardless it's my best attack option at 1HP with no breach available. After that, I should move to safety since I'm critically wounded.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Lifeline is critical and in range at dist=2. I haven't moved, so precision_shot deals 2dmg — enough to finish a critical target. Stay put and shoot.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Wraith is critical at (5,4) adjacent to me. Lifeline is at (3,4) distance 3 — out of reach. I should move toward Lifeline to close distance while protecting Wraith with shield_wall facing W (toward Lifeline's direction). Moving to (4,4) gets me closer and still lets me shield_wall. Actually, valid moves include (4,4) — moving there puts me at distance 1 from Wraith and closer to Lifeline. Shield_wall facing W to block damage to Wraith from Lifeline's direction.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 5,
+              "y": 4
+            },
+            "direction": "W"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 16,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 10,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "I'm at (5,4) with 1HP, cloaked. Lifeline is at (3,4) facing S, critical HP. (3,5) is directly behind Lifeline and adjacent. I can move to (3,5) to get behind and adjacent, then shadow_strike to deal damage while staying cloaked. Shadow_strike keeps cloak active, so I stay hidden. This is my best play — move behind the critical medic and shadow_strike.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "I'm at 1/16 HP - critically low. Wraith is adjacent at (3,5) and critical. I'm the medic (Lifeline) with 3 heals remaining. Wait - I'm the one at 1HP, not Wraith. But I'm a medic with 7HP max, so I'm at 1/16 which seems wrong for a medic... The system says I'm at 1/16 HP which is critical. I need to survive. Wraith is critical at (3,5) - adjacent. Rampart is healthy at (4,4) - adjacent. I need to move away from enemies to survive. Moving to (1,3) puts distance between me and enemies. But my orders say keep frontliner alive with patch. Wraith is critical - I should heal them if possible. But patch is blocked when adjacent to enemy Vector - Rampart is a sentinel not Vector, so patch should work. Wraith is at (3,5), adjacent to me at (3,4). I can patch Wraith. But I'm at 1HP - if I stay I might die. Let me patch Wraith first (they're critical), then move away from the enemies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": "No ally at target",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Lifeline is critical and in range at dist 3. I'm stationary so precision_shot deals 2dmg - enough to finish a critical enemy. No adjacent enemies blocking precision_shot. Stay put and execute.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Lifeline is at (1,3), distance 4, out of range. Allies Wraith and Longshot are both at (2,5) and (3,5), both wounded/critical. I need to push toward Lifeline. Moving to (3,3) gets me closer and within range next turn. I'm fortified but orders say push forward. Move to (3,3) to close gap, then shield_wall facing W to protect allies from Lifeline's direction.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "direction": "W"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 16,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 11,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "I'm at 1HP which is critical. No allies are adjacent to me to heal (they're all at dist 2+). Rampart is 2 tiles away at (3,3) - a threat. I need to retreat away from danger. Moving west/south to get distance from Rampart. I can't heal myself, and no allies are adjacent. Best to retreat to safety - move to (0,2) to put more distance between me and Rampart.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "HP is critical at 1/4. Lifeline is at dist 6, unreachable this turn. No enemies in range. I'm cloaked (facing W). Need to close distance on Lifeline who is at (0,2). Move toward them — best path is to move to (1,4) or (0,5) to get closer. With mv3 I can reach (0,5) or (1,4). Let me move to (0,5) to get closer to Lifeline at (0,2) — that puts me at dist 3 next turn for a shadow_strike approach.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Lifeline is at (0,2), distance 5 - out of range (max range 2). No enemies in range from current position. I need to close distance. Moving to (1,4) gets me closer. From (1,4), Lifeline at (0,2) is still dist ~3, still out of range. Best I can do is move toward Lifeline to close gap. Move to (2,3) reduces distance to 3. Still can't reach with precision_shot (range 2). Wait is wasteful. I'll move as close as possible - (2,3) brings me to dist 3 from Lifeline. Still out of range but better positioned. No shot available this turn regardless.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Longshot is wounded at (2,3) adjacent to me. Lifeline is critical at (0,2), dist 4 - I can't reach this turn. Orders say push forward aggressively. I should move toward Lifeline to close the gap while protecting Longshot. Moving to (2,2) gets me closer to Lifeline and adjacent to Longshot for potential shield_wall support. From (2,2) I can shield_wall South to cover Longshot from any threat below, or I can shield_wall West toward Lifeline's direction.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "direction": "W"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 16,
+          "position": {
+            "x": 0,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "opponent",
+    "totalTurns": 12,
+    "reason": "opponent eliminated all enemies"
+  },
+  "endedAt": "2026-02-27T07:06:26.172Z"
+}
