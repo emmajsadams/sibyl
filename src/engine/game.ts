@@ -838,6 +838,27 @@ export function advanceRound(state: GameState): boolean {
     return false;
   }
 
+  // Stalemate check — end after 20 rounds
+  if (state.round >= 20) {
+    const playerHP = getLivingUnits(state, "player").reduce((s, u) => s + u.hp, 0);
+    const opponentHP = getLivingUnits(state, "opponent").reduce((s, u) => s + u.hp, 0);
+    const winner = playerHP > opponentHP ? "player" : opponentHP > playerHP ? "opponent" : null;
+    state.phase = "ended";
+    state.winner = winner as any;
+    const reason = winner
+      ? `Stalemate after 20 rounds — ${winner} wins by HP (${playerHP} vs ${opponentHP})`
+      : `Stalemate after 20 rounds — draw (${playerHP} HP each)`;
+    state.log.push(`=== ${reason} ===`);
+    emit({
+      type: "game_end",
+      winner: (winner || "draw") as any,
+      reason,
+      totalTurns: state.round,
+      survivors: TrainingRecorder.snapshotUnits(state).filter((u: any) => u.hp > 0) as any,
+    });
+    return false;
+  }
+
   // Start new round
   state.round++;
   state.turn = state.round;
