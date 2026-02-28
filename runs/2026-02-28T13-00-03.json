@@ -1,0 +1,1304 @@
+{
+  "id": "2026-02-28T13-00-03",
+  "startedAt": "2026-02-28T13:00:03.830Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 4,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 5,
+        "movement": 2,
+        "range": 2,
+        "speed": 2
+      },
+      "oracle": {
+        "maxHp": 6,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 12,
+        "movement": 3,
+        "range": 2,
+        "speed": 3
+      },
+      "vector": {
+        "maxHp": 9,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 2,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 8,
+        "healAmount": 10
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Phantom",
+        "class": "specter",
+        "prompt": "Cloak immediately on turn 1. Move toward the enemy medic or weakest target. Use shadow_strike when adjacent while cloaked. Use breach to sabotage high-value targets."
+      },
+      {
+        "name": "Marksman",
+        "class": "striker",
+        "prompt": "Stay at maximum range. Use precision_shot on the most wounded enemy to secure kills. If no one is wounded, target the enemy medic. Never move adjacent to enemies."
+      },
+      {
+        "name": "Warden",
+        "class": "sentinel",
+        "prompt": "Hold the front line. Position between allies and enemies. Use shield_wall toward incoming threats. Attack adjacent enemies."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Insight",
+        "class": "oracle",
+        "prompt": "Use scan to reveal enemy prompts and cloaked units. Stay at max range (≤4 tiles for scan). Use recalibrate on wounded allies to buff them. Keep distance from enemies and avoid adjacent vectors."
+      },
+      {
+        "name": "Phantom",
+        "class": "specter",
+        "prompt": "Cloak immediately on turn 1. Move toward the enemy medic or weakest target. Use shadow_strike when adjacent while cloaked. Use breach to sabotage high-value targets."
+      },
+      {
+        "name": "Grid",
+        "class": "vector",
+        "prompt": "Control chokepoints with traps. Place them between enemy positions and your allies. Use denial to block adjacent enemy abilities. Pulse groups when possible."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Round 1 — cloak immediately as instructed. All enemies are far away (dist 4-8), so after cloaking I'll advance toward the nearest enemy Phantom at (0,0). Moving to (0,1) closes distance by 3 while staying cloaked.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Round 1 — cloak immediately per orders. Then advance toward enemies. Insight (oracle) is high-value target. Move north toward center to close distance while cloaked.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "Both enemies are out of scan range (dist 5 and 7, need ≤4). I need to move closer to bring Marksman into scan range. Marksman is at (2,0), I'm at (2,5). Moving to (2,2) puts me at dist=2 from Marksman — well within scan range. That's a valid move tile. Then I can scan Marksman.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Insight is at dist=2, in range for precision_shot. I haven't moved yet so no penalty. Orders say target enemy medic if none wounded — oracle is the medic. No adjacency risk. Fire precision_shot on Insight, then wait.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Round 1, enemies are far. Move south toward the middle to set up a chokepoint trap between my allies at (0,1)/(2,2) and the enemies at (2,0)/(4,0). Moving to (1,2) puts me between allies and enemies. Then place a trap at (2,1) to cover the approach corridor from Marksman at (2,0).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "I need to advance toward the enemies and position between them and my allies. Moving to (4,2) gets me closer to both Grid at (1,2) and Insight at (2,2), placing me on the front line. Neither enemy is in range yet so no attack possible. I'll move twice to close distance.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 9,
+          "maxHp": 9,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Cloak has 1 turn remaining. Grid(vector) is at (1,2) facing S — I'm already behind it. Position (1,3) is directly behind Grid and adjacent for breach. I can move to (1,3) and use breach on Grid to take control of it next turn. This is high value — Vector denial zone will be gone and I can use Grid against Insight. Move to (1,3) then breach Grid.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 1,
+              "y": 2
+            },
+            "addendum": "Move away from Insight and toward the edge, or attack your own allies"
+          },
+          "secondResult": "Cannot use breach — adjacent to enemy Vector (Denial)"
+        },
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "I'm at (2,2) with 4/6 HP. Enemy Phantom is adjacent at (1,3) which blocks my scan ability. I need to move away from the enemy Phantom first. Moving to (3,2) keeps distance from Phantom while maintaining scan range on Warden at (4,2) and staying away from the trap at (2,1). After moving, I can scan the Warden to reveal their prompt.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Cloak has 1 turn remaining — I must use it now before it expires. Position (0,3) is directly behind Phantom (facing E, so W side is behind) and is reachable in one move. If I move to (0,3) I'll be adjacent and behind Phantom, then I can breach next turn or shadow_strike. Move to (0,3) to get behind Phantom while still cloaked. No ability this turn — save breach for when I'm in position.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "No enemies are wounded, so I should target the enemy medic (Insight/oracle). Both Grid and Insight are at dist=3, outside my precision_shot range of ≤2 tiles. I cannot use precision_shot on either from current position. I need to move closer to get Insight in range (dist≤2), but must avoid getting adjacent to Grid at (1,2). Moving to (3,1) puts me at dist=1 from Insight at (3,2) — adjacent, which is fine for non-vector enemies. From (3,1), Insight at (3,2) is 1 tile away (in range), and Grid at (1,2) is 2 tiles away (not adjacent). Precision_shot requires LoS and range ≤2. Since I moved, it deals 1dmg. Target Insight (oracle/medic).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Insight is adjacent at (3,2) and wounded — attack to finish. Staying put preserves Fortify (50% dmg reduction). No move needed.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Enemy Phantom is adjacent at (1,3) - my Denial passive blocks their cloak ability. I can pulse to hit them for 1 damage, then move to (2,2) to place a trap at the chokepoint between enemy positions. Actually, pulse hits ALL units within 1 tile including allies - Insight is at (3,2) so not adjacent, safe to pulse. Then move toward center to control the board. Alternatively, move first to (2,2) then place trap at (2,1) - but there's already a trap at (2,1). Better to pulse the adjacent Phantom for free damage while Denial suppresses them, then move to (2,3) to position between enemies and allies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 9,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Phantom is adjacent at (0,3). I can shadow_strike to deal damage while staying cloaked. But I'm not cloaked — I used regular options. Actually, I have no cloak active. Better option: move to (0,2) to get behind Phantom, then breach to take control of them. Behind check shows (0,2) is reachable and puts me behind Phantom. Grid is 2 tiles away so breach won't be blocked if I stay at (0,2) which is dist=2 from Grid. Wait — (0,2) is adjacent to Grid at (2,2)? No, dist from (0,2) to (2,2) is 2 tiles, not adjacent. So breach is safe. Breaching Phantom (a specter) is high value — they act first in order and could be turned against their team.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 0,
+              "y": 3
+            },
+            "addendum": "Attack your nearest ally"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Orders say attack nearest ally. My allies are Grid @(2,2) and Insight @(3,2). Nearest ally to me at (0,3) is Grid at distance 3 (|2-0|+|2-3|=3) vs Insight at distance 4. I need to get adjacent to Grid to attack. Move to (1,2) — wait, that's distance 2 from Grid, not adjacent. Move to (2,3) puts me adjacent to Grid at (2,2). Then attack Grid.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "I'm at 2/6 HP and in serious danger. Marksman just used precision_shot on me last turn and Warden attacked me — I'm adjacent to both which is very bad. I need to retreat immediately. Warden holds front line and attacks adjacent, Marksman stays at max range. I should move away from both. Moving to (3,4) or (3,3) gets me away from adjacent threats. Then I can scan the enemy Phantom who is unchecked at dist=3 from current pos. After moving to (3,3), Phantom at (0,2) would be dist=3 — still in scan range. Let me move to (3,3) first to escape adjacent danger, then scan the enemy Phantom.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 0,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Insight (oracle) is wounded and 2 tiles away at (3,3) - perfect precision_shot target. I'm at (3,1), Insight is at (3,3), distance is 2 which is within range. Grid (vector) is at (2,2), distance 2 - not adjacent so precision_shot is not blocked. I should not move before shooting to keep full 2dmg on precision_shot. Stay at (3,1) and fire precision_shot at wounded Insight to secure the kill.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Wounded Phantom is at (0,2) dist=2, within attack range. Marksman at (3,1) and Warden at (4,2) are healthy and approaching. I have a trap at (2,1) already covering the south approach. I should attack the wounded Phantom to finish it off, then move east toward (3,2) to use denial against the Marksman and Warden cluster, or place a trap at (3,2) to block their approach. Attack wounded Phantom first (range 2, attack has range adjacent only - wait, attack is adjacent only, dist=2 so can't attack). Pulse hits all within 1 tile - no enemies adjacent. So I should use trap to control chokepoints. Marksman at (3,1) and Warden at (4,2) are converging - placing trap at (3,2) would catch movement between them. Move to (3,2) first would put me adjacent to Marksman at dist=1 enabling denial, then I can't trap (blocked by adjacent enemy). Better: place trap at (3,2) from current position (dist=1, within range 2), then move toward enemies for denial. Trap at (3,2) covers the corridor between Marksman and Warden.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (4,2) with 50% damage reduction. Grid is 2 tiles away at (3,3) — I should avoid moving adjacent to it. Enemies are Phantom at (2,3) and Grid at (3,3). My allies are Phantom at (0,2) and Marksman at (3,1). Moving to (3,2) would put me between Marksman and the enemies, but that's adjacent to Grid at (3,3) which would lose fortify and trigger denial. Moving to (4,3) keeps distance from Grid while positioning me closer to Phantom. Best to stay put, keep fortify active, and use shield_wall toward the north where enemies are approaching to protect allies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 1
+            },
+            "direction": "N"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "HP is 2/4, breach on cooldown. Phantom is at (2,3) facing E — I can get behind it at (1,3) which is reachable (dist=1 from there, adj=true). Move to (1,3) to get behind Phantom, then use shadow_strike to deal 1 damage while staying cloaked (if cloaked) or just attack. Wait — I'm not cloaked (Round 4, cloak was used earlier). I can move to (1,3) and shadow_strike Phantom from behind for 1 damage. That's the best play.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Orders say attack nearest ally, but I have no allies adjacent to me. The nearest ally is Grid at (3,3), dist=1 from me at (2,3). Wait — Grid is at (3,3) and I'm at (2,3), that's distance 1, adjacent. I should attack Grid as ordered. I'll use the attack ability targeting (3,3).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Both enemies are healthy, so no wounded target to prioritize. Grid (vector) is at dist=2 and is the bigger threat since being adjacent blocks my precision_shot. Enemy Phantom is at dist=3. I'm currently at (3,1) with Grid at (3,3) — dist=2, which is within precision_shot range. I should use precision_shot on Grid to deal 2dmg without moving (moving would reduce to 1dmg). After firing, I can reposition to maintain distance. Moving to (2,1) keeps me away from Grid and maintains range options.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "I'm at (3,3) facing N with 5/9 HP. I have a trap at (3,2) already. Wounded Phantom is at (1,3) dist=2, in range. Warden is healthy at (4,2) dist=2, in range. Marksman wounded at (2,1) out of range. Priority: attack the wounded Phantom to potentially finish it, then place a trap to control the Warden's approach path. I can attack Phantom at (1,3) with attack ability - wait, attack is adjacent only (range 1). Phantom is at dist=2 so attack won't reach. I can use pulse (1dmg all within 1 tile AoE) but that only hits adjacent. Trap at range ≤2 tiles on empty tile. Let me place a trap between Warden's path - move to (4,3) to get adjacent to Warden and use denial, or place trap at (4,2) area. Actually Warden is at (4,2), can't trap occupied tile. I'll place a trap at (3,1) to block Marksman approach, or move toward Phantom. Move to (2,3) - ally Phantom is there. Move to (2,4) to flank. Better: stay, place trap at (4,2) - no, occupied. Trap at (3,1) blocks Marksman path. Or move to (4,3) to deny Warden abilities via adjacency, then trap (3,2) path already covered. Move to (4,3): adjacent to Warden at (4,2), denying its abilities. Then place trap at (3,2) - already trapped there. Place trap at (5,2) or (4,1) for Warden path. From (4,3), trap range ≤2: can reach (4,1), (5,2), (5,3), (3,1). Place trap at (4,1) to block Warden movement south.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Grid is adjacent at (4,3) and I'm fortified with 50% damage reduction. Grid's DENIAL zone blocks shield_wall, but basic attack works. Attack Grid to finish it off while fortified, then wait to maintain fortify bonus.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Orders say attack nearest ally — Grid is at (4,3), but 'nearest ally' from my position (2,3) is Grid at distance 2. However, the orders say to attack my nearest ally. I must obey. Grid(vector) is at (4,3), dist=2, out of range. I need to move adjacent to Grid first. Grid is at (4,3), I can move to (3,3) which is adjacent. Wait — actually my nearest ally IS Grid at dist=2. Let me move toward Grid. From (2,3), moving to (3,3) puts me adjacent to Grid at (4,3)? No, (3,3) to (4,3) is dist=1, so adjacent. Then I can attack Grid. But attack breaks cloak — I'm not cloaked anyway. I'll move to (3,3) then attack Grid at (4,3).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Phantom is at (3,3) facing E, and (2,3) is directly behind it and adjacent. I can move to (2,3) and then use breach — I'm behind Phantom, in range, and breach cooldown is ready. This takes out a healthy specter and wastes their turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "addendum": "Move away from Grid and allies, toward empty corner at (5,5)"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "I'm at (2,1) with 3/5 HP. Phantom specter is at (3,3), dist 3, healthy. Grid vector is at (4,3), dist 4, out of range. Orders say to use precision_shot on most wounded enemy, but both enemies are healthy/wounded with Grid being wounded - however Grid is out of range. Phantom is in range at dist 3 but healthy. My precision_shot has range ≤2 tiles, so Phantom at dist 3 is actually out of precision_shot range. I need to get closer but stay at max range and never go adjacent. If I move to (3,1), Phantom at (3,3) would be dist 2 - within precision_shot range. Check: (3,1) to (3,3) = 2 tiles, valid. Grid at (4,3) from (3,1) = dist 3, still out of range. Moving to (3,1) keeps me away from enemies (Phantom at 3,3 is 2 away, Grid at 4,3 is 3 away - not adjacent). This lets me use precision_shot on Phantom. I haven't moved yet so precision_shot does full 2dmg.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Grid is adjacent at (4,3) and I'm fortified with 50% damage reduction. Grid's DENIAL zone blocks shield_wall, so only basic attack works. Attack Grid to pressure it, then wait to maintain fortify bonus.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "I'm at (4,3) with 2HP - critically low. Warden is adjacent at (4,2) threatening me. I need to survive. I can't use trap while adjacent to an enemy (Warden blocks it). Pulse would hit Warden at dist=1 for 1dmg. I should move away first to escape Warden adjacency, then place a trap. Moving to (5,3) gets me away from Warden and maintains denial pressure. Then I can pulse to hit the Warden or place a trap on a chokepoint. Actually, moving to (5,3) still keeps Warden at dist=2 - not adjacent. Let me move to (5,3) to escape, then trap at (4,2) or (4,1) to punish Warden/Marksman advance. Wait - (4,1) already has a trap. I'll trap at (4,2) after moving away, blocking the chokepoint between Warden and our position.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 9,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Phantom is adjacent at (3,3), wounded, and I'm already behind it. I'm at 2HP so I need to finish this fast. Shadow_strike does 1dmg while keeping cloak — but I'm not cloaked. Regular attack does 1dmg but breaks cloak (already not cloaked). Phantom is wounded, so one more hit likely finishes it. Use shadow_strike to deal damage without losing any positional advantage. Then wait or reposition.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Orders say move toward empty corner (5,5). I'm at (3,3) at 1HP — survival priority. Move to (4,5) first, then (5,5) next turn if possible. (4,5) is in valid moves and gets me away from enemies. No offense needed, just reposition toward corner.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Both enemies are out of range (dist 4 and 5). I need to close distance but stay at max range (2 tiles). Grid is at (5,3) dist=4, so I need to get within 2 tiles without going adjacent. Moving to (4,1) puts me at dist=2 from Grid at (5,3) - that's sqrt(1+4)=~2.2, actually manhattan dist=3. Let me recalculate: from (4,1) to (5,3): |5-4|+|3-1|=1+2=3, still out of range. From (5,1) to (5,3): dist=2, in range! And not adjacent (not dist 1). Moving to (5,1) gives me range on Grid. Check adjacency: (5,1) to (5,3) = dist 2, not adjacent. Good. Then precision_shot Grid who is critical.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "I'm at 1HP - critically low. Marksman at (5,1) dist=2 and Warden at (4,2) dist=2 are both in range. Trap at (4,3) is already placed. I need to survive. Moving to (5,5) gets me away from the cluster. But I can place a trap first to block enemy movement. Actually, I should move away from danger first then trap. Moving to (5,5) puts me farther from Marksman and Warden. Then place trap at (5,4) to block pursuit. Wait - trap range is ≤2 tiles from current position. From (5,5), I can place at (5,4) to block pursuit. Let me move to (5,5) first then trap (5,4).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Enemies are at dist 3 and 4, out of attack range. Allies are wounded and need protection. Moving north to (4,4) closes distance to Phantom at (4,5) and puts me between allies and enemies. From (4,4) I can attack Phantom who is adjacent, or use shield_wall. Moving north is priority to intercept.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 9,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "player",
+    "totalTurns": 7,
+    "reason": "player eliminated all enemies"
+  },
+  "endedAt": "2026-02-28T13:04:21.431Z"
+}
