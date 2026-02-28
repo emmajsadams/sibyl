@@ -1,0 +1,2667 @@
+{
+  "id": "2026-02-28T05-00-03",
+  "startedAt": "2026-02-28T05:00:03.699Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 4,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 5,
+        "movement": 2,
+        "range": 2,
+        "speed": 2
+      },
+      "oracle": {
+        "maxHp": 6,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 12,
+        "movement": 3,
+        "range": 2,
+        "speed": 3
+      },
+      "vector": {
+        "maxHp": 9,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 2,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 8,
+        "healAmount": 10
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Marksman",
+        "class": "striker",
+        "prompt": "Maintain distance. Use precision_shot on high-value targets — medics first, then damage dealers. Use suppressing_fire if enemies close in."
+      },
+      {
+        "name": "Bastion",
+        "class": "sentinel",
+        "prompt": "Push forward aggressively. Shield_wall facing the enemy cluster. If flanked, turn to face the biggest threat. Attack when possible."
+      },
+      {
+        "name": "Remedy",
+        "class": "medic",
+        "prompt": "Stay adjacent to the most threatened ally. Use patch on the most wounded teammate. If all healthy, use overclock on your damage dealer."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Bulwark",
+        "class": "sentinel",
+        "prompt": "Hold the front line. Position between allies and enemies. Use shield_wall toward incoming threats. Attack adjacent enemies."
+      },
+      {
+        "name": "Ghost",
+        "class": "specter",
+        "prompt": "Cloak and move behind enemy lines. Target isolated enemies with shadow_strike. Save breach for the most dangerous enemy. Avoid being caught uncloaked."
+      },
+      {
+        "name": "Deadeye",
+        "class": "striker",
+        "prompt": "Stay at maximum range. Use precision_shot on the most wounded enemy to secure kills. If no one is wounded, target the enemy medic. Never move adjacent to enemies."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "Round 1, all allies are full HP so no healing needed. Ghost is the fastest enemy at dist=4 and will likely push forward. My allies are Marksman at (4,1) and Bastion at (3,1). I should move toward them to stay adjacent and ready to support. Moving to (3,2) puts me adjacent to Bastion at (3,1) and closer to Marksman. Then I'll use overclock on Marksman (the damage dealer) to give them 2 abilities next turn for early pressure.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "secondResult": "Must be adjacent"
+        },
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "Round 1 — cloak immediately as ordered. Then move toward enemy lines. Remedy at (3,2) is the closest target. Moving to (2,2) gets me 3 tiles closer while staying cloaked and approaching from a useful angle.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Deadeye is at (4,4), dist=3, in range for precision_shot (range ≤2 tiles). Wait — dist=3 means not in range for precision_shot (range ≤2). Need to close to dist≤2. Move to (4,3) to get dist=1 from Deadeye at (4,4), then use precision_shot for 2dmg. No adjacent enemies at current position so no suppression penalty.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Marksman is adjacent (dist=1), which blocks precision_shot. Orders say never move adjacent to enemies - I'm already adjacent to Marksman. I need to move away first, then use precision_shot. Moving to (4,5) puts me at dist=2 from Marksman and keeps me at range. No one is wounded so I should target the enemy medic Remedy, but Remedy is at dist=3 from (4,5) - still out of range 2. Best option: move to (5,3) to get dist=2 from Marksman and use precision_shot on Marksman since Remedy is out of range.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Enemies are 3-4 tiles away. Move south to (3,3) to close distance and position between allies and enemies. No enemies in range yet, so wait after moving. This keeps me on the front line, closer to Marksman and Remedy at dist ~1-2 next turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Bulwark is 2 tiles north at (3,3). I need to push forward aggressively. Moving to (3,2) puts me adjacent to Bulwark, but I can only move 2 tiles. Wait - I'm at (3,1) with mv2, so I can reach (3,3) directly. That puts me adjacent to Bulwark for an attack. But orders say shield_wall facing enemy cluster. Bulwark is at (3,3), Deadeye at (5,3). I'll move to (3,2) to stay close to Remedy at (3,2)... actually Remedy is at (3,2) so I can't move there. Move to (4,2) to advance and then shield_wall facing N toward enemy cluster. Or move to (3,3) - wait that's where Bulwark is. Best: move to (4,2) advancing toward enemies, then shield_wall N to protect allies Remedy and Marksman from northern threats.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 2
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "player",
+          "hp": 12,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "Cloak expires after this turn. Remedy (medic) is adjacent and I'm behind her tile at (3,1). Move to (3,1) to get behind Remedy, then shadow_strike her — shadow_strike keeps cloak so I stay hidden for any remaining turns. Priority: eliminate the medic first.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "Marksman is wounded at (4,3) with 4/5 HP and needs healing. I'm at (3,2), distance 2 from Marksman. I need to move adjacent to Marksman first, then use patch. Moving to (4,2) puts me adjacent to Marksman but that's where Bastion is. Moving to (4,3) would be Marksman's tile. Moving to (3,3) is where Bulwark is. I should move to (4,2) — wait, Bastion is there. Let me check valid tiles: (4,4) is valid and adjacent to Marksman at (4,3). Or (3,4) is valid. From (4,4) I'd be adjacent to Marksman at (4,3). But Ghost is at (3,1) dist=1 and Bulwark at (3,3) dist=1 — I'm sandwiched. Moving away from them to reach Marksman makes sense. Move to (4,4) to get adjacent to Marksman, then patch Marksman.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "I'm adjacent to both Bulwark and Deadeye, which blocks precision_shot (due to adjacent enemy Vector rule - wait, that's Vector-specific). Actually precision_shot is blocked when adjacent to enemy Vector. Deadeye is a striker, not Vector. But both enemies are at dist=1 (adjacent), so I need to check if precision_shot works. The warning says 'blocked when adjacent to enemy Vector' - Vector is a class/unit type. Neither Bulwark nor Deadeye is a Vector, so precision_shot should work but deals 1dmg if I moved. Orders say medics first then damage dealers - Deadeye is a striker (damage dealer), Ghost is specter. No enemy medics visible. Deadeye is adjacent and high priority as a damage dealer. I should move away to maintain distance and enable full precision_shot damage. Move to (5,4) to get distance from Bulwark while staying in range of Deadeye, then precision_shot Deadeye for 1dmg (moved) or shoot first then move. Better: shoot Deadeye first at current position (no move penalty = 2dmg), then move away.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "I'm at (5,3) with Marksman adjacent at (5,4) - dist 1. precision_shot is blocked when adjacent to enemy Vector, but Marksman is a striker not a Vector. However, Marksman is at dist 1 (adjacent), and precision_shot requires range ≤2 tiles but deals 1dmg if moved. Orders say never move adjacent to enemies, but I'm already adjacent to Marksman. I should move away first to get clean precision_shot. Moving to (5,1) puts me at dist 3 from Marksman - out of range. Moving to (5,2) puts me at dist 2 from Marksman and dist 2 from Remedy. Best: move to (5,2) to escape adjacency, then precision_shot Remedy (the medic, per orders since no one is wounded). Wait - from (5,2): Marksman at (5,4) is dist 2, Remedy at (4,4) is dist 2, Bastion at (4,2) is dist 2. All in range. Target Remedy per orders. But if I move first, precision_shot does 1dmg. Alternatively, shoot first (no move penalty) then move. Shoot Remedy now from (5,3) at dist 2 for 2dmg, then move to (5,2) to escape adjacency with Marksman.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Deadeye is adjacent and wounded — perfect target for attack. Stay put to keep Fortify active (50% dmg reduction). Attack Deadeye first, then shield_wall facing East to protect allies from Deadeye/Ghost flank.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 5,
+              "y": 4
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (3,3) with 50% damage reduction. Deadeye is critical at (5,2) and needs protection. Bastion is at (4,2) adjacent to Deadeye, threatening them. I can move to (4,3) to get adjacent to Bastion and between enemies and Deadeye. From (4,3) I can attack Bastion who is at (4,2) - that's adjacent. This advances the front line and protects Deadeye.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "player",
+          "hp": 9,
+          "maxHp": 12,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "Bastion is directly behind me at (4,2) facing N — I'm currently at (3,1). The behind-tile for Bastion is (4,1), which is reachable. I can move to (4,1) to get behind Bastion, then use breach to take control of the sentinel. Breach is ready and this is a high-value target — a sentinel under my control blocks the enemy team. Moving to (4,1) puts me adjacent and behind Bastion, perfect for breach.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 4,
+              "y": 2
+            },
+            "addendum": "Move to block allies from advancing and attack Marksman if in range"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "Bastion is wounded at (4,2) needing heal, dist=2. I need to move adjacent to Bastion first. Moving to (4,3) would put me adjacent to Bastion at dist=1, but Bulwark is at (4,3) so I can't move there. Moving to (3,2) puts me adjacent to Bastion (dist=1 from 3,2 to 4,2). That's valid. Then patch Bastion.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Deadeye is critical (1HP) and at dist=2 — priority kill. I'm at (5,4), Deadeye at (5,2). That's 2 tiles away, no movement needed. Use precision_shot for 2dmg to finish Deadeye. I haven't moved so no penalty. After the kill, move to (5,5) to maintain distance from Bulwark at (4,3).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Orders are to block allies and attack Marksman if in range. Marksman is at (5,5) — not adjacent, so can't attack directly. Bulwark is at (4,3) adjacent to north. I should move to cut off allied advance while staying fortified if possible, but orders say block and attack Marksman. Marksman at (5,5) is far away. Best play: move toward Marksman's path to block, but they're at (5,5) and I can reach (5,3) in one move. Actually, I can move to (5,3) to be closer to Marksman's position and intercept their advance. But orders also say attack Marksman if in range — from (5,3) Marksman at (5,5) is dist=2, not adjacent. I could attack Ghost at (4,1) who is currently adjacent and threatening. Wait — my orders are enemy orders (I'm playing as Bastion, enemy sentinel). I should follow enemy orders: block allies from advancing and attack Marksman if in range. Move to (5,3) to block Marksman's path southward, then attack Marksman if adjacent — but (5,5) to (5,3) is dist=2. Alternatively move to (4,4) to be adjacent to Marksman at (5,5)? No, dist from (4,4) to (5,5) is 2. Move to (5,5) not in valid moves. Best: move to (5,3) to block, then wait since Marksman not adjacent.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (4,3) with Bastion adjacent to my east at (5,3). I can attack Bastion directly since it's in melee range. After attacking, I'll use shield_wall facing East to block incoming damage from Bastion and Marksman direction, protecting myself and ally Ghost behind me.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "player",
+          "hp": 9,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "Bastion (sentinel) at (5,3) is wounded (7/8 HP) and needs healing. I need to get adjacent to Bastion to use patch. Currently at (3,2), Bastion is at (5,3) - dist=3. I can move to (4,3) but that's occupied by Bulwark (enemy). Move to (4,4) puts me adjacent to Bastion at (5,3) - dist=1, and (4,4) is in my valid moves list. Then use patch on Bastion.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": "Must be adjacent"
+        },
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "Breach is on cooldown. I'm cloaked and need to position for next turn. Bastion at (5,3) faces N with (5,2) directly behind — reachable from my current position. Move to (5,2) to get behind Bastion, then wait for breach cooldown to expire next round.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Both enemies are at dist=3, which is within precision_shot range (≤2 tiles... wait, dist=3 exceeds range 2). Need to check: precision_shot range is ≤2 tiles, but both targets are at dist=3. That means they're out of range for precision_shot. Ghost is a specter (high-value damage dealer). I should move closer to get in range. Moving to (5,4) closes distance to Ghost at (5,2) to dist=2, bringing it into precision_shot range. Bulwark at (4,3) would be dist=2 from (5,4) as well (|5-4|+|4-3|=2). Ghost is higher priority as a damage dealer. From (5,4) I won't be adjacent to any enemy, so precision_shot won't be blocked. Move to (5,4) then use precision_shot on Ghost.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (4,3) with 50% damage reduction - staying put maximizes my tankiness. Remedy (medic) is adjacent at (4,4) and is the higher-value target to attack. Bastion (sentinel) is also adjacent at (5,3). I'll attack Remedy to eliminate their healing, then use shield_wall facing North to protect against threats from above.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 5,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Orders say block allies from advancing and attack Marksman if in range. Marksman is at (5,4), I'm at (5,3). Marksman is adjacent (dist=1) so I can attack. I should stay put to maintain fortify bonus and attack Marksman who is directly north of me at (5,4). Wait + attack keeps fortification active.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 12,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "I'm at (5,2) facing N, currently cloaked. Bastion is at (5,3) facing N — I'm already behind them (they face N, I'm to their south). I can breach Bastion to control them next turn, which removes a dangerous frontline sentinel. Breach requires being behind the enemy — I satisfy that condition right now at (5,2) being south of Bastion who faces N. After breach, I should reposition. Actually, Bastion is a sentinel so breaching them would waste the ability on a tanky unit. Better to use shadow_strike on Bastion (preserves cloak, deals damage) then move to (5,5) to get behind Marksman for a breach next turn. Shadow_strike is adjacent only and Bastion is adjacent at dist=1. This deals damage while keeping cloak active.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "Marksman at (5,4) is most wounded at 4/5 HP and is adjacent to me (dist=1). Bulwark is at (4,3) which is adjacent - this blocks patch/overclock if Vector is adjacent, but Bulwark is a sentinel not a Vector, so no block. I have 1 heal remaining. Marksman is the most wounded ally adjacent to me. I should use patch on Marksman at (5,4). I'm already adjacent to Marksman so no move needed first.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Ghost (specter) is adjacent at dist=1 — precision_shot is blocked when adjacent to enemy. Ghost is highest priority but I can't use precision_shot. Bulwark is at dist=2, in range for precision_shot. Orders say medics first, then damage dealers — no medic in range. Bulwark is a sentinel (low priority vs damage dealers), but it's the only valid precision_shot target. Ghost adjacent means I should move away first to avoid the adjacency block AND maintain distance per orders. Valid moves: (3,4), (4,5), (5,2). Moving to (3,4) increases distance from Ghost (would be dist=3) and keeps Bulwark at dist=2 still in range. After moving to (3,4), I haven't moved past 2 tiles so precision_shot does full 2dmg. Wait — precision_shot deals 1dmg if I moved. Still worth using on Bulwark at dist=2 from new position (3,4): dist to Bulwark (4,3) from (3,4) = sqrt(1+1)=1.4 ~ dist 2, still in range. Move to (3,4) to escape Ghost adjacency, then precision_shot Bulwark.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Orders are to block allies and attack Marksman if in range. Marksman is at (3,4), currently out of my attack range (adjacent only). I can move to (4,2) or (3,3) to block the path, but I should also check if I can reach Marksman. Moving to (3,3) gets me adjacent to Marksman at (3,4) — distance 1, so I can attack. That also positions me between enemies and allies. I'll move to (3,3) then attack Marksman.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (4,3) with 50% damage reduction. Bastion is adjacent at (3,3) and Remedy is adjacent at (4,4). Orders say to attack adjacent enemies and hold the front line. Remedy is a medic healing enemies - priority target. I'll attack Remedy first, then stay put to keep fortify active. No move needed.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 12,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "Round 6, 3HP remaining. No enemies in range from current position. Remedy is wounded at (4,4) facing N — highest priority target. Behind tile is (4,3) but no reachable options listed. I can move to (4,5) to close distance to Remedy at (4,4), then shadow_strike from adjacent position. Wait — (4,5) is in valid moves and would be adjacent to Remedy at (4,4). That puts me in range for shadow_strike which keeps cloak active.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses left). I'm sandwiched between Bulwark (4,3) and Ghost (4,5), both adjacent. Marksman is at (3,4) with 4/5 HP - wounded but not critical, and is adjacent to me. I should move away from the two flanking enemies to a safer position. Moving to (5,4) keeps me near Marksman and gets me away from Ghost. Then I can use overclock on Marksman since I can't patch.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": "Must be adjacent"
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Ghost is a specter (high-value target, likely disruptive). Remedy is wounded but out of range. Both Bulwark and Ghost are at dist=2, within precision_shot range. Ghost (specter) is higher priority than Bulwark (sentinel). I'm at full HP (4/4 shown as 4/5 with W status). If I stay at (3,4), I can fire precision_shot at Ghost at (4,5) for 2dmg. I should not move first as that would reduce precision_shot to 1dmg. No adjacent enemies so no Vector adjacency issue. Fire precision_shot at Ghost first, then consider repositioning.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Bulwark is adjacent at (4,3) - I can attack immediately. I'm fortified with 50% damage reduction which is valuable. If I move, I lose fortify. Best play: attack Bulwark now while fortified, then use shield_wall facing East to protect against the enemy cluster direction. Ghost is critical at dist=3, Bulwark is healthy and adjacent - priority is attacking Bulwark.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 4
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Bastion is adjacent at (3,3) - attack it. Stay fortified by not moving to keep 50% damage reduction. Ghost is critical at (4,5) to my north - I should use shield_wall toward W to block Bastion/Marksman threats after attacking.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 4
+            },
+            "direction": "W"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 12,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "I'm at 1HP — extremely fragile. Remedy is wounded and only 2 tiles away at (5,4) facing E, meaning I'm already behind them. I can move to (4,4) which is behind Remedy and adjacent, then use shadow_strike to finish them off while staying cloaked. This eliminates the healer before they can restore enemies, and shadow_strike won't break cloak so I stay hidden.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses left). Ghost is adjacent at (4,4) and critical - but as a Medic I can't do much damage. Both allies are wounded but not adjacent. I'm at 5/12 HP myself and Ghost is right next to me. I should move toward Marksman (most wounded at 4/5 HP) to get adjacent for overclock support. Moving to (3,4) gets me closer to allies and away from the dangerous Ghost+Bulwark pair.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Ghost is critical and adjacent at dist=2 — finish it with precision_shot. I have OVERCLOCKED so I get two ability uses. After killing Ghost, use second precision_shot on Bulwark (healthy sentinel, dist=3, in range). I'm not adjacent to any enemy so precision_shot is not blocked. I haven't moved so full 2dmg on both shots.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": "Out of range"
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Bulwark is adjacent to the east. I'm fortified with 50% damage reduction. Allies Marksman and Remedy are at (2,4) and (3,4), wounded. I should shield_wall facing E to protect myself and nearby allies from Bulwark, then attack Bulwark.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "direction": "E"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (4,3) with 50% damage reduction. Bastion is adjacent at (3,3) - I should attack. Staying put preserves fortify bonus. Attack Bastion, then shield_wall west to protect allies behind me.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 5,
+              "y": 3
+            },
+            "direction": "W"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses left). Marksman is most wounded at 3/5 HP and is adjacent to me at (2,4). Bastion is at (3,3) also wounded. I should use overclock on Marksman since they're my damage dealer and most threatened. Then I can move to stay adjacent to allies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "I'm a Striker with 2HP, overclocked (2 ability uses). Bulwark is at (4,3), dist=3, in range. I haven't moved, so precision_shot does full 2dmg. With overclocked I can fire twice. Bulwark is healthy sentinel - need to whittle it down. I should stay at current position (2,4) to maintain distance and fire precision_shot twice at Bulwark.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": "Out of range"
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "I'm at 4HP with fortify active giving 50% damage reduction. Bulwark is adjacent to my east. My allies Marksman and Remedy are both wounded at (2,4) and (3,4). Orders say push forward and attack when possible. I should attack Bulwark since it's adjacent. If I move I lose fortify, so I'll stay put, attack Bulwark, and use shield_wall facing East to protect my wounded allies from Bulwark's attacks.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Bastion is adjacent at (3,3) and wounded — attack to finish or weaken. I'm fortified so staying put preserves 50% damage reduction. Attack Bastion, then shield_wall West to block incoming threats from Marksman and Remedy.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "direction": "W"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 9,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses left). Marksman is critically wounded at 2/5 HP and adjacent to me at (2,4). I should use overclock on Marksman to maximize their damage output since I can't heal. I'm already adjacent to Marksman at (2,4) - distance is 1. Use overclock on Marksman, then wait or position.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "I'm at (2,4) with 1HP - very vulnerable. I have overclocked (2 ability uses). Bulwark is at (4,3), dist=3, wounded. My precision_shot has range ≤2 tiles, so at dist=3 it's out of range. I need to close to range 2. Moving to (3,4) would put me at dist=sqrt(1+1)≈1.4, or (3,3) is adjacent to Bastion. Let me check: from (3,4) to (4,3) is dist=sqrt(1+1)≈1.41, so within range 2. But I'm at 1HP - moving closer is risky. However, with overclocked I get 2 ability uses. If I move to (3,4) (dist from Bulwark = ~1.4, in range for precision_shot), I can fire twice. Bulwark is wounded sentinel - finishing it helps. But wait - valid moves include (4,4) which puts me at dist=1 from Bulwark (adjacent), which would block precision_shot. Better to stay at (2,4) or move to (3,5) and check range. From current pos (2,4), dist to Bulwark (4,3) is 3 - out of precision_shot range (≤2). I need to move closer. Move to (3,5): dist to (4,3) = sqrt(1+4)=2.24, still out. Move to (3,4): dist=sqrt(1+1)≈1.41, in range. Or stay and use suppressing_fire - that has range ≤2 tiles too, so same problem. Best plan: move to (3,4) to get in range, then fire precision_shot at Bulwark twice (overclocked). Risk is being at 1HP near enemy, but Bulwark is wounded and I should be able to finish it.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": "Position occupied",
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": "Out of range"
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "I'm at 3HP with fortify active (50% dmg reduction). Bulwark is adjacent at (4,3), wounded. My allies Marksman and Remedy are behind me at (2,4) and (3,4), both hurt. Orders say attack when possible and shield_wall facing enemy cluster. I should stay put to keep Fortify active, attack Bulwark, then shield_wall facing East to protect allies from Bulwark.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I'm at (4,3) with 3/8 HP, fortified. Bastion is adjacent at (3,3) and wounded - I can attack for 1 damage. I should stay put to keep fortify active (50% dmg reduction) and attack Bastion. No move needed.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 10,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses remaining). Marksman is critically low at 1/5 HP and most threatened. Bastion is at 2/8 HP also wounded. I should use overclock on Marksman (the damage dealer) to maximize their output. Marksman is at (2,4), I'm at (3,4) - adjacent. I can overclock Marksman from current position. No need to move.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Bulwark is adjacent to my east at (4,3), wounded. I'm at 2HP but fortified with 50% damage reduction. Orders say push forward and attack when possible. I should attack Bulwark now while fortified - staying in place preserves the fortify passive. Then use shield_wall facing East to protect against Bulwark's counterattack.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I'm at 2HP with fortify active (50% reduction). Bastion is adjacent at (3,3) and critical. I should attack to finish Bastion off, and stay put to keep fortify active.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 11,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses left). Bastion is at 1/8 HP critically wounded at (3,3). I'm at (3,4). I should use overclock on Bastion to give them 2 abilities next turn - they're adjacent to me already. Bulwark is nearby at (4,3) threatening Bastion. I should stay close to Bastion for support.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Remedy is at (3,4), distance 2. I'm at (4,3) with only 2HP. I'm fortified which gives 50% damage reduction — I should avoid moving to keep fortify active if possible. I can move to (3,3) to get adjacent to Remedy for an attack, but moving loses fortify. At 2HP I'm very fragile. However, holding position means I can't attack (Remedy is out of range). Moving to (3,4) is occupied, but I can move to (3,3) to get adjacent. The orders say attack adjacent enemies — Remedy is a wounded medic, attacking could finish them. With 2HP, losing fortify is risky, but the kill opportunity on a wounded enemy is worth it.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 12,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses left). I'm at 4/12 HP and adjacent to enemy Bulwark at (3,3). No allies are adjacent to me for overclock. I should move away from the enemy to avoid dying, while staying useful. Moving to (2,4) puts distance between me and Bulwark while keeping me on the field.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (3,3) with only 2HP left — very low. Remedy (enemy medic) is at (2,4), distance 2, so not adjacent. No enemies in attack range. Moving would break fortify and my 50% damage reduction, which is critical at 2HP. Best play: wait and maintain fortify passive to survive incoming hits.",
+          "firstAction": {
+            "type": "wait"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 12,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 13,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses left). No allies adjacent to heal. Bulwark enemy is critical at (3,3), distance 2. I'm at 4/12 HP myself - very low. No allies listed in order besides myself. I should use overclock if I can reach an ally, but no ally positions shown nearby. Best to stay safe and wait or reposition. Valid moves include (3,4) which keeps distance from enemy. I'll move to (3,4) to stay relevant and wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I'm at 2/8 HP but fortified (50% damage reduction). Remedy is adjacent at (3,4) and wounded. I should attack to finish them off while fortified. Staying in place preserves fortify bonus.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 14,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "HP is 3/12 — critically low. Patch is unavailable (0 uses left). Bulwark sentinel is adjacent at (3,3) and critical. No heals to give. I should move away from the dangerous enemy to survive. Moving to (3,5) puts distance between me and Bulwark while staying on the field.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I'm at (3,3) with only 2HP, fortified. Remedy is at (3,5), distance 2 — not adjacent so can't attack. Moving toward Remedy would break fortify and leave me exposed at low HP. I should stay put and maintain fortify passive for 50% damage reduction, using shield_wall to protect allies from the north where Remedy is threatening.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 15,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses left). Bulwark enemy is at (3,3) critical and adjacent range. I'm at (3,5). No allies listed in order except myself. I should use overclock on my damage dealer if healthy, but no ally positions given. I'll move closer to stay adjacent to threatened ally and use overclock on myself or wait. Since no ally targets are visible, I'll wait adjacent.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Remedy is adjacent at (3,4) and critical. I'm at 2HP but fortified with 50% damage reduction. Attack Remedy to finish them off - they're critical so one hit should do it. Stay in place to keep fortify bonus active.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 16,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "I'm at 2/12 HP and critically wounded. No patch uses remain. Bulwark enemy is adjacent at (3,3). I should move away to survive - retreat to (3,5) to escape melee range. No heals available, so wait after moving.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I'm at (3,3) with 2/8 HP, fortified (50% dmg reduction). Remedy is at (3,5), dist=2, critical. I can move to (3,4) to get adjacent and attack. But moving breaks fortify. With only 2HP, staying fortified may keep me alive. However, orders say attack adjacent enemies - Remedy is at dist=2, not adjacent. If I move to (3,4), Remedy is at dist=1 and I can attack. But I lose fortify. Alternatively, I wait to keep fortify and hope allies finish Remedy. Given Remedy is critical and I have orders to attack adjacent enemies, moving to (3,4) puts me adjacent. Then attack. The risk is losing fortify at 2HP. But Remedy is critical - one attack may finish it.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": false
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "opponent",
+    "totalTurns": 17,
+    "reason": "opponent eliminated all enemies"
+  },
+  "endedAt": "2026-02-28T05:07:20.581Z"
+}
