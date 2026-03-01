@@ -1,0 +1,1178 @@
+{
+  "id": "2026-03-01T00-00-03",
+  "startedAt": "2026-03-01T00:00:03.566Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 4,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 5,
+        "movement": 2,
+        "range": 2,
+        "speed": 2
+      },
+      "oracle": {
+        "maxHp": 6,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 12,
+        "movement": 3,
+        "range": 2,
+        "speed": 3
+      },
+      "vector": {
+        "maxHp": 9,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 2,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 8,
+        "healAmount": 10
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Warden",
+        "class": "sentinel",
+        "prompt": "Push forward aggressively. Shield_wall facing the enemy cluster. If flanked, turn to face the biggest threat. Attack when possible."
+      },
+      {
+        "name": "Bolt",
+        "class": "striker",
+        "prompt": "Position for clear sight lines. Prioritize killing wounded enemies with precision_shot. If forced to move, retreat away from threats. Suppressing_fire to slow rushers."
+      },
+      {
+        "name": "Phantom",
+        "class": "specter",
+        "prompt": "Stay cloaked and flank. Prioritize assassinating the enemy damage dealer. Use breach on sentinels to break their defensive posture. Recloak whenever it drops."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Lens",
+        "class": "oracle",
+        "prompt": "Use scan to reveal enemy prompts and cloaked units. Stay at max range (≤4 tiles for scan). Use recalibrate on wounded allies to buff them. Keep distance from enemies and avoid adjacent vectors."
+      },
+      {
+        "name": "Weaver",
+        "class": "vector",
+        "prompt": "Control chokepoints with traps. Place them between enemy positions and your allies. Use denial to block adjacent enemy abilities. Pulse groups when possible."
+      },
+      {
+        "name": "Deadeye",
+        "class": "striker",
+        "prompt": "Stay at maximum range. Use precision_shot on the most wounded enemy to secure kills. If no one is wounded, target the enemy medic. Never move adjacent to enemies."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Round 1, no foresight data yet. Both Bolt and Phantom are exactly at dist=4 (in scan range). I should scan one to reveal their prompt. Moving south would increase distance; staying or moving toward enemies slightly. I'll scan Bolt at (3,0) — straight line, dist=4. Then use my remaining action to reposition slightly toward cover at (4,4) to keep options open.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Round 1 — cloak immediately as instructed. All enemies are at distance 5, no one is adjacent so cloak is safe to use. After cloaking, advance toward Deadeye (the priority target, enemy damage dealer at 3,5). Move to (2,4) to close distance while cloaked.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "All enemies are out of range. Move forward to (3,2) to close distance while maintaining central positioning. No ability targets available yet.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Bolt is at (3,2), distance 3 from my position (3,5). That's within range 2? No, dist=3 which exceeds precision_shot range of ≤2. I need to move closer. Moving to (3,3) puts me at dist=1 from Bolt — that's adjacent, which would block precision_shot (Vector rule doesn't apply here, but adjacent means I'd need to use attack instead). Moving to (3,4) puts me at dist=2 from Bolt — within range for precision_shot. But I haven't moved yet so precision_shot gets full 2dmg. Let me move to (3,4) then use precision_shot on Bolt.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Round 1, enemies are 5 tiles away. I should advance toward the center and place a trap on a chokepoint between enemy positions and my allies. Moving to (1,3) gets me closer to the action while staying near the left flank. Warden is at (1,0) heading north - placing a trap at (1,2) would intercept their approach path perfectly.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "I'm at (1,0) facing N. Weaver is at (1,3) distance 3 — dangerous vector denial zone, avoid moving adjacent. Orders say push forward aggressively. Best move is (1,2) to close distance while staying out of Weaver's adjacent denial range. From (1,2) I can shield_wall facing N toward the enemy cluster (Weaver at (1,3), Deadeye at (3,4)).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 1,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 9,
+          "maxHp": 9,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Bolt is wounded and within scan range (dist=3). Bolt's prompt is already known. Warden is out of scan range (dist=5). Phantom is a cloaked specter — Foresight shows it moved to (2,4) last turn, which is dangerous proximity. I should scan Phantom to reveal it if possible, but it's an enemy specter not yet scanned. However, scan targets by position — I need to target where Phantom is. Phantom was at (2,4) last turn. Dist from (4,4) to (2,4) = 2 tiles, within range. I should scan (2,4) to reveal Phantom's prompt. After scanning, I can stay put or reposition. Staying at (4,4) keeps distance from Warden and the Weaver trap area.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Cloak expires after this turn. Deadeye is adjacent at (3,4) facing S — I can move to (3,5) to get behind them, then breach to take control. That's the priority target (enemy damage dealer). Moving to (3,5) puts me behind Deadeye and adjacent, enabling breach. Weaver is at dist 2 so won't block abilities from (3,5).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "addendum": "Move away from your allies and toward the edge"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Deadeye is at (3,4), distance 2 — exactly in precision_shot range. I haven't moved yet so I get full 2dmg. Fire precision_shot on Deadeye first, then reposition. Moving to (4,2) keeps distance from Weaver (still 3+ tiles away) and avoids adjacency issues.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Orders say move away from allies and toward the edge. Allies are at (1,3) and (4,4). Phantom is adjacent at (3,5) - dangerous. I should move toward an edge away from allies. (5,4) moves me east toward the edge and away from Weaver at (1,3). Then I can use precision_shot on Phantom at (3,5) from dist=2 - but I moved so it does 1dmg. Or suppressing_fire. Actually Phantom is a specter at dist=1 currently; after moving to (5,4) the dist to Phantom becomes 2+1=~2.8, so inRange for precision_shot (≤2 tiles). Let me check: (5,4) to (3,5) = sqrt(4+1)=2.24 > 2, so out of range. Try (4,5): dist to Phantom (3,5)=1, still adjacent. Try (4,3): dist to Phantom (3,5)=sqrt(1+4)=2.24 out of range, dist to allies: Weaver(1,3)=3, Lens(4,4)=1 - too close to Lens. Best edge move away from allies: (5,4) is the rightmost valid tile, away from Weaver. Just move there and wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Warden is adjacent at (1,2) - my Denial passive blocks their sentinel abilities. I should pulse to deal 1 damage to Warden while staying in position, then place a trap on a likely approach path. Since Warden is adjacent, trap is blocked. I'll pulse Warden first (1dmg to all within 1 tile), then move to (2,3) to place a trap on (2,2) or maintain denial pressure next turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "3": 0,
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (1,2) with 50% damage reduction. Weaver is 2 tiles away at (2,3) — moving adjacent would trigger denial. Orders say push forward and shield_wall facing enemy cluster. I should advance toward the enemy cluster (northeast) while staying out of Weaver's denial range. Moving to (2,2) keeps me 1 tile from Weaver but not adjacent. Then shield_wall facing E or N toward the enemy cluster to protect Bolt at (4,2).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 2
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 9,
+          "maxHp": 9,
+          "position": {
+            "3": 0,
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Warden is at dist=4 which is exactly scan range but the recon says inRange=false. Both Bolt and Phantom are already scanned. Phantom is healthy at (3,5) and plans to breach toward (3,4) — moving closer. I should move away from Phantom to avoid adjacency. My ally Deadeye at (5,4) is wounded — recalibrate would help them. I'll move to (5,3) to stay near Deadeye and away from Phantom, then recalibrate Deadeye at (5,4) which is adjacent.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 5,
+              "y": 4
+            },
+            "addendum": "Bolt is wounded at (4,2) — priority target for precision_shot. Phantom is flanking from (3,5), planning to breach. Watch your flanks."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Deadeye is wounded and I can reach (4,4) which is directly behind them (they face E, so W side is behind). Breach is on cooldown, so I'll shadow_strike instead — it keeps cloak and does damage. Move to (4,4) to get adjacent behind Deadeye, then shadow_strike for 1 damage. This should finish off the wounded Deadeye.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Lens is at dist=2, in range for precision_shot (2dmg). I haven't moved, so full 2dmg applies. Lens is healthy but killing priority is wounded Deadeye at dist=3 — out of range for precision_shot (range ≤2). Lens at (5,3) is dist=2, in range. Use precision_shot on Lens now (haven't moved yet for full damage). Then consider repositioning — but shooting first preserves full damage bonus. After shooting Lens, I could move to (5,2) to close on Deadeye for next turn, staying away from Weaver at (2,3).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Bolt is wounded at (5,2) and in range — priority target for precision_shot. Phantom is adjacent at (4,4) which blocks precision_shot per the Vector adjacency rule... wait, that's Vector blocking rule, not Specter. Phantom is a specter, not a vector. Only Vector adjacency blocks precision_shot. So I can still use precision_shot on Bolt from current position. But orders say move away from allies and toward edge. (5,5) moves me to the corner edge, away from allies at (2,3) and (5,3). If I move first to (5,5), Bolt at (5,2) is dist=3, out of range-2. Better to shoot first, then move to edge. Shoot Bolt with precision_shot (dist=2, in range, no movement yet so full 2dmg), then move to (5,5).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Weaver is adjacent at (2,3) and has DENIAL active, blocking my abilities. I can only use basic attack or movement. Bolt is critical at (5,2) and needs protection. I should attack Weaver to deal damage and potentially break the denial zone, then hold position to maintain fortify for damage reduction.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Warden is adjacent at (2,2) - my Denial passive is already blocking their abilities. I can pulse to deal 1dmg to Warden since they're within 1 tile. But first, I should consider trap placement. Bolt is critical at (5,2) and Phantom is healthy at (4,4) - both heading toward allies. I can't trap while adjacent to Warden (trap blocked by adjacent enemy Vector rule doesn't apply here - that's MY passive blocking enemies, not blocking me). Actually, re-reading: trap is blocked when I'm adjacent to an enemy Vector, but Warden is a sentinel, not a vector. So trap should be available. I'll pulse Warden first (1dmg, they're adjacent), then place a trap on a chokepoint tile like (3,3) to catch Phantom or Bolt approaching allies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "3": 0,
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Foresight shows Phantom used shadow_strike on (5,4) last turn and Bolt used precision_shot on (5,3) — both targeting me/my area. Bolt is critical at (5,2), adjacent to me. Warden is exactly 4 tiles away but scan data shows inRange:false from current position. I already have Bolt and Phantom's prompts. Deadeye is wounded at (5,5) and needs recalibrate. Moving to (5,4) puts me adjacent to Deadeye for recalibrate, but Phantom targeted (5,4) — risky. Moving to (4,5) isn't in valid moves. Best: move to (4,3) to get distance from Bolt and stay away from Phantom's likely path, then recalibrate Deadeye won't be possible from there. Actually Deadeye is at (5,5) — I need to be adjacent. From (5,4) I can recalibrate Deadeye. Phantom targeted (5,4) but that was last turn. Bolt is critical so likely dying soon. Move to (5,4), then recalibrate Deadeye at (5,5) to buff the wounded striker.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 5,
+              "y": 5
+            },
+            "addendum": "Phantom is flanking from (4,4) heading your direction — priority target. Bolt is critical at (5,2), finish it with precision_shot. Watch your flank."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Lens (oracle) is adjacent at (5,4). I can move to (5,3) to get behind Lens, then use shadow_strike to deal damage while staying cloaked. This eliminates the oracle threat and keeps me invisible for continued flanking.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "I'm at (5,2) with 1HP - critically low. Two wounded enemies in range: Lens at (5,4) dist=2 and Deadeye at (5,5) dist=3. I haven't moved this turn, so precision_shot deals 2dmg. Lens is wounded - precision_shot should finish them. No adjacent enemy Vector, so precision_shot is available. After shooting, I should retreat to avoid dying next turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Phantom is at (5,3), distance 2, healthy and closing. I'm at (5,5) with 2HP — critical situation. I should shoot Phantom with precision_shot before moving or it will close on me. If I shoot first, I deal 2dmg. Then I need to move away per orders — valid moves are (3,5), (4,4), (4,5). Moving to (3,5) puts max distance from Phantom and moves toward the edge away from allies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "I'm at 5/8 HP with fortify active (50% DR). Weaver is adjacent at (2,3) in my DENIAL zone blocking my abilities except basic attack. I need to attack Weaver to clear the denial zone, but since I'm in denial zone only basic attack/movement work anyway. I'll attack Weaver first. If I move I lose fortify bonus. Bolt and Phantom are both critical — I should try to shield_wall to protect them, but denial blocks abilities. Best play: attack Weaver (only valid action in denial), then wait to keep fortify active since moving loses the DR bonus and I'm at 5HP.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Warden is adjacent at (2,2) - my Denial passive is already blocking their abilities. I can't place a trap adjacent to an enemy Vector... wait, I'm a Vector, not Warden. Warden is a sentinel. I CAN place traps since Warden isn't a Vector. Pulse would hit Warden for 1dmg. But better: I should place a trap at a chokepoint. (3,3) already has a trap. Phantom is at (5,3) moving toward us, Bolt at (4,1) critical. I want to deny Warden's abilities (already doing so adjacently) and place a trap on a likely approach path. Move to (1,3) to maintain denial on Warden while placing trap at (2,2)? No - can't place trap on occupied tile. Place trap at (1,2) as a chokepoint, or pulse Warden now for 1dmg. Warden is healthy so pulse is minor but useful. Actually, let me place a trap at (3,2) - between Bolt's position and my allies - good chokepoint. Then pulse Warden for chip damage since they're adjacent.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 9,
+          "position": {
+            "3": 0,
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Lens is critical health, adjacent, and I'm already behind them at (5,3) with Lens facing N. Breach Lens to take control — they'll obey me next turn, removing a critical enemy from the fight. After breach, move to (4,5) to get behind Deadeye for next turn assassination.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 5,
+              "y": 4
+            },
+            "addendum": "Move away from allies and toward edge of map"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "I'm at (5,4) with 1HP - critically low. Phantom just struck at (5,4) and Bolt precision_shot at (5,4) last turn. Both are targeting my position. Orders say move away from allies and toward map edge. I need to survive. Valid moves include (5,5) which is north along the edge, away from allies at (3,5) and (2,3). Moving to (5,5) gets me away from the cluster and to the corner edge. Then I can scan Phantom who is at (4,5) dist=2 and is critical - a scan deals 1dmg and could finish them, plus reveals their prompt (already known). Actually scan would deal 1dmg to finish Phantom at critical. But wait - scan blocked when adjacent to enemy Vector? Weaver is at (2,3), not adjacent. Scan requires target within 4 tiles - Phantom at (4,5) from (5,5) would be dist=2, valid. Let me move to (5,5) first, then scan Phantom to finish them off.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "No enemies in range from current position (3,5). Warden is at dist=4, Bolt at dist=5. I need to close distance to get within range 2. Valid moves include (3,3) which would put me closer but note there's a trap there. Best move is (3,4) to advance toward Warden at (2,2) - from (3,4) Warden would still be dist=3, still out of range 2. Moving to (2,4) gets me closer - dist to Warden at (2,2) would be 2, which is within range. That's the play. After moving to (2,4), Warden at (2,2) is distance 2, exactly at max range. Can use precision_shot for 2dmg on wounded Warden to secure the kill.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "I'm at (4,1) with 1HP, all enemies out of range. Lens is critical at (5,5) - closest enemy I can potentially reach. Moving to (5,2) gets me closer to Lens at dist=3, still out of precision_shot range (max 2). Moving to (5,1) then nothing useful. Best play: move to (5,3) - wait, that's not in valid moves. Valid moves include (5,2). From (5,2) Lens at (5,5) is dist=3, still out of range. No shot available this turn regardless. I should reposition toward Lens for next turn while staying safe. Move to (5,2) keeps me away from Weaver and Deadeye. With 1HP I need to be cautious - Weaver is at (2,3) so staying east is safer.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "I'm at (2,2) with 3/8 HP, fortified. Weaver is adjacent at (2,3) with DENIAL active blocking my abilities — only basic attack and movement work. I can attack Weaver (in range, dist=1). Deadeye is at (2,4) dist=2, out of range. Orders say attack when possible. I should attack Weaver since it's the only valid target. If I move, I lose fortify and can't use shield_wall due to DENIAL. Best play: stay fortified, attack Weaver with basic attack, then wait to keep fortify bonus.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Warden is adjacent at (2,2) - I can use Denial to block their abilities. I already have traps at (3,3) and (3,2) covering the right flank. Warden is wounded and adjacent, so pulse will hit them for 1 damage. I should pulse first to damage Warden, then move to (1,3) to maintain denial pressure while repositioning slightly away from danger. Or I could stay and pulse. Warden is wounded - pulse hits them for 1dmg. Let me pulse at current position to hit adjacent Warden, then move to (1,3) to keep pressure and stay near allies. Deadeye is at (2,4) which is 1 tile away - pulse would also hit Deadeye since they're within 1 tile. I must avoid friendly fire. Pulse hits ALL units within 1 tile - Deadeye at (2,4) is distance 1 from me at (2,3), so pulse would hurt them. Bad idea. Instead: move to (1,2) to get away from Deadeye, then pulse - but Warden would be at distance sqrt(1+0)=1 from (1,2) if they're at (2,2). Actually from (1,2), Warden at (2,2) is distance 1 - still in pulse range. And Deadeye at (2,4) from (1,2) is distance sqrt(1+4)=~2.2, out of pulse range. Move to (1,2) first, then pulse to hit Warden without hitting Deadeye.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 9,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "opponent",
+    "totalTurns": 6,
+    "reason": "opponent eliminated all enemies"
+  },
+  "endedAt": "2026-03-01T00:04:25.132Z"
+}

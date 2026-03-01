@@ -1,0 +1,1380 @@
+{
+  "id": "2026-02-28T20-00-03",
+  "startedAt": "2026-02-28T20:00:03.761Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 4,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 5,
+        "movement": 2,
+        "range": 2,
+        "speed": 2
+      },
+      "oracle": {
+        "maxHp": 6,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 12,
+        "movement": 3,
+        "range": 2,
+        "speed": 3
+      },
+      "vector": {
+        "maxHp": 9,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 2,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 8,
+        "healAmount": 10
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Lifeline",
+        "class": "medic",
+        "prompt": "Prioritize healing the lowest HP ally. Position safely behind your sentinel. Use overclock on allies who can do the most with an extra action."
+      },
+      {
+        "name": "Prophet",
+        "class": "oracle",
+        "prompt": "Use scan to reveal enemy prompts and cloaked units. Stay at max range (≤4 tiles for scan). Use recalibrate on wounded allies to buff them. Keep distance from enemies and avoid adjacent vectors."
+      },
+      {
+        "name": "Marksman",
+        "class": "striker",
+        "prompt": "Stay at maximum range. Use precision_shot on the most wounded enemy to secure kills. If no one is wounded, target the enemy medic. Never move adjacent to enemies."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Wraith",
+        "class": "specter",
+        "prompt": "Cloak immediately on turn 1. Move toward the enemy medic or weakest target. Use shadow_strike when adjacent while cloaked. Use breach to sabotage high-value targets."
+      },
+      {
+        "name": "Bulwark",
+        "class": "sentinel",
+        "prompt": "Hold the front line. Position between allies and enemies. Use shield_wall toward incoming threats. Attack adjacent enemies."
+      },
+      {
+        "name": "Deadeye",
+        "class": "striker",
+        "prompt": "Maintain distance. Use precision_shot on high-value targets — medics first, then damage dealers. Use suppressing_fire if enemies close in."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Wraith is at dist 3, within scan range. Deadeye is at dist 4 but the recon says out of range from current position. I should move east to get Deadeye in range, then scan Wraith. Moving to (1,1) keeps me at safe distance while Deadeye becomes dist 4 from there. Actually, scan Wraith first since it's in range now, then move to reposition.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Round 1 — activate cloak immediately per orders. Prophet at (1,1) facing E means (0,1) is directly behind. That tile is reachable in 3 moves. Cloak first, then move to (0,1) to position for a breach or shadow_strike next turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "Round 1, all allies full HP so no healing needed. Enemies are far away (dist 6). I should advance toward allies to be in position to support them. Prophet is at (1,1) and Marksman at (2,0). Moving to (3,2) keeps me central and positions me near allies for future overclock/healing support.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Prophet (oracle) is in range at distance 3 from my current position. Orders say medics first, then damage dealers. Lifeline is out of range at 4, Marksman at 5. Prophet is the best target I can hit right now. I haven't moved yet so precision_shot deals 2dmg. I'll fire on Prophet first, then consider repositioning.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Deadeye is at distance 3, which is within precision_shot range (≤2 tiles). Wait — dist=3 means out of range for precision_shot which requires ≤2 tiles. I need to move closer. Moving to (2,2) puts me at dist=1 from Deadeye at (2,3) — too close, would be adjacent. Moving to (2,1) puts me at dist=2 from Deadeye — within precision_shot range and not adjacent. I haven't moved yet so precision_shot deals full 2dmg. Orders say stay at max range, so (2,1) is ideal — exactly range 2 from Deadeye.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Enemies are 4-5 tiles away, out of attack range. I need to advance toward the front line to position between allies and enemies. Moving to (2,3) would put me near Deadeye. Best to move south toward enemies while staying on the front line. Move to (2,3) to cover Deadeye, then wait to benefit from Fortify passive since I can't reach enemies yet.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": "Position occupied",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "player",
+          "hp": 12,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "I'm already cloaked with 1 turn remaining, currently at (0,1) which is already BEHIND Prophet (facing E, behind tile is (0,1)). Prophet is adjacent. I should use breach on Prophet right now while I'm behind them — this is the perfect setup. After breaching, I'll be done for this turn. Breach requires being behind the enemy and I'm already there.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 1,
+              "y": 1
+            },
+            "addendum": "Attack Marksman"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Orders say attack Marksman, but Marksman is an ally — this must be an error or test. I'll focus on tactical priorities instead. Wraith is adjacent at (0,1) and is a high threat (cloaking specter targeting our medic). I already have its prompt from scan. Deadeye is at (2,3) in scan range but I already know Wraith's prompt. Key threats: Wraith is adjacent which BLOCKS my scan ability. I can't scan while adjacent to Wraith. My options: (1) move away from Wraith to enable scan on Deadeye, or (2) try to attack Wraith (only 1dmg, not great). Best play: move to (1,2) to break adjacency with Wraith, then scan Deadeye at (2,3) — dist=2 from (1,2), well within range 4, and no longer adjacent to enemy Vector. Wait — Wraith is a specter not a vector. The scan-block only applies to adjacent enemy Vectors. Wraith is a specter, so scan is NOT blocked. I can scan Deadeye from current position. Scan Deadeye to reveal its prompt and deal 1dmg, then move away from Wraith toward safer position.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "All allies are at full HP, no healing needed. Deadeye is wounded and adjacent range (dist=2) but I can't attack from range 2 with melee. I should reposition to support allies. Moving to (2,2) gets me adjacent to Marksman at (2,1) and closer to the action. From there I could overclock Marksman next turn. But Deadeye is at (2,3) - moving to (2,2) puts me adjacent to an enemy, which would block patch/overclock. Better to move to (3,3) to stay safe and position near allies without being adjacent to Deadeye. Actually (2,4) keeps distance from Deadeye and gets me closer to supporting allies from behind. Let me move to (3,3) - safer position, not adjacent to Deadeye at (2,3), and I can assess next turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Deadeye is wounded and in range at dist=2. Priority: use precision_shot to finish off wounded Deadeye. I haven't moved, so full 2dmg applies. Stay at current position to avoid closing distance to enemies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "I'm at 1HP so survival is critical. Lifeline (medic) is adjacent at dist=1, which blocks precision_shot AND is dangerous. I need to move away from Lifeline first. Moving to (3,4) puts me at distance 2 from Lifeline and keeps range on other targets. After moving, I can use precision_shot on Lifeline (medic is highest priority per orders) - but need to check if I moved. Since I moved, precision_shot does 1dmg. Alternatively, move to (4,3) to get further from Lifeline. At (4,3), Lifeline at (3,3) is dist=1 again - bad. Move to (3,4): Lifeline@(3,3) dist=1 still. Move to (1,4): Lifeline@(3,3) dist=2, Prophet@(1,2) dist=2, Marksman@(2,1) dist=3. At (1,4) I can shoot Lifeline or Prophet with precision_shot (1dmg since moved). Best: move to (1,4) to escape adjacency with Lifeline, then precision_shot Lifeline (medic priority, dist=2 from new pos).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": "Out of range"
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Deadeye is critical at (1,4) and needs protection. I'm at (2,5) with fortify active. Moving to (2,4) puts me adjacent to Deadeye and closer to enemies at dist 2-3. From there I can use shield_wall toward S (where enemies are coming from the south side) or toward the enemy cluster. Lifeline is closest at dist 3 from my current position. Moving to (2,3) gets me closer but loses fortify. Best play: move to (2,4) to be adjacent to Deadeye, then shield_wall facing S to protect Deadeye from Lifeline/Marksman approaching from below.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 1,
+              "y": 4
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "player",
+          "hp": 12,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "Both allies are at full HP, so no healing needed. Deadeye is critical (enemy) at dist=3, not a heal target. I should position safely. Bulwark (enemy sentinel) is at (2,4) dist=2. I want to stay back and support. Moving to (3,4) keeps me close to allies but I need to avoid getting adjacent to enemies which would block my abilities. (4,3) gives me distance from Bulwark. No ally needs healing. I could overclock Prophet or Marksman - Marksman is a striker who could benefit from 2 abilities. I need to get adjacent to Marksman at (2,1) to overclock - that's dist=3, I can move to (2,2) which is dist=1 from Marksman... wait, (2,2) to (2,1) is dist=1, adjacent. Valid move (2,2) is available. From (2,2) I can overclock Marksman at (2,1). No enemies adjacent to (2,2) so overclock won't be blocked.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Orders are to attack Marksman — but Marksman is an ally, so I'll interpret this as a data error and focus on best tactical play. Deadeye is critical and within scan range (dist=2). Wraith is adjacent (dist=2, meaning 1 tile away diagonally or 2 manhattan) — check: Wraith at (0,1), me at (1,2), manhattan dist=2, so NOT adjacent (adjacent = dist 1). Scan is blocked only when adjacent to enemy Vector, not specter, so scan is available. Deadeye is critical — scanning would deal 1 dmg and potentially finish or nearly finish them, plus reveal prompt (already known). Actually Deadeye prompt already known. Bulwark at dist=3 is in scan range and NOT yet scanned — scanning Bulwark gives intelligence value. But orders say attack Marksman (ally) which I won't do. Priority: Deadeye is critical, scan would deal 1 dmg — could be decisive. I'll scan Deadeye to potentially eliminate them (critical = low HP). Then move away from Wraith who has breach capability and is targeting allies. Move to (1,3) to increase distance from Wraith while maintaining scan coverage.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Breach is on cooldown. I'm at (0,1) cloaked, 3HP. Marksman is at (2,1) facing N — I can reach (2,0) which is behind them and adjacent. Move to (1,1) then shadow_strike isn't possible in one move... wait, valid moves include (2,0). I can move directly to (2,0) which is behind Marksman and adjacent. Then use shadow_strike to deal 1 damage while staying cloaked. This is the ideal play — stay cloaked, hit Marksman from behind.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "I'm at (2,1) with Wraith adjacent at (2,0). Precision_shot is blocked when adjacent to enemy Vector, but Wraith is a specter not a Vector - however Wraith is at dist=1 which means adjacent. My orders say never move adjacent to enemies and use precision_shot on most wounded. Wraith is adjacent (dist=1) so I need to move away first to use precision_shot safely, OR use suppressing_fire/attack. Actually, checking the rule: precision_shot blocked when adjacent to enemy Vector specifically - Wraith is a specter, so precision_shot should work but will deal 1dmg if I moved. I have OVERCLOCKED (2 ability uses). Best plan: move to (3,1) to get dist=2 from Wraith at (2,0), then use precision_shot twice on Wraith (2dmg each if not moved... but I moved so 1dmg each). Wait - if I move first, precision_shot deals 1dmg. If I use abilities first without moving, I'm adjacent which is dist=1, still in range<=2. Precision_shot needs LoS and range<=2, no Vector adjacency restriction. So I can fire twice from current position at Wraith for 2dmg each = 4dmg total to kill Wraith. Then I don't need to move. But orders say never move adjacent - I'm already adjacent. So use both shots on Wraith now without moving to maximize damage.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "All three enemies are within 2-3 tiles to the south. Prophet is at (1,3) dist=2, Lifeline at (2,2) dist=2, Marksman at (2,1) dist=3. I need to advance toward them to get into attack range while positioning between allies and enemies. Moving to (2,3) closes distance to Prophet (dist=1, adjacent) and Lifeline (dist=1). That puts me adjacent to Prophet for an attack. I'll move to (2,3) then attack Prophet.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "player",
+          "hp": 12,
+          "maxHp": 12,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 0
+          },
+          "alive": false
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Bulwark is adjacent at (2,3) and attacked me last turn. Orders say attack Marksman, but I'm an Oracle - my only attack is adjacent 1dmg. Bulwark is the threat adjacent to me. I can scan Bulwark (dist=1, in range) to deal 1dmg and reveal their prompt. But orders say attack Marksman - Marksman is at (2,1), not adjacent, so I can't directly attack them. Best play: scan Bulwark to chip damage and get intel, then move away from Bulwark toward (1,4) to reposition safely. Actually, I should move first to avoid Bulwark's attack, then scan. Move to (0,3) to create distance, then scan Bulwark at dist=2 which is still in range 4.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "Marksman is at (2,1) with 3/5 HP - critically wounded and adjacent to me (dist=1). I'm at (2,2). Bulwark enemy is at (2,3) directly north of me. I need to heal Marksman first (lowest HP, adjacent). However, Bulwark is adjacent to me at dist=1 - the WARNING says patch/overclock are blocked when adjacent to enemy Vector, but Bulwark is a sentinel, not a Vector. So I can heal. Move south first to (2,1) to get away from Bulwark, but Marksman is already adjacent at (2,1). Actually I'm already adjacent to Marksman at (2,1). Heal Marksman first, then move away from Bulwark to safety.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Bulwark is at distance 2, exactly at max range. I'm not adjacent to any enemy Vector, so precision_shot is available. Bulwark is the only enemy and is healthy. Orders say to use precision_shot on the most wounded, or if none wounded, target the enemy medic — no medic visible, so I'll shoot Bulwark. I haven't moved, so full 2dmg. Stay in place.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (2,3) with 50% damage reduction. No enemies are adjacent so I can't attack. Marksman is at (2,1) distance 2 to the south, Prophet at (0,3) distance 2 to the west. Moving south to (2,2) would put me adjacent to Marksman for an attack next turn, but I'd lose fortify. Better to hold position and use shield_wall to protect allies from the Marksman threat to the south. I'll wait to keep fortify and use shield_wall facing south toward Marksman.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 2
+            },
+            "direction": "S"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "player",
+          "hp": 12,
+          "maxHp": 12,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 0
+          },
+          "alive": false
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Bulwark is already scanned — prompt known. No new targets to reveal. I'm at range 2 from Bulwark, safe from adjacency. Marksman just used precision_shot on Bulwark last turn. I should recalibrate Marksman to buff their offense, but Marksman is at (2,1) and I'm at (0,3) — that's distance 3, not adjacent. Lifeline is at (1,1), also not adjacent. No adjacent allies to recalibrate. No new enemies to scan. Best play: move closer to allies to enable recalibrate next turn, while staying safe. Move to (1,2) to get adjacent to both Marksman and Lifeline for future recalibrate.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "Prophet is wounded at (1,2) adjacent to my position at (1,1). I can move to (1,2) to be adjacent... wait, Prophet is AT (1,2) and I'm at (1,1), so we're already adjacent. I can heal Prophet directly with patch. Then I have my move action - I should stay safe, Bulwark is at distance 3 so no immediate threat.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Bulwark is at distance 2, within precision_shot range. I'm not adjacent to any enemy Vector, so precision_shot is available. I haven't moved, so I get full 2dmg. No wounded enemies, so target Bulwark (the only enemy visible). Stay at current position to maintain max range.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I'm at (2,3) with 5/8 HP, fortified. Enemies: Marksman at (2,1) dist=2, Prophet at (1,2) dist=2. Moving to (2,2) closes distance to Marksman to 1 (adjacent) and keeps me between allies and enemies. That lets me attack Marksman. Moving loses fortify but attacking is worth it.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "player",
+          "hp": 12,
+          "maxHp": 12,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 0
+          },
+          "alive": false
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "Marksman is wounded at 4/5 HP and is adjacent to me at (2,1). I should heal them with patch. I have 1 heal remaining. After healing, I can use overclock on Marksman since they're a striker and can deal the most damage with an extra action.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Bulwark is adjacent at (2,2) - scan is blocked when adjacent to enemies (Vector rule doesn't apply here, but Bulwark is already scanned anyway). Foresight shows Bulwark will move to (2,2) then attack (2,1) targeting Marksman. I should move away from Bulwark to enable scan usage and avoid melee. Move to (1,3) to create distance. Then I could recalibrate Marksman to help them, but Marksman is at (2,1) which won't be adjacent from (1,3). Alternatively move to (0,2) to stay out of range. Best move: go to (1,3) to get distance from Bulwark. From (1,3), Bulwark at (2,2) is distance 2 - out of attack range. No other enemies to scan. I'll recalibrate Marksman - from (1,3), Marksman at (2,1) is distance sqrt(1+4)=~2.2, not adjacent. Move to (2,0) - Marksman at (2,1) would be adjacent. From (2,0), Bulwark at (2,2) is distance 2. Let me move to (2,0) and recalibrate Marksman with advice about the incoming attack.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 2,
+              "y": 1
+            },
+            "addendum": "Bulwark will attack you this turn. Reposition or counter-attack the sentinel at (2,2)."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Bulwark is adjacent at (2,2) - this blocks precision_shot and they will attack me. I need to reposition to range 2. Move to (2,3) puts me adjacent still. Move to (4,1) gets distance. Actually (3,3) isn't available. Let me check: valid moves include (2,3) which is dist 1 from Bulwark at (2,2) - still adjacent. (3,2) is dist 1 from (2,2) - adjacent. (4,1) is dist 2 from (2,2) - safe range! Move to (4,1) first, then I can precision_shot Bulwark from range 2. I have overclocked so 2 ability uses. After moving to (4,1), Bulwark at (2,2) is distance sqrt(4+1)=2.24 - actually dist=2 in grid terms (|4-2|+|1-2|=3, that's 3 tiles manhattan). Wait, let me recalculate. Manhattan from (4,1) to (2,2) = |4-2|+|1-2| = 2+1 = 3. That's out of range 2. Hmm. (3,2): |3-2|+|2-2|=1, adjacent. (3,1): |3-2|+|1-2|=1+1=2, in range! Move to (3,1), then precision_shot Bulwark. Then use second ability use for another precision_shot or suppressing_fire.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I'm at (2,2) with 4/8 HP, fortified (50% dmg reduction). Enemies are at dist 2 — Marksman@(3,1), Prophet@(2,0), Lifeline@(1,1). If I move I lose fortify. Best play: stay put, use shield_wall toward the south where Prophet and Lifeline cluster, protecting allies behind me. Moving to (3,2) would close on Marksman but lose fortify bonus. With only 4HP, staying fortified is safer. I'll shield_wall facing south to block incoming from that direction, then wait.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 1
+            },
+            "direction": "S"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "player",
+          "hp": 12,
+          "maxHp": 12,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 0
+          },
+          "alive": false
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses left). Marksman is wounded at (3,1) dist=2, not adjacent so I can't heal anyway. I should move toward Marksman to get adjacent for overclock - moving to (2,1) gets me dist=1 from Marksman at (3,1). Then use overclock on Marksman so they can attack twice next turn. Bulwark is at (2,2) which is adjacent to (2,1) - that would block overclock due to Vector warning... wait, Bulwark is a sentinel not a Vector. The warning is specifically about Vector enemies. So overclock is safe at (2,1). Move to (2,1), then overclock Marksman at (3,1).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Bulwark is already scanned — no need to scan again. Marksman is wounded and adjacent to Bulwark's position. I should recalibrate Marksman to buff them, but recalibrate is adjacent-only and Marksman is at (3,1) — I'm at (2,0), distance is 2, so not adjacent. I could move to (3,0) to get adjacent to Marksman at (3,1), then recalibrate. Foresight shows Bulwark will shield_wall facing S toward (2,1) and then wait — so Bulwark is occupied defensively. Moving to (3,0) keeps me away from Bulwark at (2,2) and gets me adjacent to Marksman for recalibrate.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 1
+            },
+            "addendum": "Bulwark is wounded and using shield_wall defensively. Move to flank from the east and use precision_shot on Bulwark at (2,2) to finish them off."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "I'm overclocked with 2 ability uses. Bulwark is wounded at (2,2), distance 2, in range. I'm at (3,1) which is not adjacent so precision_shot is valid. Use both precision_shot charges to eliminate the wounded Bulwark. No need to move — I'm at range 2 already and moving could reduce damage.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "At 2/8 HP I'm vulnerable, but fortified gives 50% damage reduction if I stay put. Lifeline is adjacent at (2,1) — attacking them denies healing to the enemy team. If I move I lose fortify, so I should stay and attack Lifeline, then use shield_wall south to protect against threats from that direction.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "player",
+          "hp": 11,
+          "maxHp": 12,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 0
+          },
+          "alive": false
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "player",
+    "totalTurns": 8,
+    "reason": "player eliminated all enemies"
+  },
+  "endedAt": "2026-02-28T20:04:24.046Z"
+}
