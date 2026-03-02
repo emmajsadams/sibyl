@@ -1,0 +1,2630 @@
+{
+  "id": "2026-03-02T20-00-05",
+  "startedAt": "2026-03-02T20:00:05.431Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 4,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 5,
+        "movement": 2,
+        "range": 2,
+        "speed": 2
+      },
+      "oracle": {
+        "maxHp": 6,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 12,
+        "movement": 3,
+        "range": 2,
+        "speed": 3
+      },
+      "vector": {
+        "maxHp": 9,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 2,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 8,
+        "healAmount": 10
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Wraith",
+        "class": "specter",
+        "prompt": "Cloak immediately on turn 1. Move toward the enemy medic or weakest target. Use shadow_strike when adjacent while cloaked. Use breach to sabotage high-value targets."
+      },
+      {
+        "name": "Aegis",
+        "class": "sentinel",
+        "prompt": "Hold the front line. Position between allies and enemies. Use shield_wall toward incoming threats. Attack adjacent enemies."
+      },
+      {
+        "name": "Pulse",
+        "class": "medic",
+        "prompt": "Stay adjacent to the most threatened ally. Use patch on the most wounded teammate. If all healthy, use overclock on your damage dealer."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Phantom",
+        "class": "specter",
+        "prompt": "Cloak immediately on turn 1. Move toward the enemy medic or weakest target. Use shadow_strike when adjacent while cloaked. Use breach to sabotage high-value targets."
+      },
+      {
+        "name": "Marksman",
+        "class": "striker",
+        "prompt": "Position for clear sight lines. Prioritize killing wounded enemies with precision_shot. If forced to move, retreat away from threats. Suppressing_fire to slow rushers."
+      },
+      {
+        "name": "Watcher",
+        "class": "oracle",
+        "prompt": "Scan early to give your team intel on enemy prompts. Target enemy specters with scan to track them after cloak. Use recalibrate on allies who need tactical adjustments. Stay safe at range behind your front line."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Round 1 — cloak immediately as ordered, then advance toward Pulse (the medic at 3,1) who is the highest-value target. Moving to (1,4) closes distance while staying off the flanks.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "4": 4,
+              "x": 1
+            }
+          },
+          "secondResult": "Out of bounds"
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Round 1, all allies are full HP so no healing needed. Orders say use overclock on damage dealer if all healthy. Wraith is our specter damage dealer at (4,0). I'm at (3,1), dist=2 to Wraith - not adjacent. Need to move adjacent to Wraith first, then overclock. Move to (4,1) puts me adjacent to Wraith at (4,0).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 4,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Pulse is exactly 4 tiles away at (4,1) — just in scan range. I need to move closer to bring Wraith into range too, but Pulse is the priority target since it's a medic. Moving to (4,2) puts me 3 tiles from Pulse and 2 from Wraith, enabling scan on Pulse. Let me move toward the enemy line first, then scan Pulse to reveal its prompt and deal damage.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Round 1, overclocked (2 ability uses). I should cloak immediately per orders. Watcher is at (4,2) facing S, and (4,3) is behind them and reachable. I can cloak first, then move to (4,3) to get behind Watcher — setting up a breach next turn while invisible.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 4,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Both enemies are out of range (Aegis at dist 5, Pulse at dist 6). Need to advance to get within range 2. Moving to (2,3) brings me closer to Aegis while keeping distance from threats. No enemies in range to shoot this turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Enemies are at dist 3-4, out of melee range. I need to advance toward the front line to position between allies and enemies. Pulse is at (4,1) and Wraith at (4,3). Marksman at (2,3) is directly north. Moving to (2,2) puts me directly between Marksman and my starting position, closing distance while staying in line with the threat. Then wait to trigger Fortify (50% dmg reduction) since I won't move again this turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 11,
+          "maxHp": 12,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "I'm already behind Watcher (at 4,3, Watcher faces S so I'm behind them at their north). Cloak has 1 turn remaining — I should use it now before it expires. I can breach Watcher since I'm adjacent and behind them. Breach lets me control Watcher next turn — an oracle is high value. I'll breach first, then shadow_strike to stay cloaked would be ideal, but breach breaks cloak. Alternatively, shadow_strike Watcher first (keeps cloak, 1dmg), then move. But breach on an oracle is very valuable — controlling their vision/actions could swing the fight. I'll breach Watcher now while I'm perfectly positioned behind them.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 4,
+              "y": 2
+            },
+            "addendum": "Move away from allies, toward the edge of the map"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Cloak expires after this turn, so I need to close distance fast. No enemies in range. Moving toward Wraith at (3,3) — reachable tiles include (3,5) and (2,4). Best move is (2,4) to close in toward Wraith/Aegis cluster. No ability available at range, so wait as second action.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Wraith is wounded at (3,3) with 3/4 HP and needs a heal. I need to move adjacent to Wraith to use patch. Currently at (4,1), Wraith is at (3,3) - dist=3. I can move up to 3 tiles. Moving to (3,2) puts me adjacent to Wraith at (3,3) and is within my movement range. Watcher is adjacent at (4,2) which would block abilities if I stay, so moving away is also smart. From (3,2) I can patch Wraith at (3,3).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Orders say move away from allies toward map edge. Current position (4,2). Allies are at (2,4) and (2,3), enemies clustered at (2-3, 2-3). Moving toward edge means going to (5,x) or toward corners. I can move up to 3 tiles. Moving to (5,4) gets me away from the enemy cluster and toward the edge. Then I can scan Wraith or Aegis before they're out of range — but Pulse is already at dist=1 which means scan is blocked (adjacent enemy Vector check doesn't apply to medic, only Vector class). Pulse is a medic not a Vector, so scan should work. I'll move to (5,4) to get toward the edge and away from allies, then scan Wraith at (3,3) — dist from (5,4) would be 3, within range 4. Good plan.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Aegis is adjacent at (2,2) - precision_shot is blocked when adjacent to enemy. Wraith is also adjacent at (3,3). I need to reposition to gain range. Move to (1,4) to increase distance from both Aegis and Wraith. From there, Pulse at (3,2) is distance ~2.8 (out of range), but I can use suppressing_fire on Wraith or try precision_shot on Pulse if in range. Actually, let me move to (4,3) - wait, that's valid but moves toward Wraith. Better to move to (1,2) or (0,3) to escape adjacency. Move to (1,4): dist to Aegis=sqrt(1+4)~2.2, dist to Wraith=sqrt(9+1)~3.2 - both out of precision_shot range of 2. Move to (0,3): dist to Aegis=sqrt(4+1)~2.2, dist to Wraith=sqrt(9+0)=3. From (1,2): dist to Pulse=(2,0)=2 - in range! And not adjacent to Aegis (dist=sqrt(1+0)=1 - still adjacent). Move to (1,4): from there Aegis at (2,2) is dist sqrt(1+4)~2.2, outside range 2. Not useful. Best: move to (1,2) - Pulse at (3,2) dist=2, in range, not adjacent to Aegis (dist=1 - wait (1,2) to (2,2) is dist 1, still adjacent). Move to (0,3): Pulse at (3,2) dist=sqrt(9+1)~3.16 out of range. Move to (2,1): Aegis at (2,2) dist=1 adjacent, blocked. Move to (2,5): Pulse at (3,2) dist=sqrt(1+9)~3.16 out of range. Move to (3,4): Wraith at (3,3) dist=1 adjacent. Move to (1,3): Aegis dist=sqrt(1+1)~1.4, Wraith dist=sqrt(4+0)=2. Not adjacent. From (1,3) precision_shot Pulse at (3,2): dist=sqrt(4+1)~2.2 out of range. Suppressing_fire on Wraith at (3,3) from (1,3): dist=2, in range! That slows Wraith. Best plan: move to (1,3), then suppressing_fire on Wraith to slow it.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "suppressing_fire",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Phantom is at (2,4) distance 2 to my north, Marksman at (1,3) distance 2 to my northwest. I'm fortified but need to advance to hold the front line. Moving to (2,3) puts me adjacent to Phantom at (2,4) and closer to Marksman. From (2,3) I can attack Phantom. Pulse is at (3,2) behind me — I should move north to screen allies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 11,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Suppressed to 1 tile movement. No enemies in range. Valid moves: (3,4) or (4,3). Marksman is at (1,3) facing W — I'm behind them but can't reach. Phantom at (2,4) facing E. Moving to (3,4) keeps me near Phantom and puts me closer to their flank. No abilities usable this turn. Best move is toward (3,4) to close distance on Phantom for next turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Wraith is wounded at 2/4 HP and is 2 tiles away at (3,4). I need to move adjacent to Wraith to heal them. Moving to (3,3) puts me adjacent to Wraith at (3,4) and I can then use patch to heal them for 2HP.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "I'm at (2,4) with 3HP, not cloaked. Wraith is adjacent at (3,4) and Aegis is adjacent at (2,3). Priority: breach is ready and high-value. Pulse is the enemy medic — eliminating healing is key. I can reach (3,2) which is behind Pulse, then breach Pulse to sabotage their healing next turn. But first I need to get there: move to (3,2) puts me behind Pulse at dist=1. Then breach Pulse from behind. This removes their healing and wastes their turn. Wraith is adjacent but I'll use Ghost Step to move through. Let's move to (3,2) then breach Pulse at (3,3).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "addendum": "Move away from your allies toward the edge at (5,3)"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Orders say move away from allies toward edge. I'm at (5,4). Allies are at (3,2) and (1,3). Moving toward map edge means going to (5,5) or (5,1) area. (5,5) is valid and moves me away from allies toward the corner edge. Then scan Aegis at (2,3) - but dist=4 and scan requires ≤4 tiles, currently out of range after moving to (5,5). Better to scan first then move. From (5,4), Aegis is at dist=4 which is exactly in range. Scan Aegis first, then move to (5,5) to reach the edge away from allies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Aegis is adjacent at (2,3), which blocks precision_shot. Pulse is at (3,3) distance 2 and in range. I should move away from Aegis first to clear the adjacency restriction, then use precision_shot on Pulse. Moving to (0,3) puts me at distance 2 from Aegis (no longer adjacent) and distance 3 from Pulse - too far. Moving to (1,4) keeps distance 2 from Pulse at (3,3)? No, dist from (1,4) to (3,3) = |3-1|+|3-4| = 2+1 = 3, out of range. Moving to (0,4): dist to Pulse (3,3) = 3+1=4, no. Moving to (1,2): dist to Pulse (3,3) = 2+1=3, no. Moving to (2,4): dist to Aegis (2,3)=1, still adjacent. Moving to (0,3): not adjacent to Aegis, dist to Pulse = |3-0|+|3-3|=3, out of range. It seems moving away from Aegis puts Pulse out of range. Best option: stay and use suppressing_fire on Pulse to slow them, since precision_shot is blocked by adjacent Aegis. Suppressing_fire hits Pulse at (3,3) with 1dmg in a line - I need to target a point and it fires a 2-tile line from target. Actually suppressing_fire: 1dmg 2-tile line from target, range ≤2. Target Pulse at (3,3), this slows Pulse. Then I'm still adjacent to Aegis. Or: use suppressing_fire first targeting (3,3) to hit/slow Pulse, then move away to (0,3) to retreat from Aegis.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "suppressing_fire",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (2,3) with 50% damage reduction. Phantom is at (3,2) to my SE, Marksman at (0,3) to my W. Allies Wraith and Pulse are at (3,4) and (3,3). My orders are to hold the front line between allies and enemies. If I move I lose Fortify. Phantom is 2 tiles away - I can't attack without moving. Marksman is also 2 tiles away. Best play: stay fortified and use shield_wall to protect allies from the south-facing threat (Phantom approaching from S). Pulse is at (3,3) which is adjacent diagonally - Phantom at (3,2) is directly south of Pulse. I should shield_wall targeting Pulse toward S to block Phantom's attacks on Pulse. Wait as second action to keep Fortify.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "S"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 10,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Orders are to move away from allies and toward the map edge. I'm at (5,5) which is already a corner. Valid moves show I can go to (5,2), (5,3), or (5,4) — moving south along the east edge keeps me away from allies clustered around (3,2)-(3,4). Wraith is in range at (3,4) and known to use shadow_strike when adjacent — I should stay far. Move to (5,2) to push toward the southern edge while staying on the eastern wall, away from the central cluster.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Phantom is 2 tiles south at (3,2) facing S — I'm already behind them but can't reach adjacent this turn without a valid behind-tile option. Marksman at (0,3) facing W has a reachable behind position at (1,3) — I can move there and breach for a high-value control play. Breach cooldown is ready and I have 1 use left. Moving to (1,3) puts me behind Marksman (adjacent), enabling breach to take control of their striker next turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 0,
+              "y": 3
+            },
+            "addendum": "Move away from allies and toward the enemy team next turn"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Suppressed, so movement reduced to 1. I'm ordered to move toward (5,3). From (3,3), valid moves are (3,4) or (4,3). Moving to (4,3) gets me closer to (5,3). Aegis at (2,3) needs heal but is not adjacent (dist=2 from current, would be dist=2 from (4,3)), so I can't heal. No ability targets available. Move to (4,3) then wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Breach is on cooldown, so I need to prioritize shadow_strike while cloaked. Pulse is a high-value medic target — I can move to (3,3) which is behind Pulse and adjacent, then use shadow_strike to deal 1 damage while staying cloaked. This eliminates the medic's healing threat without breaking cloak.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Wraith is adjacent at (1,3) which blocks precision_shot. I need to move away from allies (Phantom at 3,3 and Watcher at 5,2) and toward enemies. Moving to (1,4) gets me closer to the enemy cluster and away from allies. Wraith is adjacent so I can't use precision_shot this turn, but after moving to (1,4) Wraith is no longer adjacent — I can then use precision_shot on Aegis at (2,3) for 2 damage since I moved (1dmg reduced). Wait, precision_shot does 1dmg if moved. Alternatively, use suppressing_fire on Wraith/Aegis. Or move first to (1,4) then precision_shot Aegis at dist 2 for 1dmg (moved penalty). Actually better: stay and precision_shot Wraith at (1,3) — but Wraith is adjacent so precision_shot is blocked. Use suppressing_fire targeting Wraith at (1,3) for 1dmg in a 2-tile line, which could also hit Aegis at (2,3). Direction from (0,3) toward Wraith at (1,3) is East — suppressing_fire in a line from target hits tiles along that direction. Then move to (1,4) to reposition toward enemies and away from allies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "suppressing_fire",
+            "target": {
+              "x": 1,
+              "y": 3
+            },
+            "direction": "E"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Phantom is adjacent at (3,3). I'm fortified (50% dmg reduction) and suppressed (mv1). Staying put preserves fortify bonus. Attack Phantom first, then shield_wall East to block Phantom's attacks on allies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 9,
+          "maxHp": 12,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "I'm at (3,3) behind Pulse at (4,3) — already in breach position. At 2HP I need to be aggressive and decisive. Breach Pulse to take the medic out of the fight, then shadow_strike Aegis or reposition. Breach is ready and I'm already behind Pulse (my position (3,3) is listed as behind Pulse). Use breach first, then shadow_strike Aegis who is adjacent.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "addendum": "Move away from allies, do not heal anyone this turn"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Orders say move away from allies and don't heal. Allies are to my west. Phantom is adjacent at (3,3). I should move away from allies (east/south) while possibly attacking Phantom. Moving to (5,3) takes me east away from allies. Then I can attack Phantom who stays at dist=1 from (4,3) but after moving to (5,3) Phantom is at dist=2 - out of melee range. Better to attack first while Phantom is adjacent, then move away east to (5,3) or (5,4).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Pulse (enemy medic) is adjacent at (5,3). Pulse healed/supported enemies last turn. Wraith is about to breach one of my allies. Aegis attacked Phantom (who is critical). Priority: Phantom is critical and Aegis is attacking them. I should recalibrate Phantom to warn about Aegis's shield_wall direction and Wraith's breach. But Phantom is at (3,3) — too far for recalibrate (adjacent only). I can move to get adjacent to Phantom or Marksman. Pulse is adjacent — I could scan Pulse but prompt is already known. Wraith used breach last turn at (0,3) targeting someone there. Wraith is at (1,3) heading W. I need to track Wraith after cloak. I can move closer to recalibrate Phantom (critical), who is at (3,3). From (5,2), moving to (4,3) puts me adjacent to Phantom at (3,3) — yes, distance 1. Then recalibrate Phantom with warning about Aegis attacking from (2,3) east side and Wraith shadow_striking. That gives critical ally actionable intel. Move to (4,3) then recalibrate Phantom.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "addendum": "Aegis will attack you from (2,3) — disengage north or east. Wraith is at (1,3) cloaking and will shadow_strike adjacent — do not move west. Retreat to safety."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "I'm suppressed so movement is reduced to 1. Marksman is adjacent (1,4) and I'm already behind them. Shadow_strike deals 1dmg, keeps cloak if I have it (I don't). Best move: use shadow_strike on Marksman since they're adjacent and I'm behind them — deals damage. I can't breach (limit reached). I'll shadow_strike first, then move to (0,3) to reposition away from the cluster.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Orders are to move away from allies and toward enemies. I'm at (1,4), allies at (3,3) and (4,3). Enemies Aegis at (2,3) and Wraith at (0,3). Moving to (1,3) gets me closer to the enemy cluster and away from allies. From (1,3) I'll still be in range of Aegis at dist=2. I should fire precision_shot on Aegis (sentinel) for 2dmg before moving, since I haven't moved yet this turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (2,3) with 4/8 HP. Phantom is critical at (3,3) distance 1 — priority target to eliminate. Marksman is healthy at (1,3) also adjacent. I should stay put to keep Fortify active (50% damage reduction) and attack Phantom to finish it off. Not moving preserves fortification. Attack Phantom first since it's critical and will die, then I still have my position holding the line between allies and enemies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 9,
+          "maxHp": 12,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Foresight shows Phantom will breach (4,3) — my current position. I must move away. Pulse is adjacent at (5,3) and already scanned. All enemies scanned. Best value now: move to safety, then recalibrate Marksman to help coordinate against the wounded Aegis and the cloaking Wraith threat. Move to (3,4) to escape Phantom's breach target, then recalibrate Marksman at (1,3) — but (1,3) is not adjacent to (3,4). Instead move to (3,3) puts me adjacent to Marksman... but Aegis is also at (2,3) which would be adjacent and block scan. Let me move to (3,4): Marksman at (1,3) is distance 3, not adjacent. Move to (4,4): Marksman still not adjacent. I can't reach adjacent to Marksman this turn while escaping. Best play: move away from breach target (4,3) to (3,4), then scan Wraith — Wraith is at (0,3), distance from (3,4) is 3+1=4, exactly in scan range. Wraith is already scanned though. All enemies scanned. Use scan on Pulse for 1 damage since adjacent? Pulse is at (5,3), from (3,4) dist=sqrt(4+1)~2.2, in range. But Pulse already scanned. Dealing 1 damage to Pulse with scan is still useful. Move to (3,4) to escape breach, then scan Pulse for chip damage.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Marksman is adjacent at (1,3), I'm at (0,3). I'm cloaked (shadow_strike keeps cloak). Use shadow_strike on Marksman first for 1 damage while staying cloaked. Then move to (1,4) to get behind Marksman for next turn positioning.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Orders are to move away from allies and not heal. Allies are to my west (Aegis at 2,3, Wraith at 1,4). I should move east/south to increase distance. Moving to 5,5 gets me to the corner, away from allies. No healing this turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "I'm at (1,3) with Aegis adjacent at (2,3) and Wraith adjacent at (1,4). Orders say move away from allies and toward enemy team. Watcher ally is at (3,4). I need to move toward enemies while away from allies. Moving to (2,2) gets me away from Watcher and stays near Aegis. But precision_shot is blocked when adjacent to enemy, so I should move first then shoot. If I move to (2,2), Aegis at (2,3) is still adjacent (dist=1), blocking precision_shot. Move to (0,2) instead - that's away from Watcher ally at (3,4) and I can use attack on Aegis... but Aegis would be at dist=3 from (0,2). Better: move to (2,4) - closer to enemy cluster, away from Watcher at (3,4)? Watcher is at (3,4), (2,4) is adjacent to Watcher so that's toward allies. Try (3,3) - dist from Watcher(3,4)=1, too close. Try (2,2): away from Watcher(3,4), dist=2.8. Aegis(2,3) would be dist=1 still, blocking precision_shot. Use suppressing_fire on Aegis from (2,2) - target (2,3), direction doesn't matter, 1dmg and slow. That works.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "suppressing_fire",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm at 3/8 HP, fortified (50% damage reduction) and suppressed (movement 1). Marksman is adjacent at (2,2) and wounded — perfect target for attack. I should stay put to keep Fortify active and attack the Marksman. No need to move.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 12,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Watcher is healthy at (3,4) and I can reach (3,3) which is directly behind them. Moving there and using shadow_strike keeps cloak and deals damage. Priority target since I'm cloaked and breach is exhausted.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Orders are to move away from allies and not heal. Allies are mostly to my southwest. Moving to (4,3) or (5,2) would increase distance. (5,2) keeps me on the east edge and moves away from both Aegis at (2,3) and Wraith at (3,3). I'll move to (5,2) to maximize distance from allies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Wraith is adjacent at (3,3) — scan is blocked when adjacent to enemy. But Wraith's prompt is already known. Pulse is the highest priority: breached and out of healing range of allies, but dist=4 means scan just barely out of range from here. I need to move closer to Pulse first. Move to (4,3) or (5,3) to get Pulse in scan range (dist≤4 from (5,2)). From (5,3): dist to Pulse(5,2)=1, well in range. Also need to avoid getting adjacent to Wraith who will shadow_strike. Wraith last turn moved to (1,4) per foresight — so they're moving away. Current foresight shows Wraith at (3,3) this turn though. Move to (4,3) puts me 1 away from Wraith at (3,3) — risky. Move to (5,3) keeps distance from Wraith and puts Pulse at dist=1. But Wraith is at (3,3) so (5,3) is fine. From (5,3) scan Pulse at (5,2) to verify their breached status and deal damage.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Aegis is adjacent (dist=1) which blocks precision_shot. I'm at 2HP so I need to be careful. I should move away from Aegis to get range, then use precision_shot on the wounded Aegis. Moving to (1,1) puts me at dist=2 from Aegis at (2,3), enabling precision_shot. But moving first means precision_shot does 1dmg instead of 2dmg. Better: move to (2,1) - that's dist=2 from Aegis at (2,3), allows precision_shot but with 1dmg penalty for moving. Actually, Aegis is at (2,3) and I'm at (2,2) - they're adjacent north. If I move to (1,2) that's dist=2 from Aegis (1 step east + 1 step north = diagonal? dist = max(1,1)=1 or Manhattan=2). Manhattan dist from (1,2) to (2,3) = |1-2|+|2-3| = 1+1 = 2. So precision_shot works but 1dmg due to moving. Aegis is wounded so 1dmg might finish them. Let me move to (1,2) to escape adjacency, then precision_shot Aegis for 1dmg.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm at 2/8 HP and fortified. Marksman is at dist 2, not adjacent so I can't attack. If I stay put, I keep fortify (50% dmg reduction) which is crucial at low HP. Moving to (1,3) puts me adjacent to Marksman at (1,2) but loses fortify. Better to hold position and use shield_wall westward to protect against Marksman's incoming fire, shielding myself and any adjacent allies from W direction.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "direction": "W"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 12,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Watcher is at (5,3) facing E, and (4,3) is behind them, adjacent, and reachable in 1 move. I'm cloaked or can shadow_strike while adjacent. Move to (4,3) to get behind Watcher, then shadow_strike for 1dmg while staying cloaked. Breach is unavailable. Watcher is healthy but this keeps pressure on and preserves cloak.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Watcher is adjacent at (5,3) - patch is blocked by adjacent enemy. I need to move away from Watcher to heal. Wraith at (4,3) is wounded (3/4 HP, dist=2). If I move to (4,2), I'm adjacent to Wraith and away from Watcher. Then I can patch Wraith. Aegis at (2,3) is more wounded (2/8) but farther. Priority: get away from Watcher, get adjacent to a wounded ally, heal.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Wraith is adjacent at (4,3) and will cloak+shadow_strike next turn per Foresight. I must move away to break adjacency and prevent scan block, then scan Wraith before it cloaks. Moving to (3,4) puts me 2 tiles from Wraith's predicted move to (3,3) — still in scan range. I already have all enemy prompts, so priority is tracking Wraith before cloak. Scan Wraith now at (4,3) for 1 damage and to maintain track.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Aegis is critical at dist=2 and in range. Precision_shot needs LoS and I must not be adjacent to Aegis. Aegis is at (2,3), I'm at (1,2) — not adjacent (diagonal doesn't count as adjacent for the block). Distance is 2, within range. Fire precision_shot at Aegis to finish them off. After that, move to reposition away from threats or get angle on Pulse.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm at 1/8 HP — critically low. Fortified gives me 50% damage reduction if I don't move. Watcher is at (3,4) dist=2, Marksman at (0,2) dist=3. Neither is adjacent so no attack. Pulse is wounded at (4,2) and Wraith is at (4,3). My orders say hold the front line and shield_wall toward incoming threats. If I stay put I keep Fortify. Watcher at (3,4) is to my NE — shield_wall N could protect against attacks from that direction. I should stay fortified and use shield_wall to protect allies from the nearest threat direction.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 12,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 5,
+          "position": {
+            "x": 0,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 9,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0/3 remaining). Wraith is adjacent at (4,3) and wounded at 3/4 HP — I can use overclock on Wraith to boost their damage output. Aegis is critically low at 1/8 HP but I can't heal. Moving toward Aegis to stay adjacent to most threatened ally. From (4,2), I can move to (3,2) to get closer to Aegis at (2,3) — dist would be 2. Then use overclock on Wraith at (4,3) which is adjacent to my current position before moving... but I need to act in order. If I move first to (3,2), Wraith at (4,3) is no longer adjacent (dist=2). If I use overclock on Wraith first (currently adjacent at (4,3)), then move toward Aegis. Overclock first on Wraith, then move to (3,3) to be closer to Aegis.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Watcher is healthy at (3,4) and I'm behind them from (4,4). I have 2 ability uses from overclocked. Move to (4,4) to get adjacent and behind Watcher, then shadow_strike twice for 2 damage total — that should finish or cripple Watcher. Breach is unavailable. This is the best offensive play.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Foresight shows Wraith moving to (4,3) then shadow_striking (5,3), and Pulse moving to (4,2) then patching (4,3). I'm adjacent to Wraith at (4,4) right now — scan is blocked when adjacent to enemy Vector/specter? Actually scan is blocked adjacent to enemy Vector, and Wraith is a specter not Vector, so scan should work. But Wraith is already scanned. Pulse is adjacent (3,3) and already scanned too. Aegis at (2,3) is dist 2, already scanned, critical. All enemies already scanned — no new intel needed. My best play: Marksman at (0,2) is wounded and isolated. I should recalibrate Marksman but they're not adjacent. I'm at (3,4). Wraith will move to (4,3) next turn — dangerous. I should move away from the cluster. Pulse is healing Wraith area. I could move to (2,4) to stay safe and recalibrate someone adjacent, but Marksman is far. Best option: move to (2,4) to be adjacent to Aegis (critical, about to be finished) — but Aegis is enemy. Or move to (1,4) to stay safe. Actually I should recalibrate Marksman with useful intel — but they're not adjacent. Let me move toward Marksman. From (3,4) I can move to (1,4) or (1,3). Then recalibrate Marksman at (0,2)? Still not adjacent from (1,3). I have speed 3 so I can move up to 3 tiles. Valid moves include (1,3). From (1,3) Marksman at (0,2) is dist 2 — still not adjacent. Can I reach (0,3)? Not in valid list but let me check — it's not listed. Move to (1,3) and wait, or move to (2,2) — from (2,2) Marksman at (0,2) is dist 2, not adjacent. I can't recalibrate Marksman this turn. Best play: move away from Wraith/Pulse cluster to safety. Move to (1,4) and wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Aegis is at distance 3, which is out of my range 2 for precision_shot. Need to close to range 2. Moving to (2,2) puts me at distance 1 from Aegis (adjacent), which would block precision_shot. Moving to (1,2) gives distance 2 from Aegis at (2,3) — that's exactly range 2, and I haven't moved yet so precision_shot deals full 2dmg. Aegis is critical so this should finish them off.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 10,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses left). Wraith is wounded at (4,4) with 2/4 HP and needs support. I should move adjacent to Wraith to use overclock, giving them 2 abilities next turn to maximize damage output. Moving to (4,3) puts me adjacent to Wraith at (4,4). Then I can overclock Wraith.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": "Position occupied",
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": "Must be adjacent"
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Watcher is wounded and only 3 tiles away. I can move to (2,4) which is behind Watcher (adjacent), then use shadow_strike for 1 damage while staying cloaked. Breach is unavailable. Priority: close on Watcher and deal damage.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "I'm at 2HP, critically wounded. Wraith is adjacent at (2,4) and about to shadow_strike — I must flee. Scan is blocked when adjacent to enemy Vector, but Wraith is a specter, not Vector class, so scan may work. However, at 2HP I can't risk staying adjacent. Foresight shows Wraith moves to (4,4) then shadow_strikes (3,4), meaning Wraith is moving away from me this turn. I should move away to safety first, then use a utility action. Moving to (0,4) or (0,5) puts me at distance. Pulse is already scanned. Wraith is already scanned. Both enemy prompts known. I should recalibrate Marksman at (1,2) — but I need to be adjacent. Marksman is at (1,2), I'm at (1,4), not adjacent. If I move to (1,3) I'm adjacent to Marksman at (1,2) and can recalibrate. But Wraith is adjacent now — move first. Move to (0,4) to escape Wraith, then wait since I can't reach Marksman for recalibrate and both enemies already scanned.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Both Wraith and Pulse are wounded and in range at dist=3. My range is 2, so dist=3 means they are OUT of range for precision_shot (range≤2). I need to move closer. Moving to (2,2) gets me dist=2 from Pulse at (3,3) and dist=2 from Wraith at (2,4). From (2,2): to Pulse(3,3) = |3-2|+|3-2|=2, to Wraith(2,4) = |2-2|+|4-2|=2. Both in range. Wraith is specter - dangerous. Pulse is medic - will heal. Priority: kill Wraith first to prevent healing support, then Pulse. Precision_shot deals 2dmg - enough to finish a wounded enemy.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 11,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "HP 1/4, critical condition. Breach unavailable. Marksman is wounded and at dist 2 — behind tile [1,2] is reachable. Move to (1,2) to get behind Marksman, then shadow_strike for 1 damage while staying cloaked (if cloaked) or just attack. Wait — I'm not cloaked (tip says don't cloak again). I need to finish off a wounded enemy. Move to (1,2) to get adjacent to Marksman from behind, then shadow_strike to deal damage safely.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "I'm at critical HP (2/6) and need to stay alive. Wraith is at (1,2) distance 3, critical HP, and I know its prompt — it shadow_struck at (1,4) last turn meaning it's likely at (1,4) now or moving there. Foresight shows Wraith moved to (2,4) then shadow_strike at (1,4). So Wraith is probably at (1,4) now — adjacent to me at (0,4). I must NOT stay here or scan will be blocked and I'll get shadow_struck. I need to move away from (1,4). Moving to (0,2) puts me farther from Wraith. Then I can recalibrate Marksman at (2,2) — but that's not adjacent. Best move: flee to (2,5) to get distance, then wait. Actually Marksman is at (2,2) critical — recalibrate could help but must be adjacent. I'm too far. Priority: survive. Move to (0,2) to escape Wraith at (1,4), then scan Wraith if still in range (dist from 0,2 to 1,4 = 3, in range). Wraith is already scanned though. I could recalibrate... no allies adjacent after move. Just move to safety and wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses left). Wraith is critically wounded at (1,2) but I can't heal. I should move toward Wraith to stay adjacent to the most threatened ally and use overclock to give them 2 abilities next turn. Moving to (2,3) puts me adjacent to Wraith at (1,2) - distance 2, not adjacent. Moving to (1,3) puts me adjacent to Wraith at dist=1. From (1,3) I can use overclock on Wraith at (1,2) which is adjacent.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Pulse is wounded and in range at dist=2. I'm at 1HP so I need to finish this fast. Precision_shot does 2dmg which should be lethal to a wounded medic. I'm not adjacent to Pulse so precision_shot is not blocked. Fire now, then wait.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 12,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 0,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 12,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "I'm at critical 2HP so survival is priority. Foresight shows Wraith moving to (1,2) and shadow_striking (2,2) — threatening Marksman. Pulse will overclock at (1,2). I already have Pulse's prompt from scan. My best move: recalibrate Marksman at (2,2) to warn about incoming Wraith shadow_strike, then reposition away from danger. Marksman is adjacent at (2,2), so recalibrate is valid. I'll move to (0,3) to stay at range and avoid Wraith at (1,2).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 2,
+              "y": 2
+            },
+            "addendum": "WARNING: Wraith is shadow_striking you this turn from (1,2). Dodge or brace — high priority threat incoming."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0/3 remaining). Watcher is adjacent at (0,3) and wounded - I should use overclock on them to maximize their output. Marksman is critical at (2,2) but that's an enemy. My orders say stay adjacent to most threatened ally (Watcher) and use overclock on damage dealer if all healthy - but Watcher is wounded. I'm already adjacent to Watcher. Use overclock on Watcher to help them act twice. Then wait or hold position.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "firstResult": "No ally at target",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Critical situation: 1HP, Wraith is shadow_striking from (1,2) this turn. Must dodge. Pulse is wounded at (1,3) dist 2, in range for precision_shot. Plan: fire precision_shot at Pulse first to eliminate wounded enemy, then move away from (1,2) threat. Moving to (3,2) gets me away from the Wraith's strike location and maintains distance. Precision_shot at Pulse before moving so I don't take the 1dmg penalty for moving.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 12,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 13,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "I'm at 3/12 HP - critically wounded myself. Patch is unavailable (0 uses left). Watcher is adjacent at (0,3) and wounded. I can't heal but I can use overclock on Watcher to boost their effectiveness. Marksman is out of range at dist 3. I should use overclock on Watcher to help them deal with threats, then consider positioning.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "firstResult": "No ally at target",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "I'm at (0,3) with 2HP — critical and vulnerable. Pulse is adjacent at (1,3), also critical. Scan is blocked when adjacent to enemy, so I can't scan. I could attack Pulse for 1dmg to finish it off, but I only do 1dmg and Pulse is critical (likely 1-2HP). Foresight shows Pulse tried to overclock an ally last turn and failed, then waited — so Pulse may try to heal itself or move. My priority: attack Pulse to potentially eliminate it, then move away to safety. Attack first (ability), then move north to (0,5) or similar to escape. Valid moves include (0,4) and (0,5). Moving to (0,5) puts distance between me and any remaining enemies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "I'm at (3,2) with 1HP - critically vulnerable. Wraith is shadow_striking from (1,2) this turn - must dodge. Pulse is critical at (1,3), distance 3, in range for precision_shot. I haven't moved yet so precision_shot does full 2dmg. But first priority: survive the Wraith strike by moving away from (1,2). Moving to (4,3) gets me away from Wraith's (1,2) position and maintains distance. From (4,3) Pulse at (1,3) would be distance 3 - still in range 2? No, dist=3 exceeds range 2. Better to shoot first before moving, then retreat. Shoot Pulse first with precision_shot (haven't moved, full 2dmg, critical hit should finish them), then move away from Wraith threat toward (5,2) or (4,3).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 12,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 0,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 14,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "I'm at (1,3) with only 2HP - critically wounded myself. Patch is unavailable (0 uses left). Watcher is at (0,5), wounded, distance 3. I need to move adjacent to Watcher to support them. Moving to (0,4) gets me adjacent to Watcher at (0,5). Then I can use overclock on Watcher to give them extra abilities next turn, since patch is unavailable.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "secondResult": "No ally at target"
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "I'm at (0,5) with 2HP, critical. Pulse is adjacent at (0,4), also critical. Foresight shows Watcher is moving to (0,5) — my current position — so I need to move away. Pulse is adjacent which blocks scan. I should move away from both threats. Moving to (3,5) gets me far from Pulse (unblocking scan) and away from where Watcher is heading. Then I can scan Pulse from range to deal damage since they're critical and might go down.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Wraith is shadow_striking from (1,2) - I must dodge. I'm at (5,2) with only 1HP, so any hit kills me. Wraith is at (1,2) attacking me, so I need to move away. Valid moves include (5,4) or (4,3) which increase distance from (1,2). Moving to (5,4) puts me at distance 5 from Wraith and gets me off this row. Pulse is at (0,4) dist 7, out of range. No enemies in range to shoot. Best play: move to (5,4) to dodge the shadow strike, then wait since no targets in range.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 12,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "opponent",
+    "totalTurns": 15,
+    "reason": "opponent eliminated all enemies"
+  },
+  "endedAt": "2026-03-02T20:08:18.452Z"
+}
