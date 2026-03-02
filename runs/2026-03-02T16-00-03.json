@@ -1,0 +1,1149 @@
+{
+  "id": "2026-03-02T16-00-03",
+  "startedAt": "2026-03-02T16:00:03.989Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 4,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 5,
+        "movement": 2,
+        "range": 2,
+        "speed": 2
+      },
+      "oracle": {
+        "maxHp": 6,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 12,
+        "movement": 3,
+        "range": 2,
+        "speed": 3
+      },
+      "vector": {
+        "maxHp": 9,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 2,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 8,
+        "healAmount": 10
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Bastion",
+        "class": "sentinel",
+        "prompt": "Advance toward the nearest enemy. Use shield_wall facing the direction with the most enemies. If an enemy is adjacent, attack them."
+      },
+      {
+        "name": "Phantom",
+        "class": "specter",
+        "prompt": "Cloak immediately on turn 1. Move toward the enemy medic or weakest target. Use shadow_strike when adjacent while cloaked. Use breach to sabotage high-value targets."
+      },
+      {
+        "name": "Prophet",
+        "class": "oracle",
+        "prompt": "Scan early to give your team intel on enemy prompts. Target enemy specters with scan to track them after cloak. Use recalibrate on allies who need tactical adjustments. Stay safe at range behind your front line."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Phantom",
+        "class": "specter",
+        "prompt": "Cloak immediately on turn 1. Move toward the enemy medic or weakest target. Use shadow_strike when adjacent while cloaked. Use breach to sabotage high-value targets."
+      },
+      {
+        "name": "Lens",
+        "class": "oracle",
+        "prompt": "Scan early to give your team intel on enemy prompts. Target enemy specters with scan to track them after cloak. Use recalibrate on allies who need tactical adjustments. Stay safe at range behind your front line."
+      },
+      {
+        "name": "Bastion",
+        "class": "sentinel",
+        "prompt": "Push forward aggressively. Shield_wall facing the enemy cluster. If flanked, turn to face the biggest threat. Attack when possible."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "All enemies are out of scan range (min dist 5, need ≤4). I need to advance north to get Lens or Bastion in range. Moving to (3,4) gets me dist=1 from Lens at (2,5) and dist=2 from Bastion at (4,5). Actually moving to (3,4): dist to Lens=(|3-2|+|4-5|)=2, dist to Bastion=(|3-4|+|4-5|)=2, both in scan range. I'll move north to (3,4) then scan Lens to reveal their prompt and deal damage.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Enemy Prophet (oracle) is at (3,4), distance 2, within scan range. Scanning it reveals their prompt and deals 1 damage - high value target since oracles can scan my allies. I'm already in a good position. Scan Prophet first, then consider moving to maintain distance from the front line.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Round 1 — cloak immediately per orders. All enemies are far (dist 5+), no threats adjacent. After cloaking, advance north toward Phantom at (0,5) to close distance while invisible.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Round 1 — cloak immediately per orders. Then move toward Prophet at (3,4) who is the closest high-value target. Cloaking first keeps me invisible as I advance.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "No enemies adjacent. Nearest enemy Lens is at (2,5), dist=5 to my north. I should advance north toward Lens. Moving to (2,2) gets me closest while staying on valid tiles. Then use shield_wall facing N since enemies are to the north.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Prophet is only 2 tiles away at (3,4). I need to close in and attack. Moving to (3,5) puts me adjacent to Prophet for an attack. Orders say push aggressively and attack when possible.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Foresight shows Bastion attacked me last turn and is at (3,5) dist=1. Enemy Lens already scanned. I'm at 4/6 HP. Bastion is adjacent — I should move away to avoid another attack. Moving to (4,4) gets me away from Bastion while keeping Lens in scan range (dist would be ~2). Then scan Lens again isn't useful since prompt is known. Bastion sentinel at (3,5) is in scan range at dist=1 — scan it to get its prompt and deal 1 damage. Move to (4,4) first to reposition, then scan Bastion at (3,5) from dist=2 which is within range 4.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Cloaked with 1 turn remaining — must use it this turn or lose it. Both enemies are out of range (dist 4-5). Closest is Lens at (2,5). I need to close distance aggressively. Move toward Lens: from (0,3) I can reach (2,5) in two moves but only have speed 3 this turn. Best move is toward (1,5) or (2,4) to get within strike range next turn. Valid moves include (1,5) and (2,4). Moving to (2,4) puts me adjacent to Lens at (2,5) — dist 1, can shadow_strike while cloaked! Let me verify: (2,4) is in valid moves list. Yes it is. Then shadow_strike Lens at (2,5).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": "Specter can move through but not end on occupied tile",
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "secondResult": "Must be adjacent"
+        },
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Cloak has 1 turn remaining. Prophet at (4,4) facing E means I'm already behind them from (3,4), which is adjacent and reachable in 1 move. Move to (3,4) and use breach on Prophet — high-value oracle target, sabotaging their next turn is ideal use of breach before cloak expires.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 4,
+              "y": 4
+            },
+            "addendum": "Attack your nearest ally"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Foresight shows enemy Prophet attempted to scan me last turn at (2,5) — they know my position. Enemy Phantom cloaked and moved to (2,4) last turn, so they may be nearby and dangerous. I need to scan the enemy Phantom at (0,3) to track them, but they're just out of range at dist=4. I could move closer to get them in range, but that risks exposure. Better to scan enemy Bastion at (2,2) for intel — it's in range at dist=3. Actually, Prophet is already scanned. Enemy Phantom is the real threat since they can cloak and flank. Moving to (1,4) would put Phantom at dist=4 — still borderline. Let me scan Bastion at (2,2) for their prompt, then consider repositioning. Actually scanning Phantom is priority per orders. Move to (1,4) to get Phantom within scan range (dist=4 from (1,4) to (0,3) = 1+1=2, actually dist=|1-0|+|4-3|=2), then scan Phantom.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "No enemies adjacent, so no attack possible. Orders say advance toward nearest enemy. Nearest enemies are Phantom at (3,4) and Lens at (1,4), both dist 3. Moving to (2,4) gets me closer to both. Then use shield_wall facing N since enemies are to my north.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 5
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "I'm at (3,5) fortified with 50% damage reduction. Enemies Bastion at (2,4) and Prophet at (4,4) are both dist=2, not yet adjacent. Orders say push forward aggressively and shield_wall facing enemy cluster. If I move to (2,5), I can get adjacent to Bastion at (2,4) for an attack. Allies Phantom is at (3,4) and Lens at (1,4). The enemy cluster is to my south. Moving to (2,5) keeps me close to allies and puts Bastion in melee range. After moving, I lose fortify, but I can attack Bastion. Shield_wall facing S would protect Phantom at (3,4) from southern threats, but attack is more aggressive. Orders say push forward and attack when possible.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "I'm already behind Prophet (at 3,4 facing E, I'm at 3,4 — wait, I AM at 3,4 which is behind Prophet). Breach is on cooldown (1 turn remaining) so I can't use it. Prophet is adjacent at (4,4) and I'm behind them. Shadow_strike hits adjacent targets and keeps cloak — but I'm not cloaked. I can use regular attack on Prophet (high-value oracle target) since they're adjacent. Or I could shadow_strike for 1 dmg. Bastion is also adjacent at (2,4). Prophet (oracle) is the higher value target. I'll attack Prophet directly. Then I could move to get better position or attack Bastion. Actually, I only get one ability per turn. Attack Prophet at (4,4) for 1 damage. Then move to (2,3) to get behind Bastion for next turn's breach.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "I'm at (1,4) with 5/6 HP. Foresight shows enemy Bastion tried to move to (2,4) and enemy Phantom tried shadow_strike on (2,5). Enemy Bastion is adjacent at (2,4) - scan is blocked when adjacent to enemy Vector, but Bastion is a sentinel not a Vector. My orders say scan for intel. Prophet is already scanned and wounded at (4,4). Phantom is already scanned. Enemy Bastion at (2,4) dist=1 is unscanned - scanning it would give me its prompt and deal 1 damage. I should scan the Bastion to get intel. After scanning, I could move back to safety. Current position (1,4), I can move to (1,5) or (0,5) to stay at range. Let me scan Bastion first then move to (1,5) to maintain distance while staying useful.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Lens is at (1,5) facing N — I can reach (1,4) which is directly behind Lens and adjacent. Move there, then breach Lens to sabotage the enemy oracle. This uses my breach ability on a high-value target from behind.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 1,
+              "y": 5
+            },
+            "addendum": "Move away from your allies and toward the enemy Bastion at (2,5)"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Orders say attack nearest ally. My allies are Bastion @(2,4) dist=2 and Phantom @(1,4) dist=3. Bastion is nearest. Attack range is adjacent only (1 tile). I need to move adjacent to Bastion at (2,4). From (4,4), I can move to (3,4) which puts me dist=1 from Bastion at (2,4) — adjacent. Then attack Bastion.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "I'm fortified (50% dmg reduction) and have two enemies adjacent: Phantom at (2,3) to my south and Bastion at (2,5) to my north. Orders say attack adjacent enemy. I'll stay put to keep Fortify active and attack the wounded-side threat. Phantom is healthy and closer in initiative order — attack it. I could also use shield_wall to protect Prophet at (3,4) who is wounded, facing S where Phantom is.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Bastion is adjacent at (2,4) to my south. I'm fortified with 50% damage reduction. Orders say push forward and shield_wall facing enemy cluster. Enemy cluster is to the south (Bastion at 2,4, Phantom at 1,4, Prophet at 3,4). I should attack Bastion first, then shield_wall facing S to protect against the cluster.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 1,
+              "y": 5
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Lens (oracle) is adjacent at (1,5) and I'm already behind them at (1,4). Breach is on cooldown (1 turn remaining), so I can't use it. Shadow_strike is the best option — it deals damage while keeping cloak if I'm cloaked, but I'm not cloaked. Regular attack or shadow_strike both deal 1 dmg. I'll use shadow_strike on Lens since it's adjacent and I'm behind them. Then I should reposition — Bastion at (2,5) is reachable if I move to (3,5) which puts me behind them. But first priority: eliminate or weaken Lens with shadow_strike, then move toward Bastion's back at (3,5).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Orders say attack nearest ally. My allies are Bastion @(2,4) dist=2 and Phantom @(3,5) dist=1. Phantom is closer at dist=1. Attack requires adjacent (dist=1), so Phantom @(3,5) is adjacent and attackable. I'll attack Phantom directly.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Orders say move away from allies and toward enemy Bastion at (2,4). I'm at (1,5), Bastion is at (2,4). Moving to (1,4) gets me closer to Bastion while moving away from ally Bastion at (2,5). From (1,4) I'm still not adjacent to enemy Bastion so can't attack. I could scan enemy Phantom at (3,5) from (1,4) — dist would be ~2.8, within range 4. But Foresight shows enemy Phantom plans breach on (1,5) this turn, so moving away is smart. Scan enemy Phantom to deal 1 damage and reveal (already known prompt, but 1 damage is useful on wounded target).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "I'm already behind Bastion (wounded, facing N) at distance 1. Breach is ready and I'm in the behind tile. Breaching Bastion will make it obey me next turn — that's high value since it's a sentinel that can tank/disrupt. I can breach from current position without moving. After breach, I can shadow_strike Bastion for damage while staying safe.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 2,
+              "y": 4
+            },
+            "addendum": "Move toward Prophet at (3,4) and attack it"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Orders are to move toward Prophet at (3,4) and attack it. Prophet is at (3,4), I'm at (2,4). I need to move adjacent to Prophet then attack. Moving to (3,3) would put me adjacent to Prophet at (3,4) — distance 1, valid attack. But wait, can I move to (3,3)? That's in valid moves list. From (3,3) Prophet at (3,4) is distance 1, so attack is valid. However, moving loses Fortify. Alternatively, Prophet is already at distance 1 from my current position? No — I'm at (2,4), Prophet at (3,4), that's distance 1. I can attack Prophet right now without moving! Attack first, then I can stay fortified. Orders say move toward Prophet AND attack — but Prophet is already adjacent. I'll attack Prophet first (preserving fortify), then wait since no move is needed.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Phantom is critical at (3,5) — priority target. Bastion is wounded at (2,4). Both are in range. Orders say attack when possible and shield_wall facing the enemy cluster. I'll attack Phantom first to finish them off (critical = near death), then shield_wall facing East/South to cover the cluster at (2,4)/(3,4). I'm fortified so I keep 50% damage reduction by not moving.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 4
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Orders say attack nearest ally. My ally Bastion is at (2,4), distance 2 — not adjacent, so can't attack directly. But I can move adjacent first. Moving to (3,3) gets me closer but still not adjacent to Bastion at (2,4). Moving to (2,2) or other tiles... Bastion is at (2,4). To be adjacent I need to be at (1,4), (3,4) [current], (2,3), or (2,5). I'm already at (3,4) which is adjacent to (2,4)? Distance from (3,4) to (2,4) is 1 — yes, already adjacent! So I can attack Bastion at (2,4) right now without moving.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Orders say move away from allies and toward enemy Bastion at (2,4). I'm at (1,4), Bastion is adjacent at (2,4) and critical. I should attack the critical Bastion to finish it off, then move. Attack first while adjacent, then move toward (2,5) area — but wait, orders say toward enemy Bastion at (2,5)? There's no enemy Bastion at (2,5), ally Bastion is there. Enemy Bastion is at (2,4). I'll attack the adjacent critical enemy Bastion, then move to create separation from allies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Bastion is adjacent at (2,4), critical HP, and I'm already behind it. Shadow_strike keeps cloak active and finishes it off. Then move to (4,4) to get behind Prophet for next turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Prophet is at (3,4), distance 2 from my current (2,5). I need to move adjacent to attack. Moving to (3,5) puts me at distance 1 from Prophet at (3,4) — adjacent, so I can attack. Orders say push forward aggressively and attack when possible. I'll move to (3,5) then attack Prophet.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "opponent",
+    "totalTurns": 6,
+    "reason": "opponent eliminated all enemies"
+  },
+  "endedAt": "2026-03-02T16:03:28.902Z"
+}
