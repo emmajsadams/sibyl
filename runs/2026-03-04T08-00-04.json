@@ -1,0 +1,1782 @@
+{
+  "id": "2026-03-04T08-00-04",
+  "startedAt": "2026-03-04T08:00:04.503Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 3,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 4,
+        "movement": 2,
+        "range": 2,
+        "speed": 2
+      },
+      "oracle": {
+        "maxHp": 6,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 12,
+        "movement": 3,
+        "range": 2,
+        "speed": 3
+      },
+      "vector": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 9,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 2,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 9,
+        "healAmount": 10
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Wraith",
+        "class": "specter",
+        "prompt": "Cloak immediately on turn 1. Move toward the enemy medic or weakest target. Use shadow_strike when adjacent while cloaked. Use breach to sabotage high-value targets."
+      },
+      {
+        "name": "Bulwark",
+        "class": "sentinel",
+        "prompt": "Advance toward the nearest enemy. Use shield_wall facing the direction with the most enemies. If an enemy is adjacent, attack them."
+      },
+      {
+        "name": "Lattice",
+        "class": "vector",
+        "prompt": "Control chokepoints with traps. Place them between enemy positions and your allies. Use denial to block adjacent enemy abilities. Pulse groups when possible."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Prophet",
+        "class": "oracle",
+        "prompt": "Scan early to give your team intel on enemy prompts. Target enemy specters with scan to track them after cloak. Use recalibrate on allies who need tactical adjustments. Stay safe at range behind your front line."
+      },
+      {
+        "name": "Bulwark",
+        "class": "sentinel",
+        "prompt": "Hold the front line. Position between allies and enemies. Use shield_wall toward incoming threats. Attack adjacent enemies."
+      },
+      {
+        "name": "Longshot",
+        "class": "striker",
+        "prompt": "Position for clear sight lines. Prioritize killing wounded enemies with precision_shot. If forced to move, retreat away from threats. Suppressing_fire to slow rushers."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "All enemies are out of scan range (dist 5-7, need ≤4). I need to advance to bring enemies into scan range. Moving to (1,2) gets me closer to Wraith at (1,0) — dist would be 2, well within scan range. From there I can scan Wraith next action or this turn if I move first.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 1,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Round 1 — cloak immediately per orders. Prophet is only dist 2 away and I can reach behind it at (1,3) which is adjacent. Cloak first, then move to (1,3) to get behind Prophet for a breach next turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 1,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Both enemies are out of range (dist 5-6). I need to advance to get within range 2 for precision_shot. Moving to (4,3) gets me closer while staying away from Lattice's denial zone. Enemies are at (3,0) and (3,1) - still out of range after moving. Best to advance and wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Round 1, no enemies in range. Prophet is at (1,2) dist=3, Longshot at (4,3) dist=3. I should advance and place a trap on a key chokepoint between enemies and allies. Moving to (3,2) puts me closer and I can trap (3,3) to intercept Longshot's approach path. This controls the center corridor.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "No enemies adjacent. Advance north toward nearest enemies (Prophet at dist 4, Longshot at dist 4). Move to (3,1) to close distance. Use shield_wall facing N (direction of most enemies) to protect Lattice at (3,2).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 2
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Lattice(vector) is 3 tiles away at (3,2) with denial range. Moving to (3,3) would be adjacent to Lattice — avoid that. Move to (2,3) to advance toward enemies while staying clear of Lattice's denial zone. From (2,3) I'm 2 tiles from Lattice and 3 from Bulwark — not adjacent, so safe. Then wait/shield_wall isn't useful yet since no enemies are adjacent. I'll hold and use Fortify passive by not moving further.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 3,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 9,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 9,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Prophet is adjacent at (1,2) facing S. I can move to (1,3) to get behind Prophet, then breach them. Cloak has 1 turn left — breach doesn't break cloak. Moving to (1,3) puts me behind Prophet (they face S, I'm at their north/back). Wait — Prophet faces S, so behind is north side... no. Facing S means they look south, so behind them is their north — (1,1). Actually if facing S, behind = north tile = (1,1) where I currently am. Let me reconsider: the behind tiles show [1,3] for Prophet facing S. So behind Prophet (facing S) is (1,3) — south of them. That makes sense if 'behind' means the direction they're facing (their back is behind them as they face away). Move to (1,3) first, then breach Prophet from behind.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 1,
+              "y": 2
+            },
+            "addendum": "Move away from allies, toward the trap at (3,3)"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Orders say move toward trap at (3,3). Wraith is adjacent at (1,3) and already scanned. Lattice is 2 tiles away so I must avoid getting adjacent to it. Moving to (3,3) puts me on the trap but follows orders. From (1,2) I can move to (3,3) which is in valid moves. After moving there, I'm dist 2 from Bulwark at (3,1) — within scan range. I'll scan Bulwark to gather intel and deal 1 damage.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "secondResult": "Cannot use scan — adjacent to enemy Vector (Denial)"
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "At (4,3) with full HP. Lattice(vector) at (3,2) is 2 tiles away - within precision_shot range and not adjacent, so no blocking. Wraith and Bulwark are at dist=3 which exceeds precision_shot range of ≤2. Lattice is the closest threat and within range. I'll use precision_shot on Lattice at (3,2) for 2dmg since I haven't moved. I'll hold position to avoid moving adjacent to Lattice or losing shot opportunity.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Nearest enemy is Prophet at (3,3), dist 2. Move north to (3,2) to close gap, then shield_wall facing N where enemies cluster.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": "Position occupied",
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 2
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Wraith is adjacent at (1,3). I'm fortified with 50% damage reduction. Attack Wraith now, then hold position to keep fortify active for next round.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Prophet is adjacent at (3,3) - my Denial passive is already blocking their abilities. I can pulse to hit all three clustered enemies (Bulwark@2,3, Prophet@3,3, Longshot@4,3 are all within 1 tile of (3,3) area, but pulse is 1-tile AoE from my position). From (3,2), pulse hits within 1 tile: Prophet@(3,3) is distance 1, Bulwark@(2,3) is distance 2 (out of range), Longshot@(4,3) is distance 2 (out of range). So pulse only hits Prophet. Better to place a trap at a chokepoint. I'll move to (4,2) to stay adjacent to Prophet (maintaining Denial) and place a trap at (3,3) or (4,3) to threaten enemies. Actually, trap can't be placed on occupied tiles. Place trap at (4,4) as a chokepoint, or (2,4) to cover ally Wraith's flank. Let me pulse Prophet first (1 dmg, adjacent), then place trap at (2,3) after they move - but (2,3) is occupied. I'll pulse Prophet now and place trap at (4,4) as a future chokepoint.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": "Out of range (max 2)"
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 3,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 9,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Adjacent to Lattice (vector) means scan is blocked — only basic attack or movement work. Orders say move away from allies toward the trap at (3,3), but I'm already at (3,3). I need to move away from allies at (2,3) and (4,3). Best move is (3,4) or (3,5) to pull away. Since scan is blocked and I can only attack adjacent targets, I'll move to (3,4) to reposition away from Lattice's denial zone, then wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "I'm at 1HP so I need to be careful. Bulwark sentinel is adjacent at (2,3) but I'm not behind them. However, I can move to (2,4) which is behind Bulwark, then use shadow_strike for 1dmg while staying hidden — but I'm not cloaked. At 1HP, shadow_strike is risky since it keeps no cloak (I'm not cloaked anyway). Prophet at (3,4) is high value — I can reach (3,3) which is behind Prophet and adjacent. From (3,3) I could breach Prophet next turn (cooldown still 1 this turn). Let me move to (3,3) to get behind Prophet and set up breach next turn. That avoids the adjacent Bulwark threat and positions me for a high-value breach on the oracle.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Wraith is wounded and adjacent (dist=1), but precision_shot requires LoS and is blocked when adjacent to Vector. Lattice(vector) is at dist=2, so I'm not adjacent to it — precision_shot is NOT blocked. Wraith is at dist=1 which is within range=2 for precision_shot, and I haven't moved yet so full 2dmg applies. This should finish off the wounded Wraith. No need to move first.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Nearest enemy is Longshot at (4,2), dist=2. I can move to (3,3) to get adjacent to Prophet at (3,4) or move to (4,1) to get closer to Longshot. Moving to (3,3) puts me adjacent to Prophet (dist=1) and closer to Bulwark. After moving I lose Fortify, so I'll use shield_wall facing N (toward Prophet and Bulwark cluster). Allies: Lattice is at (3,2). Move to (3,3) first, then shield_wall N to protect from enemies to the north.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 2
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I'm fortified with 50% damage reduction and Bulwark is adjacent at (3,3). If I move I lose fortify, so staying put is optimal. Attack Bulwark to deal damage while maintaining my defensive position. I'll use shield_wall toward the east to protect allies from Bulwark and Lattice threats.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Longshot is adjacent at (4,2) - I can pulse to hit them. Prophet at (3,4) is 2 away, Bulwark enemy at (2,3) is 2 away. Pulse hits within 1 tile so from (3,2) it hits (4,2) Longshot only. Better: move to (4,3) to get adjacent to Longshot and potentially pulse them, or just pulse now from current position to hit Longshot. Actually pulse range is 1 tile AoE from current position - Longshot at (4,2) is distance 1 (diagonal? no, manhattan=2). Wait - dist=1 means adjacent. So Longshot is adjacent. Pulse from (3,2) hits all within 1 tile: that includes (4,2) Longshot. Then I can move to place myself between allies and enemies or set a trap. Move to (4,3) puts me between Prophet and ally Bulwark. From (4,3) I could trap a tile Prophet might cross. Let me pulse first to hit Longshot, then move to (4,3) to deny Prophet abilities and threaten trap placement.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 9,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Orders say move toward (3,3) trap. Bulwark enemy is at (3,3) dist=1, adjacent — I can attack. But orders say move toward the trap. I'll scan Lattice at (4,3) dist=2 for intel+damage, then move to (3,5) to reposition away from the Vector denial zone while following the spirit of orders (moving toward the action without going adjacent to Lattice). Wait — orders explicitly say move toward (3,3). I should comply: move to (3,3) area. But (3,3) is occupied by enemy Bulwark. Valid moves don't include (3,3). Closest valid tile toward (3,3) from (3,4) is... (3,2) is in valid moves. That's past (3,3) — not reachable without passing through it. I can scan Bulwark at (3,3) dist=1 (in range) for 1 damage and reveal, then move to (3,2) if possible — yes (3,2) is valid. But moving to (3,2) puts me adjacent to Lattice at (4,3) — that would block future scans. Better: scan Bulwark first, then move to (2,4) to stay near the action without entering Lattice denial zone.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "I'm adjacent to Lattice (vector) at (4,3) which means precision_shot is blocked. I need to move away from the denial zone first. Moving to (5,2) keeps me at range 2 from wounded Bulwark at (3,3) and gets me out of Lattice's denial zone. From (5,2), I can use precision_shot on wounded Bulwark to finish it off.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": "Out of range"
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Longshot is adjacent at (5,2) and is a priority threat. I can move to (5,3) to get adjacent and apply Denial to block their abilities, then pulse to hit Longshot and potentially Bulwark at (2,3) is too far. Actually pulse only hits within 1 tile AoE from my position. From (5,3), Longshot at (5,2) is 1 tile away - pulse would hit them. Enemy Bulwark at (2,3) is too far. Better plan: place a trap on a chokepoint tile between enemies and allies. From current pos (4,3), I can trap tiles within 2 range. Tile (3,3) is occupied by ally. Tile (3,2) would intercept enemy Bulwark movement path. But trap is blocked if adjacent to enemy - Longshot at (5,2) is dist 2, not adjacent, so trap is allowed. I'll trap (3,2) to control the chokepoint, then move to (5,3) to get adjacent to Longshot for Denial suppression.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Bulwark is adjacent at (2,3). Orders say attack if adjacent. I'm fortified (50% dmg reduction) which is valuable to keep — but attacking doesn't require moving, so I can attack without losing fortify. Prophet is at (2,4) to my NW, Longshot at (5,2) to my SE. Most enemies are to my west/northwest. Attack Bulwark first, then shield_wall facing W to cover Prophet direction.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "direction": "W"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Bulwark is adjacent and wounded — attack to finish or weaken. Staying put keeps Fortify active for 50% damage reduction. No need to move.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Lattice is at (5,3), dist=4, exactly in scan range. Scanning Lattice gets intel on enemy vector's prompt — high priority since vectors are dangerous denial units. I'm at (2,4), Lattice is at dist=4 so scan is valid. After scanning, I should move to safety. Enemy Bulwark is wounded at (3,3) — Longshot and ally Bulwark can handle it. I should stay at range and avoid getting adjacent to Lattice (which would block scan). Current position is fine for scan first, then reposition.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "I'm adjacent to Lattice (vector) at (5,3), which means my precision_shot is BLOCKED by denial zone. I can only use basic attack or move. Wounded Bulwark is at (3,3) dist=3, out of range. Best play: move away from Lattice's denial zone to (4,2) or (4,3) to escape denial, then use precision_shot on wounded Bulwark if in range. From (4,2): dist to Bulwark(3,3) = sqrt(1+1) ~1.4, so dist=2, which is in precision_shot range. But I moved, so precision_shot does 1dmg. Still worth it to finish wounded Bulwark. Let me check: move to (4,2), then Bulwark at (3,3) is dist=2 (within range 2), no longer adjacent to Lattice so denial lifted. Fire precision_shot for 1dmg (moved penalty). If Bulwark is wounded (likely 1-2 HP remaining), this could finish it.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Longshot is adjacent (dist=2, in range). I can attack for 1dmg. A trap at (3,2) already exists. I should place a trap between enemies and allies - (4,3) or (3,3) area, but ally Bulwark is at (3,3). Enemy Bulwark is at (2,3) moving toward us. Place trap at (4,2) would hit Longshot if they step there, but Longshot is already there. I'll attack Longshot first (1dmg), then move to (4,3) to maintain pressure and deny abilities with adjacency. Actually, better: move to (4,2) would put me adjacent to Longshot enabling Denial. But Longshot is there. Move to (5,2) to get closer, then attack Longshot at (4,2) from range 2... wait I'm already at (5,3) with range 2 to Longshot at (4,2). Attack now, then place trap on likely enemy path like (3,3) - but ally is there. Trap at (4,3) blocks approach corridor.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Bulwark (enemy sentinel) is adjacent at (3,3) and wounded. I'm fortified with 50% damage reduction. Best play: attack the wounded enemy to finish them off, then use shield_wall facing East to protect allies from Lattice. Stay in place to keep Fortify active.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 1,
+              "y": 3
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Bulwark is adjacent at (2,3). I'm fortified with 50% damage reduction. Orders say attack adjacent enemies. I should attack Bulwark first, then use shield_wall facing west (where Prophet and Bulwark are) to protect Lattice.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 5,
+              "y": 3
+            },
+            "direction": "W"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Both enemies already scanned — no new intel needed. Bulwark at (3,3) is critical and within scan range (dist 3). Longshot took a precision_shot at Bulwark last turn; it may die this turn from Longshot or ally Bulwark. Lattice at (5,3) is out of my scan range and has denial (blocks adjacent abilities). I should stay safe at range. Moving to (2,4) keeps me at range, slightly repositions. Better: scan the critical Bulwark to deal 1 damage and potentially finish it, since it's at critical HP and within range 4. Then move to reposition safely away from Lattice.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Bulwark is critical and 2 tiles away — perfect range for precision_shot. I haven't moved yet so full 2dmg applies. Lattice is also 2 tiles away but healthy; priority is eliminating the critical enemy first. I'm not adjacent to Lattice so precision_shot is not blocked. Fire on Bulwark to finish it, then wait.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Longshot is adjacent (dist=2, within range=true) and is a high-priority threat. I have traps at (3,2) and (4,3) already placed. My current position is (5,3). I can attack Longshot at (4,2) for 1 damage. But better: I can move to (4,4) to get closer and place a trap between Longshot and my position, or attack. Actually, Longshot is at (4,2) which is dist=2 from me at (5,3) - within attack range (rng2). I should attack Longshot directly. Then I could move to pressure or hold position. Moving to (4,4) keeps distance while maintaining pressure. Or stay and attack. Let me attack Longshot (in range at dist=2) then move to (4,4) to reposition away from Bulwark approaching from (2,3). The trap at (4,3) is already between Longshot and my current position - good chokepoint coverage. I'll attack Longshot then move to (5,4) to maintain high ground and distance from Bulwark.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Lattice is at (5,4), distance 4. I'm at (2,3) fortified. I should advance toward the enemy to position between them and my allies. Moving to (4,3) closes the gap to 2 tiles and keeps me between Lattice and Prophet/Longshot. No enemies in range this turn so I'll wait after moving.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Lattice is at (5,4), dist 5 — out of scan range (max 4). Already have Lattice's prompt. I'm at (0,4) facing W, HP 4/6. Allies Longshot@(4,2) and Bulwark@(4,3) are healthy and engaging. Lattice tried to attack Longshot last turn but failed (not adjacent). Lattice will likely move to get adjacent to Longshot or Bulwark this turn. I should move closer to bring Lattice into scan range if needed, but Lattice is already scanned. Better to move toward allies to support with recalibrate. Moving to (3,4) gets me closer — dist to Lattice becomes 2, well within scan range. From (3,4) I can recalibrate Bulwark@(4,3) since that's adjacent. Bulwark is a sentinel and could use tactical guidance about Lattice's denial ability — warn about staying adjacent to Lattice blocking abilities. Recalibrate addendum: warn Bulwark that Lattice denies adjacent abilities, so maintain distance or coordinate attacks carefully.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "addendum": "Lattice denies adjacent enemy abilities — do not stand adjacent or you lose your abilities. Attack from range if possible, or coordinate with Longshot to engage from multiple angles."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Lattice is at (5,4), dist=3, healthy. I'm at (4,2). Precision_shot has range ≤2, so Lattice at dist=3 is out of range for that. Suppressing_fire targets a 2-tile line from target at range ≤2 — also out of range. I need to close to range 2 without going adjacent (which would block precision_shot). Moving to (5,3) puts me adjacent to (5,4) — too close. Moving to (4,4) gives dist=1 — adjacent, bad. Moving to (3,3) puts me at dist=sqrt(4+1)≈2.2 from (5,4) — not adjacent but still dist>2 for abilities. Moving to (5,3) is adjacent to Lattice at (5,4) — blocked. Let me recalculate: from (4,4) to (5,4) is dist=1 adjacent — bad. From (5,3) to (5,4) is dist=1 — bad. From (3,3): dist to (5,4) = sqrt(4+1)=2.24 — out of range 2. From (5,2): dist to (5,4)=2, not adjacent (2 tiles away) — this is exactly range 2 and not adjacent! Valid move, enables precision_shot. Move to (5,2) then precision_shot Lattice.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Lattice is at (5,4), distance 2. I must not move adjacent to Lattice or I lose abilities. Valid moves show (5,3) would put me adjacent to Lattice at (5,4) — avoid that. I'm currently fortified at (4,3) with 50% damage reduction. Lattice is wounded and 2 tiles away. Moving to (4,4) keeps distance ≥2 from Lattice while positioning between allies and enemy. Actually, staying put preserves fortify and keeps me on the front line. No enemies in attack range. Best play: hold position, use shield_wall toward North to cover against Lattice's direction.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "direction": "E"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "I'm at (5,4) with 3 enemies nearby at dist=2. Bulwark is at (4,3), Prophet at (3,4), Longshot at (5,2). My Denial passive blocks abilities of adjacent enemies, but none are adjacent yet. I should place a trap to control the approach. Longshot at (5,2) is directly below me - if I stay or move, they may advance. I can trap (5,3) to catch Longshot advancing north, or trap between Bulwark and Prophet. Trapping (5,3) covers Longshot's likely path. Then I can move to (4,4) to get adjacent to both Bulwark and Prophet, applying Denial to block their abilities next turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "I'm adjacent to Lattice (vector) so DENIAL blocks my abilities except basic attack. Lattice is wounded — attack is valid here. I should move away first to escape DENIAL, then I'll still be in melee range but... actually moving away would break adjacency. Better: move to (4,5) to escape DENIAL zone while staying close, then recalibrate Bulwark at (4,3) — wait, (4,5) is not adjacent to (4,3). Let me reconsider. Move to (2,4) to fully escape DENIAL, then recalibrate Bulwark at (4,3) — but (2,4) is not adjacent to (4,3) either. Best plan: attack Lattice now (valid while adjacent under DENIAL), then move away to (2,4) to reposition safely behind front line.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Lattice is wounded at (4,4), dist=3, in range for precision_shot. I haven't moved so no penalty. Stay at (5,2) and fire precision_shot for 2dmg to finish Lattice.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I'm adjacent to Lattice (vector) whose DENIAL zone blocks my abilities. I need to move away first to use shield_wall or intercept, but Lattice is wounded — a basic attack now could finish it. However, my abilities are blocked while adjacent. Best play: move to (3,4) to break out of denial zone, then attack from range if possible. Wait — attack is a basic melee ability, check if it's blocked. Warning says only basic attack/movement work in denial zone. So I can attack Lattice directly from here. Lattice is wounded, attack could finish it. I'm fortified (50% dmg reduction). Attack Lattice now, then move away to break denial.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "I'm at 2/8 HP and critically low. Bulwark is adjacent at (3,4), Prophet at distance 2. I need to survive. Moving away to safety is priority - I can't take another hit. Move to (5,5) to escape adjacency with Bulwark and gain distance. Then place a trap at (5,3) which is already marked but I can use (4,3) to block pursuit path. Actually (5,3) has a trap already. Let me move to (5,5) to escape, then place trap at (4,4) behind me to deter chase - but I'd be leaving that tile. Place trap at (4,5) to cover retreat. Wait - valid moves include (5,5). Move there first, then trap at (4,4) or nearby chokepoint to slow pursuers.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 9,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Lattice is at (5,5) at critical HP and already scanned. I'm at (2,4) with no enemies in range. Lattice placed a trap at (4,5) last turn — Bulwark at (3,4) might move into danger. I should recalibrate Bulwark (adjacent at (3,4)) to warn about the trap at (4,5) and advise finishing Lattice. Then reposition closer for future scans or support.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "addendum": "Trap at (4,5) — avoid it. Lattice is critical at (5,5), move to engage and finish it. Do not step on (4,5)."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Lattice is at (5,5), dist=3, critical HP. I'm at (5,2). Precision_shot has range ≤2 tiles, so dist=3 is out of range currently. I need to close to dist≤2 without going adjacent (dist=1 would block precision_shot via Vector denial). Moving to (5,4) puts me at dist=1 — too close, adjacent. Moving to (4,4) puts me at dist from (5,5): |4-5|+|4-5|=2, within range and not adjacent. From (4,4) I can fire precision_shot at Lattice (critical, 2dmg should finish). Check LoS (5,5) from (4,4): clear. I haven't moved before the shot so full 2dmg. This should eliminate Lattice.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": "Can only move 2 tiles",
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": "Out of range"
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Lattice is at (5,5) critical HP, dist=3. I need to close in without going adjacent (denial range). Moving to (4,4) puts me 2 tiles away diagonally — safe from denial, threatening position. Then I can attack next turn or coordinate with Longshot. Avoid (4,5) trap. Moving to (4,4) keeps me off the trap and within striking distance next round.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "I'm at (5,5) with only 2HP - very low. Bulwark is adjacent at (4,4) and Prophet at (3,5). Trap at (4,5) already blocks that move. Valid moves are (4,5)[has trap], (5,3)[has trap], (5,4). I need to pulse to damage both Bulwark and Prophet who are within 1 tile range? No - pulse hits units within 1 tile of me, Bulwark is at dist 2 and Prophet dist 2, so neither is within 1 tile. I can attack Bulwark or Prophet at range 2. With only 2HP I should attack and try to deal damage. Attack Bulwark (sentinel) at (4,4). I can also move to (5,4) to stay away from (4,5) trap. Actually staying at (5,5) and attacking Prophet makes sense - oracles are dangerous. Let me attack Prophet at (3,5) for 1 dmg, then wait or move to (5,4) away from trap at (4,5).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "opponent",
+    "totalTurns": 10,
+    "reason": "opponent eliminated all enemies"
+  },
+  "endedAt": "2026-03-04T08:05:40.241Z"
+}
