@@ -1,0 +1,1671 @@
+{
+  "id": "2026-03-04T01-00-03",
+  "startedAt": "2026-03-04T01:00:03.672Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 4,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 5,
+        "movement": 2,
+        "range": 2,
+        "speed": 2
+      },
+      "oracle": {
+        "maxHp": 6,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 12,
+        "movement": 3,
+        "range": 2,
+        "speed": 3
+      },
+      "vector": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 9,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 2,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 9,
+        "healAmount": 10
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Aegis",
+        "class": "sentinel",
+        "prompt": "Push forward aggressively. Shield_wall facing the enemy cluster. If flanked, turn to face the biggest threat. Attack when possible."
+      },
+      {
+        "name": "Deadeye",
+        "class": "striker",
+        "prompt": "Position for clear sight lines. Prioritize killing wounded enemies with precision_shot. If forced to move, retreat away from threats. Suppressing_fire to slow rushers."
+      },
+      {
+        "name": "Prophet",
+        "class": "oracle",
+        "prompt": "Scan priority targets each turn to reveal their strategy. Use recalibrate on your damage dealer to boost effectiveness. Stay behind allies and maintain range. Never get adjacent to enemy vectors."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Marksman",
+        "class": "striker",
+        "prompt": "Maintain distance. Use precision_shot on high-value targets — medics first, then damage dealers. Use suppressing_fire if enemies close in."
+      },
+      {
+        "name": "Seer",
+        "class": "oracle",
+        "prompt": "Scan priority targets each turn to reveal their strategy. Use recalibrate on your damage dealer to boost effectiveness. Stay behind allies and maintain range. Never get adjacent to enemy vectors."
+      },
+      {
+        "name": "Bulwark",
+        "class": "sentinel",
+        "prompt": "Advance toward the nearest enemy. Use shield_wall facing the direction with the most enemies. If an enemy is adjacent, attack them."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Deadeye and Prophet are both at dist=4, right at scan range limit. I need to move closer to scan effectively. Moving to (3,3) brings me to dist=3 from both Deadeye(3,0) and Prophet(2,1), safely within scan range. Then scan Deadeye (striker) to reveal their strategy and deal 1dmg — strikers are high priority threats.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Seer is the highest-priority scan target at dist=3, well within range. Scan reveals their strategy and deals 1 damage. No need to move first — scan from current position, then recalibrate Deadeye (striker, our damage dealer) but they're at (3,0) which is not adjacent. I can move toward Deadeye after scanning to set up recalibrate next turn, or just wait. Actually Deadeye is at dist=3 from me, not adjacent, so recalibrate isn't possible this turn. Best play: scan Seer now, then move closer to Deadeye for next turn recalibrate.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "All enemies are out of range (closest is Prophet at dist=5, my range is 2). I need to advance toward the enemy. Moving to (4,3) gets me closer while staying safe. Still no enemies in range after moving, so I'll wait for second action.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Seer is in range at dist=3 from current position. I haven't moved, so precision_shot deals full 2dmg. No adjacent enemies blocking it. Fire on Seer, then hold position.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Round 1, all enemies are far. Push forward aggressively toward the enemy cluster centered around (3,3)-(4,3). Move to (1,2) to advance. No adjacents to shield_wall yet, so use shield_wall facing North toward incoming enemies as a defensive posture.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 1,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "No enemies adjacent. Nearest enemy is Aegis at (1,2), dist=4. Advance toward it. Move to (2,3) to close distance by 2. Enemies are mostly south, use shield_wall facing S.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 9,
+          "maxHp": 9,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 9,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Seer is already scanned. Marksman is the priority threat — scan it to reveal its strategy and deal 1dmg. I'm at (3,1), Marksman at (4,3) dist=3, in range. No need to move first. After scanning, stay put.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Prophet (oracle) at (3,1) is unscanned and in range at dist=2. Scanning Prophet is highest priority — reveals their strategy and deals 1 damage. I'm already at (3,3) which is valid. After scanning, I can wait or hold position. Deadeye is already known. Aegis is a sentinel, lower scan priority. Stay at current position to keep all targets in scan range.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Prophet (oracle) is in range at dist 3 from current position. I haven't moved this turn, so precision_shot deals 2dmg. Orders say medics first, then damage dealers — oracle is high value. I'll fire precision_shot on Prophet, then move to maintain distance from advancing enemies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Seer is in range at dist 3 (within my range 2? No, range is ≤2 tiles). Seer is at dist 3, out of precision_shot range. No enemies in range 2. Move toward Seer to get in range, then shoot. Moving to (3,2) puts me at dist 1 from Seer at (3,3) — in range. Not adjacent to Vector so precision_shot is valid.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Nearest enemies are Aegis at (1,2) and Deadeye at (3,2), both dist 2. Orders say advance toward nearest enemy and use shield_wall facing direction with most enemies. Moving to (2,2) puts me adjacent to both Aegis and Deadeye. From (2,2), enemies are S relative: Aegis is at (1,2) which is W, Deadeye is at (3,2) which is E. Actually from (2,2): Aegis(1,2) is W, Deadeye(3,2) is E, Prophet(3,1) is SE. Most enemies are to the south/lateral. I'll move to (2,2) to get adjacent to Deadeye and near Aegis, then use shield_wall facing S to cover the southern approach where enemies cluster.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 2
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Bulwark is adjacent at (2,2). I'm fortified with 50% damage reduction. Orders say attack when possible and shield_wall facing enemy cluster. I'll attack Bulwark first, then shield_wall facing East to protect allies Deadeye and Prophet from Bulwark and the enemies beyond.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 2
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 9,
+          "maxHp": 9,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "I'm at (3,3) with 4/6 HP. Deadeye is adjacent at (3,2) — this BLOCKS my scan ability. I need to move away from Deadeye first, then scan Aegis (unknown prompt, in range at dist=3). Moving to (4,3) gets me away from Deadeye and keeps Aegis in scan range. From (4,3), Aegis is at dist=3+1=4 tiles — still in range. Then scan Aegis to reveal their strategy.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Marksman tried to precision_shot me last turn but was out of range — they're a priority threat. Seer already scanned me, knows my strategy. Bulwark is adjacent to Deadeye with shield_wall facing S (protecting Deadeye). I should recalibrate Deadeye to boost their effectiveness, then reposition. Deadeye is at (3,2), I'm at (3,1) — that's adjacent, so recalibrate is valid. After recalibrating, I should move to maintain range and avoid being adjacent to Bulwark.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 2
+            },
+            "addendum": "Priority: Bulwark at (2,2) is shielding with shield_wall facing S — flank from east or north to bypass shield. Marksman at (4,4) used precision_shot last turn, target them next if in range."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Bulwark is adjacent at (2,2) facing S with shield_wall — precision_shot is blocked when adjacent to enemy Vector, but Bulwark is a sentinel not Vector. However, being adjacent (dist=1) means precision_shot range is ≤2 so it's in range, but the warning is about Vector class specifically. I can use precision_shot on Bulwark but it's blocked by shield facing S — I'm at (3,2) which is east of Bulwark, so I'm hitting from the east/side, bypassing the south-facing shield. Move north to (3,3) first to get out of adjacency concern and hit Seer at (4,3) from range 2 without having moved penalty, or stay and shoot Bulwark from east flank. Actually I'm already east of Bulwark — shoot Bulwark with precision_shot now (dist=1, in range, not adjacent to a Vector), then move to (3,3) to reposition away from melee.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Prophet is an oracle (high-value target per orders). Both Prophet and Deadeye are at range 2 from current position. I haven't moved yet so precision_shot does full 2dmg. Target Prophet first. No need to move — maintaining distance is the order.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Bulwark is adjacent at (2,2). I'm fortified with 50% damage reduction. Orders say attack when possible and shield_wall facing enemy cluster. Enemies are mostly to the East (Seer at 4,3, Marksman at 4,4). Attack Bulwark first, then shield_wall East to protect allies Prophet and Deadeye from the ranged threats.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 2
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Aegis is adjacent at (1,2). Attack them. Then use shield_wall facing East toward Deadeye and Prophet cluster.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 9,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Critical situation: I'm at 3/6 HP. Seer is adjacent at (4,3) which blocks my scan ability. Marksman targeted me last turn with precision_shot (foresight), and Bulwark attacked (1,2). I need to escape the adjacent Seer to restore scan capability. Moving to (5,2) gets me away from Seer, puts distance between me and threats. Then I can scan Bulwark at dist=2 to deal damage and reveal their strategy. Deadeye is healthy and attacking Bulwark - recalibrate could help but I need intel more. Priority: escape adjacency, then scan.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Foresight shows Deadeye will precision_shot Bulwark (wounded) next turn - I should recalibrate Marksman to boost damage output, but Deadeye is adjacent (dist:1) which is a Vector concern... wait, I'm Oracle not Vector. Deadeye is adjacent so scan is NOT blocked (only Vector adjacency blocks scan). Deadeye is at dist:1 - already scanned. Prophet is wounded at dist:2 - already scanned. All enemies already scanned. My orders say recalibrate damage dealer. Marksman is at (4,4) - adjacent to me at (4,3), so recalibrate works. I should recalibrate Marksman to help take down priority targets. Foresight shows Marksman will precision_shot (4,2) - that's where Prophet is moving. I can boost Marksman with info about Deadeye's retreat behavior and Prophet's position. Move to (5,3) first to stay behind/beside allies and maintain range, then recalibrate Marksman.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 4,
+              "y": 4
+            },
+            "addendum": "Deadeye at (3,3) will retreat from threats - cut off retreat toward (3,2)/(3,1). Prophet wounded at (5,2) moving to (4,2) - priority kill target. Focus fire Prophet first."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Bulwark is wounded and shield_wall faces S, so attacking from current position (3,3) hits the east/north side bypassing the shield. I'm at dist=2 from Bulwark, so precision_shot (2dmg) should finish them. I haven't moved, so full 2dmg applies. After shooting Bulwark, I can move to (4,3) to reposition away from Seer and keep pressure on Marksman.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Deadeye is adjacent at (4,3) — precision_shot is blocked when adjacent to enemy. Need to move away first to enable precision_shot. Priority target is Prophet (wounded) at (5,2), but dist=3 so out of range. Move to (3,3) to back away from Deadeye, then precision_shot Deadeye at dist=1 from new position... wait, (3,3) to (4,3) is dist=1, still adjacent. Move to (3,4): dist to Deadeye=(4,3) is sqrt(1+1)=~1.4, still adjacent (≤1 tile). Move to (3,5): dist to Deadeye=(4,3) is sqrt(1+4)=~2.24, not adjacent. From (3,5) to Prophet(5,2): dist=sqrt(4+9)=~3.6, out of range 2. From (3,5) to Deadeye(4,3): dist=~2.24, within range 2, not adjacent — precision_shot viable! But orders say focus Prophet. Move to (5,4): dist to Prophet(5,2)=2, in range! Not adjacent to Deadeye(4,3) dist=sqrt(1+1)~1.4 — still adjacent. Move to (4,5): dist to Deadeye=sqrt(0+4)=2, not adjacent. Dist to Prophet=sqrt(1+9)~3.16, out of range. Move to (5,5): dist to Deadeye=sqrt(1+4)~2.24 not adjacent, dist to Prophet=sqrt(0+9)=3, out of range. Best: move to (3,5), precision_shot Deadeye since Prophet out of range from all positions. Actually check (5,4): Deadeye at (4,3), dist=sqrt(1+1)=1.41 — that's >1, so NOT adjacent. Precision_shot available! And Prophet at (5,2) dist=2 — in range! Move to (5,4), precision_shot Prophet!",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Aegis is adjacent at (1,2). I'm fortified with 50% damage reduction. Orders say attack adjacent enemies. Attack Aegis, then use shield_wall facing East where Deadeye and Prophet are clustered.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 5,
+              "y": 3
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Bulwark is adjacent at (2,2) and wounded — attack to finish or weaken. I'm fortified so I keep 50% DR if I don't move. Orders say attack when possible. I'll attack Bulwark first, then shield_wall facing E to protect Prophet at (5,2) from the eastern enemy cluster.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 2
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 9,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Prophet is wounded and adjacent at (5,2) — scan is blocked when adjacent to enemy Vector, but Prophet is an oracle not a vector, so scan is fine. However, I already know Prophet's prompt. Deadeye is also adjacent at (4,3) and healthy — already scanned too. Foresight shows Prophet will scan Bulwark at (2,2) and Deadeye will precision_shot (2,2) — Bulwark is in serious danger. My orders say recalibrate the damage dealer. Marksman is our striker at (5,4), healthy. I should recalibrate Marksman to focus on Prophet (wounded, easy kill) since Marksman will precision_shot next turn. But Marksman already fired at (5,2) last turn per foresight — actually foresight shows LAST turn actions. Prophet is wounded so Marksman may finish them. I'm at (5,3), Marksman is at (5,4) — adjacent, so I can recalibrate. Then I should move away from the two adjacent enemies (Deadeye and Prophet) since I'm at 4HP and vulnerable. Move to (4,4) to escape adjacency while staying useful.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 5,
+              "y": 4
+            },
+            "addendum": "Priority: finish off Prophet at (5,2) with precision_shot this turn — they are wounded and adjacent to you. Then suppress Deadeye at (4,3)."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "I'm at 2/6 HP — critical. Foresight shows Marksman will precision_shot me at (5,2) this round. I must move off (5,2) immediately. Seer will move to (5,3), so I should avoid that too. Best escape: move to (4,1) or (3,2) to break Marksman's shot. All three enemies already scanned. I should recalibrate Deadeye at (4,3) to boost their effectiveness — but Deadeye must be adjacent. From (5,1), Deadeye at (4,3) is distance 3 — not adjacent. From (4,2), Deadeye is distance 1 — adjacent! Move to (4,2), then recalibrate Deadeye at (4,3).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "addendum": "Priority targets: Marksman at (5,4) — use precision_shot this turn. Then Seer at (4,4)."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Prophet is wounded and at (4,2), dist=3 which is within precision_shot range (≤2 tiles means Manhattan dist≤2... wait, dist=3 so out of range for precision_shot). Deadeye at (4,3) is dist=2, in range. I'm at (5,4). Move to (5,2) to get adjacent to Prophet - but that puts me adjacent to Prophet which may block precision_shot if Prophet is a Vector... Prophet is oracle not vector, so no block. Actually moving to (5,3) gets me dist=1 from Prophet at (4,2)? No: from (5,3) to (4,2) = |5-4|+|3-2|=1+1=2, in precision_shot range. And I'm not adjacent to any enemy Vector. Use precision_shot on Prophet (wounded, priority kill). After moving to (5,3), Deadeye at (4,3) is dist=|5-4|+|3-3|=1, adjacent - that would block precision_shot only if Deadeye is a Vector class. Deadeye is striker not vector, so no block. Fire precision_shot at Prophet. But wait - I moved so precision_shot does 1dmg. Prophet is wounded so 1dmg may finish them. This is still the priority.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Marksman is adjacent at (5,3) — precision_shot is blocked when adjacent to enemy Vector, but Marksman is a striker not Vector, so check: the warning says precision_shot blocked when adjacent to enemy Vector. Marksman is a striker, not Vector class, so precision_shot should work. However, Seer is at (4,4) distance 1 (adjacent). Both enemies are adjacent. Priority orders say use precision_shot on Marksman at (5,4) but Marksman is actually at (5,3). I'm at (4,3). Marksman at (5,3) is dist=1 (adjacent). Precision_shot requires range ≤2 tiles and LoS — adjacent should be fine. But wait: if I'm adjacent to an enemy, precision_shot may be blocked. The warning specifically says 'blocked when adjacent to enemy Vector' — Vector is a class/unit name, not the striker class. No Vector units listed. So precision_shot is valid. Use precision_shot on Marksman at (5,3) first. Then move to (3,3) to get range on Bulwark next turn and escape adjacency.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Bulwark is adjacent at (2,2) and wounded. I'm fortified with 50% damage reduction. Orders say attack when possible and shield_wall facing enemy cluster. I'll attack Bulwark first, then shield_wall facing E toward the enemy cluster (Seer at 4,4 and Marksman at 5,3). Staying put preserves Fortify.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 2
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Aegis is adjacent at (1,2). I'm at 2HP with fortify active (50% reduction). Orders say attack adjacent enemy. Deadeye and Prophet are both to my east/northeast. Attack Aegis first, then shield_wall facing E to cover against Deadeye and Prophet.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 2
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 9,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "I'm at 1/6 HP — extremely vulnerable. Marksman has precision_shot aimed at me (4,2) from Foresight. I must move off (4,2) immediately. Seer already recalibrated ally at (5,4), Marksman is wounded. All enemies already scanned. My orders say recalibrate damage dealer — Deadeye is at (3,3), adjacent range only so I'd need to be next to them. Best survival: move away from Marksman's shot target. Move to (4,3) gets me adjacent to Seer (risky, scan blocked). Move to (3,2) is in valid moves list? No — checking valid moves: [2,1],[2,3],[3,0],[3,1],[3,2],[3,4],[4,0],[4,1],[4,3],[4,5],[5,0],[5,1],[5,2],[5,4]. Move to (3,2) is valid. From (3,2) I'd be adjacent to Deadeye at (3,3) — can recalibrate. That satisfies my orders. Also moves me off the Marksman's precision_shot target at (4,2). (3,2) keeps me away from Bulwark at (2,2) — distance 1, that's adjacent, scan blocked and risky. Actually (3,2) is 1 tile from Bulwark — adjacent. Bad. Try (4,3): distance from Bulwark=2, from Seer=1 (adjacent, but Seer is oracle not vector — scan-block only applies to Vector). From (4,3) Deadeye is at (3,3) — adjacent, can recalibrate. Move to (4,3), then recalibrate Deadeye.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "addendum": "Marksman at (5,3) is wounded — priority target. Bulwark at (2,2) is critical and will fall soon. Focus fire on Marksman to eliminate their ranged threat."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Prophet is critical and adjacent (4,3) — scan would deal 1dmg and finish it off, and I already know its prompt so recalibrate isn't needed there. But wait: scan requires target within 4 tiles and Prophet is at dist 1, so scan is valid. However, Prophet is an enemy oracle at critical HP — scanning it again wastes a kill shot when I could just attack. But attack is only adjacent (dist 1 = adjacent), so I can attack Prophet directly for 1dmg to finish it. Then I need to reposition. Deadeye at (3,3) is healthy and dangerous — it used precision_shot on (5,3) last turn (targeting Marksman). I'm at (4,4), Prophet is at (4,3) — if I attack Prophet first to finish it, then move to (5,4) to stay ranged and avoid being adjacent to Deadeye. Actually Foresight shows Seer recalibrated me last turn (to 4,4) and Prophet moved to (4,3) then recalibrated. This turn: attack Prophet at (4,3) to eliminate it (critical = 1hp likely), then move to (5,4) to maintain range and avoid Deadeye adjacency.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Marksman at (5,3) is wounded and in range at dist=2. I'm not adjacent to any enemy, so precision_shot is available. Fire on Marksman first to eliminate their ranged threat. Then move to (4,3) to reposition closer for next turn without moving before the shot (avoids 1dmg penalty).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Bulwark is adjacent at (2,2) and critical — attack to finish them off. I'm fortified so I keep 50% damage reduction by not moving. Attack first, then shield_wall facing East toward Seer.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 2
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Aegis is adjacent at (1,2). I'm at 1HP but fortified. Orders say attack adjacent enemies. Attack Aegis. Then shield_wall — enemies are to the west (Aegis at x=1, I'm at x=2), so face W.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 1,
+              "y": 2
+            },
+            "direction": "W"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 9,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Deadeye is at (4,3) distance 2 and healthy — already scanned. Foresight shows Deadeye used precision_shot last turn on (5,3) and is still at (4,3). I'm at (5,4) at 4HP, vulnerable. Deadeye will likely shoot me again. I should move to safety and recalibrate an ally. Bulwark is critical and adjacent to Aegis — recalibrate could help but Bulwark is at (2,2), too far for recalibrate (adjacent only). Best play: move away from Deadeye's likely firing line, then wait or scan Deadeye again isn't needed (already known). I can't recalibrate Bulwark from here. Moving to (5,5) gets me further but still exposed. Moving to (4,5) keeps distance from Deadeye at (4,3) — dist 2 still. Move to (3,5) puts me dist 2 from Deadeye still but off the direct line. Actually I should scan — but Deadeye is already scanned. No other targets in range (Aegis at dist 6). I'll move to (5,5) to break line of sight potential, then wait since no useful ability available (can't recalibrate anyone adjacent, can't scan new targets in range).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Bulwark is critical at (2,2) but dist=3 which is at the edge of my range-2. Actually dist=3 means out of range for precision_shot (range≤2). Seer is also dist=3, same issue. I need to close distance. Moving to (3,3) puts me dist=~1.4 from Bulwark — still need to check. From (3,3), Bulwark at (2,2) is dist=sqrt(2)≈1.4, so within range 2. I can move to (3,3) then use precision_shot on critical Bulwark to finish them off. No enemies adjacent so no Vector warning applies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Seer is at (5,5), distance 7. I need to advance. Moving to (3,2) gets me closest while keeping Deadeye at (3,3) adjacent for shield_wall support. I'll shield_wall facing North/East toward the enemy.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Both enemies are out of scan range from current position (5,5). Deadeye is at distance 4 — exactly at scan range limit, but from current position it shows outRange. I need to move closer to bring Deadeye into scan range. Moving to (4,4) puts me at distance 3 from Deadeye at (3,3) — within scan range. Both enemies are already scanned so scan isn't needed. I should recalibrate an ally instead. But no allies are adjacent. Best play: move to (4,4) to position better, then wait since no abilities can reach.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Seer is at (4,4) distance 2 - in range for precision_shot. I haven't moved so precision_shot deals full 2dmg. Take the shot now, then consider repositioning.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Seer is at (4,4), distance 3, out of melee range. I need to close in. Moving to (4,3) puts me adjacent to Seer. Deadeye is at (3,3) covering from behind. After moving to (4,3), I can attack Seer directly. Moving first, then attacking.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": false
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "player",
+    "totalTurns": 9,
+    "reason": "player eliminated all enemies"
+  },
+  "endedAt": "2026-03-04T01:05:26.423Z"
+}
