@@ -1,0 +1,1574 @@
+{
+  "id": "2026-03-05T09-00-04",
+  "startedAt": "2026-03-05T09:00:04.977Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 3,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 4,
+        "movement": 2,
+        "range": 2,
+        "speed": 2
+      },
+      "oracle": {
+        "maxHp": 6,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 12,
+        "movement": 3,
+        "range": 2,
+        "speed": 3
+      },
+      "vector": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 9,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 2,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 9,
+        "healAmount": 10
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Marksman",
+        "class": "striker",
+        "prompt": "Maintain distance. Use precision_shot on high-value targets — medics first, then damage dealers. Use suppressing_fire if enemies close in."
+      },
+      {
+        "name": "Veil",
+        "class": "specter",
+        "prompt": "Stay cloaked and flank. Prioritize assassinating the enemy damage dealer. Use breach on sentinels to break their defensive posture. Recloak whenever it drops."
+      },
+      {
+        "name": "Bulwark",
+        "class": "sentinel",
+        "prompt": "Advance toward the nearest enemy. Use shield_wall facing the direction with the most enemies. If an enemy is adjacent, attack them."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Deadeye",
+        "class": "striker",
+        "prompt": "Position for clear sight lines. Prioritize killing wounded enemies with precision_shot. If forced to move, retreat away from threats. Suppressing_fire to slow rushers."
+      },
+      {
+        "name": "Doc",
+        "class": "medic",
+        "prompt": "Stay adjacent to the most threatened ally. Use patch on the most wounded teammate. If all healthy, use overclock on your damage dealer."
+      },
+      {
+        "name": "Lens",
+        "class": "oracle",
+        "prompt": "Scan priority targets each turn to reveal their strategy. Use recalibrate on your damage dealer to boost effectiveness. Stay behind allies and maintain range. Never get adjacent to enemy vectors."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Veil",
+          "class": "specter",
+          "thinking": "Round 1 — cloak immediately per orders and tip. Move toward Lens (closest enemy, priority target) to close distance while invisible. Move to (4,3) to advance 3 tiles north toward Lens at (4,4).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 4,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Both enemies are out of scan range (dist=6, max=4). I need to advance to bring them in range. Moving to (3,3) reduces distance to Marksman at (1,1) to ~3 tiles. Then I can scan next turn. Stay behind allies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Doc",
+          "class": "medic",
+          "thinking": "All allies are at full HP, so no healing needed. Orders say use overclock on damage dealer if all healthy. Deadeye is the striker (damage dealer) at (1,4), distance 2. I need to move adjacent to Deadeye first, then use overclock. Moving to (1,5) puts me adjacent to Deadeye at (1,4). Then overclock Deadeye.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Deadeye is at distance 3, within precision_shot range (≤2 tiles means Manhattan distance ≤2... wait, dist=3 but recon says inRange:true). Orders say medics first but Doc is out of range. Deadeye is in range. I haven't moved so precision_shot fires at full 2dmg. Take the shot on Deadeye, then move to maintain distance.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "No enemies in range from current position. Closest is Marksman at (0,1) dist=4, Bulwark at (2,0) dist=5. Need to close distance to get in range (range 2). Moving to (1,2) gets me dist=1 from Marksman - too close, will block precision_shot. Move to (2,3) brings Marksman to dist=3 still out of range. Best move toward Marksman: (1,2) puts me adjacent which blocks precision_shot. Try (0,3): Marksman at (0,1) is dist=2, in range for precision_shot. But I moved so precision_shot does 1dmg. With OVERCLOCKED I have 2 ability uses - move then shoot twice. From (0,3): Marksman at (0,1) dist=2, in range. First ability after move = 1dmg (moved penalty). Second ability use also 1dmg. Total 2dmg to Marksman.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 0,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "No enemies adjacent. Nearest enemy is Lens at (3,3), dist 4. Move toward it via (2,2) to close distance. Then shield_wall facing N (enemies are north of me).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 9,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 12,
+          "maxHp": 12,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Veil",
+          "class": "specter",
+          "thinking": "Cloak has 1 turn remaining. Lens (oracle) is adjacent at (3,3) facing S, and (3,4) is behind them and reachable in 1 move. I should move to (3,4) to get behind Lens, then use breach to take control of the oracle — high-value target. This preserves cloak for the move and uses breach while behind.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "addendum": "Move away from allies and toward the edge next turn."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Veil is adjacent at (3,4) — scan is blocked when adjacent to enemy Vector, but Veil is a specter not a Vector, so scan should work. However orders say move away from allies and toward edge. Allies are at (0,3) and (1,5), so I should move east or south toward an edge. Moving to (5,3) gets me to the east edge and away from allies. Veil is adjacent and a threat — scan Veil first to reveal their prompt and deal 1 damage, then move to (5,3) toward the edge.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Doc",
+          "class": "medic",
+          "thinking": "Deadeye is wounded at (0,3) with 3/4 HP, dist=3 from me at (1,5). I need to move adjacent to them to heal. Moving to (0,4) puts me adjacent to Deadeye at (0,3). Then I can use patch to heal them.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Marksman is at (0,1), dist=2, in range for precision_shot (2dmg). I haven't moved so no penalty. This would kill a healthy 4HP striker in two hits but I only deal 2dmg. Still worth shooting. No adjacent enemies so precision_shot isn't blocked. Fire on Marksman first, then hold position.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 0,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "I'm at 1/4 HP — critical. Deadeye is adjacent-ish at dist=2, Doc at dist=3. Priority: shoot Doc (medic, high value) with precision_shot, then move away to survive. I'm not adjacent to an enemy Vector so precision_shot is available. Doc is at (0,4), dist=3 — out of precision_shot range (≤2 tiles). Deadeye at (0,3) dist=2 is in range. Orders say medics first, but Doc is out of range. I'll precision_shot Deadeye to reduce damage threat, then move to (1,0) to increase distance from both.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "No enemies adjacent. Nearest enemy is Deadeye at (0,3), dist 3. Orders say advance toward nearest enemy. Moving to (1,3) closes distance to Deadeye to 2. Will lose fortify but that's per orders. No adjacent allies to shield_wall. Use shield_wall facing W (toward enemy cluster at x=0) after moving.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 1,
+              "y": 3
+            },
+            "direction": "W"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 9,
+          "maxHp": 9,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 12,
+          "maxHp": 12,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Veil",
+          "class": "specter",
+          "thinking": "Breach is on cooldown. No enemies in range from current position. Lens is at (5,3) facing E, and (4,3) is behind Lens and reachable. I can move to (4,3) and use shadow_strike on Lens to deal 1 damage while staying cloaked. Shadow_strike keeps cloak active — ideal for staying hidden and pressuring the oracle.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Orders say move away from allies and toward edge. I'm at (5,3). Veil is adjacent at (4,3) and moving to (3,4) per foresight — so it's leaving my position. Scan is blocked when adjacent to enemy Vector, but Veil is a specter not Vector, so scan should work. However orders are to move away. I'll scan Bulwark first (dist=4, just in range) to get intel, then move to edge tile (5,5) to comply with orders. Wait — scan range requires target within 4 tiles, Bulwark is at dist=4 which is exactly at limit. Valid. But foresight shows Veil moving away, so I won't be adjacent to it after its move. I'll scan Bulwark at (1,3) then move toward edge at (5,5).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Doc",
+          "class": "medic",
+          "thinking": "Deadeye is adjacent at (0,3) with 2/4 HP - critically wounded and needs immediate healing. I'm already adjacent to them. Use patch on Deadeye first, then wait since I'm in a good position.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "At 1HP I'm extremely vulnerable. No enemies in range from current position. Orders say maintain distance. Move to 3,0 to gain distance from Deadeye at (0,3) while staying away from enemies. Then wait — no targets in range anyway.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Bulwark is adjacent at (1,3) — precision_shot is blocked by adjacency rule (enemy sentinel counts as Vector? No, Vector is a class. Bulwark is a sentinel, not a Vector. Check: precision_shot blocked when adjacent to enemy Vector specifically. Bulwark is sentinel, so precision_shot is NOT blocked. But dist=1 means adjacent — precision_shot requires range ≤2 tiles and LoS, so at dist=1 it should work. However, I haven't moved so no movement penalty. Fire precision_shot on Bulwark for 2dmg. Then move away to (0,2) to escape adjacency and reposition.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Deadeye at (0,2) and Doc at (0,4) are both dist=2 to my west. Moving to (0,3) puts me adjacent to both. I'll move there then use shield_wall facing W (toward likely incoming fire from Deadeye at (0,2)) — but neither ally is adjacent for shield_wall to help. Better to attack Deadeye after moving adjacent. Move to (0,3) gets me next to Deadeye at (0,2) and Doc at (0,4).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 0,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 9,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 12,
+          "maxHp": 12,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Doc",
+          "class": "medic",
+          "thinking": "Deadeye is at 3/4 HP, dist=2 — most wounded and reachable. Move to (0,3) is blocked by Bulwark. Move to (1,2) gets me adjacent to Deadeye at (0,2). Then patch Deadeye.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 0,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Veil",
+          "class": "specter",
+          "thinking": "I'm at 2/3 HP, cloaked. Deadeye (priority target, enemy damage dealer) is at dist=5, unreachable this turn. Lens is at (5,5) with behind position at (5,4) reachable - I can move there and breach. But Lens is an oracle, not the priority damage dealer. Doc at (1,2) has behind position at (1,3) reachable too. Orders say prioritize assassinating enemy damage dealer (Deadeye at dist=5, unreachable) and use breach on sentinels. No sentinel visible. Lens is reachable for breach. Moving to (5,4) puts me behind Lens for breach - neutralizing their oracle could help. But I'm at 2HP so need to be careful. Let me breach Lens from (5,4) to control them next turn, useful for disruption.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 5,
+              "y": 5
+            },
+            "addendum": "Move away from allies and toward your own baseline"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Veil is adjacent at (5,4) and plans to move to (4,3) then shadow_strike (5,3) next turn — not targeting me directly this turn. Orders say move away from allies and toward my own baseline (y=5 is already max, baseline is top). I need to move away from Veil and allies. Valid moves include (4,5), (3,5), (2,5) — moving west along top row puts distance from Veil. I'll move to (3,5) to get away. No useful ability: scan is blocked when adjacent to Vector... wait, Veil is a specter not Vector. Actually scan is blocked adjacent to enemy Vector class. Veil is specter so scan works. But all enemies are either already scanned or out of range. I'll just move west to (3,5) and wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Bulwark is adjacent at (0,3) - precision_shot is blocked when adjacent to enemy Vector, but Bulwark is a sentinel not a Vector. However, Bulwark is at dist=1 (adjacent), so I need to check if precision_shot works at adjacent range. It requires range ≤2 tiles so dist=1 qualifies. But my orders say prioritize killing wounded enemies - Marksman is critical but at dist=5, out of range. Bulwark is healthy and adjacent. Best move: retreat to (2,2) to get distance from Bulwark, then use precision_shot on... still can't reach Marksman. Alternatively, move to (1,1) or (1,3) to get away from Bulwark and try to get line on Marksman. From (2,2) Marksman at (3,0) is dist=3, still out of range 2. I can't reach Marksman this turn. With Bulwark adjacent, I should retreat. Move to (2,2) to escape Bulwark adjacency, then use suppressing_fire or attack on Bulwark if still in range. From (2,2), Bulwark at (0,3) is dist=3, out of range. So I retreat and wait - better to use suppressing_fire on Bulwark before moving to slow it, then retreat.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "suppressing_fire",
+            "target": {
+              "x": 0,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "I'm at 1HP — critical. Deadeye is at dist=3, in range for precision_shot (range≤2 tiles means dist≤2, so actually out of range). Wait — precision_shot range is ≤2 tiles but Deadeye is dist=3, so not in range. I need to close to dist≤2 to use precision_shot. But at 1HP moving into range is risky. Orders say maintain distance. Best play: move away to stay alive, use suppressing_fire if anyone closes. No enemies adjacent, so no Vector suppression issue. Move to (5,0) to maximize distance from all enemies, then wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I'm suppressed so can only move 1 tile. Doc is at (1,2), dist=2 - advancing toward them via (1,3) gets me closer. Enemies are mostly to the E/SE. Use shield_wall facing E to block incoming damage from Deadeye/Doc direction.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 1,
+              "y": 3
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 9,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 3,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 12,
+          "maxHp": 12,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Orders say move away from allies and toward my own baseline. My baseline is the west/left side (allies started there). Allies are at (2,2) and (1,2). I'm at (3,5). Moving toward baseline means moving west. Valid moves include (1,5) which is far west and still on row 5, away from allies clustered around y=2. Veil is at (5,4) and heading toward our lines - I could scan it but orders say move toward baseline. I'll move to (1,5) to comply with orders, staying high on the map away from allies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Doc",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses left). Lens is wounded at (1,5) dist=3, not adjacent. Deadeye is at (2,2) full HP. Bulwark is adjacent at (1,3). I should move toward Lens to stay near most threatened ally and use overclock on Deadeye (my damage dealer) if I can get adjacent. Deadeye is at (2,2), I'm at (1,2) — already adjacent! Use overclock on Deadeye now, then move toward Lens.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Veil",
+          "class": "specter",
+          "thinking": "All enemies are out of range (dist 4-5). I'm at (5,4) with move 3. Doc at (1,4) is closest at dist 4. I can't reach any enemy this turn. Best move is toward Doc to close distance. Moving to (3,4) gets me to dist 2 from Doc, but Doc faces N so behind tile is (1,3) which Bulwark occupies. Moving to (3,4) puts me at dist 3 from Doc and dist 3 from Deadeye. I should advance aggressively toward the cluster. Move to (3,4) to close in.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Overclocked — 2 ability uses. Bulwark is adjacent (dist=2) and healthy, Veil is dist=3. Marksman is critical at dist=5 but out of range. I'm not adjacent to any enemy Vector so precision_shot is available. Use precision_shot on Bulwark (dist=2, in range) twice to try to finish or heavily damage it. Both shots at Bulwark for 2dmg each — that's 4 total which would drop a healthy sentinel if it has 4HP.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "At 1HP, I'm extremely vulnerable. All enemies are out of range (dist 5-9). I should move toward Deadeye to get in range for precision_shot next turn, while staying safe. Moving to (3,0) closes distance to Deadeye at (2,2) to dist 3, still out of range but closer. Moving to (4,1) gives dist 3 to Deadeye. Best move: (4,1) reduces distance to Deadeye to ~3 tiles, keeps me alive. No ability possible this turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Doc is adjacent to the north at (1,4). Orders say attack if adjacent. I'm fortified so staying put preserves 50% damage reduction. Attack Doc first, then use shield_wall facing N where Doc and Lens are clustered.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 1,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 9,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 11,
+          "maxHp": 12,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Veil",
+          "class": "specter",
+          "thinking": "Breach is exhausted. I'm at (3,4) with 2HP, cloaked. Doc is the healer at (1,4) - killing it stops enemy healing. Lens is at (1,5) facing W, so (2,5) is behind it and reachable. I can move to (2,5) and use shadow_strike on Lens (adjacent, keeps cloak). Lens is squishy oracle - 1 damage hurts. Doc is the priority but no behind position reachable. Lens at (2,5) is adjacent and hittable with shadow_strike while staying cloaked.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Doc",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses left). Lens is adjacent at (1,5) and wounded (4/6 HP) - I can use overclock on Lens. Bulwark is adjacent at (1,3) - I should attack it since I can't heal. My current position (1,4) keeps me adjacent to Lens. I'll overclock Lens then attack Bulwark.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Orders are to move away from allies and toward my own baseline. I'm at (1,5) with allies at (1,4) and (2,2). My baseline is the top (y=5 row) or the west edge. Valid moves toward baseline/away from allies: (0,5) moves west away from Veil at (2,5) and keeps me on row 5. I have OVERCLOCKED so 2 ability uses. Veil is adjacent at (2,5) — a specter that will assassinate damage dealers. I should scan Veil since it's in range (dist=1) to deal damage, though I already know its prompt. Actually scan deals 1 damage which is useful. With 2 ability uses I can scan Veil twice for 2 damage total. But orders say move away from allies toward baseline. Move to (0,5) first — that's away from both allies and toward the western baseline. Then use my 2 ability uses to scan Veil (dist from (0,5) to (2,5) = 2, still in range ≤4).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Marksman is critical (1HP) at dist 3 - out of precision_shot range (max 2). Bulwark is wounded at dist 2, in range. Veil is wounded at dist 3, also out of range. I'm not adjacent to any enemy Vector, so precision_shot is usable. Best play: shoot Bulwark with precision_shot (2dmg, wounded = likely kill), then wait. No need to move since Bulwark is already in range at dist 2.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "I'm at critical HP (1/4) and must survive. Deadeye is the closest threat at dist 3 - within my range but I need to check if precision_shot works at dist 3 (range ≤2). Dist 3 means it's out of precision_shot range (≤2 tiles). Suppressing_fire also requires range ≤2. So I can't hit Deadeye from here. Priority: maintain distance and stay alive. Move away from Deadeye to preserve HP. Moving to (5,2) keeps distance from Deadeye at (2,2) and maintains tactical position. Wait after moving since no targets in range.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Doc is adjacent at (1,4). Attack Doc immediately. I'm at 2HP so staying fortified is valuable, but orders say attack adjacent enemies. After attacking, I'll use shield_wall facing North where Doc and Lens are concentrated.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 1,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 9,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 3,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 6,
+          "position": {
+            "x": 0,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 10,
+          "maxHp": 12,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Veil",
+          "class": "specter",
+          "thinking": "I'm at 1HP - extremely vulnerable. Breach is exhausted. Lens is wounded at (0,5) facing W, meaning I'm already behind from (2,5) and (1,5) is behind+adjacent. I can move to (1,5) to get adjacent, then shadow_strike Lens for the kill - shadow_strike keeps cloak so I stay hidden. Priority: eliminate the wounded oracle before it can act or heal.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "I'm at (0,5) with 2HP — critical danger. Veil is adjacent at (1,5) and will shadow_strike me this turn (per Foresight). I need to escape. Valid moves include (2,5) but Veil is moving there. (3,5) puts me further away. Bulwark is at (1,3) critical and already scanned. Marksman is out of range. My priority: survive by moving away from Veil, then scan Marksman if possible — but dist=8, out of range. Instead I can scan Veil (dist=1, already scanned) or Bulwark (already scanned). No new scan targets in range. I should move to (3,5) to escape Veil's adjacency, then recalibrate Deadeye at (2,2) — but (2,2) is not adjacent to (3,5). Alternatively move to (2,5) then recalibrate... wait, Deadeye is at (2,2), not adjacent to any of my valid moves. Best play: move to (3,5) to escape Veil, then wait or scan Bulwark again (no value). Actually I can scan Veil from (3,5): dist from (3,5) to (1,5) = 2, in range. But Veil already scanned. Bulwark already scanned too. No new intelligence value. I'll move to (2,5) — closer to allies, and scan Veil again to deal 1 damage (wounded Veil, finish them off potentially). Wait — scan deals 1 dmg. Veil is wounded. From (2,5), Veil at (1,5) dist=1, in range. But WARNING: scan blocked when adjacent to enemy Vector. Veil is a specter, not a vector — so scan is NOT blocked. Scan Veil for 1 damage to help finish them. Move to (2,5), scan Veil at (1,5).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Doc",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses left). Lens is the most wounded ally at 2/6 HP, located at (2,5) dist=2. I should move adjacent to Lens to use overclock on them as they're an oracle (damage/utility dealer). Bulwark is adjacent at (1,3) but I can move away. Moving to (2,4) puts me adjacent to Lens at (2,5) and gets me away from Bulwark. Then use overclock on Lens to boost their output.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Bulwark is critical and adjacent at dist=2, within precision_shot range. I'm not adjacent to any enemy Vector, so precision_shot is unblocked. 2dmg to a critical Bulwark should kill it. I haven't moved so full 2dmg applies. Then Marksman is also critical at dist=3, out of range for precision_shot. I'll hold position for the kill shot.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "I'm at critical HP (1/4) and need to stay alive while dealing damage. Deadeye is in range at dist=3. I can use precision_shot on Deadeye (striker, high threat) from current position. After shooting, I should move to maintain distance and avoid being an easy target. Moving to (5,4) keeps me further from Deadeye while staying on the board.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I'm at 1HP, fortified. Moving will lose fortify bonus. Orders say advance toward nearest enemy and use shield_wall. Deadeye at (2,2) and Doc at (2,4) are both dist=2. If I move to (2,3), I'll be adjacent to both Deadeye (2,2) and Doc (2,4), and could attack. But at 1HP, moving loses fortify (50% reduction) which keeps me alive. Better to stay, shield_wall facing E where all enemies are concentrated (Deadeye E-SE, Doc E-NE, Lens far E). Staying fortified at 1HP is critical survival. Shield_wall facing E to protect Marksman ally and reduce incoming damage.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "direction": "E"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 9,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 10,
+          "maxHp": 12,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "opponent",
+    "totalTurns": 8,
+    "reason": "opponent eliminated all enemies"
+  },
+  "endedAt": "2026-03-05T09:06:04.269Z"
+}

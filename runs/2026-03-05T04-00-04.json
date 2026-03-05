@@ -1,0 +1,2569 @@
+{
+  "id": "2026-03-05T04-00-04",
+  "startedAt": "2026-03-05T04:00:04.334Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 3,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 4,
+        "movement": 2,
+        "range": 2,
+        "speed": 2
+      },
+      "oracle": {
+        "maxHp": 6,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 12,
+        "movement": 3,
+        "range": 2,
+        "speed": 3
+      },
+      "vector": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 9,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 2,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 9,
+        "healAmount": 10
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Doc",
+        "class": "medic",
+        "prompt": "Stay adjacent to the most threatened ally. Use patch on the most wounded teammate. If all healthy, use overclock on your damage dealer."
+      },
+      {
+        "name": "Aegis",
+        "class": "sentinel",
+        "prompt": "Push forward aggressively. Shield_wall facing the enemy cluster. If flanked, turn to face the biggest threat. Attack when possible."
+      },
+      {
+        "name": "Deadeye",
+        "class": "striker",
+        "prompt": "Position for clear sight lines. Prioritize killing wounded enemies with precision_shot. If forced to move, retreat away from threats. Suppressing_fire to slow rushers."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Lattice",
+        "class": "vector",
+        "prompt": "Trap the paths enemies must take to reach your backline. Stay at medium range. Use pulse on clustered enemies. Denial blocks adjacent threats."
+      },
+      {
+        "name": "Deadeye",
+        "class": "striker",
+        "prompt": "Stay at maximum range. Use precision_shot on the most wounded enemy to secure kills. If no one is wounded, target the enemy medic. Never move adjacent to enemies."
+      },
+      {
+        "name": "Lifeline",
+        "class": "medic",
+        "prompt": "Stay adjacent to the most threatened ally. Use patch on the most wounded teammate. If all healthy, use overclock on your damage dealer."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "All allies are at full HP, so no healing needed. Orders say to use overclock on damage dealer if all healthy. Deadeye (striker) is at (3,4), dist=2 from my current (2,5). I need to be adjacent to use overclock. Move to (3,5) puts me adjacent to Deadeye at (3,4). Then use overclock on Deadeye.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Doc",
+          "class": "medic",
+          "thinking": "All allies are at full HP, so no healing needed. Orders say use overclock on damage dealer if all healthy. Deadeye (striker) is my damage dealer at (4,1), dist=3. I need to get adjacent to Deadeye to use overclock. Moving to (3,1) puts me at dist=1 from Deadeye at (4,1) — adjacent. Then overclock Deadeye.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "All enemies out of range (min dist 4, my range 2). I have overclocked with 2 ability uses but no valid targets. Move north to (4,3) to close distance toward Deadeye at (3,4) — that brings me to dist 2, in precision_shot range next turn. From (4,3) I still can't reach anyone this turn. Use second ability as wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "I'm overclocked with 2 ability uses. No enemies are wounded, so orders say target the enemy medic (Doc at 3,1). Deadeye is the immediate threat at dist=2. I'll use both precision_shots: first on Deadeye (dist=2, in range, no movement so full 2dmg), then on Doc (dist=3 - need to check if in range). Doc is at dist=3 which exceeds my range of 2. So second shot goes to Deadeye again or I need to reposition. Actually recon shows Doc is 'inRange' - must be using Manhattan distance where range≤2 means adjacent tiles only... but the recon says Doc at dist=3 is inRange. I'll trust the recon data. Priority: no wounded enemies, so target Doc (medic). But Deadeye is a striker threat. I'll shoot Deadeye first (dist=2, full 2dmg could weaken), then Doc. I haven't moved so precision_shot does full 2dmg. I'll fire both shots without moving.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "secondResult": "Out of range"
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Enemies are at dist 3, none in range yet. Aegis is at (2,1) moving north toward us - likely path through (2,2) or (2,3). Place a trap at (2,3) to intercept Aegis's advance. Then move to (2,3) after placing trap... wait, I can't place trap on my own tile or occupied tile. Place trap at (2,3) first (it's empty, within range 2), then I can move to maintain position. Actually, let me place trap at (2,2) to block the direct path from Aegis at (2,1). Then move to (3,3) to stay at medium range and keep options open.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Enemy cluster is at (3,3)-(3,5), all to the north. Allies: Deadeye at (4,3) is critical and needs protection. I should push forward to (2,3) to get closer and set up shield_wall facing N to protect against the enemy cluster. Can't attack yet — no enemies in range. Moving to (2,3) keeps me adjacent to my critical Deadeye ally and lets me shield_wall northward.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 9,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "player",
+          "hp": 12,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 12,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Doc",
+          "class": "medic",
+          "thinking": "Deadeye is at 1/4 HP and critically wounded — top priority. Distance is 3, move speed is 3. Valid moves include (4,2) which gets me dist=2 from Deadeye at (4,3), but patch requires adjacent (dist=1). I need to reach (4,3) or adjacent. Looking at valid tiles: (4,2) is dist=1 from Deadeye at (4,3) — that's adjacent! Move to (4,2) then patch Deadeye. Lattice is at (3,3) — moving to (4,2) keeps me 2 tiles away (safe, no blocking). Perfect.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "Deadeye ally at (3,4) is wounded (3/4 HP). I'm at (3,5), distance to (3,4) is 1 — adjacent. I can patch them immediately. Move to (4,4) to stay close to the frontline after healing, or just heal first then reposition. Actually I'm already adjacent to Deadeye at (3,4), so I can patch now then move to (4,4) to stay near the action.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "I'm adjacent to Lattice (vector) at (3,3) which blocks my precision_shot. Lifeline (medic) is at (4,4) distance 1 — I can basic attack her. But better: move to (5,3) to escape Lattice's denial zone, then precision_shot Deadeye at (3,4) from range 2 with clear LoS and no adjacent vector blocking.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": "Out of range"
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "No enemies are wounded, so target the enemy medic (Doc) per orders. I'm at (3,4), Doc is at (4,2) - dist 3, which is within precision_shot range (≤2 tiles means Manhattan distance ≤2... wait, dist=3 but recon says inRange:true). I haven't moved so precision_shot deals 2dmg. No adjacent enemies so precision_shot isn't blocked. Stay put and fire on Doc.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Lattice is adjacent at (3,3) and has DENIAL active, blocking my abilities except basic attack. I'm fortified (50% DR) so staying put is strong. I'll attack Lattice with my basic attack, then use shield_wall facing E to protect my allies from the enemy cluster to the east. Wait — DENIAL blocks my shield_wall ability. So I'll attack Lattice and wait to keep fortify active.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Aegis is adjacent at (2,3) — my Denial passive is already suppressing their abilities. Deadeye and Doc are at range 2. I should pulse to hit the Aegis (dist=1) for 1 damage, and possibly catch nearby allies/enemies. Then move to (4,3) to reposition away from Aegis while staying in range of Deadeye and Doc. Trap at (2,2) is already set — good chokepoint coverage to the west.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "player",
+          "hp": 12,
+          "maxHp": 12,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 12,
+          "maxHp": 12,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Doc",
+          "class": "medic",
+          "thinking": "I'm adjacent to Lattice (vector) at (4,3), which means my abilities are blocked by DENIAL. I need to move away from Lattice first to use patch on Aegis (8/9 HP, wounded). Aegis is at (2,3), dist=3. I need to close distance. Moving to (3,2) gets me closer (dist=2 from Aegis) and out of Lattice's denial zone. From (3,2) I still can't reach Aegis with patch (adjacent only, dist=2). Best I can do is move toward Aegis. Move to (3,3) - wait, is that in valid moves? Yes (3,3) is valid. From (3,3) Aegis at (2,3) is dist=1 - adjacent! I can patch from there. Move to (3,3) then patch Aegis at (2,3).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": "Cannot use patch — adjacent to enemy Vector (Denial)"
+        },
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "Deadeye ally is at (3,4) with 3/4 HP — most wounded. I'm at (4,4), adjacent to them. I can patch Deadeye immediately. Lattice at (4,3) is also wounded but only 1 HP down. Priority: patch Deadeye first (more critical at 3/4 vs 7/8). I'm already adjacent to Deadeye at (3,4), so no move needed to patch. After patching, I could move to stay near Lattice too.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": "Position occupied"
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Doc (medic) is adjacent at (3,3) - dist 1. Orders say target enemy medic when no one is wounded. Doc is the priority. However, precision_shot requires LoS and I need to check adjacency warning - Doc is adjacent (dist=1), not a Vector so no block. But precision_shot range is ≤2 tiles so Doc at dist=1 qualifies. I'm not adjacent to any enemy Vector (Aegis is sentinel, Doc is medic), so precision_shot is fine. I'll use precision_shot on Doc for 2 damage. I should also avoid moving adjacent to enemies - I'm already at dist=1 from Doc but Doc came to me. I should move away to maintain range after shooting, or shoot first then move. Move to (5,4) to get distance from Doc/Aegis while staying away from Deadeye at (5,3) - wait that's adjacent to Deadeye. Move to (4,5) instead to gain distance.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Adjacent to Lattice's denial zone — precision_shot is blocked. I can only use basic attack or move. Moving to (5,4) gets me away from Lattice's denial and puts me at range 2 from Lifeline (4,4) and within range of Deadeye at (4,5). From (5,4), Deadeye at (4,5) is dist=√2≈1.4, so dist=2 by grid — in range for precision_shot. Priority: move away from Lattice first to clear denial, then precision_shot Lifeline or Deadeye.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Doc is adjacent at (3,3) — I'm denying their abilities right now. Pulse will hit Doc (dist=1) and potentially Aegis (dist=2, just out of pulse range). Better to place a trap on (3,4) to catch enemies advancing toward our backline at (4,4)/(4,5), then pulse Doc who is right next to me for 1 damage. Actually pulse range is 1 tile AoE — Doc at dist=1 is within pulse range. Aegis at dist=2 is not. Deadeye at dist=2 is not. So pulse hits Doc. I should also consider moving to maintain denial on Doc while trapping an approach path. If I stay at (4,3), I can trap (3,4) — a tile between me and the enemy cluster — then pulse Doc at (3,3). That's solid: trap blocks the (3,4) corridor, pulse damages Doc.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Currently fortified at (2,3) with 50% damage reduction. Enemy cluster is to the east: Lattice@(4,3), Lifeline@(4,4), Deadeye@(4,5). Orders say push forward aggressively and shield_wall facing enemy cluster. If I move to (3,3), I'm still 1 tile from Lattice's denial zone. But Doc is at (3,3) — can't move there. Move to (3,4) gets me closer and positions me to potentially attack Lattice next turn. From (3,4), Lattice at (4,3) is distance 2 — still out of melee. Better to move to (3,2) or stay and shield_wall. Actually, moving to (3,4) puts me 1 tile from Lattice denial zone still. Let me check: Lattice@(4,3), if I move to (3,3) that's adjacent to Lattice — but Doc is there. Move to (3,4): dist to Lattice = |4-3|+|3-4|=2, still safe from denial. From (3,4) I can shield_wall East to protect Doc and Deadeye from the enemy cluster. That's aggressive positioning with good team support.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 4
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "player",
+          "hp": 9,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 11,
+          "maxHp": 12,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Doc",
+          "class": "medic",
+          "thinking": "I'm adjacent to Lattice (vector) which blocks my abilities. Aegis is wounded at (3,4) - adjacent to me, needs heal. I must move away from Lattice first to escape denial zone, then use patch on Aegis. Moving to (2,4) gets me adjacent to Aegis at (3,4) while escaping Lattice's denial zone (dist from Lattice becomes 2). Then I can patch Aegis.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "Deadeye ally at (4,5) is most wounded at 3/4 HP. I'm adjacent to them. However, I'm also adjacent to enemy Aegis and Deadeye, which means Vector Lattice at (4,3) could block patch — but Lattice is a Vector on MY side, not enemy. The warning is about adjacent enemy Vectors. No enemy Vector is adjacent to me, so patch is usable. Deadeye at (4,5) is most wounded (3HP vs 4max). I'll patch them first. Then I have no more patch uses worth saving (1 remaining after this... wait, I only have 1 heal left total). Actually Deadeye at (4,5) is priority: 3/4 HP. Lattice is 7/8. Deadeye needs more urgent heal. After patching Deadeye, I can attack an adjacent enemy or wait.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "No enemies are wounded, so orders say target the enemy medic Doc. Doc is at (2,4) dist=3 which is out of my range-2. All enemies healthy. Deadeye and Aegis are both at dist=2 and in range. Since no one is wounded, target enemy medic - but Doc is out of range at dist=3. I should target Deadeye (enemy striker) as next priority since Doc is unreachable. I'm not adjacent to any enemy Vector, so precision_shot is valid. Stay at current position (max range), use precision_shot on Deadeye at (5,4).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "I'm at 1HP — critical. Lifeline (medic) is adjacent at (4,4) and likely to heal enemies. Deadeye is at (4,5) dist=2. I can't use precision_shot on Lifeline since she's adjacent (dist=1, not blocked by Vector adjacency issue since Lattice is at dist=2 not adjacent to me). Actually Lattice is at dist=2 so precision_shot is not blocked. Lifeline at dist=1 is within range≤2. Fire precision_shot at Lifeline (2dmg, would kill if she has low HP — but she's healthy so likely 3-4HP). Best play: shoot Deadeye with precision_shot (2dmg at dist=2, healthy striker) or Lifeline. Killing the medic prevents healing. But I'm at 1HP and need to survive — retreat to (5,2) to get distance. If I move first, precision_shot does 1dmg. If I shoot first then move, precision_shot does 2dmg. Shoot Lifeline first (eliminate healer, dist=1 in range), then retreat to (5,2).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Deadeye (enemy striker) is critical at (5,2) and in range - pulse hits all within 1 tile but they're at dist 2, so use attack to finish them. Aegis is healthy at (3,4) dist 2, also in range. Priority: kill critical Deadeye with attack (dist 2, attack range is adjacent only - wait, attack is adjacent only). So I can't attack Deadeye at dist 2. Pulse hits all within 1 tile - no enemies within 1 tile of current pos. Trap is the best option - place a trap on a path enemies will use. Aegis at (3,4) moving toward backline, trap (3,3) or (4,2) would intercept. Move to (5,3) to get adjacent to critical Deadeye, then attack. From (5,3), Deadeye at (5,2) is adjacent - can attack for 1dmg to finish critical unit. Also from (5,3) I'm adjacent to Deadeye so Denial blocks their abilities.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Lifeline is adjacent at (4,4) — attack immediately. I'm fortified so I should avoid moving to keep 50% damage reduction. Attack Lifeline, then shield_wall facing E to protect against the cluster.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 4
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 9,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "player",
+          "hp": 9,
+          "maxHp": 12,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 12,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Doc",
+          "class": "medic",
+          "thinking": "All allies are at full HP (Aegis 9/9), so no healing needed. I have 1 patch remaining. Orders say use overclock on damage dealer if all healthy. Aegis is the sentinel (damage dealer/tank) at (3,4), adjacent to me. I should overclock Aegis to boost their effectiveness. Then I can move closer to the action or stay put. Moving to (3,3) keeps me adjacent to Aegis and closer to the enemy cluster.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses left). Lattice is wounded at (5,3) dist=2, needs healing but I can't patch. Aegis is adjacent at (3,4) — being adjacent to enemy sentinel doesn't block overclock (only Vector blocks abilities). Deadeye is my damage dealer at (4,5) dist=1, full HP. I should move toward Lattice to stay adjacent to the most threatened ally, and use overclock on Deadeye to boost damage output. Moving to (5,4) puts me adjacent to both Lattice at (5,3) and Deadeye at (4,5). From (5,4) I can overclock Deadeye.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": "Must be adjacent"
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Both enemies are in range from current position. No one is wounded, so I target the enemy medic Doc per orders. Doc is at (3,3) dist=3, within precision_shot range (≤2 tiles... wait, dist=3 exceeds range 2). Aegis is at dist=2, in range. Doc at dist=3 is out of precision_shot range. So I should use precision_shot on Aegis (only valid target in range). I haven't moved, so full 2dmg. Stay at (4,5) to maintain max range.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm at (3,4) with Fortify active (50% DR) and Overclocked (2 ability uses). Deadeye is at (4,5) dist=2, Lifeline at (5,4) dist=2, Lattice at (5,3) dist=3. Orders say push forward aggressively and shield_wall facing enemy cluster. Moving to (4,4) closes to dist=1 from Deadeye and dist=1 from Lifeline, letting me attack Deadeye. The enemy cluster is to the NE/E, so shield_wall facing E or N makes sense. With 2 ability uses: move to (4,4), then attack Deadeye at (4,5), then shield_wall facing E to cover the cluster. But I only get move+ability or two abilities if overclocked means 2 ability slots. With OVERCLOCKED giving 2 ability uses: I'll move to (4,4) first to get adjacent to Deadeye, then use both ability slots: attack Deadeye, then shield_wall facing E toward Lifeline/Lattice cluster.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Aegis and Doc are both at dist=2. They're close together at (4,4) and (3,3). I can't trap adjacent to an enemy, but I'm not adjacent to either right now. Move to (4,2) to stay at medium range and get a better angle, then trap (3,2) or (4,3) to block paths toward my backline at (4,5)/(5,4). Actually, staying at (5,3) and trapping (4,2) blocks the southern approach path. Enemies are at (4,4) and (3,3) - trapping (4,3) would be on the path between them and my allies. I'm not adjacent to enemies so trap is valid.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "player",
+          "hp": 9,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 12,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Doc",
+          "class": "medic",
+          "thinking": "Aegis is wounded at (4,4) and needs healing. I'm at (3,3), dist=2. I need to move adjacent to Aegis first, then patch. Moving to (4,3) puts me adjacent to Aegis at (4,4) — distance 1, so patch will work. (4,3) is in my valid moves list. Lattice is at (5,2), dist from (4,3) would be 2 — not adjacent, so abilities won't be blocked.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0/3 uses). Deadeye is wounded at (4,5), dist=2, not adjacent. Aegis is adjacent at (4,4) - enemy presence blocks abilities if Vector is adjacent, but Aegis is sentinel not Vector, so overclock is not blocked. I should move to get adjacent to Deadeye at (4,5) to use overclock and stay near our most threatened ally. Moving to (5,5) puts me adjacent to Deadeye at (4,5) (dist=1) and away from Aegis. Then I can overclock Deadeye to boost their damage output.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "I have 2 ability uses this turn (overclocked). I'm at (4,5) with Aegis adjacent at (4,4) dist=1 and Doc at (4,3) dist=2. WARNING: precision_shot is blocked when adjacent to enemy Vector — Aegis is a sentinel not a vector, so precision_shot should work. However, Aegis is at dist=1 (adjacent), which is within range≤2 for precision_shot. Doc is the medic at dist=2, which is my priority target per orders. I should use both ability uses on Doc (medic) since no one is wounded. I must not move adjacent to enemies — I'm already adjacent to Aegis at (4,4), but I can't move away and still reach Doc. Actually, I'm already adjacent to Aegis so I need to be careful. I'll use precision_shot twice on Doc at (4,3) since I have overclocked — 2dmg each shot = potentially killing Doc. Orders say target the medic if no one is wounded.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Doc (wounded medic) is in range at distance 2. I should attack/trap to pressure them. Aegis is at dist 3, out of range. I can place a trap between enemies and our backline, or pulse Doc. Doc is at (4,3), I'm at (5,2). Pulse hits all within 1 tile - Doc is at dist 2 so out of pulse range. I can place a trap on (4,2) which is a valid move tile and blocks the path. Better: stay and use trap on (4,2) to block Doc's approach path, then wait or move. Actually I should trap a chokepoint. (4,2) is on the path between enemies and our backline at (4,5)/(5,5). Place trap at (4,2) to catch Doc or Aegis moving north.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Deadeye is adjacent (4,5) and wounded — attack for the kill. Stay put to keep Fortify active and maintain 50% damage reduction. Shield_wall facing North covers Deadeye and the enemy cluster at (4,5)/(5,5).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 9,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 12,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 12,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Doc",
+          "class": "medic",
+          "thinking": "I'm at 4/12 HP and adjacent to Lattice which blocks my abilities. Patch is depleted. Aegis is full HP so overclock is pointless. I can only attack or move. Moving away from Lattice at (5,3) to break denial zone. Best move is to (3,3) or (4,2) to escape adjacency. Aegis is healthy at (4,4), so I should stay nearby. Move to (3,3) to escape Lattice denial, then attack or wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses left). Deadeye is critically wounded at 1HP adjacent to me at (4,5). I can't heal but I can overclock Deadeye to give them 2 abilities next turn - they're a striker who needs to act fast. Move to (4,5) won't work since Deadeye is there, but Deadeye is at dist=1 from me (5,5) to (4,5). Wait, valid moves show [4,3],[5,4],[5,2],[3,5],[2,5]. Moving to (5,4) gets me closer to Deadeye at (4,5) - that would be adjacent. Actually I'm at (5,5) and Deadeye is at (4,5), that's already adjacent (dist=1). So I can overclock Deadeye right now without moving. Overclock requires adjacent - Deadeye at (4,5) is adjacent to me at (5,5). Use overclock on Deadeye to maximize their damage output this critical round.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Aegis is at (4,4) dist=2, in range for pulse (1-tile AoE from me at 5,3 would hit 4,3/5,4/etc, not 4,4). Pulse only hits within 1 tile of me, so Aegis at dist=2 is out of pulse range. I can attack Aegis (adjacent only - dist=2, not adjacent). Best play: move to (4,3) to get adjacent to Aegis for attack OR place a trap on a path. Moving to (4,3) puts me adjacent to Aegis enabling attack AND activates Denial on Aegis. But Lifeline is at (5,4) - I should protect backline. Place trap at (4,2) - already trapped. Try (3,3) or (4,3). Trap at (4,3) would block Aegis advance path. I'm not adjacent to enemy at current pos so trap is valid. Trap (4,3) to block Aegis, then move closer or wait.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm adjacent to both Lattice (4,3) and Lifeline (5,4). Lattice's DENIAL zone blocks my abilities except basic attack. I'm fortified with 50% damage reduction. Orders say push forward aggressively and attack when possible. Lattice is the denial threat — attack it first. If I move I lose fortify, so staying and attacking is optimal. Attack Lattice, then shield_wall... but shield_wall is blocked by DENIAL. So attack Lattice, then attack Lifeline (two attacks if ability=attack counts as ability slot). Actually I only get one ability per turn. Attack Lattice (adjacent, in DENIAL so basic attack works), then wait to keep fortify.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 9,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 12,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses left). Lattice is wounded at (4,3) but dist=2, not adjacent. Aegis (enemy sentinel) is adjacent at (4,4) — overclock is blocked if adjacent to enemy Vector, but Aegis is a sentinel, not a Vector, so overclock should be usable. However, Lattice is not adjacent to me. I need to move closer to Lattice to use overclock. Moving to (4,5) puts me adjacent to Lattice at (4,3)? No — dist from (4,5) to (4,3) is 2. Moving to (5,3) puts me at dist=1 from Lattice at (4,3)? dist = |5-4|+|3-3| = 1, yes adjacent. But (5,3) is in valid moves. From (5,3) I can overclock Lattice. But wait — Lattice is a vector, not a medic/damage dealer. Orders say overclock the damage dealer if all healthy, but Lattice is wounded. Since patch is unavailable, best I can do is overclock Lattice (the vector/damage dealer). Move to (5,3) to get adjacent to Lattice at (4,3), then overclock Lattice.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Doc",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses left). Aegis is at full HP so no heal needed. I'm at 4/12 HP which is very low. Lattice(vector) is at (4,3), dist=2 — must stay at least 2 tiles away to avoid ability denial. Aegis at (4,4) is the ally to support. I can use overclock on Aegis to boost the damage dealer. Aegis is at (4,4) — I need to be adjacent to use overclock. I'm at (3,4), which is adjacent to Aegis at (4,4). But moving adjacent to Lattice at (4,3) risks denial. Current position (3,4) is adjacent to Aegis and dist=2 from Lattice — safe to use overclock here. Use overclock on Aegis, then wait or reposition.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "I'm overclocked so I get 2 ability uses. Aegis is adjacent at (4,4) - I can pulse to hit them for 1 damage, and my Denial passive is already blocking their abilities. I have a trap at (4,3) which is my current position. I should move first to (4,5) or use abilities. Actually, let me pulse Aegis first (hits all within 1 tile), then trap a path. (4,5) would be a good trap location to block Aegis advance. Or I could pulse and then attack. Pulse hits all units within 1 tile - Aegis is at dist 1, so pulse would hit them. Then I can trap a tile to further deny area. Move to (4,5) to stay near but place trap on path. Actually stay put and use both abilities: pulse Aegis, then trap (4,5) to block their movement north.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm adjacent to Lattice (4,3) — DENIAL zone means only basic attack/movement work. I have OVERCLOCKED (2 ability uses) but abilities are blocked by DENIAL. Fortified gives 50% damage reduction since I haven't moved. Best play: attack Lattice twice with my 2 ability uses (attack is a basic ability, should work under DENIAL). This maximizes damage on the healthy enemy vector while staying fortified.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 12,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 12,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 9,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses left). Lattice at (4,3) is wounded at 3/8 HP and is my most threatened ally. I'm currently at (5,3). I need to stay adjacent to Lattice. Aegis is at (4,4) which is adjacent to Lattice - dangerous. I should use overclock on Lattice to boost their damage output since I can't heal. But wait - overclock is blocked when adjacent to enemy Vector. Lattice IS a Vector, not an enemy Vector. The warning is about enemy Vectors blocking MY abilities. Aegis is a sentinel, not a Vector, so overclock is not blocked. I'm already adjacent to Lattice at (4,3) from my position (5,3). I can use overclock on Lattice to give them 2 abilities next turn, which helps them fight Aegis. Then I have no other useful ability, so I'll wait or move to a better position.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Doc",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses left). Aegis is wounded at (4,4) dist=2, not adjacent. I need to move closer to Aegis to support with overclock. Moving to (3,4) gets me adjacent to Aegis at (4,4) and stays 2 tiles from Lattice at (4,3), avoiding denial range. Then use overclock on Aegis to boost their damage output.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "I'm at 2/8 HP with overclocked (2 ability uses). Aegis is adjacent at (4,4) - dangerous. Doc is wounded at (3,4) dist 2. My Denial passive blocks some abilities on Aegis since adjacent. I have traps at (4,5) already. Best play: pulse hits Aegis (dist 1) and Doc (dist 2 - wait, pulse is 1 tile AoE, Doc is at dist 2 so won't hit). Pulse hits Aegis for 1 dmg. Then trap at (3,3) or (5,4) to cut off paths. I'm at 2HP so I need to be careful. Aegis is healthy and adjacent - pulse first to damage, then move away or trap. Move to (5,4) would put me away from Aegis. Or pulse Aegis then trap a path. Aegis can't use some abilities due to my Denial. Let me pulse (hits Aegis at dist 1), then trap at (5,4) to block that flank since I can move there. Actually I should move first to avoid Aegis attack next. But overclocked gives 2 ability uses not extra move. So: ability 1 = pulse (damages Aegis), ability 2 = trap at (5,4) to block escape/flanking route. I stay put but pulse hits adjacent Aegis.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Lattice is adjacent at (4,3) and critical — I must attack to finish it. I have 2 ability uses (overclocked) and I'm fortified (50% dmg reduction). Denial zone blocks abilities but basic attack still works. Attack Lattice twice to eliminate it.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 12,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 10,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Doc",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0/3 remaining). Aegis is wounded at (4,4) adjacent to me. I can use overclock on Aegis to give them 2 abilities next turn — useful since they're a sentinel. I'll stay adjacent to Aegis.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses left). I'm at (5,3) with 6/12 HP. Aegis (sentinel, enemy) is at (4,4), dist 2 — adjacent enough to be a threat. Doc (ally medic) is at (3,4), dist 3 — out of range. My orders say stay adjacent to most threatened ally. Doc is wounded and farther away. I should move toward Doc to stay adjacent. Moving to (4,3) is a trap. Moving to (3,3) gets me closer to Doc at dist ~1-2. From (3,3), Doc at (3,4) would be adjacent — I can use overclock on Doc since I have no patch uses left and Doc is our healer/damage support. Let me check: (3,3) to (3,4) = dist 1, adjacent. Overclock gives Doc 2 abilities next turn — very valuable. But (4,3) is a trap, so I need a path avoiding traps. Valid moves include (3,3). Move to (3,3), then overclock Doc at (3,4).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": "No ally at target"
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Lifeline is at (3,3), dist 2. I need to close to adjacent to attack. Moving to (4,3) puts me at dist 1 from Lifeline (3,3) — adjacent. Then I can attack. Doc is wounded at (3,4); I can also shield_wall S to cover Doc from Lifeline. With 2 ability uses (overclocked): move to (4,3), attack Lifeline, then shield_wall facing W toward Lifeline cluster.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 9,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 11,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Doc",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses left). Aegis is wounded at (4,3) dist=2, needs support. Enemy Lifeline is adjacent at (3,3). I should move toward Aegis to use overclock, but first I need to get adjacent. Moving to (4,4) puts me adjacent to Aegis at (4,3) and allows overclock. I'm currently adjacent to enemy Lifeline but moving away is fine - I can't heal anyway. Move to (4,4), then overclock Aegis.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses left). I'm at (3,3) with 5/12 HP, adjacent to enemy Aegis at (4,3). My Vector passive warning means abilities are blocked when adjacent to enemy Vector, but Aegis is a sentinel not a Vector, so overclock should be usable. Doc is wounded at (4,4). I should move away from Aegis to avoid melee pressure, then use overclock on Doc to help them heal more. Moving to (3,4) keeps me near Doc while stepping away from Aegis. Then overclock Doc at (4,4) — distance would be 2 from (3,4), but overclock requires adjacent range. I need to be adjacent to Doc. Doc is at (4,4). From (3,4) that's distance 1 — adjacent! So move to (3,4) then overclock Doc.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": "No ally at target"
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "At 2HP I'm very fragile. I have OVERCLOCKED (2 ability uses) and FORTIFIED (50% dmg reduction if I don't move). Lifeline is at (3,4), dist=2, not adjacent so can't attack. Doc is at (4,4) wounded. Orders say push forward aggressively. If I move to (3,3) I get adjacent to Lifeline at (3,4) to attack, but I lose fortify. Alternatively stay put, use shield_wall to protect Doc facing N (Lifeline is north of Doc at same x=4? No, Lifeline is at (3,4), Doc is at (4,4)). Actually if I stay I can't attack (Lifeline out of range). Best play: move to (3,3) which puts me adjacent to Lifeline at (3,4) — I can attack. Then use second ability (OVERCLOCKED) to attack again or shield_wall Doc. Moving loses fortify but I only have 2HP anyway — fortify saves 50% which is marginal. Attack priority: move to (3,3), attack Lifeline, then shield_wall facing N to protect Doc from Lifeline.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 9,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 12,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 12,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses left). Doc is wounded and adjacent at (4,4) — use overclock on Doc to give them 2 abilities next turn. Aegis sentinel is critical at (3,3) and adjacent — dangerous. I'm at 4/12 HP myself, critical. No patch available. Best play: overclock Doc so they can heal aggressively next turn, then consider repositioning away from Aegis.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": "No ally at target",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Doc",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses left). Aegis at (3,3) is critically wounded at 2/9 HP but is not adjacent (dist=2). I should move toward Aegis to use overclock on them. Moving to (3,4) puts me adjacent to Aegis at (3,3), then I can use overclock to give them 2 abilities next turn which could be crucial.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm at 1HP — survival is critical. Lifeline is at (2,4), dist 2, so I can move to (2,3) to get adjacent and attack. But at 1HP I'll likely die if I take any hit. Fortify gives 50% reduction if I don't move, but orders say push aggressively. I have 2 ability uses (overclocked). Moving to (2,3) puts me adjacent to Lifeline at (2,4) — I can attack twice with overclocked. Doc is wounded at (3,4) — I should consider shield_wall to protect Doc. Moving to (2,3) lets me attack Lifeline and potentially shield_wall N to protect Doc. Let's move to (2,3) then attack Lifeline at (2,4), use second ability as another attack.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 12,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 13,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Doc",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses left). Aegis is critically wounded at (2,3) with 1HP but I can't heal. Lifeline is adjacent at (2,4) — I can attack to eliminate the enemy medic. Then move toward Aegis to use overclock next turn. Attack Lifeline first, then move to (2,3) to be adjacent to Aegis.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": "Position occupied"
+        },
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "I'm at 2HP/12HP - critically low. Patch is unavailable (0 uses left). Aegis is adjacent at (2,3) critical, Doc is adjacent at (3,4) wounded. I'm adjacent to enemy Aegis (sentinel) which blocks patch/overclock anyway. I have no heals left. Best action: overclock Doc to let them act twice, but I'm adjacent to enemy so overclock is blocked. I can only attack or move. I should move away from the enemy sentinel to unblock my abilities, but overclock won't help since I have no heals. I can use overclock on Doc if I move away from Aegis first. Move to (1,4) to escape adjacency with Aegis at (2,3), then use overclock on Doc at (3,4) - but Doc would be dist 2 from (1,4), out of adjacent range. Better: move to (3,5) to stay near Doc and escape Aegis adjacency, then overclock Doc at (3,4) which is adjacent. Check: Aegis at (2,3), from (3,5) dist = |3-2|+|5-3|=3, not adjacent. Doc at (3,4), from (3,5) dist=1, adjacent. Valid move tile (3,5) is listed. This works.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": "No ally at target"
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "At 1HP, I'm critical. Fortified gives 50% damage reduction which is keeping me alive. Lifeline is at dist 3, not in melee range. Doc is wounded adjacent at (3,4). I should shield_wall facing N to protect Doc from Lifeline above, and stay put to keep Fortify active.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 12,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 14,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Doc",
+          "class": "medic",
+          "thinking": "Patch is unavailable (0 uses left). Aegis is critical at (2,3) dist=2, not adjacent. Lifeline enemy is adjacent at (3,5). I can't patch or overclock while adjacent to enemy Vector... wait, Lifeline is a medic not a Vector, so overclock is available. But Aegis is not adjacent. I should move toward Aegis to get adjacent, then overclock next turn. Moving to (2,4) gets me adjacent to Aegis at dist=1. Attack Lifeline first since she's critical and adjacent, then move toward Aegis.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "I'm at 1HP, critically low. Patch is unavailable (0 uses left). Doc is wounded and adjacent (dist=2). Aegis is critical at dist=3. I cannot heal anyone. My best option is to use overclock on Doc (the medic ally) to boost their effectiveness, then move to stay adjacent to the most threatened ally. Moving to (2,5) gets me adjacent to Doc at (2,4). Trap at (4,5) so avoid that. Move to (2,5) first, then overclock Doc.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": "No ally at target"
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "At 1HP I'm critical. Fortified gives 50% damage reduction if I don't move. Lifeline is at (2,5), distance 2, not in melee range. Doc is at (2,4) wounded and adjacent to Lifeline. If I move to (2,4) I'd be adjacent to Lifeline and could attack, but I'd lose fortify. Better to stay put, keep fortify active for survival, and use shield_wall facing North to protect Doc from Lifeline.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 12,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 12,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "player",
+    "totalTurns": 15,
+    "reason": "player eliminated all enemies"
+  },
+  "endedAt": "2026-03-05T04:07:27.447Z"
+}

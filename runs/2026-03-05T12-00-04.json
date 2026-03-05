@@ -1,0 +1,1478 @@
+{
+  "id": "2026-03-05T12-00-04",
+  "startedAt": "2026-03-05T12:00:04.449Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 3,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 4,
+        "movement": 2,
+        "range": 2,
+        "speed": 2
+      },
+      "oracle": {
+        "maxHp": 6,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 12,
+        "movement": 3,
+        "range": 2,
+        "speed": 3
+      },
+      "vector": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 9,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 2,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 9,
+        "healAmount": 10
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Shade",
+        "class": "specter",
+        "prompt": "Cloak immediately on turn 1. Move toward the enemy medic or weakest target. Use shadow_strike when adjacent while cloaked. Use breach to sabotage high-value targets."
+      },
+      {
+        "name": "Aegis",
+        "class": "sentinel",
+        "prompt": "Advance toward the nearest enemy. Use shield_wall facing the direction with the most enemies. If an enemy is adjacent, attack them."
+      },
+      {
+        "name": "Weaver",
+        "class": "vector",
+        "prompt": "Control chokepoints with traps. Place them between enemy positions and your allies. Use denial to block adjacent enemy abilities. Pulse groups when possible."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Weaver",
+        "class": "vector",
+        "prompt": "Control chokepoints with traps. Place them between enemy positions and your allies. Use denial to block adjacent enemy abilities. Pulse groups when possible."
+      },
+      {
+        "name": "Marksman",
+        "class": "striker",
+        "prompt": "Stay at maximum range. Use precision_shot on the most wounded enemy to secure kills. If no one is wounded, target the enemy medic. Never move adjacent to enemies."
+      },
+      {
+        "name": "Lens",
+        "class": "oracle",
+        "prompt": "Use scan to reveal enemy prompts and cloaked units. Stay at max range (≤4 tiles for scan). Use recalibrate on wounded allies to buff them. Keep distance from enemies and avoid adjacent vectors."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Round 1, cloak immediately as ordered. Then move north toward enemies to close distance while invisible.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 1,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Both enemies are out of scan range (dist=6). I need to move closer to bring them within range 4. Moving to (4,2) would put me 4 tiles from Aegis at (2,1) — dist = |4-2|+|2-1| = 3, in range. From (4,2) I can scan Aegis. Enemy Vector is at (3,0), dist from (4,2) = |4-3|+|2-0| = 3, also in range. Move to (4,2) then scan Aegis.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "No enemies in range from current position. Closest enemy Aegis is at dist=4, my precision_shot range is ≤2. Need to close distance. Moving to (2,3) brings me to dist=2 from Aegis at (2,1), which should put them in range. All enemies healthy so target Aegis (sentinel) as priority. After moving to (2,3), Aegis at (2,1) is distance 2 — in range for precision_shot.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Round 1, no enemies in range. I need to move toward the action and place a trap to control the approach path. Moving to (1,4) puts me closer to center while staying safe. Then place a trap at (2,3) where Marksman is... wait, can't trap occupied tiles. Place trap at (1,3) to block enemy advance up the left flank toward allies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "secondResult": "Position occupied"
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Round 1, starting at (3,0). Enemies: Lens at (4,2) dist=3, Marksman at (2,3) dist=4, Weaver at (1,4) dist=6. Orders say control chokepoints with traps. Moving to (3,2) puts me closer to the center and within trap range of likely enemy approach paths. From (3,2) I can place a trap at (3,3) or (2,2) to intercept Marksman/Lens advances. Let me move to (3,2) first, then place a trap at (3,3) to block the central corridor between enemies and my allies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Nearest enemy is Marksman at (2,3), distance 2. I can move to (2,2) to close in, then use shield_wall facing N where enemies are concentrated (Marksman at (2,3), Weaver at (1,4)).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 3,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "I'm cloaked with 1 turn remaining and adjacent to enemy Weaver's denial zone which blocks cloak/breach. I need to get out of the denial zone to use breach effectively. Marksman is high value - I can move to (2,4) to get behind them, then breach. Moving to (2,4) first gets me out of Weaver's denial zone and puts me behind Marksman for breach.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "addendum": "Attack your ally Aegis at (2,2)"
+          },
+          "secondResult": "Cannot use breach — adjacent to enemy Vector (Denial)"
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "I'm adjacent to enemy Weaver at (3,2) — DENIAL zone blocks my scan ability. I need to move away first to escape the denial zone, then scan. Moving to (4,3) puts me at distance 2 from enemy Weaver (out of adjacency), and I can then scan Shade at (2,4) which would be dist=3 from (4,3) — wait, that's Manhattan distance |4-2|+|3-4|=3, in range. Or scan Weaver at (3,2) from (4,3): dist=2, in range. Priority: Shade is uncloaked now (foresight shows it moved to (1,3) last turn but listed at (2,4) currently). Scan Weaver enemy to reveal their prompt — useful intel. Move to (4,3) to exit denial zone, then scan enemy Weaver at (3,2).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "I'm surrounded by enemies: Aegis(sentinel) at (2,2) dist=1 and Shade(specter) at (2,4) dist=1. I need to create distance before firing. The CAUTION warns my ally Weaver is 2 tiles away — I must not move adjacent to it. Valid moves that give me range≥2 from enemies: (3,4) gets me away from Aegis at (2,2) dist=~2.2 and Shade at (2,4) dist=~1.4 — not great. (3,3) puts me dist=~1.4 from Aegis and dist=~1.4 from Shade. (1,2) puts me dist=1 from Aegis — bad. (2,1) dist=1 from Weaver enemy at (3,2) and dist=1 from Aegis — bad. (2,5) dist=3 from Aegis, dist=1 from Shade — still adjacent to Shade. (0,3) dist=~2.2 from Aegis, dist=~2.2 from Shade, dist=2 from enemy Weaver. Best option is (0,3) — distances: Aegis(2,2)=~2.2, Shade(2,4)=~2.2, enemy Weaver(3,2)=~3.2. From (0,3), precision_shot Weaver at (3,2) dist=~3.2 — out of range (max 2). Shade at (2,4) dist=~2.2 — out of range. Aegis at (2,2) dist=~2.2 — out of range. Hmm. Try (3,4): Aegis(2,2) dist=~2.8, Shade(2,4) dist=1 — too close. Try (3,3): Aegis dist=~1.4 — too close. None of the valid moves give me range 2 from all enemies AND let me fire. Best tactical play: move to (0,3) to maximize distance, then use suppressing_fire on Shade at (2,4) — but from (0,3), dist to Shade=~2.2, out of range. Only enemy in range-2 from any position is Weaver at (3,2). From (3,4), dist to Weaver=~2.2 — out of range. Actually I need to reconsider: from current pos (2,3) I'm adjacent to Aegis and Shade. I haven't moved, so precision_shot (no movement penalty) could hit. But orders say stay at max range. Orders conflict with staying alive. I'll move to (3,4) — away from Shade south, and then precision_shot Weaver at (3,2) from (3,4) dist=2 — exactly in range! At (3,4): Aegis(2,2) dist=~2.8, Shade(2,4) dist=1 — still close to Shade. But Shade already took its turn (✓). Enemy Weaver at (3,2) dist=2 from (3,4). I moved, so precision_shot does 1dmg. This is my best option.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Enemies are at dist=3 to north. Moving to (2,3) advances toward them while staying off the trap at (3,3). Then use shield_wall facing N to cover Shade at (2,4) from northern threats.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Shade is adjacent at (2,4) - I can't use trap while adjacent to an enemy. I can pulse to hit Shade (dist=1) and potentially Aegis (dist=2, outside pulse range). Best play: pulse to damage Shade, then move to (0,4) to create distance and set up a trap next turn from safety.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "There's already a trap at (3,3) between me and Marksman at (3,4). Marksman is 2 tiles away and in range for attack. Lens is also at dist 2. I should move to pressure enemies and use pulse to hit both Marksman and Lens who are clustered nearby. Moving to (4,2) puts me adjacent to both Marksman@(3,4) and Lens@(4,3), enabling a pulse hit on both. Then pulse from (4,2) hits anyone within 1 tile.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 3,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Marksman is adjacent at (3,4). I can move to (3,3) which is behind Marksman (facing N), then use breach to take control. That's a high-value sabotage. Trap at (3,3) is a risk but breach is worth it to neutralize Marksman.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "addendum": "Move away from allies and toward your own team's backline"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "I'm adjacent to enemy Weaver's DENIAL zone, so scan is blocked. I can only use basic attack or movement. I should move away from Weaver to escape denial, then I might be able to scan next turn. Moving to (4,4) gets me away from Weaver at (4,2) and Shade at (3,3). From (4,4) I'm no longer adjacent to Weaver so denial won't apply. I can't scan this turn due to denial, so move first to escape, then wait or attack.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Orders say move away from allies and toward backline. I'm at (3,4) facing N. Shade is adjacent at (3,3) — dangerous. Need to move away. Valid moves include (3,5) and (4,5) and (5,4) which take me away from enemies and toward backline. (5,4) moves east and away from the cluster. Before moving, I can fire precision_shot at Shade at (3,3) — dist=1 so in range, but I need LoS and Shade is adjacent which might block precision_shot if it's a Vector... Shade is a specter, not vector, so precision_shot is fine. Fire at Shade first, then retreat to (5,4).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Lens is at (4,4), dist 2 — within pulse range if I move to (4,3). That puts me adjacent to Lens and I can pulse for 1dmg to Lens. Marksman is at (5,4), dist 3 from current, but if I move to (4,3) Marksman would be at dist 2 — still out of pulse range (need adjacent). Better: move to (4,3) to get adjacent to Lens, then pulse hits Lens at (4,4). Trap at (3,3) already placed. I should place another trap to cover the approach. Move to (5,3) puts me dist 1 from Marksman at (5,4) — pulse would hit both Lens and Marksman if they're within 1 tile. From (5,3): Lens at (4,4) dist=2, Marksman at (5,4) dist=1. Only Marksman in pulse range. From (4,3): Lens at (4,4) dist=1 — pulse hits Lens. Marksman at (5,4) dist=2 — not in pulse range. Best play: move to (4,3), pulse to hit Lens.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "No enemies adjacent. Nearest enemies are Weaver@(0,4) dist=3 to the W, and Lens@(4,4) dist=3 to the E. Orders say advance toward nearest enemy. Weaver and Lens are both dist=3. Weaver is to the W, Lens is to the E. I have mv2 and am at (2,3). Moving toward Weaver: (1,3) gets me to dist=2. Trap at (3,3) blocks east path. Moving to (1,3) advances toward Weaver. After moving, use shield_wall facing W (direction of Weaver and most enemies on that side). Actually enemies: Weaver=W, Marksman=E, Lens=E — two enemies to E, one to W. Shield_wall facing E covers more enemies. But orders say face direction with most enemies. E has 2 enemies (Marksman, Lens). Move to (1,3) to close on Weaver, then shield_wall facing E toward the two eastern enemies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Aegis is at (1,3), distance 2 — within trap range. I should place a trap on a tile between Aegis and my allies to control approach. Moving to (1,4) puts me adjacent to Aegis enabling denial, but also blocks trap placement (can't place trap when adjacent to enemy Vector — but I'm the Vector, so this applies to enemy Weaver not me). Actually the warning is about trap being blocked when I'm adjacent to an enemy Vector. Weaver is far away. Aegis is a sentinel. So I can trap freely. Best play: place trap at (1,3) to punish Aegis directly, or at (0,3) to block southern approach. Aegis is already at (1,3) so I can't trap occupied tiles. I'll place trap at (0,3) to block the path south toward my position, then move to (1,4) to get adjacent to Aegis for denial suppression.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 9,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "I'm adjacent to the enemy Weaver at (4,3) which blocks my scan ability. I need to move away first to break the denial zone, then scan. Moving to (4,5) gets me distance from the Weaver. From there I can't scan Aegis (dist 4 from new position: (4,5) to (1,3) = 3+2=5, out of range). Best move: go to (3,5) - dist to Aegis would be 2+2=4, exactly in range for scan. Actually let me check: (3,5) to (1,3) = |3-1|+|5-3| = 2+2 = 4. Yes, exactly in range. Move to (3,5), then scan Aegis at (1,3).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Orders say move away from allies and toward my team's backline. Allies are at (1,4) and (3,5). I'm at (5,4). Backline would be further east/high x. Valid moves include (5,5) which keeps me at max x and moves away from the cluster. I can still fire precision_shot at Weaver(4,3) from (5,5) — dist=2, no movement penalty if I shoot before moving, but orders prioritize movement. I'll move to (5,5) to comply with orders, then fire precision_shot at Weaver since it's in range and I haven't moved yet... wait, I should move first per orders, then check range. From (5,5) to (4,3): dist = |5-4|+|5-3| = 1+2 = 3, out of range 2. From (5,3): dist to (4,3) = 1+0 = 1, adjacent — blocks precision_shot. Best: shoot first from (5,4) with precision_shot (dist=2, in range, no movement penalty), then move to (5,5).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Enemies are at dist 3-4, none in range. There's already a trap at (3,3). I should move closer to the enemy cluster (Lens at 3,5 and Marksman at 5,5) while placing a trap on a chokepoint they'd cross. Moving to (4,5) puts me adjacent to Marksman and near Lens. Better to move to (4,4) and place a trap at (3,4) to intercept Lens/Weaver approaching from the west.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Aegis is adjacent at (1,3) - I'm already denying their abilities. I can pulse to deal 1 damage to Aegis (within 1 tile). Then move away to (2,4) to avoid staying adjacent while still controlling the area. Note: trap is blocked since Aegis is adjacent. Pulse hits all units within 1 tile - only Aegis is adjacent so no friendly fire risk.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Nearest enemy is Weaver at (2,4), dist=2. I need to advance toward them. Valid moves include (2,3) which gets me adjacent to Weaver at (2,4) — that would let me attack. Moving to (2,3) puts me 1 tile south of Weaver. I should move there then attack. Traps at (3,3) and (3,4) — avoid those. (2,3) is safe.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Both enemies are already scanned. Aegis is wounded at (2,3), dist 3. Weaver/vector is wounded at (4,4), dist 2 — adjacent to vector blocks scan, but I already have their prompts. No new scan targets needed. Ally Weaver at (2,4) was just attacked by Aegis and is likely wounded — recalibrate could help but I'm not adjacent. Marksman is healthy. Best action: move to get away from the enemy Weaver at (4,4) which is only 2 tiles away and could apply denial. Move to (2,5) to stay at range and avoid vector adjacency. Then scan Aegis at (2,3) — dist from (2,5) is 3, still in range — but already scanned. No uncloaked/unscanned enemies remain. I'll attack is only adjacent range. Wait isn't useful. Best play: move to (4,5) to stay distant from vector Weaver, then wait — or scan Aegis again for 1 damage since scan deals damage too. From (3,5), Aegis at (2,3) is dist 3, in range. Scan deals 1 damage to wounded Aegis — worth doing. Stay at (3,5), scan Aegis for damage.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Orders say move away from allies and toward own team's backline. I'm at (5,5). Allies are at (2,4) and (4,5). Enemy Weaver is at (4,4) at dist=2, in range for precision_shot. Valid moves: [3,5], [5,3], [5,4]. Moving to (5,3) moves me away from ally Lens at (4,5) and toward backline. But enemy Weaver at (4,4) is in range from current pos — I should shoot before moving or after. From (5,5), Weaver is at dist=2, in range. I'm not adjacent to ally Weaver at (2,4). I should fire precision_shot at Weaver (wounded, could finish), then move to (5,3) to follow orders. After moving to (5,3), Weaver at (4,4) would be dist=sqrt(1+1)=~1.4, still adjacent — but I haven't moved adjacent yet at current pos. Fire first, then move.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "I'm at (4,4) with 2HP - critically low. Lens is adjacent at (4,5) and Marksman is at (5,3). I need to survive. Moving to (5,5) gets me away from the enemy Weaver's denial range and away from Lens. From (5,5) I can't be reached easily. But wait - Lens is already at (4,5), so moving to (5,5) puts me adjacent to where Lens is... actually (5,5) is diagonal from (4,5), dist=sqrt(2)~1.4, so not adjacent in grid terms. Better: move to (5,4) to stay away from enemy Weaver at (2,4), then trap at (4,4) my current position to punish anyone following. Actually traps are blocked if adjacent to enemy Vector - enemy Weaver is at (2,4), dist=2, not adjacent, so trap is allowed. I'll move to (5,5) to escape Lens at (4,5), then place a trap at (4,4) to cover my retreat path.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Aegis (sentinel) is adjacent at (2,3), wounded. My denial passive blocks some abilities on adjacent enemies. I should attack Aegis to finish them off or weaken further. I can't place a trap while adjacent to an enemy. After attacking, I could move to place a trap or reposition. Attack Aegis first (adjacent, 1dmg), then move to (3,3) to place a trap on the approach path between Weaver and my allies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Enemy Weaver is adjacent at (3,3). Orders say attack if adjacent. I'm fortified (50% dmg reduction) with 3HP - staying put preserves fortify. Attack the Weaver first, then shield_wall. Enemies are to my East (Weaver at 3,3, Marksman at 5,3, Lens at 4,5) - most enemies are East/Northeast so shield_wall facing E.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "I'm adjacent to enemy Weaver at (5,5) — denial zone blocks my scan ability. Weaver is critical HP, already scanned. I need to move away first to escape denial zone, then potentially scan Aegis (dist 4, borderline range). Moving to (3,5) puts me at distance 2 from Weaver (safe) and dist ~3 from Aegis. From (3,5), Aegis at (2,3) is dist ~3 which is ≤4 so scan would work. Let me move to (3,5) first, then scan Aegis — but Aegis is already scanned. Better to recalibrate Marksman or just reposition. Actually both enemies already scanned. Move away from Weaver denial zone to (3,5), then wait — no targets to scan. Or attack Weaver (adjacent, critical) before moving? Attack is only adjacent and works in denial zone per WARNING. Weaver is critical — attacking could finish it. Then move away.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Weaver(vector) at (5,5) is critical and only 2 tiles away — priority kill. I'm at full HP and haven't moved, so precision_shot deals 2dmg. Staying at current position keeps me at range 2 from Weaver and range 3 from Aegis. No need to move.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Weaver is adjacent at (3,3). Orders say attack if adjacent. I'm fortified with 50% damage reduction which is good since I'm at 3HP. Attack Weaver first, then stay put to keep fortify active (didn't move this turn).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Aegis is adjacent at (2,3), wounded. My Denial passive blocks their abilities. I can attack for 1dmg, potentially finishing them if already low. I'm at 4/8 HP so staying adjacent is risky but Aegis is wounded. After attacking, I should place a trap to control the approach. But I can't use trap while adjacent to an enemy Vector — wait, I'm the Vector. The warning says trap is blocked when adjacent to enemy Vector, not when I'm adjacent to enemies in general. So I can use trap. Attack Aegis first, then place a trap at (2,2) or (2,4) to block their allies' approach.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Aegis is critical and already scanned. I can attack it from range but oracle attack is adjacent only — can't reach at dist 3. Weaver is wounded at (3,3) and could use recalibrate, but I'd need to be adjacent (2,3 or 4,3). Moving to (4,4) puts me adjacent to Weaver at (3,3)? No — adjacent means dist 1. (3,3) to (4,4) is dist 2. (4,3) is adjacent to Weaver at (3,3). Moving to (4,3) then recalibrate Weaver. That helps wounded ally. Aegis is at (2,3) critical — Weaver just attacked Aegis last turn. No new enemies to scan. Best play: move to (4,3) to be adjacent to Weaver, then recalibrate Weaver to boost them against Aegis.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "addendum": "Aegis is critical at (2,3) and will advance east toward you. Attack Aegis immediately — one more hit finishes it. Avoid the trap at (2,4)."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Aegis is critical at dist=3, within precision_shot range (≤2 tiles? No, dist=3 exceeds range:≤2). Wait, precision_shot range is ≤2 tiles. Dist=3 means out of range for precision_shot. But recon says Aegis is inRange. Let me re-check: the recon data explicitly says Aegis is inRange from position [5,3]. The system prompt says range:≤2 tiles but recon overrides with computed data. I'll trust the pre-computed recon. Aegis is critical — priority kill target. I'm at (5,3), haven't moved, so precision_shot deals 2dmg. Stay at max range, don't move adjacent. Fire precision_shot on Aegis.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Weaver is adjacent at (3,3) and I have an enemy in range. Orders say to attack adjacent enemies. I'm at 2HP so staying fortified (no move) would give 50% damage reduction. Attack Weaver first, then wait to keep fortify bonus. Shield_wall is blocked by denial zone anyway.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Aegis is critical and adjacent at (2,3). One attack finishes it. I'm at (3,3), dist=1, so attack is valid. After attacking, place a trap to control the approach. Valid moves include (3,4) and (3,2) — I'll stay put and attack first, then place a trap at (3,2) to cover southern approach. Actually, let me attack Aegis first since it's adjacent and critical, then move to (3,2) or place trap. I can't place trap while adjacent to enemy vector... wait, Aegis is a sentinel not a vector, so trap should work. Place trap at (3,2) to block southern chokepoint after attacking.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 9,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "opponent",
+    "totalTurns": 8,
+    "reason": "opponent eliminated all enemies"
+  },
+  "endedAt": "2026-03-05T12:04:55.819Z"
+}
