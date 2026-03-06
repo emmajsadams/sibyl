@@ -125,8 +125,12 @@ function isAdjacentToVector(state: GameState, unit: Unit): boolean {
 /** Build turn order: sort by speed descending, break ties randomly */
 export function buildTurnStack(state: GameState): string[] {
   const living = getLivingUnits(state);
-  // Shuffle first to randomize tie-breaking
-  const shuffled = [...living].sort(() => Math.random() - 0.5);
+  // Fisher-Yates shuffle to randomize tie-breaking
+  const shuffled = [...living];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j]!, shuffled[i]!];
+  }
   // Then stable-sort by speed descending
   shuffled.sort((a, b) => b.speed - a.speed);
   return shuffled.map((u) => u.id);

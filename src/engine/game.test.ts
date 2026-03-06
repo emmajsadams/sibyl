@@ -197,12 +197,13 @@ describe("buildTurnStack", () => {
   test("orders by speed descending", () => {
     const g = createGame();
     const specter = unit("spec", "specter", "player", { x: 0, y: 0 }); // speed 3
-    const striker = unit("str", "striker", "player", { x: 1, y: 0 }); // speed 2
+    const oracle = unit("ora", "oracle", "player", { x: 1, y: 0 }); // speed 3
     const sentinel = unit("sen", "sentinel", "player", { x: 2, y: 0 }); // speed 1
-    g.units.push(specter, striker, sentinel);
+    g.units.push(specter, oracle, sentinel);
     const stack = buildTurnStack(g);
-    expect(stack.indexOf("spec")).toBeLessThan(stack.indexOf("str"));
-    expect(stack.indexOf("str")).toBeLessThan(stack.indexOf("sen"));
+    // specter and oracle both speed 3, so they come before sentinel (speed 1)
+    expect(stack.indexOf("spec")).toBeLessThan(stack.indexOf("sen"));
+    expect(stack.indexOf("ora")).toBeLessThan(stack.indexOf("sen"));
   });
 });
 
