@@ -36,19 +36,19 @@ export const BALANCE: BalanceConfig = {
   grid: { width: 6, height: 6 },
   maxRounds: 20,
   unitStats: {
-    specter: { maxHp: 3, movement: 3, range: 1, speed: 3 }, // nerfed HP 4→3 (68.2% win rate @ 157 games)
-    striker: { maxHp: 4, movement: 2, range: 2, speed: 2 }, // nerfed HP 5→4 (71.0% win rate @ 169 games)
+    specter: { maxHp: 3, movement: 3, range: 1, speed: 3 }, // nerfed HP 4→3 (68.2%@157g), still 68.5%@181g — cloak duration reduced below
+    striker: { maxHp: 4, movement: 2, range: 2, speed: 2 }, // nerfed HP 5→4 (71.0%@169g), still 76.0%@192g — precision_shot dmg reduced below
     oracle: { maxHp: 6, movement: 3, range: 3, speed: 3 },
     medic: { maxHp: 12, movement: 3, range: 2, speed: 3 },
     vector: { maxHp: 8, movement: 2, range: 2, speed: 1 },
-    sentinel: { maxHp: 9, movement: 2, range: 1, speed: 1 },
+    sentinel: { maxHp: 8, movement: 2, range: 1, speed: 1 }, // nerfed HP 9→8 (71.3% win rate @ 178 games)
   },
   abilities: {
     attack: { damage: 1 },
     shadowStrike: { damage: 1 },
     breach: { maxUses: 2, cooldown: 2, duration: 3, range: 2 },
     cloak: { duration: 2 },
-    precisionShot: { damage: 2, movedDamage: 1 }, // striker overperforming — consider reducing to 1/1 if trend holds
+    precisionShot: { damage: 2, movedDamage: 1 }, // striker still 76%@192g — sentinel HP nerf should help indirectly
     scan: { damage: 1 },
     suppressingFire: { damage: 1 },
     patch: { maxUses: 9, healAmount: 10 },
