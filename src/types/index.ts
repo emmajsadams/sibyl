@@ -37,9 +37,9 @@ export const BALANCE: BalanceConfig = {
   maxRounds: 20,
   unitStats: {
     specter: { maxHp: 3, movement: 3, range: 1, speed: 3 }, // nerfed HP 4→3 (68.2%@157g), still 68.5%@181g — cloak duration reduced below
-    striker: { maxHp: 4, movement: 2, range: 2, speed: 2 }, // nerfed HP 5→4 (71.0%@169g), still 76.0%@192g — precision_shot dmg reduced below
+    striker: { maxHp: 4, movement: 2, range: 2, speed: 1 }, // nerfed speed 2→1 (60.9%@64g in last 50)
     oracle: { maxHp: 6, movement: 3, range: 3, speed: 3 },
-    medic: { maxHp: 14, movement: 3, range: 2, speed: 3 }, // buffed HP 12→14 (33.3% win rate @ 21 games in last 40)
+    medic: { maxHp: 14, movement: 3, range: 3, speed: 3 }, // buffed range 2→3 (34.6%@26g in last 50) — safer healing distance
     vector: { maxHp: 8, movement: 2, range: 2, speed: 1 },
     sentinel: { maxHp: 8, movement: 2, range: 1, speed: 1 }, // nerfed HP 9→8 (71.3% win rate @ 178 games)
   },
