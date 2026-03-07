@@ -36,7 +36,7 @@ export const BALANCE: BalanceConfig = {
   grid: { width: 6, height: 6 },
   maxRounds: 20,
   unitStats: {
-    specter: { maxHp: 3, movement: 3, range: 1, speed: 3 }, // nerfed HP 4→3 (68.2%@157g), still 68.5%@181g — cloak duration reduced below
+    specter: { maxHp: 4, movement: 3, range: 1, speed: 3 }, // buffed HP 3→4 (39.5%@38g in last 30) — over-nerfed, restoring to 4
     striker: { maxHp: 4, movement: 2, range: 2, speed: 1 }, // nerfed speed 2→1 (60.9%@64g in last 50)
     oracle: { maxHp: 6, movement: 3, range: 3, speed: 3 },
     medic: { maxHp: 14, movement: 3, range: 3, speed: 3 }, // buffed range 2→3 (34.6%@26g in last 50) — safer healing distance

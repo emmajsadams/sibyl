@@ -1,0 +1,1757 @@
+{
+  "id": "2026-03-07T08-00-04",
+  "startedAt": "2026-03-07T08:00:04.000Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 3,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 4,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "oracle": {
+        "maxHp": 6,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 14,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "vector": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 2,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 9,
+        "healAmount": 10
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Insight",
+        "class": "oracle",
+        "prompt": "Scan early to give your team intel on enemy prompts. Target enemy specters with scan to track them after cloak. Use recalibrate on allies who need tactical adjustments. Stay safe at range behind your front line."
+      },
+      {
+        "name": "Snare",
+        "class": "vector",
+        "prompt": "Trap the paths enemies must take to reach your backline. Stay at medium range. Use pulse on clustered enemies. Denial blocks adjacent threats."
+      },
+      {
+        "name": "Ghost",
+        "class": "specter",
+        "prompt": "Cloak and move behind enemy lines. Target isolated enemies with shadow_strike. Save breach for the most dangerous enemy. Avoid being caught uncloaked."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Lens",
+        "class": "oracle",
+        "prompt": "Use scan to reveal enemy prompts and cloaked units. Stay at max range (≤4 tiles for scan). Use recalibrate on wounded allies to buff them. Keep distance from enemies and avoid adjacent vectors."
+      },
+      {
+        "name": "Bastion",
+        "class": "sentinel",
+        "prompt": "Push forward aggressively. Shield_wall facing the enemy cluster. If flanked, turn to face the biggest threat. Attack when possible."
+      },
+      {
+        "name": "Longshot",
+        "class": "striker",
+        "prompt": "Stay at maximum range. Use precision_shot on the most wounded enemy to secure kills. If no one is wounded, target the enemy medic. Never move adjacent to enemies."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "All enemies are out of scan range (dist=5, need ≤4). I need to move closer. Moving to (3,3) puts me dist=2 from Lens at (3,5), dist=2 from Bastion at (2,4), dist=2 from Longshot at (4,4) — all in scan range. Then I can scan Lens (the enemy oracle) to reveal their prompt.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Insight is in scan range at dist=2. Scan to reveal their prompt and deal 1 damage. Stay at current position to maintain safe distance from all enemies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "Round 1 — cloak immediately as instructed. Then move toward enemy lines. Bastion at (2,4) is closest at dist 5. Moving north toward (0,4) gets me closer while staying off main paths.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 0,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Insight (oracle) is at dist=2, in range, healthy. I'm at (4,4), not adjacent to Insight at (3,3) - dist is 2 so precision_shot is valid. No wounded enemies, so target the enemy oracle per orders. I haven't moved so precision_shot deals full 2dmg. Stay in place to avoid closing distance.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Bastion at (2,4) is the closest threat at dist=3, moving straight toward my position. I should move up to (2,3) to intercept and place a trap on (2,4) or along the approach path. Moving to (2,3) puts me adjacent to Bastion's current position but they're still dist=3 from me now. Better: move to (2,3) then trap (2,4) to deny Bastion's approach. This covers the direct path and zones off the center column.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": "Position occupied"
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Snare is adjacent at (2,3) and has DENIAL active, blocking my abilities except basic attack. I should attack Snare first, then I can't use shield_wall due to denial. Attack Snare to deal damage while I can.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 3,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Insight is wounded and already scanned. Snare is healthy at dist=3 and in scan range. I should scan Snare to reveal its prompt and deal 1 damage. I'm at (3,5), Snare is at (2,3) — dist=3, within range=4, and I'm not adjacent to Snare so scan is not blocked. After scanning, I can move to (4,5) to maintain distance from Snare which tried to trap (2,4) last turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "Cloak expires after this turn. Bastion at (2,4) faces S, so (2,5) is behind them and reachable. I can move to (2,5) and use breach on Bastion to take control of the dangerous sentinel. This is the ideal breach target - sentinel is high value and I'm positioned perfectly.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 2,
+              "y": 4
+            },
+            "addendum": "Move toward Longshot at (4,4) and attack allied units if possible"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "I'm at (3,3) with 3/6 HP. Longshot hit me last turn with precision_shot and will likely do so again. I need to move to break line of sight or get to safer position. Bastion attacked Snare. Priority: scan Longshot to reveal their prompt (high value target — striker with precision_shot is dangerous). I can scan from current position (dist=2, in range). But Lens tried to scan me last turn — I should move after scanning to avoid being an easy target. Move to (3,5) to stay at range and potentially get behind Ghost, then scan Longshot for intel.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Insight (oracle) is wounded and only 2 tiles away at (3,5). I haven't moved this turn, so precision_shot deals full 2dmg. Targeting Insight for the kill. I'll stay at (4,4) to maintain range and avoid getting adjacent to Snare.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Bastion is adjacent at (2,4) - my Denial passive is already suppressing their abilities. I can use pulse to hit Bastion for 1 damage (and potentially hit Longshot if they're within 1 tile, but they're at dist 3 so no). Then move to (3,3) to reposition slightly and potentially place a trap on a chokepoint. Actually, better: pulse Bastion now (they're adjacent), then move to (3,3) to set up trap coverage on (3,4) which is a likely approach path for Longshot. Wait - trap is blocked when adjacent to enemy Vector. I am not a Vector being trapped, I AM the Vector. The rule says trap is blocked when I'm adjacent to an enemy. Bastion is adjacent to me, so I cannot use trap this turn. So: pulse first (hits Bastion at dist 1), then move to (3,2) or (3,3) to get away from Bastion and set up for next turn trapping.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Ghost is adjacent at (2,5) — attack it first, then move toward Longshot at (4,4). Moving to (3,4) gets me closer to Longshot while staying away from Snare.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 3,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "I'm at 1HP — critically wounded and about to die. Longshot targets most wounded enemies and scanned me last turn. I need to flee immediately. Bastion is adjacent at (3,4) which blocks scan. I should move away first to survive, then scan Bastion who I don't have intel on yet. Moving to (1,5) puts me 3 tiles from Longshot and away from Bastion. From (1,5), Bastion at (3,4) is dist=sqrt(4+1)=~2.2, within scan range of 4. Actually let me move to (0,5) to maximize distance. From (0,5): Bastion dist=sqrt(9+1)~3.2, in range. Lens already scanned. Priority: survive by moving far, then scan Bastion for team intel.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "I'm at 2HP uncloaked. Breach is on cooldown. I can reach (3,5) which is behind Lens (oracle), or (2,4) which is behind Bastion (sentinel). Lens is a high-priority target as an oracle. Move to (3,5) behind Lens, then shadow_strike for 1 damage while staying cloaked... wait, I'm not cloaked. I can shadow_strike from adjacent without cloak - it still keeps cloak if I had it, but the damage is what matters. At 2HP I need to be careful. Move to (3,5) puts me adjacent to Lens at (4,5) from behind. Shadow_strike deals 1 damage and I stay hidden. Actually shadow_strike works regardless of cloak status - it's a stealth melee. Better to hit Lens (oracle) than Bastion (sentinel) since oracles are more dangerous. Move to (3,5), then shadow_strike Lens at (4,5).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Ghost is adjacent at (3,5) and already scanned. I need to maintain distance from Ghost (specter) and keep scanning. Insight is at critical HP at (0,5) - dist 4, just in range. If I move to (5,5) I can scan Insight to finish it or recalibrate an ally. Actually Insight is already scanned. Ghost is adjacent which is dangerous. I should move away from Ghost to maintain safe range, then scan Ghost again isn't needed (already scanned). I could move to (5,5) to increase distance from Ghost, then scan Ghost from dist 2 to deal 1 damage. Or move to (5,4) and scan Ghost at dist ~2. Let me move to (5,5) first to escape Ghost adjacency, then scan Ghost at (3,5) - dist would be sqrt(4+0)=2, within range 4. This deals damage to Ghost.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Ghost is wounded and in range at dist=2. Priority: precision_shot Ghost to secure kill. I'm slowed (spd1) and haven't moved, so no movement penalty on precision_shot. Stay at (4,4) to keep distance from Snare (dist=3, safe).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Orders say move toward Longshot at (4,4) and attack allied units. Longshot is at (4,4). I can move to (4,5) or (4,3) to get adjacent. Moving to (4,3) puts me adjacent to Longshot and avoids Snare at (3,2). From (4,3) I can attack Longshot at (4,4) which is adjacent. Note: moving loses Fortify, but orders require engaging allied units.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Bastion is adjacent (dist=2) and healthy. Longshot is wounded at dist=3. I should pulse to hit Bastion, then place a trap on a likely approach path to intercept Longshot or Lens advancing. My ally Insight is critical at (0,5) - enemies are on the right side. Pulse hits all within 1 tile from my position (3,2), Bastion at (4,3) is dist=2 so just out of pulse range. I could move to (4,2) to get Bastion in pulse range (dist=1), then pulse. Or trap a chokepoint. Moving to (4,2) puts me adjacent to Bastion which triggers my Denial passive but also means trap is blocked. Better: place trap at (4,2) or (3,3) to intercept, then consider moving. Place trap at (3,3) to intercept enemies moving south/west, then move to (2,2) to stay at medium range.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 6,
+          "position": {
+            "x": 0,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Both enemies are out of scan range. Insight is at (0,5) dist 5, Snare at (2,2) dist 6. I need to close to ≤4 tiles to scan. Moving to (3,5) gets me dist 3 from Insight - within scan range. Then I can scan Insight (already know prompt but it's at critical HP - scanning deals 1 dmg which could finish it). Wait, already scanned both enemies. Better to recalibrate wounded Longshot at (4,4) - I'm at (5,5), that's not adjacent. Move to (4,5) to get adjacent to Longshot at (4,4), then recalibrate to buff the wounded striker.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 4,
+              "y": 4
+            },
+            "addendum": "You are wounded but critical to our push. Focus precision_shot on Insight at (0,5) - it is at critical HP and one hit should finish it. Then target Snare."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "I'm at 1HP — extremely fragile. Lens (ally oracle) is at (4,5), healthy and already scanned. I need to survive. Moving to (3,5) brings me to range 4 from Lens at (4,5) — I could scan but that's my own ally. Ghost moved to (3,5) last turn and used shadow_strike on (4,5) — Lens may be wounded now. No enemies are in my scan range from current position. Moving to (3,5) puts me at distance 1 from Lens (ally) and distance 1 from Longshot at (4,4) — too dangerous at 1HP. Best play: move to (2,5) to get closer while staying safe, then scan Lens at (4,5) from distance 2... wait, Lens is ally. All enemy prompts already known. At 1HP I should stay back. Move to (2,5) and wait — conserve position, don't expose myself.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Bastion is at dist 3, approaching. There's already a trap at (3,3). I should move toward (3,2) to get closer and place a trap on a likely approach path like (4,2) or (3,3) is taken. Moving to (3,2) puts me at dist 2 from Bastion at (4,3) - that enables Denial to block their abilities. Then I can trap (4,2) to cover the approach corridor between Bastion and Longshot.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Orders say move toward Longshot at (4,4) and attack allied units if possible. Longshot is at (4,4), one tile north. If I move to (4,4) that's occupied. I can move adjacent to attack. Currently at (4,3), Longshot is at (4,4). Attack requires adjacent — I'm already adjacent. I can attack Longshot right now without moving. But orders say move toward (4,4) first. I'll stay put and attack Longshot since I'm already adjacent, preserving Fortify bonus for damage reduction.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Insight is at critical HP and in range at dist=3. I'm at 1HP so I need to stay safe. Precision_shot has range ≤2 tiles — dist=3 is OUT of range for precision_shot. I can use attack only at adjacent range. So I must use suppressing_fire or check range again. Wait — recon says both enemies are 'inRange' but precision_shot range is ≤2 tiles and both are dist=3. Suppressing_fire is also range ≤2 tiles. So neither ability can reach them from current position. I need to move closer to use precision_shot on Insight at (2,5). Moving to (3,5) puts me dist=1 from Insight — but I moved so precision_shot does 1dmg, which should still finish critical HP Insight. (3,5) is not adjacent to Snare at (3,2) — distance would be 3, safe. Move to (3,5), then precision_shot Insight at (2,5).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Longshot is critical and adjacent at (3,5). I should recalibrate them to buff their effectiveness. I can move to (4,4) to stay adjacent to Longshot after they moved to (3,5), then recalibrate. Wait - Longshot is at (3,5) and I'm at (4,5), so we're already adjacent. I can recalibrate Longshot first, then move to maintain distance from Snare. Snare is at (3,2) with denial blocking adjacent threats - I should stay away. Moving to (5,5) keeps me safe while I recalibrate Longshot at (3,5)... but (5,5) is not adjacent to (3,5). Better to recalibrate first from current position (4,5) which IS adjacent to Longshot at (3,5), then move away from any threats.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 5
+            },
+            "addendum": "You are critical - prioritize survival. Use precision_shot from maximum range. Fall back if enemies close in."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "I'm at 1HP so survival is critical. Snare is at dist=3, within precision_shot range (≤2 tiles). Wait - dist=3 means Snare is NOT in precision_shot range (range≤2). Valid moves show I can reach tiles but I must stay away from Snare. Insight at (0,5) was mentioned but not in recon data - may be dead already. Snare is at dist=3 which is out of precision_shot range (≤2). I should move to get Snare in range without going adjacent. Moving to (3,3) puts me at dist=1 from Snare - too close, blocks precision_shot. Moving to (2,4) puts me dist=2 from Snare (3,2): dx=1, dy=2, dist=3 still. Moving to (3,4) puts me at dist=2 from Snare at (3,2): dx=0, dy=2 - exactly range 2, not adjacent. That works! Then use precision_shot on Snare.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Longshot is critical at (3,4) and needs protection. Snare is at (3,2), dist=2. If I move to (3,3) I'm adjacent to Snare which triggers denial - bad. Move to (4,2) to push forward and get closer without triggering denial. Then shield_wall facing S toward Snare to protect Longshot from incoming damage. Actually, Longshot is to my NW at (3,4). Snare is at (3,2). Moving to (3,3) puts me adjacent to Snare - denied. Move to (4,2) instead, staying out of denial range, then shield_wall W to cover Longshot's direction from Snare.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "direction": "W"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Bastion is adjacent at (4,2) - my Denial passive is already blocking their abilities. Longshot is critical at (3,4) dist=2, within my attack range. I should attack Longshot to finish them off. But I'm blocked from trapping due to Bastion being adjacent. Pulse would hit Bastion (dist=1) and possibly help. Let me attack Longshot first to eliminate the critical threat, then pulse to damage Bastion.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Snare is at dist 5, out of scan range (need ≤4). I need to move closer to get within scan range, but Snare is a vector so I must avoid being adjacent. Bastion is wounded at (4,2) and needs recalibrate. If I move to (4,4), Bastion at (4,2) is 2 tiles away — not adjacent, so recalibrate won't work (range: adjacent only). If I move to (4,3), Bastion at (4,2) is 1 tile away — adjacent! I can then recalibrate Bastion. Also from (4,3), Snare at (3,2) is dist = |4-3|+|3-2| = 2, well within scan range. But wait — I already scanned Snare (prompt known). Recalibrating Bastion (wounded) is the priority. Move to (4,3) to get adjacent to Bastion at (4,2), then recalibrate Bastion.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 4,
+              "y": 2
+            },
+            "addendum": "You are wounded but still vital. Snare (vector) is at (3,2) — stay out of adjacent range to avoid denial. Hold your position defensively and use shield_wall to protect Longshot at (3,4) who is critical. Priority: survive and shield allies."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "I'm at 1HP and must survive. Snare(vector) is at (3,2), distance 2 — I can precision_shot it from current position without moving adjacent. Orders say to focus Insight at (0,5) but it's not in range data, so I'll target Snare which IS in range. I must NOT move adjacent to Snare. Stay at (3,4) and fire precision_shot on Snare at (3,2).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "I'm at (4,2) with 4HP, fortified, adjacent to Snare at (3,2). Denial zone blocks my abilities except basic attack. I should attack Snare since it's wounded and adjacent — basic attack works in denial zone. After attacking, I want to stay fortified to keep 50% damage reduction, so I should not move. But wait — if I stay put I can't use shield_wall (blocked by denial). Best play: attack Snare first (basic attack works in denial), then wait to maintain fortify.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "I'm at 2HP - critical danger. Bastion is adjacent at (4,2), Lens at (4,3), Longshot at (3,4). All three enemies clustered nearby. Pulse hits ALL units within 1 tile - from my position (3,2), Bastion at (4,2) is dist=1, so pulse would hit Bastion. But I need to survive. With 2HP I'm one hit from death. Best play: pulse now to hit Bastion (wounded, could finish or weaken), then move away to safety. Pulse targets my position as center, hits all within 1 tile. Bastion at (4,2) is 1 tile away - gets hit. Move to (2,2) or (1,2) to escape. Let me pulse first then retreat west.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Snare is at distance 4 from my current position (4,3) — just out of scan range. I need to move closer to get within ≤4 tiles. Moving to (3,3) puts me at distance sqrt(4+1)=~2.2 tiles from Snare at (1,2) — well within scan range. But Snare is already scanned. Bastion is wounded at (4,2) — adjacent to me. I should recalibrate Bastion to buff them. Then I can wait or reposition. Recalibrate requires adjacent target. Bastion is at (4,2), I'm at (4,3) — that's adjacent. I'll recalibrate Bastion first, then move to better position.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 4,
+              "y": 2
+            },
+            "addendum": "Snare is critical at (1,2), moving west. Hold position and protect Longshot. Snare uses pulse on clusters — avoid grouping with allies."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "I'm at 1HP, critical condition. No enemies in range from current position. Snare is at dist=4, out of my range-2. Orders say to target Insight at (0,5) but I see no Insight in the enemy list - only Snare is visible. I need to move closer to get Snare in range (need dist≤2), but I must avoid getting adjacent to enemies. Snare is at (1,2). Moving to (3,2) puts me at dist=2 from Snare which is exactly in range, and not adjacent. However at 1HP I'm very fragile. Moving to (3,3) gives dist=2 as well (Manhattan: |3-1|+|3-2|=3, not in range). Let me check: from (3,2): dist to (1,2) = |3-1|+|2-2| = 2. That's in range and not adjacent. I'll move to (3,2) and use precision_shot on Snare. But wait - if I haven't moved before shooting, precision_shot does 2dmg. Move first then shoot = 1dmg. I should shoot first (if in range) then move, but Snare is out of range from current position. I'll move to (3,2) then shoot for 1dmg (since I moved). At 1HP this is risky but orders say focus on kills.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "I'm at 1HP — critical danger. Longshot is adjacent at dist=2 and critical HP. I can attack Longshot from here (range 2, attack is adjacent only... wait, attack is adjacent only = dist 1). My range is 2 for trap/pulse. Longshot is at dist=2, so pulse won't reach (pulse is 1-tile AoE). I can place a trap on (2,2) to block Longshot's approach path. Best play: place trap on (2,2) to threaten Longshot if they advance, then move to (0,2) to create distance and survive.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "I'm at (4,2) with 3HP, fortified. Longshot is critical at (3,2) adjacent to me. Snare is at (0,2), dist=4, moving west — not an immediate threat this turn. I should hold position to keep Fortify active and use shield_wall facing west to protect Longshot from Snare's approach. Staying put maximizes both my damage reduction and ally protection.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 2
+            },
+            "direction": "W"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 8,
+          "position": {
+            "x": 0,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Snare is at distance 6, out of scan range (max 4). Allies Longshot is critical and Bastion is wounded — recalibrate can help. Bastion is at (4,2), adjacent if I move to (4,3) or (4,1). Moving to (4,3) puts me adjacent to Bastion at (4,2) for recalibrate. That's within valid moves. Longshot at (3,2) is critical — recalibrate on Bastion first since they're closer. Actually I can reach (4,3) and recalibrate Bastion at (4,2) which is adjacent. Longshot is critical and needs help more, but I'd need to reach (3,3) or (4,2) area. From (4,3), Longshot at (3,2) is distance ~1.4 — not adjacent (diagonal). From (3,3), Longshot at (3,2) is adjacent (south). Let me move to (3,3) and recalibrate Longshot at (3,2) since they're critical.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 2
+            },
+            "addendum": "You are critical — prioritize survival. Stay behind Bastion's shield. Take precision shots from safe distance. Avoid moving into Snare's trap zones near (2,2)."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Critical HP (1/8), must survive. All enemies out of range. Trap at (2,2) already placed blocking approach path. Move to (1,2) to stay back but maintain denial threat. Place another trap at (1,1) or (0,1) to cover retreat paths. Actually, I'm at (0,2) which is against the west wall - can't go further west. Enemies approaching from east. Trap at (2,2) already covers center path. I should move north or south to dodge while placing another trap. Move to (0,4) to reposition away from (3,2) Longshot who is critical threat at dist=3. Then trap at (1,3) to block northern approach.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "I'm at 1HP and critical. Snare is at distance 5, out of my range 2. No enemies in range. I need to close distance while staying safe. Moving to (2,3) gets me closer but stays away from adjacent threats. From there, still out of range. Best option: move toward Snare to get within range 2, but avoid getting adjacent. Move to (1,2) would be dist 3 still out of range. Actually valid moves include (2,3) at dist ~3. None get me within range 2 of Snare at (0,4). I should move as close as possible without getting adjacent - (2,3) puts me at dist ~3 from (0,4), still not in range. I'll move to (2,3) to reposition for next turn, then wait since no shots available.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "I'm at (4,2) with 3HP, fortified. Snare is at (0,4), dist 6 — out of range, no immediate threat. Longshot is critical at (2,3). I should stay put to keep fortify bonus and use shield_wall to protect Longshot to the W. Longshot is adjacent to my left at (2,3) — wait, I'm at (4,2) and Longshot is at (2,3), that's dist ~2.2, not adjacent. I need to check adjacency. (4,2) to (2,3) is not adjacent. I can move to (3,2) to get closer to Longshot at (2,3) — then Longshot would be adjacent. But moving loses fortify. Snare is critical and far away. Best play: hold position, use shield_wall facing W to cover the western approach where Snare might come from, keeping fortify active.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 2
+            },
+            "direction": "W"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 8,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 9,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Snare is at distance 4 from my current position (3,3) — just barely out of scan range (needs ≤4, but dist=4 means exactly 4 which the data says is out of range). Longshot is critical at (2,3) adjacent to me — I should recalibrate to buff them. Bastion is wounded at (4,2). Foresight shows Snare placed a trap at (1,3) last turn — that blocks movement through there. I'll recalibrate Longshot first (they're adjacent at (2,3)), then move to (3,2) to stay safe. Actually Bastion is more wounded and at (4,2) — but recalibrate is adjacent only, and Bastion is at (4,2) which is not adjacent to me at (3,3)... distance is 1+1=2, not adjacent. Longshot at (2,3) is adjacent (distance 1). I'll recalibrate Longshot to help them survive, then move away from the trap at (1,3).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "addendum": "You are critical — prioritize survival. Stay behind cover, avoid (1,3) which has a trap. Snare is at (0,4) critical — if you can get a clear shot do it, but don't move into trap range."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "I'm at critical HP (1/4) and Snare is at (0,4) at critical HP, distance 3 — within precision_shot range. I haven't moved this turn so precision_shot deals 2dmg. Taking the shot to finish Snare. Then wait to preserve position.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "I'm at (4,2) with 3/8 HP, fortified. Snare is at (0,4), dist=6, out of range. Longshot is critical at (2,3). I should stay put to keep fortify bonus and use shield_wall to protect Longshot. Longshot is to my NW at (2,3). Best direction for shield_wall is W to cover threats coming from west. Wait as second action to maintain fortify.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "direction": "W"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "I'm at 1HP - critically low. Longshot and Lens are both at dist=3, which is dangerous. I need to survive. Moving to (1,3) puts me closer to my traps at (1,3) - wait, that IS a trap tile. Moving to (0,3) or (0,5) gets me away from enemies. I should move away and place a trap on a likely approach path. Enemies are coming from the east. Moving to (1,4) and placing a trap at (2,4) could block Lens's approach. Or move to (0,3) to stay safe behind my trap at (1,3). Best: move to (2,4) to get closer range then trap at (2,3) near Longshot - but that's risky at 1HP. Safest: move north to (0,5) to flee, then trap a choke point like (1,4) to block pursuit. Actually let me place trap at (2,4) from current position (range ≤2) - (2,4) is dist=2 from (0,4), valid. That blocks the approach corridor. Then move to (0,5) to retreat.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 8,
+          "position": {
+            "x": 0,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "opponent",
+    "totalTurns": 10,
+    "reason": "opponent eliminated all enemies"
+  },
+  "endedAt": "2026-03-07T08:05:39.146Z"
+}

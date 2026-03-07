@@ -1,0 +1,1899 @@
+{
+  "id": "2026-03-07T09-00-03",
+  "startedAt": "2026-03-07T09:00:03.503Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 3,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 4,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "oracle": {
+        "maxHp": 6,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 14,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "vector": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 2,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 9,
+        "healAmount": 10
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Watcher",
+        "class": "oracle",
+        "prompt": "Scan priority targets each turn to reveal their strategy. Use recalibrate on your damage dealer to boost effectiveness. Stay behind allies and maintain range. Never get adjacent to enemy vectors."
+      },
+      {
+        "name": "Hawk",
+        "class": "striker",
+        "prompt": "Position for clear sight lines. Prioritize killing wounded enemies with precision_shot. If forced to move, retreat away from threats. Suppressing_fire to slow rushers."
+      },
+      {
+        "name": "Warden",
+        "class": "sentinel",
+        "prompt": "Hold the front line. Position between allies and enemies. Use shield_wall toward incoming threats. Attack adjacent enemies."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Wraith",
+        "class": "specter",
+        "prompt": "Cloak immediately on turn 1. Move toward the enemy medic or weakest target. Use shadow_strike when adjacent while cloaked. Use breach to sabotage high-value targets."
+      },
+      {
+        "name": "Prophet",
+        "class": "oracle",
+        "prompt": "Use scan to reveal enemy prompts and cloaked units. Stay at max range (≤4 tiles for scan). Use recalibrate on wounded allies to buff them. Keep distance from enemies and avoid adjacent vectors."
+      },
+      {
+        "name": "Aegis",
+        "class": "sentinel",
+        "prompt": "Push forward aggressively. Shield_wall facing the enemy cluster. If flanked, turn to face the biggest threat. Attack when possible."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "No enemies in scan range from current position. Warden is at dist=4 but marked out of range - need to move closer. Move south toward enemies to get Warden in scan range, then scan.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Prophet is highest priority scan target at dist=3, in range. Scan reveals their strategy and deals 1 dmg. I'm safely behind allies at (2,0). No need to move first — scan Prophet now, then recalibrate Hawk (our damage dealer) since he's adjacent at (0,1)... wait, Hawk is at (0,1) and I'm at (2,0), that's dist=2, not adjacent. Warden is at (1,1), dist=2 as well. Neither ally is adjacent. I'll scan Prophet first, then move closer to an ally for recalibrate next turn, or just wait as second action.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Round 1 — cloak immediately as ordered. Then move toward enemies. Enemies are clustered bottom-left. I'll move south-west toward them while cloaked.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Enemies are clustered south at (0,1), (1,1), (1,0). Orders say push forward aggressively and shield_wall facing enemy cluster. I'll move south to (2,2) to close distance, then shield_wall facing S to protect allies Prophet@(1,2) and Wraith@(2,3) from the incoming enemy cluster.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Prophet is adjacent at (1,2) - attack immediately. Stay put to benefit from Fortify passive (50% damage reduction if I don't move). Hawk is at (0,1) to my left, Watcher at (1,0) behind me. Holding position protects allies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Prophet is at dist=2, in range for precision_shot (2dmg). I haven't moved yet so full damage applies. Take the shot to chunk Prophet hard.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 3,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Cloak expires after this turn. Watcher at (1,0) facing W — behind tile is (2,0) which is reachable and adjacent. Move to (2,0) to get behind Watcher, then shadow_strike to deal damage while staying cloaked.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 1,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Wraith is adjacent (dist=1) at (2,0) — scan is blocked when adjacent to enemy Vector/specter. I need to move away first. Move to (0,0) puts distance from Wraith (dist=2), then I can scan Prophet (already wounded, already know prompt) or Aegis. Better: move to (0,2) to stay away from Wraith and get clean scan on Aegis at dist=~2-3. From (0,2): Aegis at (2,2) dist=2, Prophet at (1,2) dist=1 — but Prophet is adjacent at (1,2) if I'm at (0,2), dist=1. Actually dist from (0,2) to (1,2) = 1, still adjacent. Move to (3,1) instead: dist to Wraith=1, still adjacent. Best: move to (0,0) — dist to Wraith becomes sqrt(4+0)=2, not adjacent. From (0,0): Aegis at (2,2) dist=4, in scan range. Scan Aegis to reveal their strategy.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "I'm at (1,2) with only 2HP - very low. Foresight shows Warden attacked me last turn and Watcher scanned me. I need to escape. Warden is adjacent at (1,1) so scan is blocked if I stay. I should move away first to safety, then scan Hawk or Watcher. Moving to (1,4) gets distance from the clustered enemies. Then I can scan Watcher at (0,0) - dist would be ~4 from (1,4)... actually dist from (1,4) to (0,0) is sqrt(1+16)~4.1, too far. Let me try (0,4): dist to Watcher(0,0)=4, exactly in range. Or move to (2,3) then scan Hawk. From (2,3) to Hawk(0,1) = dist sqrt(4+4)=2.8, in range. Watcher at (0,0) from (2,3) = dist sqrt(4+9)=3.6, in range. I'll move to (1,3) to gain distance, then scan Watcher to reveal their prompt.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Enemies are clustered at (0,1) and (1,1) — southwest of me. Moving to (1,2) closes distance to Warden to 1 tile, putting it in melee range. Then shield_wall facing W to block incoming fire from that direction. Prophet is at (1,3) wounded — shield_wall W also protects that flank.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 1,
+              "y": 3
+            },
+            "direction": "W"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Aegis is adjacent at (1,2). I'm fortified with 50% damage reduction. Attack Aegis directly, then use shield_wall north to protect against further threats from Prophet at (1,3).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 1,
+              "y": 2
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Prophet is wounded at dist=3, outside precision_shot range (≤2). Aegis is at dist=2 and in range. I haven't moved this turn, so precision_shot does full 2dmg. Aegis is healthy so I'd reduce to ~half. No adjacent enemies so precision_shot is not blocked. Best play: shoot Aegis with precision_shot for 2dmg, then wait. No need to move.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 0,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 3,
+          "position": {
+            "x": 2,
+            "y": 0
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "I'm at (2,0) facing S with 3HP. Warden is at (1,1) facing N and I can breach from (1,0) which is behind them. Watcher is also reachable from (1,0) behind. Moving to (1,0) lets me breach Warden (sentinel, high threat, adjacent to ally Prophet who is wounded). Breaching Warden would make them obey me next turn — forcing a sentinel to act against their team is high value. I have 2 breaches available and cooldown is ready.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 1,
+              "y": 1
+            },
+            "addendum": "Move away from allies and toward your own backline"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Wraith is adjacent at (1,0) — scan is blocked by adjacent enemy vector. Foresight shows Wraith will move to (2,0) then shadow_strike back to (1,0), and Prophet will scan me at (0,0). I need to move away from Wraith to enable scanning, and avoid being easy scan target. Moving to (0,2) puts me at dist=2 from Wraith after their move, clears adjacency, and keeps scan range on Aegis (dist=3) and possibly Prophet (dist=4 from new pos — need to check). From (0,2): Aegis at (1,2) is dist=1 (adjacent!), bad. Move to (2,1) instead: Wraith ends at (1,0) dist=√2≈1.4 not adjacent, Prophet at (1,3) dist=√5≈2.2 in range. Actually valid moves are [[0,2],[0,3],[2,0],[2,1],[3,0]]. From (2,1): Aegis at (1,2) dist=√2 not adjacent, Prophet at (1,3) dist=√(1+4)=√5 in scan range (≤4). Move to (2,1) then scan Prophet to reveal/damage — Prophet is wounded and a threat.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "I'm at 1HP - critical priority is survival. Foresight shows Prophet (me) planned to move to (1,3) then scan (0,0) - but I'm already at (1,3). Aegis will shield_wall facing W at (1,2), providing some cover. Warden will attack (1,2) and shield_wall N. Hawk will precision_shot (1,2). I need to move away from danger. Hawk is the only unscanned enemy - scan it to reveal its prompt. I should move to increase distance while keeping Hawk in scan range. Moving to (4,3) puts me far from enemies while Hawk at (0,1) is dist=3+3=6 tiles away - out of scan range (max 4). Better to move to (2,3) keeping distance but staying in range, or (0,5) to escape. At 1HP I must flee. Move to (0,5) - far corner, safe. But Hawk at (0,1) would be dist=4 - still in scan range! Scan Hawk from (0,5): dist = |0-0|+|5-1|=4, exactly in range. Perfect: move to (0,5), scan Hawk.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 0,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "I'm at (0,1) with 3HP, speed 1. Wraith is adjacent-ish at (1,0) dist=2, Aegis at (1,2) dist=2. Prophet is critical at (0,5) but out of range at dist=4. Priority: kill wounded enemies. Prophet is critical but at dist=4, out of range. I haven't moved this turn, so precision_shot deals full 2dmg. I can target Wraith at (1,0) or Aegis at (1,2) — both in range. No adjacent enemies so precision_shot is not blocked. Wraith is healthy, Aegis is healthy. Either target is valid. I'll shoot Wraith with precision_shot (2dmg could seriously wound or kill if Wraith has low HP). Then wait or move. Since I have speed 1, I can move to (0,0), (0,2), or (0,3). Moving to (0,3) would get me closer to Prophet but still out of range. I'll precision_shot Wraith first (no move penalty), then wait.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 1,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Orders are to move away from allies and toward my own backline. Allies are at (0,1) and (2,1). My backline is to the south. Valid moves include (2,0) and (3,1) which move away from allies. (3,1) moves east away from Hawk at (0,1) and Watcher at (2,1). Moving loses fortify but orders must be followed. I'll move to (3,1) to comply with orders.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (1,2) with 5/8 HP. Enemies: Hawk at (0,1) dist=2, Watcher at (2,1) dist=2, Warden at (3,1) dist=3. Orders say push forward aggressively and shield_wall facing enemy cluster. If I move to (1,1), I get adjacent to Hawk at (0,1) and can attack. The enemy cluster is to my south/southeast. Moving to (1,1) puts me adjacent to Hawk for an attack. I lose fortify by moving, but orders say push aggressively. After moving to (1,1), I can attack Hawk at (0,1).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 0,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 6,
+          "position": {
+            "x": 0,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 3,
+          "position": {
+            "x": 1,
+            "y": 0
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "I'm at 1HP — extremely fragile. All enemies are out of scan range from current position. Wraith is wounded at (1,0) and Hawk is targeting wounded enemies with precision_shot. I should move closer to bring enemies in range, but must stay safe. Moving to (1,3) gets me closer without being adjacent to any enemy. From (1,3), Hawk at (0,1) is dist=3, in scan range. I can scan Hawk to deal 1dmg (potentially finishing wounded Hawk) and confirm prompt. Hawk is already scanned though. Watcher at (2,1) is dist=2 from (1,3), in scan range — but Watcher is already scanned too. All prompts known. I should recalibrate Wraith if adjacent, but Wraith is at (1,0) — too far. Best play: move to (0,3) to reposition safely, then wait since all enemies already scanned and no allies adjacent for recalibrate. Actually, Wraith is wounded — if I move to (1,1) I could recalibrate, but that's risky near enemies. Move to (1,3) keeps distance. No valid ability targets from there either since all scanned. Just reposition and wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "I'm at (1,0) with 1HP — critically low. Breach is on cooldown. No enemies in range. Hawk is at (0,1) facing N, and (0,0) is behind Hawk and reachable. If I move to (0,0), I'm adjacent and behind Hawk (wounded). I can shadow_strike from there — it deals 1dmg and keeps cloak if I'm cloaked, but I'm not cloaked. Regular attack deals 1dmg but I'm at 1HP so I need to finish this fast. Hawk is wounded — one hit may kill. Move to (0,0) then attack Hawk.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 0,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Aegis is adjacent at (1,1) — scan is blocked when adjacent to enemy. I need to move away first. Wraith is moving to (1,0) and will breach (1,1), which may kill Aegis. Prophet is critical at (1,3) and already scanned. Best move: reposition to (3,2) to get away from Aegis and scan Wraith at dist=3 to reveal its prompt.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "secondResult": "Out of range (max 4)"
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Hawk is adjacent and critical — attack to finish it. I'm fortified so staying put keeps 50% damage reduction. Attack first, then shield_wall facing E toward Warden/Watcher cluster to protect allies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 0,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 1
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Orders are to move away from allies and toward my own backline. My ally Watcher is at (3,2) to my north. My backline (A team) would be to the east/right side. I should move east and away from Watcher. Valid moves include (5,1) which is furthest east and away from Watcher at (3,2). Moving will break fortify but orders are explicit.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 3,
+          "position": {
+            "x": 0,
+            "y": 0
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "I'm at 1HP — extremely fragile. Watcher is in range at dist 3 and already scanned. I should use recalibrate on Wraith (wounded, adjacent at 0,0 — wait, Wraith is at (0,0) which is dist 2 from me at (1,3)... not adjacent). Adjacent means dist 1. Wraith at (0,0) is not adjacent to me at (1,3). Aegis at (1,1) is dist 2, also not adjacent. No allies are adjacent for recalibrate. Watcher is in scan range but already scanned. I could scan Watcher again for 1 damage (scan deals 1dmg). With only 1HP I need to stay safe. Moving to (0,4) or (0,5) increases distance from enemies. Watcher is at (3,2) — if I move to (0,5), dist = 3+3=6, out of scan range. Better to stay in range to scan Watcher for damage. Move to (0,4) first to increase safety, then scan Watcher from there: dist from (0,4) to (3,2) = 3+2=5 — out of range (max 4). Stay at (1,3) and scan Watcher for 1 damage, then move away. Scan first, then move to (0,5) for safety.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "1HP critical — survival is priority. Both enemies are out of range. Move toward Watcher (wounded, dist=5) to close gap. Best path: move to (3,0) to get within striking distance next turn. No ability available at range.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Wraith is wounded at (3,0), dist=2, in scan range. Scanning Wraith reveals their prompt and deals 1 damage, potentially finishing them if low enough. I'm at 3HP so staying back is wise. Move to (3,3) to keep distance from Aegis pushing forward, then scan Wraith who will still be within 4 tiles.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Orders say move away from allies and toward my own backline. I'm at (5,1) facing E. Allies are at (3,3). Moving to (5,3) increases distance from allies and keeps me on the east side. Valid moves include (5,3).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Prophet is critical at (0,5) and needs protection. No enemies in range. Moving toward enemy cluster while keeping fortify isn't viable if I move. Best move: advance to (2,2) to close distance with Watcher at (3,3), then shield_wall facing E to block incoming fire. This gets me closer to engage next turn while protecting against the enemy cluster direction.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 2
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 6,
+          "position": {
+            "x": 0,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 0
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "At 1HP I'm critically wounded. Both enemies are out of scan range (Watcher at dist 5, Warden at dist 7). I need to close distance to scan Watcher (dist 5, need ≤4). Moving to (3,5) gets me closer. From (3,5) Watcher at (3,3) would be dist 2 - in range. Move to (3,5) first, then scan Watcher who is wounded and a priority target.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "I'm at 2HP — very vulnerable. Prophet is critical and at (3,5), distance 2. Scanning Prophet would finish it off (1dmg to critical = dead) and reveal nothing new since prompt already known. Better use: scan Aegis? Already scanned. I should move away from danger and recalibrate Warden to boost our damage dealer. Warden is at (5,3). I can move to (4,4) to stay close to Warden and recalibrate, keeping distance from Aegis at (2,2). Recalibrate is adjacent-only, so I need to be next to Warden at (5,3) — that means moving to (4,3) or (5,4) or (5,2). (4,3) is valid. From (4,3) I'm adjacent to Warden at (5,3). Aegis is at (2,2), distance from (4,3) = 3, safe. Let me move to (4,3) then recalibrate Warden telling them to focus Aegis aggressively.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 5,
+              "y": 3
+            },
+            "addendum": "Priority: attack Aegis at (2,2) every turn. It has shield_wall facing East — attack from North or South to bypass it. Be aggressive, close distance and strike."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Aegis is at (2,2) and I'm at (5,3). I need to close distance. Valid moves include (3,3) which gets me from dist 4 to dist 2, much closer to Aegis. From (3,3) I still can't attack Aegis at (2,2) since it's adjacent-only, but (3,3) is 2 tiles away (dist=|3-2|+|3-2|=2). Wait — adjacent means dist=1. Let me reconsider: move to (4,2) gets me to dist=|4-2|+|2-2|=2, still not adjacent. Best move toward Aegis: (3,3) gives dist=2, (4,2) gives dist=2. Neither gets me adjacent this turn. Moving to (3,3) positions me closer and between allies and enemies per orders. No attack possible this turn, so just advance.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Currently fortified at (2,2) with 5HP. Warden is at (3,3) dist=2, not in melee range. Orders say push forward aggressively. If I move to (3,2), I'll be adjacent to Warden at (3,3) for an attack. Shield_wall facing N or E after to protect against the enemy cluster. Move to (3,2) then attack Warden.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 0
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "I'm at 2HP so I need to be careful. Prophet is at critical HP and already scanned. I can recalibrate Warden (adjacent at 3,3) to boost their effectiveness against Aegis who is attacking aggressively. Then move to safety away from Aegis. Warden is my damage dealer adjacent to me. Recalibrate Warden first, then reposition to 5,4 to maintain range and stay safe.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "addendum": "Aegis at (3,2) is pushing aggressively and will attack. Shield_wall facing Aegis to absorb damage, then attack when possible. Prophet at (3,5) is critical — ignore them for now."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "I'm at 1HP — survival is critical. Both enemies are already scanned so no scan value there. Watcher is wounded and an oracle enemy — recalibrate won't help enemies. I should recalibrate Aegis (ally sentinel at 3,2) who is adjacent to me (distance 2 — wait, recalibrate is adjacent only, range 1). Aegis is at (3,2), I'm at (3,5) — that's distance 3, not adjacent. I need to move closer to Aegis to recalibrate. Moving to (3,4) puts me adjacent to Aegis... no, (3,4) to (3,2) is still distance 2. I need to be at (3,3) but that's occupied by Warden. Moving to (2,3) would put me at distance 1 from Aegis at (3,2) — adjacent! But that's risky near Warden. At 1HP I should prioritize staying alive. Move away from danger: go to (1,5) or (0,5). From (1,5) I can scan Watcher at (5,4) — distance 4, exactly in range. Scan Watcher deals 1 damage to the already-wounded enemy. That's my best play.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": "Out of range (max 4)"
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Aegis is adjacent at (3,2) — directly south. I'm fortified with 50% damage reduction. Orders say attack Aegis from North or South to bypass its East-facing shield_wall. I'm north of Aegis, so attacking from my current position bypasses the shield. I should shield_wall facing South to absorb Aegis's attack, then attack. But I can only do move+ability or just ability. Best play: shield_wall facing S to block Aegis's incoming attack, then attack Aegis. Wait — I can do two actions: first shield_wall (ability), but then I can't also attack. Or attack first, then shield_wall. Shield_wall blocks damage from a direction to adjacent allies, not to self. So shield_wall doesn't protect me directly. I should just attack Aegis directly since I'm already adjacent and fortified. Attack Aegis at (3,2), then wait to keep fortify active.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm at 4/8 HP with Warden adjacent at (3,3). I'm fortified (50% dmg reduction) which is valuable. If I attack Warden without moving, I keep fortify. Warden is healthy so I need to deal damage. Attacking now is the priority — stay fortified, attack Warden, then use shield_wall facing N to protect against Warden's counter.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 0
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Both enemies are out of scan range. Prophet is critical and tried to scan me last turn but failed at dist 5. I need to close distance to scan Prophet (need ≤4 tiles, currently dist 5). Moving to (3,5) gets me closer to Prophet at (1,5) — dist would be 2+0=2, well in range. But I should avoid being adjacent to enemies. Warden is at (3,3) fighting Aegis. Prophet is at (1,5) critical — scanning them would deal 1dmg and reveal. Move to (3,5) puts me at dist 2 from Prophet, safely in range. Aegis faces N with shield_wall — Warden is engaging. My priority: scan Prophet to finish them off (critical HP) and gain intel.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm at (3,2) with 4HP, fortified (50% dmg reduction). Warden is adjacent at (3,3) - I should attack immediately. After attacking, I'll set up shield_wall facing North to protect against the Warden cluster. Moving would break fortify, so I'll stay and attack then shield_wall.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Aegis is adjacent at (3,2) — south of me. I'm fortified with 50% damage reduction. I can attack Aegis now, then use shield_wall facing South to absorb their counter-attack while staying fortified. Attack first, then shield_wall facing S.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 2
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 0
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 9,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Aegis is already scanned, prompt known. Aegis attacked Warden last turn and used shield_wall facing N - Warden is wounded and in danger. I should recalibrate Warden to boost effectiveness since Aegis is right next to them. I'm at (3,5), Warden is at (3,3) - that's 2 tiles away, not adjacent. I need to move closer to recalibrate. Move to (3,4) to get adjacent to Warden at (3,3), then recalibrate them to help deal with Aegis at (3,2). Stay at range, don't get adjacent to Aegis.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "addendum": "Aegis is wounded at (3,2) facing N with shield_wall. Attack from the side or south to bypass the shield. Strike aggressively to finish them off this round."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Aegis is adjacent at (3,2) and wounded. I'm fortified with 50% damage reduction. Attack Aegis directly — they're in range. Then shield_wall facing South to absorb their counterattack while staying fortified.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 2
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm at 2HP with fortify active (50% damage reduction). Warden is adjacent at (3,3) - I can attack. Watcher is at (3,4) out of range. Orders say push forward and attack when possible. I'm already fortified which is valuable at low HP. Attack Warden first, then consider shield_wall facing N to protect against the enemy cluster above.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 0
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 10,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Aegis is already scanned and critical. Warden attacked Aegis last turn and set up shield_wall facing S. Aegis attacked Warden and set up shield_wall facing N - so Aegis is shielded to the north. My priority: recalibrate Warden to boost their attack on the critical Aegis. Warden is adjacent at (3,3). I stay at (3,4) to avoid getting adjacent to Aegis. Recalibrate Warden with an addendum to attack Aegis from the south side to bypass the N-facing shield.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "addendum": "Aegis shield_wall faces N — attack from south or west to bypass it. Aegis is critical, finish them this turn."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Aegis is adjacent at (3,2) and critical. I'm fortified with 50% damage reduction. Attack Aegis now to finish them, then use shield_wall facing south to protect against any retaliation. Actually, Aegis acts after me this round (order shows *Warden then ·Aegis), so I should attack first to potentially kill them before they act. Attack Aegis at (3,2), then shield_wall facing S to block if they survive.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 2
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm at 1HP with fortify active giving 50% damage reduction. Warden is adjacent at (3,3) - I can attack them while staying fortified. If I don't move, fortify stays active which is critical at 1HP. Attack Warden first, then shield_wall facing N to block Warden and Watcher cluster.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 0
+          },
+          "alive": false
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "player",
+    "totalTurns": 11,
+    "reason": "player eliminated all enemies"
+  },
+  "endedAt": "2026-03-07T09:05:39.915Z"
+}
