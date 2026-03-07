@@ -1,0 +1,2511 @@
+{
+  "id": "2026-03-07T17-01-50",
+  "startedAt": "2026-03-07T17:01:50.053Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 4,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 4,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "oracle": {
+        "maxHp": 6,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 14,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "vector": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 2,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 9,
+        "healAmount": 10
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Insight",
+        "class": "oracle",
+        "prompt": "Scan priority targets each turn to reveal their strategy. Use recalibrate on your damage dealer to boost effectiveness. Stay behind allies and maintain range. Never get adjacent to enemy vectors."
+      },
+      {
+        "name": "Bulwark",
+        "class": "sentinel",
+        "prompt": "Advance toward the nearest enemy. Use shield_wall facing the direction with the most enemies. If an enemy is adjacent, attack them."
+      },
+      {
+        "name": "Snare",
+        "class": "vector",
+        "prompt": "Control chokepoints with traps. Place them between enemy positions and your allies. Use denial to block adjacent enemy abilities. Pulse groups when possible."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Viper",
+        "class": "vector",
+        "prompt": "Place traps on tiles enemies are likely to move through. Use pulse if 2+ enemies are adjacent. Stay near allies for mutual support."
+      },
+      {
+        "name": "Seer",
+        "class": "oracle",
+        "prompt": "Scan priority targets each turn to reveal their strategy. Use recalibrate on your damage dealer to boost effectiveness. Stay behind allies and maintain range. Never get adjacent to enemy vectors."
+      },
+      {
+        "name": "Bolt",
+        "class": "striker",
+        "prompt": "Position for clear sight lines. Prioritize killing wounded enemies with precision_shot. If forced to move, retreat away from threats. Suppressing_fire to slow rushers."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "All enemies are out of scan range (dist 5-8, max 4). Closest is Insight at dist=5. I need to move closer to bring enemies into scan range. Moving to (2,3) gets me closer to Insight at (2,1) — new dist would be 2, well within scan range. I'll move then scan Insight to reveal their strategy and deal 1 damage.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "Seer is in scan range at (2,3), dist=2. Scanning reveals their strategy and deals 1 damage. Then recalibrate Snare (vector, damage dealer) at (0,0) — but that's distance 2, not adjacent. Bulwark is adjacent at (2,0). I'll scan Seer first, then move closer to Snare or recalibrate Bulwark. Actually, recalibrate requires adjacent — Bulwark is at (2,0), I'm at (2,1), so adjacent. Snare is at (0,0), not adjacent. Recalibrate Bulwark isn't the damage dealer. Best play: scan Seer (high value target, reveals prompt + 1 dmg), then stay put or reposition. No need to move since Seer is already in range.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Seer is closest at dist 3, at (2,3). I should advance toward them. Moving to (2,2) gets me closest to Seer while staying in line. Then use shield_wall facing North (toward enemies) to protect Insight who is adjacent at (2,1).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 1
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "All enemies are far away. Move toward the center to contest territory and place a trap on a likely approach tile. Bulwark at (2,2) will push north toward our side — trap (3,3) to intercept their advance path.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": "Position occupied"
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "All enemies are out of range (dist 5-9). Closest is Bulwark at (2,2), dist 5. I need to close distance while maintaining ranged advantage. Moving to (4,3) gets me closer to center without overextending. No enemies in range so no ability this turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Round 1, all enemies are far. Move toward the center to control approach lanes, then place a trap at (1,2) to block the path between enemies and allies. Seer at (2,3) is the closest threat - trap on (1,2) intercepts movement toward our allies at (2,1) and (2,2).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Bulwark is adjacent (dist=1) which blocks scan. I should move away to maintain range, then scan Bulwark or Snare. Moving to (2,4) keeps distance from Bulwark and Snare. From (2,4), Bulwark is at dist=2, still in scan range. Snare is at dist=4, in scan range. Insight already scanned. Priority: scan Snare to reveal its prompt since it's a threat with trap placement.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "Seer already scanned me last turn and will likely do so again from (2,3). Viper is at (3,3), 3 tiles away - must not move adjacent. I should scan Viper to reveal their strategy and deal damage. Moving to (2,3) would put me adjacent to Seer's likely position and is occupied anyway. I'll scan Viper from current position (dist=3, within range 4), then move to (1,3) to stay safe and maintain range.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "There's already a trap at (1,2). I need to move forward to control the approach. Viper is at (3,3) with denial range adjacent - I'm not adjacent so I can still use trap. Moving to (2,1) gets me closer and lets me place a trap at (2,2) to block enemy advance through the center. Wait - Bulwark is at (2,2) so I can't trap there. Move to (1,2) is blocked by my own trap. Move to (2,1) and trap at (2,2)... Bulwark is there. Better: move to (0,2) and trap at (1,2) - already trapped. Move to (2,1) and trap at (3,1) to create a barrier on the eastern approach. That covers the path Viper/Bolt might take coming south.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Both Bulwark and Insight are at dist=3, within precision_shot range (≤2 tiles means range 2, but dist=3 is out of range 2). Wait - range 2 means I can hit targets up to 2 tiles away. Dist=3 is too far for precision_shot. I need to move closer. Moving to (3,3) would put me adjacent to ally Viper - instead move to (3,4) which closes distance to Insight at (1,3) to dist=2, bringing both into range. From (3,4): Insight at (1,3) = dist 2+1=3 still. From (4,2): Bulwark at (2,2) = dist 2, Insight at (1,3) = dist 3+1=4. From (3,2): Bulwark at (2,2) = dist 1+0=1 adjacent-ish, dist=1+1=2 exactly. Insight at (1,3) = dist 2+1=3. Best: move to (3,2) - Bulwark at (2,2) is dist=1 (adjacent diagonally = still dist 2 in grid terms: |3-2|+|2-2|=1). That's dist 1, adjacent, so precision_shot blocked. Move to (4,2): Bulwark at (2,2) = |4-2|+|2-2|=2, in range! Insight at (1,3) = |4-1|+|2-3|=4, out of range. Fire precision_shot at Bulwark from (4,2) - haven't moved far enough to trigger the 1dmg penalty... wait, moved so it's 1dmg. Still worth it. Actually I haven't moved yet this turn so no penalty if I shoot first. Shoot Bulwark first (precision_shot, 2dmg) then move to maintain distance.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Currently fortified at (2,2) with 50% damage reduction. All enemies are 2 tiles away. Moving north to (2,3) advances toward Seer at (2,4) and keeps me between allies and enemies. After moving, I lose fortify but can use shield_wall facing north to protect against Seer, or east toward Bolt/Viper cluster.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 1,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Bulwark is adjacent at (2,3) - perfect pulse target. Insight is at (1,3) dist=2, not in pulse range. I can pulse now to hit Bulwark for 1 damage, then move to (4,3) to reposition away from Bulwark while staying near Bolt at (4,2). Trap would be blocked since Bulwark is adjacent. Pulse hits all units within 1 tile - that's Bulwark at dist=1, good trade.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "Seer is already scanned. Bolt is at dist 4, out of scan range from current position. I should scan Bolt — but need to move closer first. Moving to (3,3) puts me at dist=2 from Bolt at (4,2) and keeps me away from Viper. Wait — (3,3) is a valid move tile. From (3,3), Bolt at (4,2) is dist=2, in scan range. Viper is at (4,3), dist=2 from (3,3) — not adjacent, so scan not blocked. This lets me scan Bolt to reveal their strategy.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": "Cannot use scan — adjacent to enemy Vector (Denial)"
+        },
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Bulwark is adjacent at (2,3) — scan is blocked when adjacent to enemy Vector, but Bulwark is a sentinel, not a vector. Snare is the vector at dist=3, not adjacent, so scan is not blocked. I should scan Bulwark (dist=1, in range) to damage and reveal prompt. After scanning, move away from Bulwark to avoid being adjacent next turn. Move to (3,4) to reposition safely while staying in range of enemies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Insight (oracle) is at dist=2, in range for precision_shot (2dmg). I haven't moved, so full 2dmg applies. No adjacent enemies blocking the shot. Fire on Insight first, then wait or reposition. Staying at (4,2) keeps distance from Snare vector at (2,1) — moving adjacent would block abilities.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "No enemies adjacent, so no attack. Orders say advance toward nearest enemy. Viper and Seer are both at dist=2. Moving to (3,2) advances toward Bolt and stays away from Viper's denial zone (Viper is at (4,3), adjacent would be (3,3),(4,2),(4,4),(5,3)). Wait — (3,3) is my current position neighbor, Viper at (4,3). If I move to (3,2) I'm not adjacent to Viper. Most enemies are to the East, so shield_wall facing E makes sense.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "No enemies in range. Traps already at (1,2) and (3,1). Orders say control chokepoints between enemies and allies. Enemies are approaching from east around (4,2)-(4,3). I should move toward (3,1) area and place a trap on a likely approach path. Moving to (3,0) puts me near the trap at (3,1) and lets me place a new trap at (4,1) which is a key approach tile for Bolt at (4,2).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Insight (oracle) is adjacent at (3,3) and wounded — priority target for attack to finish them off. Bulwark is at range 2, not adjacent so pulse won't hit both. After attacking Insight, I'm already adjacent to the enemy so trap is blocked. Best play: attack Insight to eliminate them, then move to (5,3) to reposition and maintain denial pressure.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "At 2HP I'm fragile. Seer is adjacent at (3,4) — I can attack it for 1dmg. Viper is at (5,3), 2 tiles away, so moving adjacent is dangerous. I should move away from danger first, then attack Seer or scan Bolt. Moving to (2,4) keeps distance from Viper and lets me potentially scan Bolt (dist would be ~3). Actually, Seer is adjacent right now — I can attack it this turn without moving. But I need to survive. Let me move to (2,4) to escape Viper's threat range and stay safe, then scan Bolt from there (dist ~3, within range 4). From (2,4): dist to Bolt(4,2) = sqrt(4+4) ~2.8, in range. Viper at (5,3) would be dist ~3.6, safe. Seer at (3,4) would be dist ~1.4, still nearby. Better: move to (2,3) — dist to Viper(5,3)=3, safe. Dist to Bolt(4,2)=sqrt(4+1)~2.2, in range for scan. This gets me away from Seer too (dist~1.4). Let me go (2,4): away from traps at (3,1),(4,1),(1,2). Scan Bolt to reveal strategy.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Insight is adjacent at (2,4) and wounded — I can attack to finish them. But scan is more valuable if I can use it. Insight is at dist:1 (adjacent), so scan would fail if I'm adjacent to enemy Vector. Check: Viper is ally vector at (5,3), Snare is enemy vector at (3,0) dist:4 — not adjacent. So scan is not blocked. However, Insight is already scanned. I should attack Insight (adjacent, 1dmg) to eliminate the wounded enemy oracle. Then move away from danger. Bulwark is at (3,2) dist:2 — not adjacent so can't attack me yet. I'll attack Insight first, then move to (4,4) to maintain range and stay safe.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Traps at (3,1) and (4,1) already cover the south approach. Enemies are converging from the northeast. I should move toward (4,0) to reposition, then place a trap at (5,0) to cover the eastern flank approach — blocking Bolt and Viper's likely path toward our allies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 5,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Bolt is adjacent to the east. Orders say attack adjacent enemies. I'm fortified (50% DR) so staying put is beneficial. Attack Bolt, then use shield_wall facing east where Bolt and Viper/Seer cluster.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 2
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "No enemies in range. Insight is critical at (2,4) but far. Bulwark and Snare may push through center. Move to (4,3) to stay near Bolt and Seer, then place a trap on (3,3) — a likely path for Bulwark advancing from (3,2) northward or Snare moving up.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "I'm at (4,2) with 2HP, adjacent to Bulwark at (3,2). Precision_shot is blocked when adjacent to enemy (Bulwark is adjacent). Snare is at (4,0) dist=2, in range but has denial zone. I need to move away from Bulwark first to enable precision_shot. Moving to (5,2) keeps distance from Bulwark and avoids Snare's adjacent denial. From (5,2), Snare at (4,0) is dist=sqrt(1+4)=~2.2 so out of range. Bulwark at (3,2) would be dist=2, enabling precision_shot. Move to (5,2) first, then precision_shot Bulwark.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Insight is at critical HP at (2,4), distance 2 — scanning would finish them off and reveal nothing new (already scanned). Better to scan Insight for 1 damage to eliminate them. Then move to maintain range from Snare. Insight is already scanned so the damage is the value here. Scan Insight to deal 1 damage and likely kill them (critical = 1HP remaining). Stay at current position or move to safety.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Trap at (4,1) already exists. (5,0) is trapped too. I need to place traps in enemy approach paths. Moving to (5,1) puts me adjacent to the (5,0) trap but not enemies — from there I could trap (5,2) approach or stay to use denial. But (4,1) is already trapped. Better: move to (3,0) and place trap at (3,1) — wait, (3,1) is already trapped. Valid moves exclude trapped tiles as destinations. Let me place a trap at (4,2) from current position (4,0) — distance is 2, within trap range. That blocks the corridor between Viper at (4,3) and Bolt at (5,2). Then move to (5,1) to be closer for denial/pulse next turn, staying away from Viper (not adjacent).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Bulwark is at (3,2) distance 2, in range. There's already a trap at (3,3). I should attack Bulwark and place a trap on a tile they might move through. Moving to (3,4) would put me adjacent to Bulwark and block my abilities via their potential movement. Best play: attack Bulwark from current position (range 2, within range), then move to (4,2) to maintain pressure. Wait - attack range is 'adjacent only' (1 tile). Bulwark is dist 2, so attack won't reach. I can use pulse (1dmg ALL within 1 tile) but no enemies are adjacent. I can place a trap - (3,3) already has one. Bulwark at (3,2) might move toward me through (3,3) or (4,2). Place trap at (4,2) to intercept Bulwark's likely advance. Current position (4,3) is fine for trap placement at (4,2) which is within 2 tiles. Then move to maintain distance.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "I'm adjacent to Snare's denial zone, blocking precision_shot. At 2HP I'm vulnerable. Snare is right next to me at (5,1) - I can basic attack it. But first I should move to (5,3) to escape the denial zone, then use precision_shot on Snare if still in range. Wait - if I move first to (5,3), Snare at (5,1) is dist=2, still in range for precision_shot and no longer adjacent so denial is gone. But moving penalizes precision_shot to 1dmg. Alternatively, attack Snare now (1dmg, adjacent) then move away. Attack deals 1dmg regardless. Precision_shot after moving deals 1dmg too. So attack + move = 1dmg + escape. Or move + precision_shot = 1dmg + escape. Same damage. I'll move to (5,3) first to escape denial, then precision_shot Snare from dist=2 for 1dmg (moved penalty). Actually Snare would be at dist=2 from (5,3), in range. This gets me out of danger and chips Snare.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Nearest enemies are Bolt at (5,3) and Viper at (4,4), both dist 3. I need to advance. Moving to (4,3) gets me closer to Bolt (dist 1) and Viper (dist 1), but Viper has denial range adjacent — risky. Moving to (4,2) avoids Viper adjacency while closing on Bolt. Trap at (4,2) though — skip that. Move to (3,3) advances north safely, dist to Bolt becomes 2. Then shield_wall facing E (enemies are to the east).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 5,
+              "y": 1
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Both enemies already scanned. Snare is at (5,1) with denial on adjacent — must stay away. Bolt is my damage dealer at (5,3) wounded. Recalibrate Bolt to boost effectiveness. I'm at (5,4), Bolt is at (5,3) — adjacent, so recalibrate is in range. Stay in place, recalibrate Bolt.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 5,
+              "y": 3
+            },
+            "addendum": "Snare(vector) is at (5,1) — do NOT move adjacent. Bulwark is wounded at (3,3) advancing east with shield_wall facing E. Priority: engage Bulwark from range if possible, avoid Snare's denial zone."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Bulwark is wounded and at dist=2, within my attack range. I can attack Bulwark directly. Then move to (3,4) to stay close and maintain pressure while keeping near Seer for support. No point in trap since Bulwark is adjacent and my Denial passive blocks their key abilities anyway.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Viper is adjacent at (3,4) and has DENIAL active blocking my abilities. I can still use basic attack. Attack Viper since they're adjacent. I'm fortified so I should stay put to keep 50% damage reduction. Most enemies are to the N/E — Viper at N(3,4), Bolt at (5,3), Seer at (5,4). After attacking Viper, use shield_wall facing E where Bolt and Seer are clustered.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Bolt is wounded and 2 tiles away at (5,3) - within my range 2 attack. I can attack Bolt to finish it off or weaken further. Moving isn't critical right now. (5,0) already has a trap. I should attack Bolt since it's in range and wounded, then wait or place a trap. Actually, let me check trap placement - (4,2) already has a trap. I could move to (5,2) to get adjacent to Bolt for denial, then pulse to hit Bolt. But Bolt is only 1 unit so pulse isn't great. Better to attack Bolt from current position (range 2 hits it at dist 2), then move toward Seer or hold position.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "I'm adjacent to Snare's denial zone, so precision_shot is blocked. I can only use basic attack or move. Snare is at (5,2) distance 1 — I need to escape denial. Moving to (4,3) breaks adjacency with Snare and keeps me at distance 2 from Bulwark. From (4,3) I should be clear of denial and can use precision_shot on wounded Bulwark at (3,3) for 2 damage. But wait — the valid moves show (5,1) which is adjacent to Snare at (5,1)... actually orders say Snare(vector) is at (5,1) but enemies show Snare at (5,2). I'll trust the enemies data. Moving to (4,3) exits denial zone. From (4,3), Bulwark at (3,3) is still dist=2. I moved so precision_shot deals 1dmg. Better: move first to (4,4) — farther from Snare, still in range of Bulwark at dist ~1.4 but that's not integer. Actually from (4,4) to (3,3) dist = sqrt(1+1)=1.41, so dist=2 by Chebyshev. Either way, move to (4,3) to clear denial, then basic attack Snare at (5,2) for 1dmg? No — priority is Bulwark. Move to (4,3), then precision_shot Bulwark (1dmg since I moved, but Bulwark is wounded so this could finish).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Both enemies already scanned. Snare is at (5,2), 2 tiles away — cannot move adjacent. Bulwark is wounded at (3,3). Bolt is my damage dealer at (4,3). I should recalibrate Bolt to boost effectiveness against Bulwark. I can move to (4,4) to get adjacent to Bolt at (4,3) for recalibrate, while staying away from Snare at (5,2). From (4,4), distance to Bolt at (4,3) is 1 — adjacent. Snare at (5,2) would be ~2.2 tiles away, not adjacent. Good.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "addendum": "Focus fire on Bulwark at (3,3) — they are wounded and using shield_wall facing E. Attack from the north or south to bypass the shield. Priority target to eliminate."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Bulwark is adjacent at (3,3) - wounded and in denial range. I can attack for 1dmg. Can't use trap while adjacent to enemy. Pulse would only hit Bulwark (1 enemy adjacent, not worth it vs attack). Attack Bulwark to finish it off, then move to (2,3) to reposition and deny Snare if it advances.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Bulwark is at (3,3) dist=1 — critical HP, priority target. I'm at (4,3). Bulwark has shield_wall facing E, so attacking from east (my current position) hits the shield. I need to reposition north or south to bypass shield. Move to (4,2) is a trap — skip. Move to (3,4) puts me north of Bulwark at dist=1, bypassing E-facing shield. But wait — precision_shot is blocked when adjacent to enemy. Snare is at (5,2) dist=2, not adjacent, so no block from Snare. But Bulwark is at dist=1 (adjacent) — that blocks precision_shot too if I stay. So: move to (3,4) — now adjacent to Bulwark from north, still blocked for precision_shot. Better: move to (4,5) to get range, then precision_shot Bulwark. From (4,5): Bulwark at (3,3) = dist ~2.2, out of range. From (5,3): Bulwark at (3,3) = dist=2, in range, not adjacent — precision_shot works! And Snare at (5,2) is adjacent to (5,3) — that would block. Avoid (5,3). From (5,4): Bulwark dist ~2.2, out of range. From (3,4): adjacent to Bulwark, blocked. Best option: move to (4,1) — Bulwark at (3,3) dist ~2.2, out of range. Or stay and use attack (1dmg, adjacent) on Bulwark from east — hits shield. Actually let me reconsider: attack is 1dmg adjacent only, Bulwark is critical so likely 1HP left. Attack would kill. Shield_wall facing E — I'm at (4,3) which is EAST of Bulwark at (3,3). Shield blocks from E. Move to (3,4) first (north of Bulwark), then attack from north — bypasses E shield. That kills Bulwark.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "At 1HP, I'm nearly dead. I'm fortified (50% dmg reduction) which is keeping me alive. Bolt is adjacent at (3,4) - attack them since they're wounded. Viper's DENIAL zone blocks abilities other than basic attack/movement, so shield_wall is blocked. Best play: attack Bolt to potentially finish them, then stay put to maintain fortify.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "All enemies are out of range. I need to close distance while placing traps. Seer at (4,4) is closest at dist 3. Moving to (4,3) gets me adjacent denial range of Seer and closer to the cluster. But (4,2) is already trapped. Move to (5,3) first to stay safe, then trap (4,3) to block the approach corridor between enemies and Bulwark. Actually, moving to (4,3) puts me adjacent to Seer, enabling denial and potential pulse next turn. Trap at (4,3) isn't possible if I'm standing there. Let me move to (5,3) and trap (4,3) to block the lane between Seer/Bolt and Bulwark.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Both enemies already scanned. Bulwark is critical and adjacent to Bolt — allies should finish it. Snare is healthy and dangerous with trap at (4,2) blocking south. I should recalibrate Bolt (at 3,4, adjacent to me at 4,4) to boost damage output since Bulwark is critical and Bolt is the damage dealer. Then stay put or reposition away from Snare. Bolt is adjacent to me so recalibrate is valid.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "addendum": "Bulwark is critical at (3,3) and adjacent to you — attack immediately to eliminate it this turn."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Bulwark is critical and adjacent at (3,3). I'm at 1HP so I need to eliminate it now. Precision_shot is blocked when adjacent to enemy, so I must use basic attack. Attack Bulwark to finish it off.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Seer is adjacent at (5,4) — denial blocks their scan/abilities. Bolt is critical at (4,4) in range 2. I should attack Bolt to finish them off, and I'm already denying Seer. Stay put to keep denial pressure on Seer while attacking Bolt.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Snare is at (5,3) heading N — likely moving to (5,4) or (5,5). Allies are clustered around (4-5, 4). There's already a trap at (4,2). I should place a trap on a likely enemy path. Snare moving north could go to (5,4) or (4,3). Moving to (3,3) keeps me safe from Snare's denial range while letting me trap (4,3) which is a likely corridor. Stay mobile and deny area.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 9,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "I'm adjacent to Snare, so abilities are blocked except basic attack. I need to move away to restore ability use. Moving to (5,5) gets me away from Snare's denial zone and out of the trap at (4,3). From (5,5) I'm still only 2 tiles from Snare so I can scan next turn. Bolt is critical and Snare tried to attack them - I should recalibrate Bolt but I need to not be in denial zone first. Move to (5,5) then recalibrate isn't possible since Bolt is at (4,4) which is adjacent to (5,5) - wait, I need to check adjacency. (5,5) to (4,4) is diagonal distance ~1.4, so not adjacent. Let me move to (4,5) instead - that keeps me adjacent to Bolt at (4,4) and out of Snare's denial. From (4,5), Snare at (5,3) is distance ~2.2, outside denial. Then recalibrate Bolt to boost their attacks.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 4,
+              "y": 4
+            },
+            "addendum": "Focus attacks on Snare at (5,3) to eliminate their denial field. You are critical - attack only when safe, prioritize survival."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Snare is at (5,3) dist=2, so I must NOT move adjacent. Traps at (4,2) and (4,3) already placed. Snare is likely to advance west toward me — placing a trap at (3,2) or (3,4) could intercept. I'm at (3,3). I can place a trap at range ≤2 on an empty tile. (5,2) or (5,4) would be in Snare's movement path. (5,2) is empty and dist=2 from me — valid trap target. Then stay put or reposition safely.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": "Out of range (max 2)",
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": "Out of range (max 2)"
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "I'm at (4,4) with 1HP — critical. Snare is at (5,3), dist=2, in range for precision_shot. I haven't moved this turn so precision_shot deals 2dmg. Snare is healthy so 2dmg won't kill but it's my best play. I need to stay at current position to avoid moving adjacent to Snare. After shooting, I should move to (3,5) to create distance and get behind allies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "I'm at (5,3) with 4HP. Viper is at (3,3) distance 2 - within my attack range but if I move adjacent my abilities get blocked. Bolt is critical at (3,5) but out of range. Trap at (4,3) already exists. I should place a trap to deny movement paths. Moving to (5,4) keeps distance from Viper while I set a trap to block enemy approach. (4,4) would be a good trap location - blocks the path between enemies and creates a zone of control. Stay at range 2 from Viper to keep denial active without getting my abilities blocked.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 10,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Snare is wounded at (5,4), 2 tiles away — within scan range (≤4) but I must NOT move adjacent. Current position (4,5) keeps me at distance 2, safe. Bolt is critical and needs recalibrate boost. Priority: recalibrate Bolt at (3,5) first (adjacent), then stay put or reposition. Wait — recalibrate requires adjacent, Bolt is at (3,5) and I'm at (4,5), that's 1 tile away = adjacent. I can recalibrate Bolt to boost their damage output. After recalibrate, I can scan Snare from (4,5) — dist 2, within range 4, and I'm not adjacent to Snare (dist=2, not 1). This maximizes value: buff critical ally + damage wounded enemy.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 5
+            },
+            "addendum": "Focus fire on Snare at (5,4) — wounded vector, priority kill. Use precision_shot to finish them before they place more traps."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Snare is at (5,4) moving north, likely heading toward (5,5) or (5,3). Traps at (4,2) and (4,3) already placed. I should place a trap on (5,3) to intercept Snare's likely path south, or (4,4) as a chokepoint. Moving to (4,4) puts me closer to Snare but risks getting adjacent (dist would be 1 from 5,4 - no, (4,4) to (5,4) is dist 1, that's adjacent - Denial would block my trap ability). Better to stay at (3,3) or move to (4,4)... wait, (4,4) is adjacent to (5,4), so Snare's Denial would block my trap there. I'll move to (3,4) to stay safe and place trap at (4,4) from range, which is a likely path for Snare moving west/southwest.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "I'm at (3,5) with 1HP — critical condition. Snare is wounded at (5,4), dist=3, in range for precision_shot. I haven't moved this turn, so precision_shot does full 2dmg which should finish the wounded Snare. Must not move adjacent to Snare (denial zone). Staying put and firing precision_shot is the best play — no movement needed, full damage, safe distance.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "I'm at 3/8 HP, critical situation. Viper is 2 tiles away at (3,4) - must stay non-adjacent. Seer at (4,5) is in range. Moving to (5,5) keeps distance from Viper while staying safe. From current position I can place a trap at (4,4) - wait, (4,4) already has a trap. I can pulse to hit Seer at (4,5) from current position (within 1 tile AoE? No, pulse hits within 1 tile, Seer is at dist 2). Better to move to (5,5) to get adjacent to Seer for pulse, or stay and use attack on Seer. Seer is at (4,5), dist=2, attack requires adjacent. Move to (4,4) is blocked by trap. Move to (5,5) puts me adjacent to Seer at (4,5) - I can then pulse hitting Seer. But Viper at (3,4) would be dist 2 from (5,5), safe. From (5,5) pulse hits within 1 tile: Seer at (4,5) is adjacent - hits! Viper at (3,4) is dist 2 - safe from pulse. This is good: move to (5,5), pulse to damage Seer.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 11,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "I'm adjacent to Snare which blocks my scan/recalibrate abilities. I need to move away first. Best move is to (5,4) — still close but not adjacent to Snare at (5,5)... wait, (5,4) is distance 1 from (5,5) so still adjacent. Let me check: Snare is at (5,5). Moving to (5,4) puts me at distance 1 (adjacent) — still blocked. Moving to (5,3) puts me at distance 2 from Snare — not adjacent, abilities unblocked. From (5,3) I can scan Snare at (5,5) which is distance 2, within range 4. Also need to avoid traps at (4,2),(4,3),(4,4). (5,3) is safe. After moving to (5,3), scan Snare to deal 1 more damage — they're wounded, this could finish or weaken further. Snare is already scanned so I don't gain new info, but 1 damage is still useful. Actually, my orders say scan priority targets — but Snare is already scanned. Better to recalibrate Bolt (critical health striker) if I can reach adjacent. Bolt is at (3,5) — too far from (5,3). Let me move to (5,4) — wait that's still adjacent to Snare. Move to (4,3) — that's a trap! Avoid. Move to (5,3): distance to Snare=(5,5) is 2, not adjacent, scan works. Scan Snare for 1 damage to finish off wounded unit.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Snare is at (5,5), critical HP. Traps already at (4,2), (4,3), (4,4). I need to cover escape routes. Snare might move west toward (4,5) or (3,5). I can move to (4,5) to get closer and place a trap on (5,4) to cut off Snare's movement south. But (4,4) already has a trap. Moving to (4,5) puts me 2 tiles from Snare at (5,5) - not adjacent so no denial risk. From (4,5) I can trap (5,4) which is a likely escape tile for Snare moving south.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": "Cannot use trap — adjacent to enemy Vector (Denial)"
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "At 2HP I'm critical. Viper at (4,5) has DENIAL blocking my trap ability. I can't use trap while adjacent to Viper. Pulse would hit Viper at dist=1 but I'm in denial zone - pulse is not in the denied list (only cloak,breach,scan,precision_shot,trap,patch,overclock are blocked). So pulse should work! Pulse from (5,5) hits all units within 1 tile - that would hit Viper at (4,5). But I need to survive. Moving to (5,4) gets me away from Viper's denial zone and closer to Seer. Actually I should pulse Viper first (still adjacent at dist=1), then move away. Pulse hits all within 1 tile of ME, so targeting myself at (5,5) hits Viper at (4,5). That would deal 1 damage to Viper. Then move to (5,4) to escape and potentially place a trap next turn. With only 2HP, survival is key.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "I'm at (3,5) with 1HP - critical. Snare is at (5,4) critical and in range (dist=3, within my range 2... wait, dist=3 exceeds my rng2). Actually dist=3 means out of precision_shot range (≤2). I need to check: can I move closer to get a shot? Moving to (4,4) is a valid tile but it's a TRAP. Moving to (5,5) gets me closer but still dist to (5,4) would be 1 - that's adjacent range, precision_shot needs LoS and ≤2 tiles. From (5,5) to (5,4) is dist=1, in range, but I moved so precision_shot does 1dmg. Snare is critical so 1dmg should finish them. But (4,4) is a trap. Let me reconsider: stay at (3,5) - Snare at (5,4) is dist=3, out of my range 2. I cannot hit them without moving. Moving to (5,5): dist to (5,4) = 1, in range, but moved so 1dmg - enough to kill critical Snare. Risk: I'm at 1HP moving near threats. But orders say focus fire on Snare to eliminate. Move to (5,5) then precision_shot Snare at (5,4) for 1dmg kill.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": "Cannot use precision_shot — adjacent to enemy Vector (Denial)"
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 12,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "I'm adjacent to Snare (critical) at (5,4) which blocks my abilities via DENIAL. I need to move away first to enable scan or recalibrate. Moving to (3,3) puts me at distance 2 from Snare, breaking denial. Traps at (4,2),(4,3),(4,4) — must avoid those. Safe move to (3,4) avoids traps and breaks denial. Then I can scan Snare (already scanned, prompt known) — better to recalibrate Bolt at (5,5) but that's range 3+ from (3,4), recalibrate is adjacent only. From (3,4), Snare is at dist ~2.2, out of denial. Snare is critical — Bolt and Viper can finish it. I should move away from denial zone and recalibrate Bolt if possible. Bolt is at (5,5), I'm at (5,3) — moving to (5,2) avoids traps, breaks denial (dist 2 from Snare at 5,4), and keeps me away. From (5,2) Bolt at (5,5) is dist 3 — not adjacent, can't recalibrate. Move to (3,3) avoids all traps, breaks denial. Snare is critical and should die soon. Best move: go to (3,4) — no traps there, breaks denial. Then scan Snare from (3,4): dist = sqrt(4+0)=2, within range 4. Snare already scanned but scan also deals 1dmg — Snare is critical, this could finish it.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Snare is critical and 2 tiles away at (5,4). I can attack from range 2. Tiles (4,4) and (4,3) are already trapped. I should attack Snare to finish it off. Moving to (3,5) would keep distance from Snare while staying near allies, but attacking from current position (4,5) hits Snare at dist=2 within my range. Attack Snare first, then consider positioning.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "I'm at 1HP — critical danger. Bolt is adjacent at (5,5) and will likely kill me. I need to attack Bolt first (they're critical, so a 1dmg attack might finish them), then move away from Viper. Attack Bolt at (5,5), then move to (5,2) to escape. Seer is wounded and in range but Bolt is the immediate threat.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 13,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Snare is at distance 4, just out of scan range. I already have Snare's prompt. Traps block (4,2)(4,3)(4,4) — moving through those would be dangerous. Viper is my damage dealer at (3,5). I should recalibrate Viper to boost effectiveness since I can't scan anything useful this turn. Move to (2,4) to stay safe and get adjacent to Viper at (3,5)... wait, (3,5) is Viper's position. From (3,4), Viper is adjacent at (3,5). I can recalibrate right now without moving. Best play: recalibrate Viper with addendum about Snare's trap denial strategy, then move to maintain position away from traps.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 5
+            },
+            "addendum": "Snare controls chokepoints with traps at (4,2)(4,3)(4,4) and uses denial to block adjacent abilities. Approach from the west/south to avoid trap tiles. Snare is critical HP at (5,2)."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "At 1HP I'm extremely vulnerable. Both enemies are at dist=5, out of range. I have 7 traps already placed. I should move to reposition and place another trap to control approach paths. Moving to (5,4) gets me further from the trap cluster and I can place a trap on an approach route. Actually, let me move north to (5,4) and place a trap at (4,4) - wait, (4,4) already has a trap. Let me check valid moves and open trap positions. Valid moves include (5,3) and (5,4). I can place trap at tiles within range 2 that are empty. From (5,4), I could trap (3,4) or (4,5) to block enemy approaches from the northwest. Moving to (5,4) first, then trap at (3,4) to intercept Viper/Seer.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Snare is critical HP at (5,4) but has traps blocking direct approach at (4,2)(4,3)(4,4). I'm at (3,5) with speed 1. Valid moves include (4,5) which avoids all traps. Moving to (4,5) puts me adjacent to Snare's column but not on trap tiles, and gets me within range 2 for trap placement or closer next turn. I should move to (4,5) then place a trap at (5,5) to cut off Snare's escape route northward, or place on (4,4) — wait, (4,4) already has a trap. Place trap at (5,5) to threaten escape.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "opponent",
+    "totalTurns": 14,
+    "reason": "opponent eliminated all enemies"
+  },
+  "endedAt": "2026-03-07T17:09:32.449Z"
+}
