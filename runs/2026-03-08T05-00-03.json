@@ -1,0 +1,2046 @@
+{
+  "id": "2026-03-08T05-00-03",
+  "startedAt": "2026-03-08T05:00:03.862Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 4,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 4,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "oracle": {
+        "maxHp": 6,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 14,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "vector": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 2,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 9,
+        "healAmount": 10
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Wraith",
+        "class": "specter",
+        "prompt": "Stay cloaked and flank. Prioritize assassinating the enemy damage dealer. Use breach on sentinels to break their defensive posture. Recloak whenever it drops."
+      },
+      {
+        "name": "Warden",
+        "class": "sentinel",
+        "prompt": "Hold the front line. Position between allies and enemies. Use shield_wall toward incoming threats. Attack adjacent enemies."
+      },
+      {
+        "name": "Remedy",
+        "class": "medic",
+        "prompt": "Keep your frontliner alive with patch. Stay behind them for cover. Overclock your striker or specter when no healing is needed."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Prophet",
+        "class": "oracle",
+        "prompt": "Scan early to give your team intel on enemy prompts. Target enemy specters with scan to track them after cloak. Use recalibrate on allies who need tactical adjustments. Stay safe at range behind your front line."
+      },
+      {
+        "name": "Veil",
+        "class": "specter",
+        "prompt": "Cloak and move behind enemy lines. Target isolated enemies with shadow_strike. Save breach for the most dangerous enemy. Avoid being caught uncloaked."
+      },
+      {
+        "name": "Bolt",
+        "class": "striker",
+        "prompt": "Position for clear sight lines. Prioritize killing wounded enemies with precision_shot. If forced to move, retreat away from threats. Suppressing_fire to slow rushers."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Warden is exactly at dist=4 from my current position (2,4) to (2,0). But scan requires target within ≤4 tiles. Dist=4 means it's on the edge of range. I should move south to close distance to Warden and then scan, or move toward center. Actually Warden is at (2,0) and I'm at (2,4) — that's exactly 4 tiles Manhattan distance. The recon says 'inRange: false' for Warden from current position, so I need to move closer. Move to (2,3) reduces distance to 3, putting Warden in scan range. Then scan Warden for intel.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Round 1 — cloak immediately per orders and tip. Then advance toward Prophet (enemy damage dealer / oracle) who is closest at dist 5. Move north to close distance while cloaked.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "Warden is wounded at (2,0), dist=2. I need to move adjacent to heal. Moving to (3,0) puts me at dist=1 from Warden at (2,0). Then I can patch Warden.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 2,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Veil",
+          "class": "specter",
+          "thinking": "Round 1 - cloak immediately per orders and tip. Then advance toward enemies. Both enemies are far south. I'll cloak first, then move south toward (4,2) to close distance while invisible.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Both enemies are out of range (dist 6-7, max range 2). I should advance toward them to get into firing position. Moving to (1,3) gets me closer while staying near allies. Then wait to preserve position.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Enemies at dist 3-4, need to advance. Move to (2,2) to position between allies and enemies. Shield_wall north to block incoming threats from Prophet at (2,3).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "player",
+          "hp": 14,
+          "maxHp": 14,
+          "position": {
+            "x": 3,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "All allies are at full HP, no healing needed. Enemies are 4-5 tiles away. I should advance toward allies and position to support. Moving to (3,3) gets me closer to allies at (0,3) and (2,2) for potential overclock next turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Remedy is adjacent at (3,3) and unscanned — high priority target. Scanning Remedy deals 1 damage and reveals their prompt, giving team intel on the medic. Warden is already scanned. After scanning Remedy, I should move away to avoid being adjacent to Warden next turn (Warden used shield_wall toward me last turn, so they're defensive but dangerous if I stay close). Moving to (2,4) puts me at range from Warden and keeps scan range on enemies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Veil",
+          "class": "specter",
+          "thinking": "Cloak has only 1 turn remaining. I'm already behind Remedy at (3,3) — I can move to (3,2) which is directly behind her and adjacent. Then use shadow_strike to deal damage while staying cloaked. This preserves cloak for potential breach next turn against the more dangerous Warden.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Cloak has 1 turn remaining. Orders say to assassinate the enemy damage dealer — Bolt is a striker adjacent to me, but I should prioritize getting behind Prophet (oracle) who is a high-value target. I can move to (2,3) which puts me directly behind Prophet (facing N, so south is behind). From there I can breach Prophet next turn. Alternatively, Bolt is right next to me — shadow_strike keeps cloak and deals 1 damage. But orders say prioritize damage dealer. Bolt is a striker (damage dealer) at dist=1. I can shadow_strike Bolt to deal damage while staying cloaked, then move toward Prophet. Shadow_strike keeps cloak, so I stay invisible. Let me shadow_strike Bolt first, then move to (2,3) to get behind Prophet for breach next turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Wraith is adjacent at (2,3) — precision_shot is blocked when adjacent to enemy. Warden and Remedy are at dist 2, in range. I should move away from Wraith first to enable precision_shot, then target a priority enemy. Moving to (0,3) puts me at dist 2 from Wraith and maintains range to enemies. After moving, I'll have moved so precision_shot does 1dmg. Better to use suppressing_fire on Wraith to slow it, or precision_shot on Remedy/Warden. Moving to (0,4) then precision_shot Warden at dist 2 — but after moving precision_shot only does 1dmg. Suppressing_fire on Warden (dist 2) would hit a 2-tile line from target. Let me retreat to (0,3) then precision_shot Remedy (dist will be ~3, out of range). Actually from (0,3) Remedy at (3,3) is dist 3 — out of range 2. Warden at (2,2) from (0,3) is dist 3 — also out of range. Best move: (0,4) — Warden at (2,2) is dist ~2.8, Remedy at (3,3) is dist 3.6. Only Wraith at (2,3) would be dist ~2.2. Not helpful. Move to (1,4): Wraith at (2,3) dist ~1.4, Warden at (2,2) dist ~2.2, Remedy at (3,3) dist ~2.2. From (1,4), precision_shot Remedy at (3,3) — dist=sqrt(4+1)=2.24 > 2, out of range. Warden at (2,2) from (1,4): dist=sqrt(1+4)=2.24 > 2, out of range. Only option in range after moving is Wraith. Move to (1,2): Wraith at (2,3) dist=sqrt(1+1)=1.4, Warden at (2,2) dist=1, Remedy at (3,3) dist=sqrt(4+1)=2.24. Warden would be adjacent, so precision_shot blocked by Warden too? Only blocked by adjacent enemy Vectors. Best plan: Stay, use suppressing_fire on Wraith (line toward (2,3), direction matters). Wraith is adjacent so suppressing_fire still applies dmg. Then move away. Actually: fire first then move. Suppressing_fire on Wraith at (2,3) from (1,3): 1dmg and slows. Then retreat to (0,3).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "suppressing_fire",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Veil is adjacent at (3,2) — attack immediately. Stay put to keep Fortify active for damage reduction. No need to move.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "player",
+          "hp": 11,
+          "maxHp": 14,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Wraith is adjacent at (2,3) — scan is blocked when adjacent to enemy Vector, but Wraith is a specter not a Vector, so scan should work. Wraith's prompt is unknown and it's a priority target. Scan Wraith to reveal prompt and deal 1 damage. Then move north away from Wraith to maintain safe distance.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "Wraith is at (2,3) with 2/4 HP and needs healing. I'm suppressed so movement is limited to 1. Veil is adjacent at (3,2) which blocks patch/overclock. I need to move away from Veil to use abilities. Moving to (3,4) puts me at dist=2 from Veil, unblocking abilities. From (3,4), Wraith at (2,3) is distance 2 — not adjacent, so I can't patch. Moving to (4,3) keeps Veil at dist=2 but Wraith is still not adjacent. Neither move gets me adjacent to Wraith. Best option: move to (3,4) to escape Veil's suppression block, but I still can't reach Wraith. Wait — patch requires adjacent only. Wraith is at dist=2 from me. I cannot heal this turn regardless. Since Veil is adjacent and blocking abilities, and I can't reach Wraith, I should move to (3,4) to escape Veil adjacency. Then second action: no heal possible, so wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "I'm suppressed (mv1) at 2HP. Orders say assassinate the enemy damage dealer — Bolt is a striker. I can reach (1,3) which is behind Bolt and adjacent. Breach Bolt from there to take control next turn, or shadow_strike for damage. I'm at 2HP so I should go for breach to disable Bolt without risking counterattack. Move to (1,3), then breach Bolt at (0,3) — I'm behind him, adjacent, breach is ready.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 0,
+              "y": 3
+            },
+            "addendum": "Move away from allies and toward the edge of the map, then wait."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Veil",
+          "class": "specter",
+          "thinking": "Warden is adjacent at (2,2) facing N, so (2,1) is behind it. I can move to (2,1) to get behind Warden, then use breach to take control of it — it's a sentinel (tanky, high threat). Breach range is ≤2 tiles and I must be BEHIND the enemy, which (2,1) satisfies. This uses my breach on a healthy but dangerous frontliner. Alternatively, Remedy is a medic that I'm already behind from current position — but dist=2 so not in melee range. Moving to (3,3) would be behind Remedy and adjacent for shadow_strike, but I'm not cloaked so shadow_strike loses its stealth benefit. Breach on Warden is high value — sentinel turned against enemies disrupts their frontline significantly. Move to (2,1) then breach Warden.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 2,
+              "y": 2
+            },
+            "addendum": "Attack the nearest enemy unit."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Orders are to move away from allies and toward the map edge, then wait. I'm at (0,3) facing W — already on the west edge. Valid moves include (0,1) and (0,5) which are further along the west edge. Allies are at (2,1) and (2,5). Moving to (0,5) takes me toward the north edge and away from Veil at (2,1). Moving to (0,1) is closer to Veil. So (0,5) is the better choice to move away from allies toward an edge.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Veil is adjacent at (2,1) directly south. I'm fortified with 50% damage reduction. Attack Veil immediately — no need to move, preserving Fortify bonus.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "player",
+          "hp": 11,
+          "maxHp": 14,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Veil",
+          "class": "specter",
+          "thinking": "I'm at (2,1) facing S, HP 2/4. Warden is adjacent at (2,2) and I'm already behind them (Warden faces N, I'm at their south). Breach is on cooldown. Shadow_strike deals 1dmg and keeps cloak — but I'm not cloaked. A regular attack would deal 1dmg. Warden is healthy so I won't kill them this turn regardless. Wraith is wounded at (1,3) — killing them is higher priority. (2,3) is behind Wraith and reachable. I can move to (2,3) and then shadow_strike Wraith won't work since I need cloak. But I can use attack on Wraith if adjacent. From (2,3) Wraith at (1,3) is dist=1 — adjacent. Best plan: attack Warden now (1dmg, they're right here), then move to (2,3) to pressure Wraith next turn. Or: move to (2,3) first, then attack Wraith from adjacent. Moving to (2,3) puts me adjacent to wounded Wraith — attack deals 1dmg. That's better since Wraith is wounded and potentially killable sooner. Move to (2,3), attack Wraith at (1,3).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "All three enemies already scanned. Wraith is critical and planning to breach (0,3) — Veil is wounded at (2,3) and moving to (2,1) where Warden will attack. I should recalibrate Veil to warn about Warden's attack and Wraith's flank, but Veil is at (2,3) which is not adjacent. Remedy is healthy at (3,4) — closest unscanned threat to act on. I can move to (3,4) area to get adjacent to Veil... but Veil is moving to (2,1). Better play: recalibrate Bolt at (0,5) who is adjacent — Bolt is idle and Wraith is heading to breach at (0,3), so Bolt should intercept. I'm at (2,5), Bolt is at (0,5) — not adjacent. Move to (1,5) to get adjacent to Bolt, then recalibrate Bolt to warn about Wraith breaching at (0,3) and to attack Wraith.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 0,
+              "y": 5
+            },
+            "addendum": "Wraith (critical specter) is moving to breach at (0,3) this turn. Move south to intercept and attack — Wraith is critical and can be finished off. Warden is holding at (2,2), stay north to avoid."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "I'm at 1HP — extremely fragile. Veil is adjacent and wounded (easy kill with shadow_strike since it doesn't break cloak). But I'm NOT cloaked currently, so shadow_strike's cloak-preservation is moot. Priority: kill wounded Veil with shadow_strike (1dmg should finish a wounded unit), then reposition. After killing Veil, I could move toward Prophet's back tile (2,5) for a future breach/kill. Veil is at (2,3), adjacent to me — shadow_strike is valid. Then move to (2,4) to get closer to Prophet's flank.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "Wraith is at 1/4 HP and adjacent to me (dist=1, at 2,4 while I'm at 3,4). I must patch Wraith immediately. After healing, I can wait or reposition. Veil is critical at dist=2 but I can't attack (melee only, not adjacent). Stay safe.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Veil is adjacent at (2,3) and critical. Attack immediately. Stay in place to keep Fortify active.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Orders say move toward edge and wait, but tactical orders override: intercept Wraith breaching at (0,3). I'm at (0,5), can move to (0,3) which is in my valid moves list. Wraith is healthy but described as critical — moving to (0,3) puts me adjacent for attack. After moving I'll attack Wraith.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "secondResult": "Cannot attack self"
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "player",
+          "hp": 11,
+          "maxHp": 14,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "All allies are at full HP, so no healing needed. Wraith is adjacent at (2,4). I'll overclock Wraith to give them 2 abilities next turn, then move to maintain position.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "I'm overclocked with 2 ability uses. Prophet is the priority target (oracle = damage dealer). I'm already behind Prophet — (2,5) is reachable and puts me adjacent behind them for breach. Move to (2,5), then breach Prophet. This will let me control them next turn. Bolt is farther and not the priority.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 1,
+              "y": 5
+            },
+            "addendum": "Move away from allies, toward the edge. Stay isolated."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Orders say move away from allies and toward edge. Bolt is at (0,3), I'm at (1,5). Moving to (4,5) gets me to the far edge and away from allies. Wraith is adjacent at (2,5) — I can scan it but it's already scanned. I should move first to get distance, then scan Warden or Remedy if in range. After moving to (4,5), Warden at (2,2) is dist=4, Remedy at (3,3) is dist=3 — both in scan range. Scan Remedy to get more intel.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Orders say move away from allies toward edge, then wait. But tactical orders say move south to intercept Wraith at (0,3) — Wraith is moving to breach there. Moving to (0,1) gets me south and toward edge while positioning to intercept. (0,5) is north toward ally Prophet. South is better for interception and edge movement. Move to (0,1) to head south toward edge, then wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Bolt is at (0,1), distance 3. I need to close the gap. Moving to (1,1) gets me distance 1 from Bolt (adjacent), then I can attack. Valid moves include (1,1).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 0,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "player",
+          "hp": 10,
+          "maxHp": 14,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Orders say move away from allies toward edge. I'm at (4,5) facing E. Bolt is at (0,1) — moving to (5,5) puts me at the corner edge, isolated, and still keeps Remedy and Wraith in scan range. Scan Remedy to gather intel or damage — she's at (3,3), dist 3, within range 4. Moving to (5,5) first then scanning Remedy at (3,3) dist=3+1=... wait, from (5,5) Remedy at (3,3) is dist=|5-3|+|5-3|=4, still in range. Do that.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "Wraith is wounded at HP 3/4 and dist=3 from me. I need to close distance to heal. Moving toward Wraith at (2,5) - best approach is (2,4) which puts me adjacent. Then I can patch Wraith next turn. This turn I'll move to (3,5) to get closer, then wait since I can't reach Wraith yet.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Prophet is the priority target (enemy damage dealer, 3 dist). I can reach (4,5) which is directly behind Prophet (facing E, so behind = west side = (4,5)). Move there then shadow_strike to deal damage while staying cloaked.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Bolt is adjacent at (0,1) and wounded — attack to finish. Staying put preserves Fortify (50% dmg reduction). No need to move.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 0,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "I'm at 1HP with Warden adjacent at (1,1). Precision_shot is blocked when adjacent to enemy. I must move first to escape adjacency, then use precision_shot. Moving to (2,1) increases distance from Warden but keeps me on the board. From (2,1), Warden at (1,1) is dist=1 still adjacent - still blocked. Move to (0,0) - Warden at (1,1) is dist=1, still adjacent. Move to (0,2) - Warden at (1,1) is dist=sqrt(2)~1.4, not adjacent (diagonal). From (0,2), Warden dist=~1.4, should be >1 tile so precision_shot unblocked. Warden is healthy so 2dmg would hurt badly. Let me move to (0,2) then precision_shot Warden.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "player",
+          "hp": 9,
+          "maxHp": 14,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "Wraith is adjacent at (4,5) with 3/4 HP - needs healing. I'm at (3,5), Wraith is adjacent. Patch Wraith first, then consider positioning. Prophet is at (5,5) dist=2, healthy enemy nearby. After healing Wraith, I should move away from Prophet to avoid being adjacent to enemy which blocks my abilities.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Wraith is adjacent at (4,5) and tried to shadow_strike me last turn. Orders say move away from allies toward edge. I'm already at (5,5) — corner. I should move to isolate further but I'm already at the edge. Wraith is adjacent and a threat. I can scan Wraith but it's already scanned. I can attack for 1dmg. Best play: move to (5,4) to stay on edge and away from allies, then attack Wraith if still adjacent — but after moving to (5,4), Wraith at (4,5) is distance 2, out of attack range. Alternatively stay and attack Wraith now, then move. Attack first (adjacent, 1dmg), then move to (5,3) to comply with isolation orders.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Prophet is the priority target (enemy damage dealer, healthy). I can reach (5,4) which is directly behind Prophet (facing S, so behind is (5,4)). Move there first, then shadow_strike to stay cloaked and deal damage.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "I'm at 1HP, critical condition. Warden is adjacent (dist=2) at (1,1), blocking precision_shot. I need to move away first. Moving to (0,4) puts distance between me and Warden. From there I can use suppressing_fire on Warden to slow their advance since precision_shot requires no adjacent enemy and Warden is sentinel class (likely can close gap). Actually, Warden at dist=2 means they're not adjacent (adjacent=dist=1), so precision_shot should work. Warden is at (1,1), I'm at (0,2) - that's diagonal distance 1 in Chebyshev but Manhattan dist=2. Fire precision_shot at Warden for 2dmg to potentially kill, then retreat.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Currently fortified at (1,1) with 50% damage reduction. No enemies in range. Bolt is at (0,4) critical and approaching from the north. Allies Wraith and Remedy are at y=4. I should advance to intercept Bolt and protect allies. Moving to (1,3) puts me closer to Bolt while maintaining a blocking position between enemies and allies. Then wait to preserve fortify next turn if needed, or shield_wall toward Bolt's direction.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "player",
+          "hp": 9,
+          "maxHp": 14,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "Warden(sentinel) is at (1,3), dist=2, HP 6/8 - wounded and adjacent is reachable. Move to (1,4) to get adjacent to Warden at (1,3), then patch Warden. Wraith at dist=3 needs heal too but Warden is closer and a frontliner. Bolt is at (0,4) critical - Warden is my shield, keep them alive.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Wraith is adjacent at (5,4) and targeted shadow_strike at me last turn — it's right next to me and dangerous. Scan is blocked when adjacent to an enemy Vector, but Wraith is a specter not a Vector, so scan should work. However, scan only does 1 dmg and I'm already adjacent — Wraith will likely strike me again. Better to move away to (4,4) to break adjacency and get safer range, then I can scan Wraith from distance next turn or recalibrate Bolt who is critical. Actually Wraith is already scanned. Bolt is critical and needs help — I should recalibrate Bolt, but Bolt is at (0,4) and recalibrate is adjacent-only, so I can't reach. I have no useful targets in scan range except Wraith (already scanned). Moving away from Wraith is priority — retreat to (4,4) to avoid shadow_strike. Then wait or attack isn't useful. I'll move to (4,3) to keep distance, then wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Prophet is adjacent and I can move behind them to (4,3) then shadow_strike to stay cloaked. Shadow_strike deals 1 damage and maintains cloak — perfect for assassinating the oracle without breaking stealth.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "I'm at 1HP so survival is critical. Remedy is adjacent at (1,4) and Warden is at dist 2. precision_shot is blocked when adjacent to enemy - Remedy is adjacent so I can't use it. I can use suppressing_fire on Warden to slow them. But first I should move away to escape adjacency with Remedy, which would also let me use precision_shot. Moving to (0,2) or (0,3) gets me away. Actually, moving to (2,4) puts me further from Remedy but Warden is still at dist ~2. Let me move to (0,5) to retreat north, then suppressing_fire on Warden to slow the rush. Wait - at (0,5) Warden at (1,3) is dist ~3, out of range 2. Better to move to (0,3) - that's dist 2 from Warden still and away from Remedy adjacency, allowing precision_shot on Warden. Actually Warden is healthy not wounded. Prophet is wounded but out of range. Best play: move to (0,5) to retreat, then suppressing_fire on Warden (dist from 0,5 to 1,3 = sqrt(1+4)=~2.2, likely out of range). Or stay and use suppressing_fire on Warden now from (0,4) - Warden is at dist 2, in range. I'm adjacent to Remedy so precision_shot blocked. Use suppressing_fire on Warden to slow them, then move to (0,5) to retreat.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "suppressing_fire",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "I'm suppressed so movement is limited to 1. Enemies are out of range. Remedy is at (1,4) to my north, Bolt is to the northwest at (0,5). Staying fortified gives 50% damage reduction which is valuable. I should use shield_wall to protect Remedy from Bolt's direction (Bolt is north of me, roughly N direction). Staying put preserves fortify bonus.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 1,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "player",
+          "hp": 9,
+          "maxHp": 14,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 9,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "Warden is adjacent at (1,3) and wounded at 7/8 HP - I can patch them. Bolt is critical at dist=2, dangerous. I should heal Warden first, then consider positioning. Warden is directly south of me at (1,3), so patch is valid.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Prophet is wounded, adjacent, and I'm already behind them at (4,3) while they face N. Shadow_strike deals 1dmg while keeping cloak—perfect to finish off a wounded target without breaking concealment. Then I can move to reposition.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "At 2HP I'm very vulnerable. Wraith tried to shadow_strike me last turn and will likely try again — it's at (3,5). Remedy is moving to (1,4) to patch Warden. I should move away from Wraith's reach and scan Remedy since all enemies are already scanned. Actually all three enemies are already scanned. Best use: recalibrate Bolt who is critical at (0,5) — but that's far. I can move to (5,5) to gain distance from Wraith, then wait. Or scan Remedy for 1 damage. Remedy is healthy and supporting enemies — scanning deals 1dmg and I already know their prompt. Moving to (5,5) puts me further from Wraith. Scan Remedy at (2,4) for chip damage while retreating.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "I'm at 1HP so survival is critical. Remedy is wounded and in range at dist=3 - priority target. Precision shot requires ≤2 tiles range, but Remedy is at dist=3 so out of precision_shot range from current position. I need to move closer. Moving to (1,4) puts me 1 tile from Remedy at (2,4), within precision_shot range. But I'm adjacent to Warden at (1,3) if I go to (1,4) - that blocks precision_shot. Moving to (2,5) puts me at dist=1 from Remedy (2,4) - adjacent, so precision_shot blocked by adjacency rule only if there's an adjacent enemy. Warden is at (1,3), not adjacent to (2,5). From (2,5), Remedy at (2,4) is dist=1 - adjacent, so I'd use basic attack not precision_shot. Better: move to (1,5), Remedy is at (2,4) dist=2, no enemy adjacent to me there (Warden at (1,3) is dist=2). Precision_shot from (1,5) to Remedy at (2,4) = dist=2, within range, need LoS. Take the shot to finish wounded Remedy.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Bolt is at (1,5), distance 2 — if I move to (1,4) I'll be adjacent and can attack. Remedy is wounded at (2,4), so I should stay close for protection. Moving north to (1,4) puts me between Bolt and Remedy, lets me attack Bolt who is critical, and I can shield_wall N to protect allies behind me if needed. Bolt is critical so one attack may finish them.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 14,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 10,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "Wraith is at (3,5) with 3/4 HP, wounded and needs healing. I'm at (2,4), distance 2 from Wraith. I need to move adjacent to Wraith to patch them. Moving to (2,5) puts me adjacent to (3,5) — distance 1, so patch will work. Then heal Wraith.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Prophet is wounded and 2 tiles away. I can move to (5,4) which puts me behind Prophet and adjacent. Then shadow_strike to deal damage while staying cloaked.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "I'm at 1HP — extremely vulnerable. Wraith is adjacent at (5,4) and just shadow_struck last turn, likely will attack again. I must flee. Valid moves include (4,4), (4,5), (3,5), (4,3) etc. Moving to (4,4) puts me closer to the action but still adjacent risk. Moving to (3,5) gets distance from Wraith. After moving, I can scan Remedy at (2,5) from (3,5) — dist=1, well in range — to deal 1 damage to their wounded medic and potentially finish them. Remedy is wounded and is the healer keeping enemies alive. Scan from (3,5) to (2,5) is distance 1, valid.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Prophet is at (3,5) distance 3, critical HP. Remedy is wounded at (2,5). I should advance to (2,4) to stay between enemies and allies, positioning to intercept or attack next round. Moving loses fortify but gets me closer to protect Remedy.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 14,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "player",
+    "totalTurns": 11,
+    "reason": "player eliminated all enemies"
+  },
+  "endedAt": "2026-03-08T05:05:37.925Z"
+}

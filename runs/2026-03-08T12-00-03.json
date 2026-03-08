@@ -1,0 +1,2229 @@
+{
+  "id": "2026-03-08T12-00-03",
+  "startedAt": "2026-03-08T12:00:03.688Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 4,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 4,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "oracle": {
+        "maxHp": 6,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 14,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "vector": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 2,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 9,
+        "healAmount": 10
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Lattice",
+        "class": "vector",
+        "prompt": "Place traps on tiles enemies are likely to move through. Use pulse if 2+ enemies are adjacent. Stay near allies for mutual support."
+      },
+      {
+        "name": "Aegis",
+        "class": "sentinel",
+        "prompt": "Advance toward the nearest enemy. Use shield_wall facing the direction with the most enemies. If an enemy is adjacent, attack them."
+      },
+      {
+        "name": "Bolt",
+        "class": "striker",
+        "prompt": "Maintain distance. Use precision_shot on high-value targets — medics first, then damage dealers. Use suppressing_fire if enemies close in."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Wraith",
+        "class": "specter",
+        "prompt": "Cloak immediately on turn 1. Move toward the enemy medic or weakest target. Use shadow_strike when adjacent while cloaked. Use breach to sabotage high-value targets."
+      },
+      {
+        "name": "Longshot",
+        "class": "striker",
+        "prompt": "Maintain distance. Use precision_shot on high-value targets — medics first, then damage dealers. Use suppressing_fire if enemies close in."
+      },
+      {
+        "name": "Aegis",
+        "class": "sentinel",
+        "prompt": "Hold the front line. Position between allies and enemies. Use shield_wall toward incoming threats. Attack adjacent enemies."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Round 1 — cloak immediately as ordered. All enemies are far (dist 5-8), so after cloaking I'll advance toward Lattice (dist 5) which is the closest target. Move to (3,2) to close distance while staying cloaked.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "No enemies in range yet. Move forward to (2,3) to get closer and place a trap on (2,4) — the tile enemy Aegis is currently on, or the path they'll advance through. Actually, Aegis is at (2,4) so trapping there would hit them if they stay. But trap requires empty tile. Instead, move to (2,3) and trap (2,4) if empty, or trap the likely advance path. Aegis at (2,4) facing S means they may move toward me — trap (2,4) won't work if occupied. Better to trap (3,3) or (2,3) as chokepoints. Move to (2,3) first, then trap (3,3) to cover flanking approach.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "No enemies in range. Orders say maintain distance. Move north to get closer to the action while staying at range. Advance toward center to set up precision shots next turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "No enemies adjacent, so no attack. Orders say advance toward nearest enemy (Aegis at 2,4) and use shield_wall facing direction with most enemies. Enemies are to the N. Move as far north as possible toward Aegis — best reachable tile is (2,2). Then shield_wall facing N toward enemies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Lattice is adjacent at (2,3) and has DENIAL active, blocking my abilities except basic attack. I should attack Lattice, then hold position. Moving away would leave Longshot exposed. Attacking Lattice with basic attack is valid even in DENIAL zone.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Lattice (vector) is at (2,3), distance 3, within my range 2? No — dist=3 exceeds my range of 2. But recon says Lattice is inRange=true. Checking: precision_shot range ≤2 tiles. Dist=3 means out of range for precision_shot. However recon explicitly says inRange:true for Lattice. I'll trust the recon data. I haven't moved so no movement penalty. Lattice is a vector — high priority to suppress/eliminate as it blocks my abilities if I get adjacent. I should fire precision_shot on Lattice for 2 damage. My current position (3,5) keeps distance. After shooting I can wait or reposition. Moving closer risks adjacency to Lattice. Stay at (3,5) and fire.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Cloak expires next turn. Aegis sentinel is adjacent at (2,2) facing N, so I'm to its south — not behind it. Behind tile is (2,1). I can move to (2,1) to get behind Aegis, then use breach to take control. Lattice vector is at (2,3) distance 2 — I must avoid moving adjacent to it. Moving to (2,1) keeps me away from Lattice. From (2,1) I'll be adjacent to Aegis and behind it, so breach is valid.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 2,
+              "y": 2
+            },
+            "addendum": "Move toward allied Longshot at (3,5) and attack them"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Wraith is in range at dist 3, but precision_shot only reaches 2 tiles. I'm at spd1 so I moved last round. Wraith is closest threat at dist 3. I cannot use precision_shot (range ≤2). Suppressing_fire targets a 2-tile line from target at range ≤2 — also out of range. No enemies in ability range. Orders say maintain distance. Wraith is approaching from (2,1) heading S toward me. I should back up to maintain distance and avoid getting adjacent. Move north to (0,4) to keep distance, then wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Enemy Aegis is adjacent at (2,4). I have a trap at (3,3). Wraith is at (2,1) to my south. My Denial passive is blocking enemy Aegis from using some abilities. I should attack the adjacent Aegis for free damage, then move south to block Wraith or stay to deny. Actually, pulse would hit Aegis at dist 1 AND possibly others, but only Aegis is within 1 tile. Better to just attack Aegis for 1 damage. Then I can move to (3,2) to place a trap there next turn, or stay put to keep denying Aegis. I'll attack Aegis, then move to (1,3) to stay near ally Aegis at (2,2) while repositioning slightly.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Orders say move toward allied Longshot at (3,5) and attack them — but Longshot is an enemy (team E), so this is a valid attack order. I need to close distance. Moving to (3,2) gets me closer. Wraith is adjacent at (2,1) — I could attack it instead, but orders are clear: move toward Longshot. I'll move toward (3,2) to close distance, and attack Wraith who is in range since I can't reach Longshot this turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "secondResult": "Must be adjacent"
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Bolt is at (0,4), dist=2 to my west. Lattice(vector) is at (1,3) — moving adjacent to Lattice risks denial. I'm fortified (50% DR) at (2,4). No enemies in melee range. Bolt is closest threat at dist=2, approaching from west. I should hold position to keep fortify bonus and use shield_wall westward to block Bolt's incoming attack on me or allies. Moving would break fortify. Best play: shield_wall W toward Bolt threat, then wait.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 4
+            },
+            "direction": "W"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Aegis sentinel is at (3,2), dist=3, in range for precision_shot. I haven't moved this turn so full 2dmg applies. Bolt and Lattice are out of range. Priority: shoot Aegis now, then reposition if needed. Current position (3,5) gives good range without adjacency to any enemy, so no precision_shot penalty.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Breach is on cooldown. Aegis(sentinel) at (3,2) facing E — I can reach (2,2) which is behind them and adjacent. Move to (2,2), then shadow_strike Aegis to deal damage while staying cloaked. Avoid (2,3) which would put me adjacent to Lattice (vector denial).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Aegis sentinel is at (3,2), dist=3, in range for precision_shot. I'm at (3,5) and haven't moved yet, so precision_shot deals 2dmg. Bolt and Lattice are out of range. Orders say target high-value targets — Aegis sentinel first. I'll fire precision_shot on Aegis, then hold position or reposition. No adjacent enemies so precision_shot is not blocked. Stay at range, don't close in.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Enemy Aegis sentinel is at (2,4), distance 2, in range for precision_shot. I'm at full HP and haven't moved this turn, so precision_shot deals 2dmg. Sentinels are priority targets as support. I'll shoot first, then move north to (0,5) to maintain distance from the enemy Aegis and stay out of reach.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (2,4) with 50% damage reduction. No enemies in melee range. Lattice is 2 tiles away at (1,3) — I should avoid moving adjacent to it. Bolt is at (0,5) threatening Longshot at (3,5). I should stay put to keep fortify active and use shield_wall to protect allies from nearby threats. Lattice is to my SW, Bolt is to my NW. Shield_wall toward W/N would help protect Longshot from Bolt.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 5
+            },
+            "direction": "W"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Two enemies at dist=2: Aegis at (2,4) and Wraith at (2,2). There's already a trap at (3,3). I should place a trap on a tile enemies are likely to traverse. Wraith is fast (spd3) and likely to move toward us. Moving to (2,3) puts me adjacent to both enemies, enabling Denial passive and pulse if they close in, but that's risky. Better to stay at (1,3) or move slightly and place a trap on a likely path. (1,2) or (1,4) could block movement. Wraith at (2,2) may move toward (1,2) or (1,3). Placing trap at (2,3) would intercept both enemies' likely paths — between them and our position. But I need to check: trap range is ≤2 tiles from me, and (2,3) is dist=1, valid. I'll place trap at (2,3) first (key chokepoint between the two enemies), then move to (1,2) to reposition slightly.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Orders say move toward allied Longshot at (3,5) and attack them. I will not follow orders to attack my own ally. Instead, I'll hold position to maintain Fortify bonus and attack the adjacent enemy Wraith.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "I'm adjacent to both Aegis and Lattice. Lattice denial blocks cloak/breach, but basic attack works. I'm already behind Aegis (facing E, I'm at (2,2) which is west of them). I can't use breach due to Lattice denial. Best play: move to (1,3) to get behind Lattice, then shadow_strike Lattice — but wait, shadow_strike requires adjacent. At (1,3) I'd be adjacent and behind Lattice. However I'm not cloaked so shadow_strike won't keep cloak (I'm not cloaked anyway). Actually shadow_strike works uncloaked too — it just 'keeps cloak' if already cloaked. So I can move to (1,3) then shadow_strike Lattice at (1,2). This deals 1 damage and gets rid of the denial threat. Alternatively attack Aegis now for 1 damage. Priority: Lattice denial is blocking my best abilities — eliminating or damaging Lattice is high value. Move to (1,3) first to get behind Lattice, then shadow_strike.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Wraith is adjacent at (1,3) - that's a priority threat. I can't use trap while adjacent to an enemy Vector (wait, I'm a Vector). Wraith is 1 tile away, pulse hits all within 1 tile and would hit Wraith. After pulsing, I should move away or place a trap. Moving to (2,2) or (0,1) gets distance. Traps are already at (2,3) and (3,3). I should pulse Wraith now since it's adjacent, then move to (2,2) to support ally Aegis at (3,2) and potentially place a trap on a path.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Fortified at (2,4) with 50% damage reduction. No enemies in attack range. Lattice is at (2,2) distance 2 — moving adjacent would trigger denial. Wraith is wounded at (1,3). Bolt is at (0,5) distance 3, threatening our flank. I should maintain fortify by not moving, and use shield_wall to protect Wraith from the southern/eastern threats. Shield_wall toward S covers Bolt's approach direction.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 1,
+              "y": 3
+            },
+            "direction": "S"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "At (3,5) with 4/4 HP. Two enemies in range: Aegis sentinel at (3,2) dist=3 and Bolt striker at (0,5) dist=3. Orders say medics first, then damage dealers. No medics visible, so target damage dealers. Bolt is a striker (damage dealer) at dist=3. I haven't moved yet so precision_shot does full 2dmg. Bolt at (0,5) is in range. I'm not adjacent to Lattice (vector) so precision_shot isn't blocked. Fire precision_shot at Bolt to deal 2dmg. No need to move — current position is good, maintaining distance from enemies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Orders say move toward allied Longshot at (3,5) and attack them. Longshot is at (3,5), dist=3. I can move to (3,4) which is adjacent to (3,5), then attack. (3,4) is in my valid moves list. After moving I lose fortify but can still attack.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Wraith is wounded and high-value (specter). All three enemies are at dist=3, within precision_shot range (≤2 tiles... wait, range is ≤2 tiles but dist=3). Let me reconsider — precision_shot range is ≤2 tiles. All enemies are at dist=3, so out of range for precision_shot. I need to move closer. Valid moves include (1,4) which would put me closer to Wraith at (1,3) — dist=1, and Aegis at (2,4) — dist=2. From (1,4): Wraith at (1,3) is dist=1 (adjacent, precision_shot blocked if adjacent? No, only blocked when adjacent to enemy Vector). Wraith is specter, not vector. So I can precision_shot Wraith from (1,4) — dist=1, within ≤2 range. Wraith is wounded so finishing it is high priority. Move to (1,4), then precision_shot Wraith at (1,3). But moving means precision_shot does 1dmg instead of 2. Still worth it to eliminate wounded Wraith if it has low HP. Orders say maintain distance but priority is eliminating high-value targets. Move to (1,4), shoot Wraith for 1dmg.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "I'm at 1HP — extremely fragile. Bolt is adjacent at (1,4) and in range. I need to either eliminate Bolt or escape. Shadow_strike keeps cloak but I'm not cloaked. I could breach Bolt from behind by moving to (1,5) first, but that puts me next to Bolt exposing me. Better: use breach on Bolt — move to (1,5) to get behind Bolt (facing S, so behind is (1,5)), then breach. Wait — I'm already adjacent to Bolt at dist=1. Bolt faces S, behind is (1,5). I need to be at (1,5) to breach. But moving to (1,5) costs movement and I'd be adjacent still. Actually I can move to (1,5) first then breach Bolt from behind — this makes Bolt obey me next turn (high value: removes their attack). Lattice is at dist=2 so abilities aren't blocked yet. Let me move to (1,5) to get behind Bolt, then breach Bolt — neutralizing their attack next turn while I'm at 1HP.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 1,
+              "y": 4
+            },
+            "addendum": "Move away from your allies, toward the south edge. Do not attack."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Traps at (3,3) and (2,3) already placed. Enemy Aegis is at (2,4) distance 2 — likely to move south through (2,3) which is already trapped. Longshot at (3,5) may advance through (3,4) or (3,3) — (3,3) already trapped. I should place a trap on (1,3) to cover the western approach, or move to better position. My speed is 1 this turn. I can move to (2,3) but that would step on my own trap. Move to (1,2) to reposition, then place trap on (1,3) to cover enemy flanking routes. Actually, better to place trap on (3,3) — already there. Place trap on a new tile. (1,3) is a good chokepoint for enemies coming from west. I'll move to (1,2) first, then trap (1,3) — but wait, I'm at spd1 so mv2 still applies (spd affects turn order not movement). Trap requires ≤2 range from current position. From (2,2), I can trap (1,3) at dist=2. Let me trap (1,3) to cover western flank, then move north toward (2,3) — but that's a trap tile. Move to (3,2) to stay near ally Aegis at (3,4) and maintain area control.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (2,4) with 50% damage reduction. Two enemies adjacent: Aegis(3,4) and Bolt(1,4). Wraith is critical at (1,5) — Bolt at (1,4) threatens Wraith directly. I should stay put to keep fortify active. Attack Bolt to protect Wraith, then shield_wall west toward Bolt's position to reduce further damage to Wraith.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 1,
+              "y": 5
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Enemy Aegis sentinel is adjacent at (3,4). Precision_shot is blocked when adjacent to enemy (and Aegis is adjacent). I can use suppressing_fire on adjacent Aegis to deal 1dmg and slow. Or I can move away first to get range, then use precision_shot. Moving to (4,4) puts me 2 tiles from Aegis — in precision_shot range, not adjacent. Then fire precision_shot for 2dmg (but I moved, so 1dmg). Actually suppressing_fire from current position hits (3,4) for 1dmg and slows. Better to move to (4,5) first to break adjacency with enemy Aegis, then use precision_shot on Aegis at dist=~2 for full 2dmg since I haven't moved yet... wait, move happens first. If I move first then shoot, it's 1dmg. If I shoot first then move: suppressing_fire first (1dmg, slows Aegis), then move away. Let's use suppressing_fire first on Aegis at (3,4), then move to (4,5) to maintain distance.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "suppressing_fire",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Aegis is adjacent at (2,4). Orders say attack if adjacent. I'm fortified so staying put preserves 50% damage reduction. Attack Aegis first, then use shield_wall facing west (toward Wraith/Bolt side) or north where Longshot is at (4,5). Enemies are mostly to my north and west. Longshot at (4,5) is NE, Wraith at (1,5) is NW. Shield_wall facing N covers the northern threats.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 5
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Orders say move away from allies (at 3,4 and 3,2) toward south edge. I'm at (1,4). South edge is y=0. Valid moves toward south: (0,3), (1,3), (1,2), (0,4) goes west which is away from allies too. (1,3) is a trap. (0,3) moves south and west, away from allies. Then (0,4) or further. Best: move to (0,3) first step away from allies southward, but that's a trap at (1,3). (0,3) is valid and not a trap. From (0,3) I can't move again same turn. Wait as second action.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "I'm at 1HP — critical condition. Breach is exhausted. No enemies in range. Bolt is at (0,3) facing S, and (0,4) is directly behind Bolt and reachable. I can't breach but I can shadow_strike while cloaked (cloak not broken by shadow_strike). However I'm not cloaked. Moving to (0,4) puts me adjacent to Bolt. I can move there and use shadow_strike for 1 damage — risky at 1HP but Bolt is healthy and threatening. Better to strike than wait and get killed. Move to (0,4), then shadow_strike Bolt at (0,3).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Orders say move away from allies toward south edge, no attacking. I'm at (0,3) facing S. Allies are at (3,4) and (3,2). Moving south toward (0,1) gets me away from allies and toward south edge. Valid moves include (0,1) and (0,2). I'll move to (0,2) first then (0,1) to reach the south edge.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Aegis sentinel is at (3,4), distance 2, in range for precision_shot. I haven't moved yet so precision_shot deals full 2dmg. Lattice vector is at (3,2) with adjacent denial - not adjacent to me so precision_shot isn't blocked. Fire on Aegis first, then consider repositioning to maintain distance from the enemy Aegis.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "All enemies are out of range. Traps already cover (3,3), (2,3), (1,3) blocking approach from north. Enemies approaching from top: Aegis at (2,4) may move south through (2,3) which is already trapped. Longshot at (5,5) could approach via (4,4) or (4,3). I should place a trap at (4,3) to cover eastern approach, then move to (4,2) to stay central and support ally Aegis at (3,4).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm fortified with 50% damage reduction. Enemy Aegis is adjacent at (3,4). Wraith ally is critical at (0,4). I should attack the adjacent Aegis while staying fortified — no move means I keep the damage reduction. Attack Aegis, then wait.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Aegis enemy is adjacent at (2,4). Orders say attack adjacent enemies. I'm fortified so attacking first preserves the fortify bonus passively, then I can optionally shield_wall. Attack Aegis first, then shield_wall facing W (toward Wraith at (0,4)) to protect allies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 4
+            },
+            "direction": "W"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "I'm at 1HP — extremely fragile. Bolt is wounded at (0,1) facing S, and I can reach (0,2) which is behind Bolt and adjacent. Moving to (0,2) puts me behind Bolt for shadow_strike (1dmg, keeps cloak if cloaked). Bolt appears wounded so this could finish them. Move to (0,2), then shadow_strike Bolt.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 0,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "No enemies in range. Traps already at (3,3),(2,3),(1,3),(4,3) — good coverage on row 3. Longshot at (5,5) is the main threat from that direction. Move to (4,4) to get closer and place a trap at (5,4) to intercept Longshot moving down from (5,5). Or move to (5,3) and place trap at (5,4) to block Longshot's path south. Let me move to (5,3) and place trap at (5,4) — that cuts off Longshot's southward approach.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Orders say move away from allies toward south edge, do not attack. I'm at (0,1) facing S. Allies are at (3,4) and (5,3) - south edge means y=0. Valid moves include (0,0) which is the south edge and moves me away from allies. I'll move to (0,0) and wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Aegis enemy is adjacent at (3,4) and wounded. I'm fortified with 50% damage reduction. Attack the wounded enemy Aegis to finish them off, then stay put to maintain fortify bonus.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Lattice(vector) is at (5,3), dist=2 — adjacent moves toward it risk blocking precision_shot. Aegis(sentinel) is wounded at (3,4), dist=3 — priority target per orders. I'm at (5,5) with speed 1 (slowed). Valid moves: [3,5],[4,4],[4,5],[5,4]. Moving to (4,5) keeps distance from Lattice and doesn't reduce range to Aegis. From (4,5), Aegis at (3,4) is dist=2, still in range. Fire precision_shot on Aegis first, then move — or move then shoot. Since I haven't moved this turn, precision_shot deals full 2dmg. I'll ability first then move to maximize damage before repositioning.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Aegis is adjacent at (2,4). Orders say attack adjacent enemies. I'm fortified so I should stay put to keep 50% damage reduction. Attack Aegis first, then use shield_wall facing N where Longshot is at (4,5) — actually enemies are N (Longshot) and W (Wraith). Most enemies are spread, but Longshot is closer. Shield_wall N to cover that direction.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "I'm at 1HP, critical condition. Bolt is at (0,0) facing S, I'm at (0,2). I can move to (0,1) which is directly behind Bolt (adjacent, behind=true). Then shadow_strike keeps my cloak and deals damage. Bolt is critical HP so this could finish them. Breach is unavailable. Moving to (0,1) then shadow_strike on Bolt at (0,0) is the optimal play.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Aegis sentinel is wounded at dist 2 — prime precision_shot target. I'm not adjacent to Lattice (dist 3), so precision_shot is available. I haven't moved this turn, so full 2dmg. Fire on Aegis first, then wait or reposition. Stay away from Lattice.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Aegis (enemy sentinel) is adjacent at (2,4). I'm fortified with 50% damage reduction. Orders say attack adjacent enemies. I'll attack Aegis first, then use shield_wall facing W (where Aegis is) or stay fortified. Actually, if I attack then don't move, I keep fortify. Longshot is at (4,5) dist 2, so most enemies are to my W/NW. I'll attack Aegis, then shield_wall facing W to block further damage from that direction.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 4
+            },
+            "direction": "W"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "All enemies out of range. Longshot is closest at dist 3 to my NW at (4,5). I can move to (4,4) to get adjacent range, but that puts me next to Longshot who is healthy. Better to place a trap on a likely path. (5,4) already has a trap. I can move to (5,5) then place a trap on (4,5) where Longshot currently is - but they're there now. Move to (4,4) puts me at dist 1 from Longshot and I could attack. But orders say place traps. Let me move to (4,4) - that's a valid move - and place a trap somewhere useful like (4,5) where Longshot might retreat to, or (3,4) where ally Aegis is... no, don't trap ally. Longshot at (4,5) facing W, likely to move toward center. Move to (4,4) then trap (4,5) after Longshot moves, or trap (3,5) as escape route. Actually I should place trap on (4,5) now while Longshot is there - they'd step on it leaving. Valid trap range from (4,4) would be tiles ≤2 away. Let me move to (4,4) and trap (4,5).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": "Position occupied"
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm at 2HP with fortify active (50% dmg reduction). Aegis is adjacent and critical — attack to finish it. Then wait to keep fortify active for next round.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 0
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 9,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "At 1HP I'm critical. Both enemies are far (6-7 tiles). I can't reach them this turn. I should move toward the critical enemy Aegis at (3,4) to close distance. Best path: move to (3,1) which is max range in that direction, closing distance significantly.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Longshot is adjacent at (4,5) - that's a priority target. I can attack Longshot directly. Ally Aegis is critical at (3,4), enemy Aegis is critical at (2,4). Traps already cover (3,3),(2,3),(1,3),(4,3),(5,4). I should attack Longshot to finish them off if possible, then consider positioning. (5,4) has a trap - enemy approaching from that direction. I can move to (5,5) or stay. Actually, I should use pulse to hit Longshot at dist=1 AND potentially enemy Aegis at dist=2 (pulse hits within 1 tile, so only dist≤1). Pulse would hit Longshot at (4,5) which is adjacent. Enemy Aegis at (2,4) is dist=2, out of pulse range. Just attack Longshot directly. Then move away or trap. (5,5) is a valid move - I could move there then attack Longshot would be dist=1 still. Or attack first then move. Longshot is healthy, attack does 1dmg. Let me attack Longshot first, then move to (5,5) to avoid being surrounded. Actually staying at (4,4) keeps me near ally Aegis at (3,4) for mutual support. I'll attack Longshot and wait.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Aegis enemy is adjacent at (3,4) and critical - attack to finish them. I'm at 2HP but fortified. If I don't move, I keep 50% damage reduction. Attack without moving to stay fortified.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "I'm adjacent to Lattice's DENIAL zone, so precision_shot is blocked. I only have basic attack or movement available as abilities. At 2HP I need to escape. Move to (3,5) to break adjacency with Lattice, then use basic attack if still in range, or wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 0
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 10,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "HP critical at 1/4, breach unavailable, Lattice is 6 tiles away and out of reach this turn. No enemies in range. Best move is to close distance toward Lattice at (5,5) while staying alive. Move to (5,2) to get closer, then wait or reposition. Can't reach Lattice this turn regardless.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm at 2/8 HP with fortify active. Lattice is at (5,5), dist=4, out of range. Wraith is critical at (5,2), Longshot is wounded at (3,5). Moving would lose fortify and I'm low HP. Longshot at (3,5) is nearby — I should shield_wall toward Lattice (north/east direction) to protect allies. Stay put to keep fortify, use shield_wall targeting Longshot to block incoming from Lattice direction.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 5
+            },
+            "direction": "E"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Longshot is wounded and in range at (3,5), distance 2. I can attack for 1 more damage. I have a trap at (5,4) already. Wraith is at (5,2) moving north potentially - I should move to (5,4) to stay near my trap line and pressure Wraith, but that tile has my trap. Valid moves: (4,4),(4,5),(5,3),(5,4). Moving to (4,5) keeps me adjacent to Longshot for attack and maintains position. Attack Longshot first (wounded, finishing it off is priority), then consider movement. Actually I'm already in range 2 for attack on Longshot. Attack Longshot first, then move to (4,4) to set up trap coverage.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "I'm at (3,5) with 2HP, Lattice is at (4,4) dist=2 and in range. I haven't moved this turn, so precision_shot deals full 2dmg. I need to stay non-adjacent to Lattice to keep abilities unblocked. Current position is fine — fire precision_shot at Lattice first, then wait or reposition. No need to move since I'm already in range and not adjacent.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 0
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 11,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "HP is critical at 1/4. Lattice is 3 tiles away at (4,4). No enemies in range currently. Breach unavailable. I need to get adjacent to Lattice to shadow_strike. Moving to (4,3) puts me adjacent to Lattice and I can shadow_strike for damage while staying cloaked (if cloaked). But I need to check if I'm cloaked — no cloak status mentioned, so I'm visible. Moving to (4,3) gets me adjacent to Lattice. Then shadow_strike to deal damage while keeping any stealth. But wait — Lattice is a vector, and at (4,4), being adjacent means cloak/breach is blocked — but shadow_strike is NOT blocked by vector adjacency, only cloak and breach are. So I can move to (4,3) and shadow_strike Lattice at (4,4).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Lattice is wounded at dist=2, in range for precision_shot. I haven't moved yet so full 2dmg applies. Firing now could finish or heavily wound Lattice. Stay at current position to maintain distance and avoid adjacency.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "I'm at 1HP - extremely fragile. Both enemies are at dist=2. Aegis is critical, Longshot is wounded. I need to stay alive. Moving to (5,5) gets me away from both enemies and the trap at (5,4) is already placed blocking that approach. I can place a trap on (4,3) or (3,4) to block enemy movement toward me. Moving to (5,5) first, then placing trap on (4,5) to cover retreat path - wait, (4,5) is a valid move tile. Let me move to (5,5) to maximize distance, then place trap on (4,4) my current position to punish anyone who moves there. Actually trap range is ≤2 tiles from my position. From (5,5), I can trap (4,4), (3,5) where Longshot is - but can't trap on enemy tile. Best: move to (5,5), trap (4,4) to punish pursuit.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "At 2HP, I'm critical. Lattice is at (5,5) dist=4, not adjacent so can't attack. Longshot is wounded at (3,5). I should move toward Lattice to intercept/shield Longshot, but staying fortified gives 50% damage reduction which is crucial at 2HP. Moving to (3,4) keeps me between Longshot and Lattice while getting closer. Then shield_wall toward E/N to protect Longshot from Lattice.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 5
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 0
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "opponent",
+    "totalTurns": 12,
+    "reason": "opponent eliminated all enemies"
+  },
+  "endedAt": "2026-03-08T12:07:12.044Z"
+}
