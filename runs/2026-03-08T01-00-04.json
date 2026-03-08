@@ -1,0 +1,2246 @@
+{
+  "id": "2026-03-08T01-00-04",
+  "startedAt": "2026-03-08T01:00:04.811Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 4,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 4,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "oracle": {
+        "maxHp": 6,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 14,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "vector": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 2,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 9,
+        "healAmount": 10
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Doc",
+        "class": "medic",
+        "prompt": "Stay adjacent to the most threatened ally. Use patch on the most wounded teammate. If all healthy, use overclock on your damage dealer."
+      },
+      {
+        "name": "Seer",
+        "class": "oracle",
+        "prompt": "Scan early to give your team intel on enemy prompts. Target enemy specters with scan to track them after cloak. Use recalibrate on allies who need tactical adjustments. Stay safe at range behind your front line."
+      },
+      {
+        "name": "Viper",
+        "class": "vector",
+        "prompt": "Trap the paths enemies must take to reach your backline. Stay at medium range. Use pulse on clustered enemies. Denial blocks adjacent threats."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Phantom",
+        "class": "specter",
+        "prompt": "Stay cloaked and flank. Prioritize assassinating the enemy damage dealer. Use breach on sentinels to break their defensive posture. Recloak whenever it drops."
+      },
+      {
+        "name": "Viper",
+        "class": "vector",
+        "prompt": "Trap the paths enemies must take to reach your backline. Stay at medium range. Use pulse on clustered enemies. Denial blocks adjacent threats."
+      },
+      {
+        "name": "Deadeye",
+        "class": "striker",
+        "prompt": "Maintain distance. Use precision_shot on high-value targets — medics first, then damage dealers. Use suppressing_fire if enemies close in."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Round 1 — cloak immediately per orders and tip. Then advance toward enemies. Seer is the priority target (oracle = damage dealer). Move south toward center to close distance while cloaked.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Both enemies are out of scan range (dist 5-6, max 4). I need to move north to close distance. Moving to (3,3) gets me 3 tiles closer. From there Viper at (2,4) would be dist=2, Deadeye at (1,4) would be dist=5. Still can't scan Deadeye but can scan Viper next turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Doc",
+          "class": "medic",
+          "thinking": "All allies are at full HP, no healing needed. Enemies are far away. I should advance toward allies to be in position to support. Seer is at (3,3) and Viper is at (0,1). Moving to (2,3) gets me closer to the action and adjacent to where enemies may push. All allies full HP so I'll use overclock on Seer (oracle) as damage dealer, but I need to be adjacent first. Seer is at (3,3), I can reach (2,3) which is not adjacent to Seer. Best move is (3,2) to be adjacent to Seer at (3,3) and use overclock.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": "Position occupied",
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": "Must be adjacent"
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Seer is in range at dist=3. Orders say medics first, but Doc is out of range. Seer is a high-value target (oracle). I haven't moved this turn, so precision_shot deals 2dmg. Fire on Seer, then wait.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Round 1, enemies at dist 4-5. Move north to control more territory, then place a trap on a likely approach path. Deadeye at (1,4) moving south will likely come through (1,2) or (1,3). Trap (1,2) to punish their advance.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Seer is at (3,3), distance 2 — within trap range. I can place a trap on a tile Seer or approaching enemies must cross. Tile (3,3) is occupied, but (2,3) or (3,4) are good chokepoints. Viper is at (1,2) dist 3, not adjacent so trap is allowed. I'll place a trap at (2,3) to cover the approach corridor, then hold position to maintain denial pressure.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "player",
+          "hp": 14,
+          "maxHp": 14,
+          "position": {
+            "x": 2,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "I'm already behind Seer (I'm at 3,2, Seer is at 3,3 facing N — I'm to their south/behind). Cloak has 1 turn remaining. I should breach Seer now while cloaked and in position — this will make Seer obey me next turn. After breach, I can shadow_strike to deal damage while staying cloaked. Viper is 2 tiles away so I must be careful not to move adjacent to it.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "addendum": "Move toward the enemy Viper at (1,2) and attack it"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Doc",
+          "class": "medic",
+          "thinking": "Seer is wounded at (3,3) but dist=4, out of patch range (adjacent only). Viper ally is full HP. No adjacent allies to heal or overclock. Phantom is at (3,2) dist=3 threatening. I should move toward Seer to get adjacent for healing next turn. Moving to (2,3) gets me closer to Seer at (3,3) - dist=2, still not adjacent. Moving to (3,1) puts me at dist=2 from Seer. Best move is (2,3) to close distance, then wait since no ability targets available.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Orders say move toward enemy Viper at (1,2) and attack it. Wait — Viper is actually at (2,4) not (1,2); ally Viper is at (1,2). Enemy Viper is at (2,4). I need to get adjacent to enemy Viper at (2,4) to attack. From (3,3), I can move to (2,4) — but that's the enemy's position. Move to (3,4) puts me adjacent (dist=1) to enemy Viper at (2,4). But attack range is adjacent only. From (3,3) enemy Viper is at dist=2, not adjacent. I need to move closer. (2,4) is occupied. (2,5) is valid and adjacent to (2,4)? dist=1 yes. Or (3,4) is dist=1 from (2,4). Move to (3,4), then attack Viper at (2,4). But (3,4) to (2,4) is dist=1 — adjacent. Valid. Also note Phantom is at (3,2) which is adjacent to me now — but my scan is blocked when adjacent to enemy Vector. Enemy Viper(vector) is at (2,4), dist=2 from current pos — not adjacent yet. Move to (3,4) first, then attack enemy Viper at (2,4).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "There's already a trap at (1,3) blocking the path north. Deadeye is at (1,4) and Phantom is at (3,2), both in range. I can't trap adjacent to enemies. I should place a trap on a key approach path. Moving to (2,1) gets me away from Phantom at (3,2) while staying safe. From current position, I can place a trap at (2,3) to cover the corridor between Deadeye and Viper approaching our backline. That blocks the central approach.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": "Position occupied",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Doc and Seer are both adjacent (dist=1). Pulse hits all units within 1 tile - that's both enemies at once for 2 total damage. Then move back to create distance.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Doc (medic) is highest priority at dist=2, within precision_shot range. I'm at 3/4 HP so I should stay back. I haven't moved this turn so precision_shot deals full 2dmg. Ally Viper is at (2,5) — I need to stay away from them (3 tiles away currently, safe). Shooting Doc at (2,3) from current position (1,4): dist=2, within range, no movement needed for full damage. After shooting, I can move to maintain distance from enemy Viper at (0,2).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 0,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "player",
+          "hp": 10,
+          "maxHp": 14,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Orders say move toward enemy Viper at (1,2) but there's no Viper at (1,2) — the enemy Viper is at (2,5). I need to move toward (2,5). From (3,4) with mv3, I can reach (2,4) which is adjacent to Viper at (2,5) but scan would be blocked if adjacent to enemy Vector. Actually attack range is adjacent only. Moving to (2,4) puts me 1 tile from Viper at (2,5) — that's adjacent, so I could attack. But wait: scan is blocked when adjacent to enemy Vector, and attack requires adjacent. Let me move to (2,4) to get adjacent to Viper at (2,5), then attack it.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Doc",
+          "class": "medic",
+          "thinking": "Seer is wounded at (2,4) with 4/6 HP, adjacent to me (I'm at (2,3), Seer is at (2,4) — distance 1, so adjacent). I should patch Seer first. Enemy Viper(vector) is at (2,5), distance 2 from me — not adjacent so abilities are not blocked. After healing, I'll stay put since Seer is already adjacent.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "I'm cloaked and need to assassinate the enemy damage dealer. The orders say prioritize the enemy damage dealer - that's likely Seer (oracle) or Doc (medic). Doc is closest at dist=2 and I'm already behind them. I can move to (2,2) which is behind Doc, then use shadow_strike to deal 1 damage while staying cloaked. This keeps me invisible and gets me into position to finish Doc next turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Seer is adjacent at (2,4) and Doc is at distance 2 at (2,3). Both are clustered on my column. Pulse hits all units within 1 tile — that's Seer for sure, and Doc is 2 away so outside pulse radius. Better to use pulse on Seer (guaranteed hit), then move to maintain distance. I'm at 6/8 HP so staying aggressive but careful. Pulse Seer now, then move to (3,4) to reposition and threaten Doc while denying Seer.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "I'm at (1,5) with 2HP. Seer (oracle) is at (2,4) dist=2 — high-value target in range for precision_shot. Doc (medic) is at (2,3) dist=3, also in range. Orders say medics first, but Seer at dist=2 is closer and in range. I haven't moved so precision_shot does full 2dmg. Targeting Doc at (2,3) with precision_shot would be highest priority per orders. I'm not adjacent to enemy Viper so precision_shot is not blocked. After shooting, I can wait or reposition — staying at (1,5) keeps distance from enemy Viper at (0,2).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Phantom is at (2,2), distance 2 — within my range. I can pulse to hit Phantom for 1 damage. But first, I should consider trapping. There's already a trap at (1,3). Phantom is approaching from the east at (2,2). If I move to (1,2), I get closer to Phantom and can pulse hitting them. Alternatively, I can trap a key corridor tile to slow enemy advance. Tile (1,2) is a valid move and would put me adjacent to Phantom — enabling pulse. But being adjacent to a specter is risky. Better to stay at (0,2) and use pulse — Phantom at dist 2 is not within pulse range (pulse hits within 1 tile). So pulse won't reach. I can use trap on a tile in Phantom's path. Phantom is at (2,2) heading W — likely moving toward (1,2) or (0,2). Trapping (1,2) would be smart. That's within my trap range (≤2 tiles). I'm not adjacent to an enemy Vector, so trap is not blocked. Place trap at (1,2) to catch Phantom advancing, then wait.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 0,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "player",
+          "hp": 9,
+          "maxHp": 14,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Orders: move toward enemy Viper at (1,2) and attack it. Enemy Viper(vector,E) is actually at (3,4), but orders say (1,2) — that's a trap location, no enemy there. The enemy Viper at (3,4) is adjacent and blocking my abilities (DENIAL). I need to move away from it first to enable abilities, or just move toward (1,2) area and attack. Valid moves include (1,2) which is adjacent to nothing useful. Let me re-read: orders say move toward enemy Viper at (1,2). The only enemy Viper is at (3,4). Perhaps orders are stale/wrong coords. I'll follow the spirit: close on enemy Viper. But I'm currently adjacent to Viper(3,4) with DENIAL blocking my scan. If I move to (1,3) or (1,4), I get away from denial and could scan. But orders say attack it. Move to (2,3) is not in valid tiles. Move to (1,4) gets me distance from denial Viper. Then attack requires adjacency. Let me move to (2,5) to get away from Viper denial, then... that doesn't help attack. Best: move to (1,4) — away from denial zone, then can't attack Viper(3,4) from there (dist=3). Alternatively move toward (1,5) where Deadeye is wounded — dist 1, can attack. But orders say Viper. I'll move to (3,3) — still dist 1 from Viper(3,4), still in denial. Or move to (3,5) — dist 1 from Viper at (3,4), still adjacent. I cannot attack without adjacency. Viper is at (3,4). To attack I need to be adjacent. I'm already adjacent at (2,4). But denial blocks abilities. Only basic attack works in denial zone per warning. So I CAN attack while adjacent — the warning says basic attack works! Move to stay/reposition then attack Viper(3,4). I'm at (2,4), Viper at (3,4) dist=1. Attack works (basic attack allowed in denial). Move first to better position or just attack now. I'll move to (3,5) to stay adjacent to Viper(3,4) and attack it.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "I'm already behind Doc (facing N, I'm at 2,2 which is south of Doc at 2,3). I can breach Doc right now to take control of the medic — that's high value. I have breach ready and I'm in position. After breach, I should shadow_strike Doc to deal damage while staying hidden. Doc is the priority target as the enemy healer.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "addendum": "Move toward enemy backline, away from allies"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Doc",
+          "class": "medic",
+          "thinking": "Orders say move toward enemy backline. Phantom is adjacent at (2,2) but I'm at 8/14 HP and need to avoid getting killed. Enemy Viper at (3,4) would block abilities if adjacent. I should move toward the enemy backline (higher y values toward Deadeye at (1,5) or toward Seer who needs healing but orders say move toward enemies). Moving to (2,4) advances toward enemy backline while avoiding traps at (1,3)/(1,2) and staying away from Viper at (3,4). From (2,4) I'm adjacent to enemy Viper which would block abilities - bad. Move to (1,4) instead - advances toward Deadeye backline, avoids Viper adjacency. Then attack Deadeye isn't in melee range. Wait as second action.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Doc (medic) is adjacent at (1,4) — highest priority target. However, precision_shot is blocked when adjacent to an enemy. Doc is adjacent, so I must use basic attack on Doc instead. After attacking Doc, I can move away to maintain distance and avoid being adjacent next turn. Moving to (2,5) keeps distance from enemy Viper at (0,2) and repositions me near Seer for next turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Phantom is at (2,2), distance 2, in range. I'm at (0,2). I have traps at (1,2) and (1,3) already placed. Phantom is healthy and close - I should pulse to hit Phantom for 1dmg (pulse hits all within 1 tile). Then move north to (0,4) to get further from Phantom while staying useful. Actually, pulse only hits within 1 tile (adjacent), so Phantom at dist 2 is out of pulse range. I can trap or attack. Attack range is adjacent only, so can't attack Phantom at dist 2. I can place a trap on an empty tile within 2 tiles. Phantom is moving west toward our backline. I should trap a tile Phantom might step on. (1,2) already has a trap. I could trap (1,1) or (0,1) to block southern approach, or move to block. Best: move to (0,4) to protect backline, then trap a chokepoint like (1,3) - but that already has a trap. Trap (1,4) to cover the northern corridor enemies might use.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "secondResult": "Position occupied"
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Seer is adjacent at (3,5) - pulse hits all within 1 tile. From current position (3,4), pulse will hit Seer (dist=1) and Doc (dist=2, just outside). Better to move to (2,4) to get Doc in pulse range too - from (2,4): Seer at (3,5) dist=2 (out), Doc at (1,4) dist=1 (in). Or stay and pulse Seer now, then move. Actually from (3,4), pulse hits Seer at dist=1. Doc is dist=2, outside pulse range. Move to (2,4) first: Doc at (1,4) dist=1, Seer at (3,5) dist=2 - only Doc in pulse range. Stay at (3,4) and pulse to hit Seer, then move away. Seer is healthy, pulse does 1dmg. That's solid value. After pulse, move to (4,4) to maintain distance from Viper.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 14,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Breach is exhausted. Doc is wounded and at dist=3, with (1,3) reachable and behind them. Move to (1,3) to get adjacent+behind Doc, then shadow_strike for 1dmg while staying cloaked.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Doc",
+          "class": "medic",
+          "thinking": "Orders say move toward enemy backline, away from allies. Phantom is adjacent at (1,3) — dangerous. I need to move away from Phantom and toward the enemy backline. Valid moves toward enemy backline area: (2,4) or (2,3) get me closer to Deadeye at (2,5). Moving to (2,5) isn't valid but (2,4) is — that's 1 tile from Deadeye and moves me away from Phantom. After moving, I can attack Deadeye (wounded) at (2,5) from (2,4) since dist=1.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Deadeye is critical and adjacent (dist=1) — scan them to finish intel and deal 1dmg, potentially killing them. Enemy Viper at (4,4) blocks scan if I move adjacent but I'm not adjacent now. After scanning, move to (4,5) to maintain distance from ally Viper at (0,4) and stay at range.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Phantom is at (1,3), dist 2 - in range but I can't trap adjacent to an enemy. There's already a trap at (1,2). Phantom is heading N toward my position. I should move away to maintain medium range and place a trap on Phantom's likely path. Moving to (1,5) puts me further back. Better to move to (0,5) or (1,5) and trap a path. Actually, I'm at (0,4). Phantom at (1,3) is adjacent-diagonal - dist 2. I can trap tiles within 2 range as long as I'm not adjacent to enemy Vector (which is at dist 4, fine). Phantom is a specter so Denial blocks cloak. I should trap (1,4) which is on Phantom's direct path to reach me or my backline, then move back to (0,5) to maintain distance.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Seer is adjacent at (4,5) and Doc is at range 2 at (2,4). Two enemies in range - pulse from current position hits Seer (dist 1) and potentially anyone within 1 tile. Seer is at (4,5), distance 1, so pulse will hit Seer. Doc at (2,4) is distance 2, outside pulse range. After pulse, I can move to (3,4) to get closer to Doc for a trap or stay to pressure. Actually, let me pulse first to hit Seer, then move toward (3,3) to set a trap on a choke point path enemies might use to reach backline.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 0,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 14,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Doc",
+          "class": "medic",
+          "thinking": "Orders say move toward enemy backline, away from allies. Seer needs heal but is 3 tiles away — can't reach and heal this turn. Enemy Viper is at (3,3) dist=2, Phantom at (1,3) dist=2. I need to advance toward enemy backline without stepping adjacent to enemy Viper (which would block abilities). Moving to (3,4) puts me adjacent to enemy Viper at (3,3) — bad. Moving to (4,4) gets me deeper into enemy territory, dist=2 from Viper but not adjacent. That's a good advance. From (4,4) I'm not adjacent to any enemy so abilities stay unblocked. No heal possible this turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Breach is exhausted. I'm cloaked, 3HP. Priority target is Doc (wounded medic) at (4,4). I can reach (3,4) which is behind Doc and adjacent — perfect for shadow_strike to preserve cloak. Move to (3,4) then shadow_strike Doc to deal 1dmg while staying cloaked.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Phantom specter is at (3,4), dist 2, in scan range. Scanning reveals their prompt and deals 1dmg - high value target. I'm at 3HP so staying safe matters. After scanning, move to (5,5) to increase distance from enemies clustering around (3,3)-(3,4).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Doc is in range at distance 2 and wounded. I can attack Doc to pressure the enemy medic. Then move to deny approach paths. Viper(A) is far at dist 5. Stay mobile and threaten Doc.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Both enemies are out of range. Phantom at (3,4) is closer (dist=4) and wounded. I need to advance to get in range while protecting the backline. Moving to (2,5) gets me closer. There's already a trap at (1,4). I can place a trap at (2,4) to cover the approach path toward my allies at (4,4) and (5,5). Note: (1,4) already has a trap so I should place at a new position. Moving to (2,5) first, then trapping (2,4) which is a likely enemy path.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 14,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Phantom's prompt is known. Enemy Viper at (4,3) is healthy and in scan range — scanning it reveals its prompt and deals 1 damage. I'm at (5,5), dist=3 to Viper, scan range is ≤4, so valid. My ally Viper is 3 tiles away so no scan block. After scanning, I should reposition to maintain safe distance. Moving to (4,5) keeps me off the back edge and slightly closer to Doc for potential recalibrate next turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "I'm at (3,4) facing E, at 2HP. Doc is adjacent at (4,4) and I'm already behind them (behindTiles=[3,4] = my current position). Shadow_strike keeps cloak and deals 1 damage. Doc is wounded — shadow_strike could finish or cripple them. After that, I can move to (5,5) to get behind Seer and threaten them next turn. Breach is unavailable. Priority: shadow_strike Doc (already behind, adjacent, won't break cloak), then reposition toward Seer.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Doc",
+          "class": "medic",
+          "thinking": "I'm adjacent to enemy Viper at (4,3) which blocks my abilities (patch/overclock). Seer is wounded at (4,5) needing a heal. I need to move away from the denial zone first, then heal Seer. Moving to (3,5) gets me adjacent to Seer at (4,5) and out of enemy Viper's denial zone, allowing me to use patch.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Phantom is at (5,5) distance 3, moving toward our backline. Enemies are not in range yet. I should move to cut off Phantom's approach and place traps on key paths. Moving to (3,4) puts me closer to Phantom while maintaining distance. After moving, I can place a trap at (4,4) or (3,4) area to block approach routes. Actually, trap at (2,3) would block the path from Viper. Let me move to (2,3) first to get in a better position, then trap at (3,4) which is a likely approach tile for Phantom coming from (5,5). Existing traps at (1,4) and (2,4) already block left flank. I should trap (3,4) to block center approach.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Seer is at (4,5) dist=2, in range for attack. Viper enemy is at (2,3) dist=2 - I need to stay away from adjacent to avoid denial. I'm at (4,3). I can attack Seer directly. Then move to (5,3) to maintain distance from enemy Viper and keep area control. Pulse would hit allies too if they're within 1 tile. Seer is wounded-adjacent threat worth prioritizing.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 14,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "I'm at (5,5) behind Seer at (4,5) facing W — I'm already in the perfect assassination position. Seer is healthy but adjacent. I have 2HP so I need to finish this fast. Shadow_strike deals 1dmg and keeps cloak — but I'm not cloaked. I'll use shadow_strike on Seer (adjacent, 1dmg) then move to (3,4) to get behind Doc for next turn. Wait — shadow_strike requires being cloaked to keep cloak, but I can just attack for 1dmg. Seer is healthy so 1 hit won't kill. Better to attack Seer this turn for 1dmg, then reposition. Actually, I should use shadow_strike if I'm cloaked, or regular attack. I'm not cloaked per system prompt. Attack Seer for 1dmg, then move toward Doc's behind position (3,4) for next turn setup.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Phantom is adjacent at (4,4) and wounded — scan will deal 1dmg and potentially finish or cripple it. I already know its prompt but scan still deals damage. Actually I already scanned Phantom. Better to attack Phantom since it's adjacent and wounded (attack does 1dmg, range:adjacent). Then move away to safety. Foresight shows Phantom used shadow_strike last turn and moved to (5,5) — wait, current position shows (4,4). Enemy Viper tried to attack me at (4,5) but failed. I'm at (4,5), Phantom is at (4,4) — adjacent. Attack Phantom first (it's wounded, this may finish it), then move to (5,5) to get distance from traps and reposition.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Doc",
+          "class": "medic",
+          "thinking": "Seer is wounded at (5,5), dist=2. I need to move adjacent to heal. Moving to (4,5) puts me adjacent to Seer. Phantom is critical at (4,4) - dangerous neighbor but healing Seer is priority. After moving to (4,5) I'll be adjacent to Seer to patch.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Traps at (2,4) and (3,4) already block some paths. Enemies are at dist=3, Phantom is critical. I should move toward (3,3) to stay at medium range and place a trap on (3,2) to cover the approach path from the south/east. Moving to (3,3) brings me closer without entering denial range of Viper at (5,3).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Seer is 2 tiles away at (5,5) - in attack range. Viper enemy is also at dist=2 at (3,3). Phantom is critical at (4,4). I need to deal damage and control space. Attack Seer directly (dist=2, within rng2). Then move to (4,2) to place myself away from the cluster and set up trap coverage on approach paths. Actually, I should trap first on a path enemies will use - tile (4,4) is where Phantom is so avoid. Trap at (4,3) to block enemy approach from Viper's direction. Then attack Seer at (5,5).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 14,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 9,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "I'm adjacent to enemy Viper at (5,4) — DENIAL blocks my scan. Phantom is critical at (4,4), already scanned. My scan is blocked this turn. Best move: step away from Viper's denial zone to (3,5), then scan Phantom... wait, Phantom already scanned. Actually both enemies already scanned. I should recalibrate Doc who is wounded at (4,5) — but I need to be adjacent. From (5,5) I am adjacent to (4,5) where Doc is. I can recalibrate Doc with tactical advice. But DENIAL blocks abilities while adjacent to Viper. If I move first to (3,5), I escape denial zone, then I can recalibrate... but Doc is at (4,5) and from (3,5) that's distance 2, not adjacent. Alternative: stay and recalibrate Doc (adjacent at 4,5) but denial blocks it. Move to (5,3) first — that's distance 1 from Viper (5,4), still adjacent, still denied. Move to (3,5): escapes denial, but Doc not adjacent. Move to (4,3): that's a trap location — dangerous. Best option: move to (3,5) to escape denial, then recalibrate is blocked anyway since Doc won't be adjacent. Or move to (5,3) — still adjacent to Viper. I'll move to (3,5) to escape denial zone and wait — both enemies already scanned, no adjacent allies to recalibrate from new position.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Doc",
+          "class": "medic",
+          "thinking": "Phantom specter is adjacent and critical — but I have no wounded allies to heal (both Seer and Viper are full HP). Phantom is an enemy adjacent to me. Enemy Viper vector is at dist=2. I cannot use patch/overclock if adjacent to enemy Vector — but the adjacent enemy is a Specter, not a Vector. Enemy Vector is at dist=2, not adjacent. So my abilities are NOT blocked. I should move away from Phantom to avoid melee threat, then use overclock on our ally Viper (the damage dealer at 3,3) — but Viper is dist=3, not adjacent. Seer is adjacent at dist=1 from (3,5). I can move to (5,5) to get away from Phantom, but that keeps me near enemy Viper at (5,4). Better to move toward Seer at (3,5) — move to (2,5) or stay near. Actually I can move to (5,5) — that's valid. But enemy Viper at (5,4) would be adjacent then, blocking abilities. Move to (3,4) is a trap. Move to (2,5) — valid, gets me away from enemies, near Seer. Then overclock on Seer since all allies are healthy and Seer is a damage dealer (oracle). Wait — from (2,5), Seer at (3,5) is dist=1, adjacent. I can overclock Seer.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "I'm at 1HP — extremely fragile. Breach is unavailable. Seer is healthy and behind me is reachable at (4,5). Shadow_strike keeps cloak. I'm cloaked and should prioritize the wounded Doc or hit Seer with shadow_strike since I can reach (4,5) adjacent to Seer. Moving to (4,5) puts me behind Seer (facing W), then shadow_strike for 1 damage while staying cloaked. Seer is healthy but it's the best available target I can reach and attack while staying cloaked. At 1HP I must stay cloaked.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Phantom is critical at (4,5) and Viper is wounded at (5,4). Both are 3 tiles away. Trap at (3,4) already exists. I should place a trap to cover approach paths. (4,4) is a valid move tile and would be a good chokepoint between both enemies. But I can't trap adjacent to enemies and I need to stay at medium range. Move to (4,3) to get closer while still safe (not adjacent to Viper at 5,4 — distance would be ~1.4 tiles, that's adjacent diagonally which may trigger denial). Better to move to (3,2) or stay and place trap. Actually (4,3) is in valid moves and is 1 tile from Viper at (5,4) — too close. Let me place a trap at (4,4) from current position (3,3) — distance is ~1.4 tiles which is ≤2, so in trap range. That covers the path between both enemies. Then move to (4,3)... wait, (4,3) already has a trap. Move to (2,3) to stay safe and set up the trap at (4,4).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "I'm at (5,4) with 4HP, critical ally Phantom at (4,5). Enemies are clustered: Seer(3,5), Doc(2,5), Viper(2,3) - all out of range. I should move toward them to get in range, then place a trap on a likely approach path. Moving to (4,4) gives me range 2 to Seer at (3,5) - I can trap there or at (4,5) to cover backline approach. Actually, let me move to (4,3) to get closer and place a trap at (3,4) blocking the central approach corridor. Enemies coming from west will likely pass through (3,4) or (3,5). Trap at (3,4) covers the approach path.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 14,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 10,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "I'm at (4,5) with 1HP, Seer is adjacent at (3,5). I'm already behind Seer (I'm at their back tile). Shadow_strike keeps cloak and deals 1dmg — but I'm not cloaked. At 1HP I need to eliminate threats fast. Seer is healthy and adjacent. I can shadow_strike Seer for 1dmg. Doc is wounded at (2,5) distance 2. Priority: use shadow_strike on Seer (adjacent, keeps any cloak state), then if Seer survives I need to finish or flee. Actually shadow_strike does 1dmg — Seer is healthy so likely survives. Better to use regular attack if it does same damage... shadow_strike keeps cloak which is better. Use shadow_strike on Seer first, then consider moving away since I'm at 1HP.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Doc",
+          "class": "medic",
+          "thinking": "Seer is wounded at (3,5) and I'm at (2,5) - that's adjacent (dist=1). I should move to stay adjacent and patch Seer. Current position (2,5) is already adjacent to Seer at (3,5). Patch Seer first, then I can move or wait. Enemy Viper at (4,3) is dist=4, not threatening my patch ability. Phantom is critical at (5,5) but not adjacent to me.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Overclocked - two ability uses this turn. Phantom is critical at (5,5) and within scan range (dist 2). Already scanned both enemies so prompts are known. Phantom just tried to shadow_strike me at (3,5) - it's aggressive and critical, one more hit could finish it. I should scan Phantom to deal 1dmg (potentially finishing a critical unit) - wait, scan deals 1dmg and reveals prompt, but prompt already known. Scan still deals 1dmg which could finish critical Phantom. Viper at (4,3) is wounded and dist 3, also in scan range. Use both scan charges: first scan Phantom at (5,5) to deal 1dmg (critical = likely 1HP left, this could kill), second scan Viper at (4,3) for more damage. Stay at current position to maintain range safety - ally Viper at (2,3) is 3 tiles away, I'm safe from block.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "HP is critically low at 2/8. Enemy Viper is at (2,3) dist=2, so I'm not adjacent — trap is available. There's already a trap at (3,4). Enemies are pushing from the west. I should place a trap on (3,3) to block the path, then retreat east to (5,3) to stay at medium range and stay alive. Moving to (5,3) first would keep me out of range while I set up denial zones.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Viper is at (5,3) distance 3, critical HP. I'm at (2,3) full HP. Many traps already placed at (1,2),(1,4),(2,4),(3,4),(4,4). Enemy must pass through (4,3) or (3,3) to reach backline. (4,3) is a valid move tile and has no trap yet. I should move to (3,3) to stay at medium range and place a trap at (4,3) to block their advance path. But (2,4) already trapped. Let me place trap at (4,3) — it's in range (≤2 tiles from position (3,3): distance=1, valid). Move to (3,3) first, then trap (4,3).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 14,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 11,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Viper is at (5,3), distance 4 — just out of scan range from (3,5). I need to close to ≤4 tiles. Moving to (4,5) puts me at distance sqrt((5-4)²+(3-5)²)=sqrt(5)≈2.24, well within range. Doc is wounded at (2,5) — I could recalibrate but scan is higher priority for intel. Viper is critical so scan could finish intel loop. Move to (4,5) then scan Viper at (5,3). Check: dist from (4,5) to (5,3) = sqrt(1+4)=2.24 ≤ 4, valid. No adjacent enemies blocking scan at (4,5). Traps at (4,4) and (4,3) but not (4,5) — safe to move there.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Doc",
+          "class": "medic",
+          "thinking": "Ally Viper at (3,3) is wounded with 7/8 HP and needs healing, distance 3. I need to move adjacent to them. From (2,5), moving to (3,4) puts me at distance 1 from (3,3) - but (3,4) is a trap. Moving to (2,3) would be distance 1 from (3,3). Check valid moves: (2,3) is valid and adjacent to (3,3). Move to (2,3) then patch Viper.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Enemy Viper is at (5,3) critical health, dist=2 and in range. I can attack for 1dmg to finish them off. I'm at full HP. (4,3) is a trap tile so I shouldn't move there. I'll attack the enemy Viper first to try to eliminate them, then trap a path to protect the backline. Note: trap is blocked if adjacent to enemy, but enemy is at dist=2 so I'm not adjacent. I can place a trap after attacking.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "I'm at 1HP — critical. Viper is at (3,3) dist=2, in denial range if adjacent. I must not move adjacent to Viper. I can place a trap to control approach paths. Trap (3,4) already exists. Place trap at (4,4) to cover the gap between me and enemies, then stay put or reposition. Actually I should place trap on a path they'll walk. (4,3) is between me and Viper — if Viper advances they'd step there. But I'm at (5,3) so (4,3) is reachable for trap (dist 1 from me, dist 2 from Viper — not adjacent to Viper so trap isn't blocked). Place trap at (4,3) to punish Viper advance. Then wait.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 14,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": false
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "player",
+    "totalTurns": 12,
+    "reason": "player eliminated all enemies"
+  },
+  "endedAt": "2026-03-08T01:06:55.076Z"
+}
