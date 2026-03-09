@@ -39,7 +39,7 @@ export const BALANCE: BalanceConfig = {
     specter: { maxHp: 4, movement: 3, range: 1, speed: 3 }, // buffed HP 3→4 (39.5%@38g in last 30) — over-nerfed, restoring to 4
     striker: { maxHp: 3, movement: 2, range: 2, speed: 1 }, // nerfed HP 4→3 (61.7%@243g overall)
     oracle: { maxHp: 6, movement: 3, range: 3, speed: 3 },
-    medic: { maxHp: 10, movement: 3, range: 3, speed: 3 }, // nerfed HP 12→10 (73.9%@23g in last 50) — still overperforming
+    medic: { maxHp: 8, movement: 3, range: 3, speed: 3 }, // nerfed HP 12→10→8 (73.9%@23g in last 50) — still overperforming, reducing durability
     vector: { maxHp: 8, movement: 2, range: 2, speed: 1 },
     sentinel: { maxHp: 8, movement: 2, range: 1, speed: 1 }, // nerfed HP 9→8 (71.3% win rate @ 178 games)
   },
@@ -51,7 +51,7 @@ export const BALANCE: BalanceConfig = {
     precisionShot: { damage: 2, movedDamage: 1 }, // striker still 76%@192g — sentinel HP nerf should help indirectly
     scan: { damage: 1 },
     suppressingFire: { damage: 1 },
-    patch: { maxUses: 6, healAmount: 3 }, // nerfed heal 10→3 (was full-heal every time, medic 73.9%@23g in last 50)
+    patch: { maxUses: 4, healAmount: 3 }, // nerfed uses 6→4, heal 10→3 (medic 73.9%@23g in last 50, reducing sustain)
     overclock: { selfDamage: 1 },
     trap: { damage: 1 },
     pulse: { damage: 1 },
