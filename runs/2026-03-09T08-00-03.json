@@ -1,0 +1,2478 @@
+{
+  "id": "2026-03-09T08-00-03",
+  "startedAt": "2026-03-09T08:00:03.753Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 4,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 3,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "oracle": {
+        "maxHp": 6,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 14,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "vector": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 2,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 9,
+        "healAmount": 10
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Patch",
+        "class": "medic",
+        "prompt": "Keep your frontliner alive with patch. Stay behind them for cover. Overclock your striker or specter when no healing is needed."
+      },
+      {
+        "name": "Ghost",
+        "class": "specter",
+        "prompt": "Cloak and move behind enemy lines. Target isolated enemies with shadow_strike. Save breach for the most dangerous enemy. Avoid being caught uncloaked."
+      },
+      {
+        "name": "Aegis",
+        "class": "sentinel",
+        "prompt": "Push forward aggressively. Shield_wall facing the enemy cluster. If flanked, turn to face the biggest threat. Attack when possible."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Prophet",
+        "class": "oracle",
+        "prompt": "Scan priority targets each turn to reveal their strategy. Use recalibrate on your damage dealer to boost effectiveness. Stay behind allies and maintain range. Never get adjacent to enemy vectors."
+      },
+      {
+        "name": "Longshot",
+        "class": "striker",
+        "prompt": "Position for clear sight lines. Prioritize killing wounded enemies with precision_shot. If forced to move, retreat away from threats. Suppressing_fire to slow rushers."
+      },
+      {
+        "name": "Grid",
+        "class": "vector",
+        "prompt": "Place traps on tiles enemies are likely to move through. Use pulse if 2+ enemies are adjacent. Stay near allies for mutual support."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "Round 1 — cloak first, then advance toward enemy lines. Enemies are clustered at y=4-5. Cloaking now lets me move safely. I'll move to (1,3) to push deep into enemy territory while cloaked.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 1,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Patch",
+          "class": "medic",
+          "thinking": "Round 1, all allies at full HP so no healing needed. Move north to close gap with frontliners. No overclock targets in range yet.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Patch is the priority scan target - medic at dist=2, revealing their healing strategy is high value. Then recalibrate Longshot (our damage dealer) to boost effectiveness. Stay at current position, no need to move.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 5
+            },
+            "addendum": "Focus fire on Patch the medic at (3,3) - eliminating their healer is top priority. Aegis sentinel is at (2,1). Patch is wounded from scan."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Push forward toward enemy cluster. Prophet is closest at dist 3. Move to (2,3) to close distance, then shield_wall facing N toward the enemy cluster at (1,5),(2,4),(3,5).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Enemies Aegis at (2,3) and Patch at (3,3) are moving north toward us. Move to (1,3) to close distance, then place a trap at (2,3) or the path between — (2,4) is a likely approach tile for Aegis moving north.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": "Position occupied",
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": "Position occupied"
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Patch the medic is at (3,3), distance 2 from my current position (3,5). I have not moved, so precision_shot deals full 2dmg. Priority is eliminating the medic. I'll fire precision_shot at Patch first, then wait.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Patch",
+          "class": "medic",
+          "side": "player",
+          "hp": 11,
+          "maxHp": 14,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Patch",
+          "class": "medic",
+          "thinking": "All allies are at full HP, no healing needed. Longshot is 2 tiles away to the north — threatening. I should reposition to stay behind my frontliners. Move to (3,2) to stay behind Aegis at (2,3), then overclock Aegis (adjacent at dist=1) to give them 2 abilities next turn for extra threat.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": "Must be adjacent"
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Aegis is adjacent at (2,3) — scan is blocked when adjacent to enemy Vector, but Aegis is a sentinel not a vector, so scan should work. However, Aegis is only 1 tile away which means I'm in melee range danger. Foresight shows Aegis will use shield_wall facing N toward me. I should move away to maintain range and scan a priority target. Ghost is moving to (1,3) — that's a threat. I need to scan Aegis to reveal their strategy, then reposition. But scan requires target within 4 tiles and Aegis is at dist=1. Wait — the warning says scan is BLOCKED when adjacent to enemy Vector. Aegis is a sentinel, not a vector, so scan works. I'll scan Aegis first (dist=1, in range), then move to (4,4) to maintain distance from the frontline while staying safe.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "Cloak expires after this turn. Prophet at (4,4) facing E has a behind tile at (3,4) which is reachable. Move to (3,4) to get behind Prophet, then shadow_strike for 1 damage while staying cloaked.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Enemies Ghost@(3,4) and Aegis@(2,3) are approaching. Moving to (2,4) puts me closer and lets me place a trap on (2,3) or (3,4) - likely enemy paths. Ghost is at (3,4) heading E, Aegis at (2,3) heading N. I'll move to (2,4) to intercept and place a trap at (3,4) where Ghost currently is or nearby - actually Ghost is there so I can't trap occupied tiles. I'll trap (2,3) where Aegis is moving from, or (1,3) as a chokepoint. Moving to (2,4) first, then trap at (2,3) - Aegis may move through that area. Actually Aegis is AT (2,3), can't trap occupied. I'll move to (1,4) and trap (2,3) after Aegis moves, but I don't know if they'll vacate. Better: move to (2,4) and trap (1,3) as a defensive chokepoint between me and approaching enemies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": "Position occupied"
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Grid is adjacent at (2,4) — I'm in denial zone so only basic attack works. Attack Grid first, then shield_wall facing N toward the enemy cluster (Grid, Longshot, Prophet are all north/northeast). Staying put preserves Fortify for damage reduction.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Ghost is adjacent at (3,4) - precision_shot is blocked when adjacent to enemy. I can use suppressing_fire on Ghost to slow them, or attack. Orders say to focus on Patch at (3,2) but they're out of range. Ghost is blocking my path. I should move to (3,3) to get range 1 on Patch and range 0 on Ghost - wait, (3,3) is a valid move. From (3,3) Patch at (3,2) would be dist=1, in range for precision_shot. But Ghost would be adjacent at (3,4) still blocking precision_shot. Better to move to (4,5) or (5,5) to avoid Ghost adjacency, but then Patch still out of range. Actually move to (3,3): Ghost at (3,4) is dist=1 (adjacent), so precision_shot still blocked. Let me use suppressing_fire on Ghost from current position to slow them, then move to (3,3) to be closer to Patch. Suppressing_fire: 1dmg 2-tile line from target, range ≤2. Ghost at (3,4) dist=1, in range. Fire suppressing_fire targeting Ghost to slow them, then move to (3,3) for better positioning toward Patch.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "suppressing_fire",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Patch",
+          "class": "medic",
+          "side": "player",
+          "hp": 11,
+          "maxHp": 14,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "I'm suppressed (mv1), adjacent to Grid's denial zone which blocks cloak/breach. I'm already behind Longshot (facing S, I'm at 3,4 which is behind them). I can't cloak due to Grid's denial. Best play: breach Longshot to take them out of the fight, then shadow_strike Prophet or Grid. Longshot is behind me at dist=1 and I'm in a behind position. Breach Longshot (addendum: attack nearest ally next turn), then shadow_strike Prophet who is also adjacent and I'm behind them.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "addendum": "Attack your nearest ally next turn"
+          },
+          "firstResult": "Cannot use breach — adjacent to enemy Vector (Denial)",
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Patch",
+          "class": "medic",
+          "thinking": "Longshot is adjacent at (3,3) — dangerous. Ghost is wounded at (3,4) dist=2, Aegis wounded at (2,3) dist=2. I need to move to heal someone. If I move to (3,3) that's occupied. Move to (2,2) gets me adjacent to Aegis at (2,3) to heal. But Grid is at (2,4) — if I'm at (2,2), Grid is dist=2, not adjacent, so patch won't be blocked. Aegis is more critically wounded (7/8 vs 3/4 relative). Actually Ghost at 3/4 HP is more critical proportionally. If I move to (3,3) — occupied by Longshot. Move to (4,3) gets adjacent to Ghost at (3,4)? dist from (4,3) to (3,4) = 2. No. Move to (3,3) blocked. Move to (2,2): adjacent to Aegis (2,3) ✓, Grid at (2,4) is dist=2 from (2,2), not adjacent — safe to patch. Heal Aegis.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Ghost is adjacent (dist=1) and just shadow_struck me — dangerous specter that needs scanning to reveal their strategy. But scan is blocked when adjacent to enemy Vector... Ghost is a specter, not a vector, so scan should work. Scan Ghost at (3,4) to deal 1dmg and reveal their prompt. Then move away to (5,5) to escape Ghost's melee range and maintain distance from the enemy cluster.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Two enemies adjacent (Aegis at dist=1, Ghost at dist=1). Pulse hits all within 1 tile - will hit both Aegis and Ghost. Ghost is already wounded so pulse could pressure them hard. After pulse, move away to avoid retaliation or stay to deny abilities via Denial passive. Pulse first from current position (2,4) to hit Aegis(2,3) and Ghost(3,4), then move to (1,4) to reposition slightly while keeping Denial pressure on Aegis.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "4": 4,
+              "x": 1
+            }
+          },
+          "secondResult": "Out of bounds"
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Ghost is critical and adjacent at (3,4) - finish it with precision_shot for a kill. I haven't moved yet so full 2dmg applies. Then move to (4,3) to break adjacency with Aegis (which blocks precision_shot) and reposition for next turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Grid is adjacent at (2,4) to my north. I'm fortified and in denial zone. Attack Grid first (basic attack works in denial zone), then shield_wall facing north to protect Patch at (2,2) from Grid/Longshot cluster.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 2
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Patch",
+          "class": "medic",
+          "side": "player",
+          "hp": 11,
+          "maxHp": 14,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Both enemies are out of scan range. Need to close distance to scan. Patch is at (2,2) and Aegis at (2,3). Moving to (3,4) gets me closer while staying behind Longshot at (4,3). From (3,4) I'm 3 tiles from Aegis and can scan next turn. Grid is adjacent to Aegis so I should avoid getting too close to enemy vectors. Move to (3,4) to reposition for scan next turn. No valid scan targets in range this turn, so recalibrate Longshot to boost damage output.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "addendum": "Aegis is your priority target at (2,3) - push forward and use precision_shot. Patch is behind at (2,2) healing the frontline. Eliminate Aegis first to break their defense."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Patch",
+          "class": "medic",
+          "thinking": "Aegis is wounded at 7/8 HP and adjacent to me at (2,3). Grid is at (2,4), dist=2, so I'm not adjacent to Grid — patch is not blocked. I should heal Aegis first. After healing, I can wait or stay put. No need to move.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Aegis is at (2,3), distance 2 from my current position (4,3) - exactly in precision_shot range. I haven't moved yet so no damage penalty. Orders say eliminate Aegis first. I'll use precision_shot on Aegis for 2 damage, then move to a better position away from threats.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Aegis is adjacent at (2,3) - I can't use trap when adjacent to an enemy. Pulse hits all units within 1 tile - Aegis is at dist 1, Patch is at dist 2. Only Aegis is in pulse range. My Denial passive blocks some abilities on adjacent Aegis. Best move: pulse Aegis for 1 damage, then move to (3,3) to place a trap on a tile Patch might move through, staying near allies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Grid is adjacent at (3,3) and has DENIAL active blocking my abilities - only basic attack works. I'm fortified for 50% damage reduction. I can attack Grid with basic attack since that works under denial. Prophet is wounded at (3,4) distance 2. Orders say push forward and attack when possible. Attack Grid now (in range, denial doesn't block basic attack), then use shield_wall facing E toward the enemy cluster (Grid/Prophet/Longshot all to my east).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Patch",
+          "class": "medic",
+          "side": "player",
+          "hp": 11,
+          "maxHp": 14,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 3,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Patch",
+          "class": "medic",
+          "thinking": "Aegis is wounded at 6/8 HP and is adjacent to me at (2,3). I need to patch Aegis. Grid is at (3,3) which is 2 tiles away — not adjacent, so abilities are not blocked. I'll patch Aegis first, then wait since my job is done this turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Both enemies already scanned. Patch is the priority — keeping Aegis alive. I should recalibrate Longshot to boost damage output since Longshot just used precision_shot on Aegis. Move to (4,4) to stay at range, then recalibrate Longshot at (5,3) — wait, recalibrate is adjacent only and Longshot is at (5,3), distance from (4,4) to (5,3) is 2, not adjacent. From current (3,4), Longshot at (5,3) is distance 3, not adjacent either. Grid is at (3,3), distance 1 from me — adjacent. I can recalibrate Grid. Or move closer to Longshot: (4,4) puts me dist sqrt(2) from (5,3)=not adjacent. Move to (4,3): dist to Longshot(5,3)=1, adjacent! That works. Move to (4,3) then recalibrate Longshot. But (4,3) is in valid moves. This keeps me off enemy adjacency (Aegis at 2,3 is dist 2 from 4,3, safe). Recalibrate Longshot to focus fire on Patch to shut down healing.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 5,
+              "y": 3
+            },
+            "addendum": "Prioritize Patch the medic at (2,2) with precision_shot. Eliminating the healer is critical — ignore Aegis and focus all fire on Patch."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Aegis is adjacent at (2,3). My Denial passive blocks some of Aegis's abilities. I can't use trap while adjacent to an enemy Vector - wait, I AM the Vector. So trap is blocked while Aegis is adjacent. Pulse hits all units within 1 tile - Aegis is at dist=1, so pulse would hit Aegis. Prophet (ally) is at (4,3) dist=1 from me, so pulse would also hit Prophet who is already wounded - bad idea. Best play: attack Aegis for 1 dmg, then move away to place a trap on a likely enemy path. Move to (3,4) to get distance, then... actually attack first then move to break adjacency. After moving to (3,4), Aegis is no longer adjacent so I could trap next turn. Or move first to (2,4) to flank, but that keeps me near Aegis. Better: attack Aegis, then move to (3,4) to set up trap next turn on enemy approach path.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Orders prioritize Patch the medic at (2,2) but Patch is out of range (dist=4) from current position. Aegis is in range at dist=3. Moving closer to reach Patch would put me at risk. Best play: use precision_shot on Aegis at (2,3) since they're in range at dist=3 and within precision_shot range (≤2 tiles... wait, dist=3 exceeds range 2). Precision_shot range is ≤2 tiles, so dist=3 is out of range for precision_shot. Attack is adjacent only. Suppressing_fire hits 2-tile line from target at ≤2 tiles range - Aegis at dist=3 is also out of range. I cannot reach Patch (dist=4) in one move. Moving to (3,3) brings me to dist=1 from Aegis and dist=2 from Patch. From (3,3) I could use precision_shot on Patch at dist=2 - but I moved, so it deals 1dmg. Or I can move to (4,2) which puts Aegis at dist=2 and Patch at dist=3. Actually from (3,3): Patch at (2,2) = dist=2, in precision_shot range, but I moved so 1dmg. That eliminates healer focus. Let me move to (4,2): Aegis at (2,3) dist=2+1=3... no. From (4,2): Aegis(2,3) dist=|4-2|+|2-3|=3, Patch(2,2) dist=2+0=2. So from (4,2) Patch is at dist=2, in precision_shot range, but I moved so 1dmg. Best to move to (4,2) and precision_shot Patch for 1dmg - orders say eliminate healer is critical.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Currently fortified at (2,3). Enemies are Grid@(3,4) dist=2, Prophet@(4,3) dist=2, Longshot@(4,2) dist=3. Orders say push forward aggressively and shield_wall facing enemy cluster. If I move to (3,3), I'll be adjacent to both Grid@(3,4) and Prophet@(4,3), putting me in attack range. The enemy cluster is to the NE/E. Moving to (3,3) lets me attack Grid or Prophet and shield_wall facing N or E to protect Patch behind me. Let me move to (3,3) first, then attack Prophet (wounded, priority kill) since they'd be adjacent at (4,3) — wait, (3,3) to (4,3) is dist=1, adjacent. Yes. Or attack Grid at (3,4) also adjacent from (3,3). Prophet is wounded so higher value target. Attack Prophet.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Patch",
+          "class": "medic",
+          "side": "player",
+          "hp": 10,
+          "maxHp": 14,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Patch",
+          "class": "medic",
+          "thinking": "Aegis is wounded at (3,3) dist=2, needs heal. I need to move adjacent to Aegis first, then patch. Moving to (3,2) puts me adjacent to Aegis at (3,3) and keeps distance from Grid at (3,4) — that would be dist=1 from Grid, too close. Moving to (2,3) gets me dist=1 from Aegis (adjacent), and keeps me dist=2 from Grid at (3,4) — safe. From (2,3) Aegis at (3,3) is adjacent (dist=1), so patch works.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "I'm at (4,3) with 2HP, very low. Aegis is adjacent at (3,3) and attacked me last turn. I need to escape — move to (5,4) to get distance. Then recalibrate Longshot at (4,2) since I can't scan safely (Aegis is adjacent, blocking scan per rules). Wait, after moving to (5,4) Longshot is at (4,2) which is 2 tiles away — not adjacent, so recalibrate won't reach. Better plan: move to (5,2) to get adjacent to Longshot at (4,2) and recalibrate them. That also gets me away from Aegis. Checking valid moves: (5,2) is valid. Distance from (5,2) to Longshot (4,2) = 1, adjacent. Recalibrate works. And I'm no longer adjacent to Aegis.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 4,
+              "y": 2
+            },
+            "addendum": "Focus fire on Patch at (2,3) — eliminating the medic prevents healing. High priority target."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Aegis is at (3,3), dist=2, in range for precision_shot. I haven't moved so full 2dmg applies. Patch is at (2,3), dist=3, out of my range-2. Priority orders say focus Patch but Aegis is the only target in range. I'm at spd1 so I act late. Use precision_shot on Aegis at (3,3) — 2dmg to a healthy target is solid value. No need to move, staying at (4,2) keeps distance from both enemies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Grid is adjacent at (3,4) and has DENIAL active blocking my abilities — only basic attack works. I can attack Grid for 1 damage. I'm fortified so I want to stay put to keep 50% damage reduction. Attack Grid, then wait to maintain fortify.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Aegis is adjacent at (3,3) - my Denial passive blocks some of their abilities. Patch is at (2,3) dist=2. Both enemies are clustered nearby. Pulse hits all units within 1 tile - Aegis is adjacent so pulse hits them. Need to check if allies are in range: Longshot@(4,2) and Prophet@(5,2) are not adjacent so pulse won't hit them. Pulse Aegis now, then move to (4,4) to reposition and deny Aegis while staying near Longshot for mutual support. Trap is blocked when adjacent to enemy Vector - Aegis is adjacent so I can't trap first. Pulse is the right call.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Patch",
+          "class": "medic",
+          "side": "player",
+          "hp": 10,
+          "maxHp": 14,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Both enemies are already scanned. Aegis is at (3,3) in range at dist 3 — but already scanned. Patch is at dist 4, out of range. Longshot is at (4,2) adjacent to me — I can recalibrate them to boost their damage output against Aegis. Move to (4,3) to stay close to Longshot after recalibrate, or recalibrate first at current position since Longshot is adjacent at (4,2). Current position (5,2), Longshot at (4,2) is adjacent. Recalibrate Longshot with addendum to focus fire on Aegis. Then move to maintain distance from enemies — move to (5,3) or (5,4) to stay safe. Grid is wounded at (4,4), I should stay back. No new scan targets available (both already scanned). Priority: recalibrate Longshot to boost damage, then reposition safely.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 4,
+              "y": 2
+            },
+            "addendum": "Focus all attacks on Aegis at (3,3). Use your highest damage ability. Aegis prompt: push forward aggressively with shield_wall. Anticipate it advancing — position for clean shots and eliminate it quickly."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Patch",
+          "class": "medic",
+          "thinking": "Aegis is wounded at 6/8 HP and adjacent to me at (3,3). I should patch Aegis to keep the frontliner alive. After healing, I'll stay in position.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Aegis is at (3,3), dist=2, healthy. Patch is at (2,3), dist=3, out of my range-2. Orders focus on Aegis first. I'm not adjacent to Aegis so precision_shot is valid. Use precision_shot on Aegis for 2dmg (haven't moved yet). Then consider moving if needed.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Aegis is at (3,3), dist 2, likely to move toward me or Prophet at (5,3). I can place a trap on (3,4) or (4,3) to intercept movement. Trap blocked if adjacent to enemy - Aegis is at dist 2 so I'm not adjacent. Best trap tile: (4,3) is directly between me and Aegis, or (3,4) blocks Aegis moving north. Place trap at (3,4) to intercept Aegis. Then move to (5,4) to stay near Prophet and maintain range.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm currently fortified at (3,3) with 50% damage reduction. Enemies are clustered to the east: Longshot at (4,2) dist=2, Prophet at (5,3) dist=2, Grid at (5,4) dist=3. Orders say push forward and shield_wall facing the enemy cluster. If I move to (4,3), I'll be adjacent to Longshot at (4,2) and Prophet at (5,3), enabling an attack. Moving east gets me closer to the cluster. After moving to (4,3), I can attack Longshot or Prophet (both adjacent). Shield_wall would be better for protecting Patch, but orders say push aggressively and attack when possible. Move to (4,3) to get adjacent to enemies, then attack Longshot (healthy, priority target).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Patch",
+          "class": "medic",
+          "side": "player",
+          "hp": 10,
+          "maxHp": 14,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "I'm at 2HP, so survival is critical. Aegis is adjacent at (4,3) — this blocks my scan ability. I need to move away from Aegis first to enable scanning. Foresight shows Aegis will attack (4,2) this turn — that's Longshot's position. I should recalibrate Longshot to boost their effectiveness since they're my main damage dealer and under threat. Moving to (5,2) gets me away from Aegis (no longer adjacent), maintains range to Longshot at (4,2) for recalibrate. From (5,2) I'm 2 tiles from Longshot — still adjacent? (5,2) to (4,2) is distance 1, yes adjacent. So move to (5,2) then recalibrate Longshot at (4,2) with an addendum to focus Aegis.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 4,
+              "y": 2
+            },
+            "addendum": "Aegis is at (4,3) and will attack you this turn. Priority: attack Aegis to eliminate the threat. You are healthy — push forward and deal damage."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Patch",
+          "class": "medic",
+          "thinking": "Aegis is wounded at 7/8 HP, dist=2 at (4,3). I need to move adjacent to heal. Moving to (3,3) puts me adjacent to Aegis at (4,3). Then patch Aegis.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Aegis is at (4,3) dist=2, in attack range. I'm at half HP so I want to deal damage without closing in. I can attack Aegis from current position (dist=2, range=2). Patch is out of range. Trap at (3,4) is already placed. I should place another trap on (4,4) to cover Aegis's likely movement path toward me, then attack Aegis.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": "Must be adjacent"
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Longshot is adjacent at (4,2) — attack immediately. Then shield_wall facing South to protect against the enemy cluster (Longshot, Prophet both to the south). Stay put to maintain Fortify.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "I'm at (4,2) with 1HP, adjacent to Aegis at (4,3). Precision_shot is blocked when adjacent to enemy. I can use regular attack on Aegis (1dmg) or move away first. Orders say focus Aegis. If I move away first, I can use precision_shot. Move to (5,3) to break adjacency with Aegis, then precision_shot Aegis at (4,3) from dist=1 for 2dmg (but I moved, so 1dmg). Or attack Aegis now for 1dmg without moving. I'm at 1HP so survival matters. Attacking Aegis now deals 1dmg. Moving to (5,3) then precision_shot deals 1dmg (moved penalty). Same damage either way. Better to attack first, then move to safety at (5,3) to survive.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Patch",
+          "class": "medic",
+          "side": "player",
+          "hp": 10,
+          "maxHp": 14,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 3,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 9,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "I'm at (5,2) with 2HP, very fragile. Longshot is adjacent at (5,3) and wounded - a good recalibrate target. Aegis is at (4,3) distance 2, healthy but already scanned. Patch is at (3,3) distance 3, already scanned. Both enemies are scanned so no need to scan again. I should recalibrate Longshot to boost their damage output, then move to safety. Aegis last turn attacked (4,2) and shield_walled facing S - so Aegis is now at (4,3) facing S with shield on south side. Longshot attacked (4,3) last turn. I need to recalibrate Longshot at (5,3) - they're adjacent. Then move away to stay safe. Move to (5,1) or (4,1) to stay at range. Let me recalibrate Longshot first (adjacent at 5,3), then move to (4,1) to maintain distance from Aegis.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 5,
+              "y": 3
+            },
+            "addendum": "Focus fire on Aegis the sentinel at (4,3). Attack from the north to avoid their south-facing shield. Aegis prompt: push forward aggressively, shield facing enemy cluster. Exploit this by attacking from unexpected angles."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Patch",
+          "class": "medic",
+          "thinking": "Aegis is wounded at 7/8 HP, adjacent to me at (4,3). I should patch Aegis to keep the frontliner alive. Grid is at dist=3 so abilities aren't blocked. After healing, I'll wait in place to stay behind Aegis for cover.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "I'm at (5,4) with Aegis at (4,3) dist=2. I have traps at (3,4) and (4,4) already placed. Aegis is healthy and likely to advance. My ally Longshot is wounded at (5,3). I can attack Aegis from current position (dist=2, within range 2). I should attack Aegis to pressure them, then wait or reposition. Moving to (5,5) would give me high ground but distance from ally. Better to stay and attack Aegis now since they're in range, then hold position to protect Longshot.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Longshot is adjacent at (5,3) — attack immediately. Then shield_wall facing East to protect against Grid and Longshot cluster.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Patch",
+          "class": "medic",
+          "side": "player",
+          "hp": 10,
+          "maxHp": 14,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 10,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "I'm at 2HP, need to stay alive. Both enemies are already scanned. Patch will likely heal Aegis. Grid failed to attack last turn. I should recalibrate Grid to boost its effectiveness against Aegis, then reposition. Grid is at (5,4), I need to be adjacent to recalibrate - move to (5,3) first (valid move), then recalibrate Grid at (5,4). This gets me closer to Grid for coordination while staying out of melee range of enemies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 5,
+              "y": 4
+            },
+            "addendum": "Aegis is at (4,3) with shield_wall facing E. Attack from the north or south flank to bypass the shield. Patch is at (3,3) healing - priority kill Aegis first then Patch."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Patch",
+          "class": "medic",
+          "thinking": "Aegis is at full HP (8/8), no healing needed. No wounded allies to patch. Both enemies are wounded but I can't attack effectively. Grid is 3 tiles away - stay back to avoid denial range. Prophet is at dist=2. I should wait or position safely. Stay at current position to support Aegis without exposing myself to Grid's denial zone.",
+          "firstAction": {
+            "type": "wait"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Prophet is adjacent at (5,3) and wounded — attack to finish. Stay put to keep Fortify active. Shield_wall east to cover against Grid.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "I'm at (5,4) with traps already at (3,4) and (4,4). Aegis is at (4,3) facing E - attacking from north/south bypasses shield. Prophet is critical at (5,3) and needs protection. I can attack Aegis from current position (dist=2, in range). Then move to (4,5) to stay near Prophet and set up flank. Actually, attack Aegis now, then move to (4,5) to cover Prophet and threaten Aegis from south flank next turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Patch",
+          "class": "medic",
+          "side": "player",
+          "hp": 10,
+          "maxHp": 14,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 11,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Patch",
+          "class": "medic",
+          "thinking": "Aegis is at full HP (8/8), no healing needed. Prophet is critical at dist=2 — can't attack effectively. Grid is dist=3, won't block abilities. Orders say to overclock striker/specter when no healing needed, but I don't see a striker/specter in allies — only Aegis (sentinel). Overclock Aegis to give them 2 abilities next turn, but Aegis is at (4,3) adjacent to me at (3,3), so overclock is valid. Stay behind Aegis for cover. I'll overclock Aegis then wait.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "I'm at 1HP — critically wounded. Aegis is adjacent at (4,3) and attacked me last turn, so staying here means death. I must move away from Aegis to survive. Moving to (5,4) gets me away from Aegis (now dist 2) and away from the traps at (3,4)/(4,4). Both enemies are already scanned so no need for scan. I could recalibrate Grid but Grid is far at (4,5) — not adjacent. After moving to (5,4), Grid at (4,5) is adjacent, so I can recalibrate Grid to boost their effectiveness.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 4,
+              "y": 5
+            },
+            "addendum": "Aegis sentinel is at (4,3) facing E with aggressive shield_wall orders. Patch medic is at (3,3) staying behind Aegis to heal. Focus attacks on Aegis to break their frontline, then eliminate Patch."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "I'm at (4,5) with 4HP. Aegis is at (4,3) facing E - I'm directly north of Aegis, which means attacking from (4,4) hits the flank/rear bypassing shield_wall. Traps at (3,4) and (4,4) already placed. I can move to (3,4) but that's a trap. Move to (5,5) keeps distance, or stay and attack Aegis at range 2 from current position. Actually I'm at range 2 from Aegis right now - I can attack from here. But moving to (4,4) is a trap tile. Let me attack Aegis now from (4,5) - dist=2, in range. Then consider moving. Actually attack first, then move to maintain pressure. Aegis faces E so attacking from N (my position at 4,5 is north of 4,3) bypasses shield.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Prophet is critical at dist=2 to my NE at (5,4). I need to close to adjacent to attack. Moving to (4,4) puts me adjacent to Prophet at (5,4) — dist=1, enabling melee attack. With OVERCLOCKED I get 2 ability uses. I'll move to (4,4), attack Prophet, then use shield_wall facing N/E to cover against Grid. Orders say push forward and attack when possible.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Patch",
+          "class": "medic",
+          "side": "player",
+          "hp": 10,
+          "maxHp": 14,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 12,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Patch",
+          "class": "medic",
+          "thinking": "Aegis is wounded at (4,4), dist=2. I need to move adjacent to heal. Move to (4,3) puts me adjacent to Aegis at (4,4) and keeps me away from Grid at (3,5) — dist from (4,3) to (3,5) is 3, safe. Then patch Aegis.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "I'm at (3,5) with a trap already at (3,4). Aegis is at (4,4) at distance 2 - within attack range. My Denial passive blocks some of Aegis's sentinel abilities when adjacent. I should move to (4,5) to get adjacent to Aegis from the north, bypassing any shield facing, and then attack. This puts me adjacent to Aegis which activates Denial passive. Alternatively I can attack from current position at range 2, then move closer. Attack Aegis from (3,5) at range 2, then move to (4,5) to threaten with Denial next turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Grid is adjacent at (4,5) and wounded — attack to finish. I'm fortified with 50% DR. Denial zone blocks abilities except basic attack/movement, so attack works. Stay put to keep fortify active.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Patch",
+          "class": "medic",
+          "side": "player",
+          "hp": 10,
+          "maxHp": 14,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 13,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Patch",
+          "class": "medic",
+          "thinking": "Aegis is at full HP (8/8) so no healing needed. Grid is at dist=2, so I must not move adjacent or abilities get blocked. I have 1 heal left so I should conserve it. Aegis is between me and Grid providing cover. I'll overclock Aegis to give them 2 abilities next turn — but wait, overclock requires adjacent target. Aegis is at (4,4) and I'm at (4,3), so we ARE adjacent. But Grid is at (4,5) which is adjacent to Aegis... Grid is NOT adjacent to me (dist=2), so my abilities are not blocked. I can overclock Aegis safely from my current position.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Grid is adjacent at (4,5), wounded, and I'm in its DENIAL zone — only basic attack works. I have OVERCLOCKED so 2 ability uses, but DENIAL blocks abilities other than basic attack. I should attack Grid to finish it off while it's wounded. Fortify gives 50% DR since I didn't move. Attack twice with both ability slots.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "I'm at 1HP - critically low. Aegis is adjacent at (4,4). I need to either attack or escape. Pulse would hit Aegis (dist=1) for 1 damage. But at 1HP I'll likely die next turn regardless. Best play: pulse to damage both Aegis (dist=1) and potentially help allies, then move away. Aegis is at (4,4) directly south, Patch at (4,3). Pulse from current position hits Aegis. Then move to (5,5) to escape. Actually, attack Aegis directly for 1dmg (adjacent), then move to (5,5) to survive.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Patch",
+          "class": "medic",
+          "side": "player",
+          "hp": 10,
+          "maxHp": 14,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": false
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "player",
+    "totalTurns": 14,
+    "reason": "player eliminated all enemies"
+  },
+  "endedAt": "2026-03-09T08:07:55.346Z"
+}
