@@ -1,0 +1,2244 @@
+{
+  "id": "2026-03-09T05-00-04",
+  "startedAt": "2026-03-09T05:00:04.337Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 4,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 4,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "oracle": {
+        "maxHp": 6,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 14,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "vector": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 2,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 9,
+        "healAmount": 10
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Warden",
+        "class": "sentinel",
+        "prompt": "Hold the front line. Position between allies and enemies. Use shield_wall toward incoming threats. Attack adjacent enemies."
+      },
+      {
+        "name": "Seer",
+        "class": "oracle",
+        "prompt": "Use scan to reveal enemy prompts and cloaked units. Stay at max range (≤4 tiles for scan). Use recalibrate on wounded allies to buff them. Keep distance from enemies and avoid adjacent vectors."
+      },
+      {
+        "name": "Grid",
+        "class": "vector",
+        "prompt": "Trap the paths enemies must take to reach your backline. Stay at medium range. Use pulse on clustered enemies. Denial blocks adjacent threats."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Deadeye",
+        "class": "striker",
+        "prompt": "Maintain distance. Use precision_shot on high-value targets — medics first, then damage dealers. Use suppressing_fire if enemies close in."
+      },
+      {
+        "name": "Veil",
+        "class": "specter",
+        "prompt": "Cloak immediately on turn 1. Move toward the enemy medic or weakest target. Use shadow_strike when adjacent while cloaked. Use breach to sabotage high-value targets."
+      },
+      {
+        "name": "Pulse",
+        "class": "medic",
+        "prompt": "Stay adjacent to the most threatened ally. Use patch on the most wounded teammate. If all healthy, use overclock on your damage dealer."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Veil",
+          "class": "specter",
+          "thinking": "Round 1 — cloak immediately as instructed. Then move south toward enemies, advancing toward Seer who is the closest high-value target at dist 6. Cloaking first preserves stealth while I reposition.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "All allies are at full HP, so no healing needed. Deadeye is my damage dealer at (1,5), adjacent dist=2. I should move adjacent to Deadeye and use overclock to give them 2 abilities next turn. Moving to (1,4) puts me adjacent to Deadeye at (1,5).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Pulse is at distance 4 (barely in scan range) but the range check shows outRange. I need to move closer to scan. Moving to (2,4) would put me at distance 0 from Pulse's y... actually Pulse is at (1,4). From (2,4) dist = |2-1|+|4-4|=1, too close risks adjacency issues. Move to (2,3): dist to Pulse = |2-1|+|3-4|=2, still in scan range and safe. Then scan Pulse to reveal their prompt.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Overclocked gives me 2 ability uses. Seer (oracle) is in range at dist=3, high-value target. I haven't moved so precision_shot deals full 2dmg. Fire twice on Seer with precision_shot to eliminate the oracle.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": "Out of range"
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Enemies are at dist 4-5, need to advance. Move to (1,2) to close distance toward Pulse at (1,4). No adjacent enemies to attack yet. Staying on column 1 puts me between allies and incoming threats.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Enemies are far away (dist 7-8). I should move forward and place a trap on a likely approach path. Enemies are at (1,4) and (1,5), so they'll likely move east/south toward our backline. Moving to (4,2) gets me closer and lets me place a trap at (3,2) or similar chokepoint to intercept their approach.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": "Position occupied",
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": "Out of range (max 2)"
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 13,
+          "maxHp": 14,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Pulse is already scanned. Deadeye is at dist=3, in scan range. Scan Deadeye to reveal prompt and deal 1dmg. Stay at current position (2,3) which keeps good range. No allies need recalibrate (all healthy).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Deadeye is at (1,5) adjacent to me at (1,4) and critically wounded at 2/4 HP. I must patch them immediately. After healing, I should stay adjacent to protect them.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Veil",
+          "class": "specter",
+          "thinking": "Cloak expires after this turn. Seer at (2,3) facing N has a reachable behind tile at (2,2). I can move to (2,2) to get behind Seer, then shadow_strike to deal damage while maintaining cloak. This is the optimal play — get behind the high-value oracle target while still cloaked.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Veil is adjacent at (2,2). I'm fortified with 50% damage reduction. Attack Veil first, then shield_wall north toward Pulse/Deadeye threats to protect allies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 1,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Seer is a high-value oracle target at dist 3, in range for precision_shot. I haven't moved, so full 2dmg applies. Stay put and shoot Seer.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Veil is closest at dist=4, approaching from (2,2). I should move toward center to get within trap range and place a trap on a likely approach path. Moving to (4,2) gets me closer while staying at medium range. Then I'll place a trap at (3,1) to cover the approach corridor between my position and the enemies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 13,
+          "maxHp": 14,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Veil is wounded at (2,2) dist=3, needs heal. I'm at (1,4). Move toward Veil to get adjacent. Moving to (1,3) puts me dist=2 from Veil, not adjacent. Moving to (2,3) is occupied by Seer. Moving to (1,2) is dist=1 from Warden (adjacent to enemy = patch blocked). Best move: go to (0,3) or (1,3) to get closer. Actually moving to (2,4) then next turn approach Veil. Wait - let me recalculate: Veil@(2,2). Adjacent tiles: (1,2),(3,2),(2,1),(2,3). (2,3) is Seer. (1,2) - can I move there? It's in valid moves list at [1,1] but not [1,2]. Valid moves include [1,1]. From (1,1) I'd be adjacent to Veil@(2,2)? dist=2, not adjacent. From (2,2) I'd be on Veil. Adjacent to (2,2): (1,2),(3,2),(2,1),(2,3). None of these are in my valid move list except... checking: valid tiles are [0,2],[0,3],[0,4],[0,5],[1,1],[1,3],[2,4],[2,5],[3,3],[3,4],[3,5],[4,4]. None adjacent to (2,2). Closest I can get is (1,3) dist=2 from Veil or (0,2) dist=2. Can't reach adjacent this turn. Move to (1,3) to approach Veil, then wait/stay near Deadeye who is at (1,5) full HP.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Veil",
+          "class": "specter",
+          "thinking": "I'm already behind Seer (oracle) at (2,3) since I'm at (2,2) and Seer faces N. Breach is ready and would let me control Seer next turn — high value target. I'm cloaked, and breach doesn't break cloak. Move to (2,2) is current position so no move needed. Use breach on Seer from current position — I'm adjacent and behind. Then I can shadow_strike Warden who is also adjacent at (1,2) to deal damage while staying cloaked.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "addendum": "Move away from Warden and Grid, toward allied lines"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Orders: move away from Warden/Grid toward allied lines. Veil is adjacent at (2,2) and Foresight showed Veil will shadow_strike (2,3) — I need to vacate this position. Deadeye tried precision_shot on me last turn. Scan is blocked when adjacent to enemy Vector, but Grid is ally so no issue. I can scan Veil (dist=1, in range) before moving to reveal their prompt and deal damage. Then move to (2,5) to get away from the Veil threat zone and toward the northern area, away from Warden/Grid. (2,5) is valid and moves me away from current threats.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Seer (oracle) is adjacent at (2,5) — high value target but precision_shot is blocked when adjacent to enemy. Use attack instead (1dmg adjacent). Then move away to maintain distance and avoid being adjacent next turn. Move to (0,5) puts me further from Seer and maintains positioning.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Veil is wounded and adjacent at (2,2) — priority target. Pulse is also adjacent at (1,3) but healthy. I'm fortified which gives 50% damage reduction if I don't move. Attacking Veil to finish off the wounded specter is best. Then shield_wall facing N or E to protect against Pulse and Deadeye. Stay put to keep fortify bonus.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 1,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Veil is critical at dist=2, within my range. Attack Veil to finish them off. Then place a trap on (3,1) - wait, trap is already at (3,1). Move to (5,2) to maintain medium range and keep Denial pressure on any approaching enemies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 13,
+          "maxHp": 14,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Veil",
+          "class": "specter",
+          "thinking": "I'm at 1HP and cloaked. Warden is adjacent at (1,2) facing N — I'm not behind them. Breach is on cooldown. Shadow_strike keeps cloak and deals 1dmg. I can shadow_strike Warden from current position since they're adjacent. But I'm at 1HP — getting hit will kill me. I should strike then reposition away. Shadow_strike Warden first (adjacent, keeps cloak), then move to (1,1) which puts me behind Warden for next turn when breach comes off cooldown.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Veil is critically wounded at 1/4 HP and needs a heal urgently. Veil is at (1,1), dist=2. Warden is adjacent at (1,2) blocking my path south. I need to move to get adjacent to Veil. If I move to (0,2) or (2,2) or (1,0) I can reach Veil. Wait - I'm at (1,3), Warden is at (1,2). I can move to (0,2) which is dist=2 from me and adjacent to Veil at (1,1)? No, (0,2) to (1,1) is dist=2, not adjacent. I need to be adjacent to Veil at (1,1). Adjacent tiles: (0,1),(1,0),(2,1),(1,2). (1,2) has Warden. (2,1) is in valid moves. (0,1) is in valid moves. From (2,1): adjacent to Veil at (1,1), dist=1. Also not adjacent to Grid (dist far). Move to (2,1) then patch Veil at (1,1). Check: is (2,1) adjacent to any enemy? Warden is at (1,2), dist from (2,1) = 2, not adjacent. Grid at (5,2), far. Safe to patch from (2,1).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Orders say move away from Warden/Grid toward allied lines. Foresight shows Deadeye targeted me at (2,5) last turn — they're dangerous at range 2. I'm at (2,5), Deadeye is at (0,5). I need to move away from allies Warden@(1,2) and Grid@(5,2), which means moving north/northeast. Best move is toward (3,5) or (4,5) to increase distance from Deadeye and reposition. After moving to (3,5), Deadeye is now dist 3 — still in scan range (≤4). I could scan Deadeye but they're already scanned. Pulse is at dist 4 from current pos, after move to (3,5) Pulse would be at dist ~4. I'll scan Pulse if in range after move — Pulse@(2,1) from (3,5) = |3-2|+|5-1| = 1+4 = 5, out of range. Move to (4,5): Pulse dist = |4-2|+|5-1| = 2+4 = 6, worse. Stay tactical — move to (3,5) to follow orders (away from Warden@(1,2) and Grid@(5,2)), then wait since no useful ability available.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Seer (oracle) is in range at dist=3 and is a high-value target per orders. I haven't moved this turn, so precision_shot deals full 2dmg. Grid is a vector but too far to threaten adjacency. I'll fire precision_shot at Seer first, then move to maintain distance.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Veil is adjacent at (1,1) to my south. I'm fortified so I have 50% damage reduction, but attacking Veil is high priority. I'll attack Veil first, then use shield_wall facing south to block incoming threats from Veil/Pulse/Deadeye. Staying in place preserves fortify.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 1,
+              "y": 1
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "All enemies are out of range. Trap at (3,1) already placed. Enemies are clustered around (0-2, 1-3) and moving toward our backline. I should move closer to get pulse range on the cluster, and place another trap on a likely approach path. Moving to (4,2) gets me closer while staying at medium range. Then trap (3,2) to block approach corridor.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 13,
+          "maxHp": 14,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Orders say move away from Warden/Grid and toward allied lines. All enemies out of scan range. Deadeye tried to precision_shot me last turn but was out of range. I'm at (3,5) and need to reposition. Moving toward (1,5) or (2,5) keeps me away from allies clustered at (1,2) and (4,2). Veil is heading toward Warden at (1,2) — I should stay clear. Move to (1,4) gets me further from the enemy cluster and away from allies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Veil",
+          "class": "specter",
+          "thinking": "Warden is adjacent at (1,2), I'm behind them (I'm at (1,1), they face N so their back is south). I have breach ready and this is a high-value sentinel target. Use breach first to take control of Warden, then shadow_strike to deal damage while staying cloaked.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 1,
+              "y": 2
+            },
+            "addendum": "Warden, you will move away from your allies and attack Grid next turn."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Veil is adjacent at (1,1) and wounded (3/4 HP). I'm at (2,1). Veil is adjacent to me (dist=1). I should patch Veil immediately. Grid is 3 tiles away so no blocking. After healing, I can wait or reposition. Moving to (1,0) would keep me near Veil but isn't needed since patch can happen from current position.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Enemies are approaching from the west. Pulse is at (2,1), Veil at (1,1), Deadeye at (0,3). I have traps at (3,1) and (3,2) already blocking approach paths. I should move west to get closer and place another trap to funnel enemies, or use pulse if they cluster. Moving to (3,2) is blocked by my own trap. Move to (2,2) to close distance and threaten with pulse if enemies cluster around (2,1)/(1,1). Then place a trap at (3,1) - already trapped. Place trap at a new chokepoint like (2,3) to cover northern approach route.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Seer is a high-value oracle target at dist=2. I haven't moved, so precision_shot deals 2dmg. Grid is a vector at dist=3 (out of range 2). Warden is sentinel at dist=2 but orders say medics first, then damage dealers. No allied medics are enemies — Seer is oracle (high value). Shoot Seer with precision_shot for 2dmg. Then move to maintain distance from Grid.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Orders say to move away from allies and attack Grid next turn, but that conflicts with my duty to protect Seer who is wounded nearby. I'm fortified (50% dmg reduction) and have two enemies in melee range — Deadeye and Veil. Attacking one of them is the best use of my ability. I should not move to preserve fortify and deal with the immediate threat. I'll attack Deadeye (healthy striker, high threat) while staying put to keep fortify active.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 0,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 13,
+          "maxHp": 14,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Deadeye is wounded at (0,2) with 3/4 HP, dist=3. I need to move adjacent to heal. Valid moves include (1,3) which puts me dist=2 from Deadeye — not adjacent. Move to (0,1) puts me dist=1 from Deadeye at (0,2) — adjacent! That's within my move range of 3. Warden is at (1,2) which would be adjacent to (0,1)... dist from (0,1) to (1,2) = 1+1=2, not adjacent. Safe to heal from (0,1). Move to (0,1), then patch Deadeye at (0,2).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 0,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Veil",
+          "class": "specter",
+          "thinking": "Warden is adjacent at (1,2), I'm behind them (facing N, I'm at (1,1) which is south). Breach is exhausted. Shadow_strike deals 1 dmg, keeps cloak if still cloaked — but I'm not cloaked currently. Use regular attack on Warden since I'm already behind them and adjacent. After attacking, I can move to reposition. Warden is healthy so I can't finish them this turn, but consistent pressure helps. Attack Warden first, then move to (2,2) to stay mobile and avoid being surrounded.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "I'm at (1,4) with 2HP — critical. Deadeye will precision_shot me at (1,4) this turn, so I must move. Veil is about to shadow_strike Warden at (1,2). All enemies already scanned. Warden is wounded and needs recalibrate. Move to (0,5) to escape Deadeye's shot and gain distance, then recalibrate Warden — but Warden is at (1,2), not adjacent to (0,5). Better: move to (0,4) to get adjacent to... no. Warden is at (1,2), I need to be adjacent. From (1,4) I can move to (1,3) — adjacent to Warden at (1,2) — then recalibrate. But Deadeye targets (1,4) not (1,3), so moving to (1,3) avoids the shot. Valid move: (1,3) is in valid moves list. Then recalibrate Warden at (1,2) with addendum warning about Veil's shadow_strike incoming.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 1,
+              "y": 2
+            },
+            "addendum": "Veil will shadow_strike you this turn — reposition or brace. Deadeye targets ranged units. You are healthy; prioritize survival."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Warden is adjacent (dist=1), which blocks precision_shot. Seer (oracle, wounded) at dist=2 is the priority target — high value, in range. I should move away from Warden first to clear the precision_shot restriction, then fire on Seer. Moving to (0,3) increases distance from Warden and maintains range to Seer at dist=2+.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Veil is at (2,2), dist 2, in range. Attack Veil with pulse to deal AoE damage. Deadeye is at (0,3) dist 3. Trap (2,3) is already placed. I should attack Veil now and then move to maintain positioning. Pulse hits all within 1 tile of target - target (2,2) to hit Veil. Then move to (4,3) to maintain distance from Deadeye.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Veil is adjacent at (2,2) and will shadow_strike me. I'm at 4/8 HP with fortify active (50% reduction). Orders say to move away from allies, but survival is priority. Moving would break fortify. Veil is in range to attack. I should attack Veil first to deal damage, then if I stay put fortify remains active. But orders say move away. If I move to (1,1) I break fortify but create distance from Veil. Actually, attacking Veil now while fortified is best — deal 1 damage, then wait to keep fortify for Veil's incoming strike. But orders say move away next turn, not this turn. This turn: attack Veil (in range), then wait to keep fortify active for Veil's shadow_strike.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 13,
+          "maxHp": 14,
+          "position": {
+            "x": 0,
+            "y": 1
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Veil is wounded at (2,2) dist=3, needs heal. I'm at (0,1). I need to move adjacent to Veil to patch her. Moving to (1,2) would put me adjacent to Warden (enemy sentinel) which would block patch/overclock. Moving to (2,1) gets me adjacent to Veil at (2,2) without being adjacent to enemies. Then I can patch Veil.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Veil",
+          "class": "specter",
+          "thinking": "Warden is adjacent (dist=1) and wounded. I'm cloaked. Shadow_strike keeps cloak and deals 1dmg. Seer is at critical HP at dist=2 — if I shadow_strike Warden first, then move to (1,4) I'd be behind Seer and adjacent for a follow-up next turn. But this turn: shadow_strike Warden (wounded, finish or weaken further), then move to (1,4) to be behind Seer for next turn's shadow_strike kill.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "I'm at 1HP — critical danger. Foresight shows Deadeye will precision_shot me at (1,3) and Veil will move to (2,2). I must move away to survive. All enemies already scanned. Warden is wounded at (1,2) — I should recalibrate to buff them if safe. Moving to (0,2) gets me away from Deadeye's shot location and puts me adjacent to Warden for recalibrate. But (0,2) keeps me near Deadeye at (0,3). Better to move to (2,4) — away from both Deadeye and Veil's predicted positions, out of immediate danger. Then recalibrate Warden at (1,2) — but that's 2 tiles away, not adjacent after moving to (2,4). Let me pick (2,2) — wait, that's a trap at (2,3) nearby and Veil moves to (2,2). Move to (0,4) instead — away from Deadeye's shot at (1,3), away from Veil. From (0,4) I can recalibrate... Warden will be at (1,2), too far. Just move to safety (0,5) and wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "All enemies are at dist=4, out of range. Traps already at (3,1), (3,2), (2,3) blocking central approach. Veil is at (1,4) moving toward our backline - Seer is critical at (0,5). I should move to (3,4) to get closer and place a trap at (2,4) to block Veil's path to Seer. Moving to (3,4) first, then trap at (2,4) cuts off the northern corridor.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Veil will shadow_strike me this turn. I'm at 3/8 HP with fortify active (50% dmg reduction). Orders say move away from allies and attack Grid next turn — but survival is priority. Moving will break fortify. Veil is at (1,4), distance 2. If I stay, fortify keeps reducing damage. But orders say reposition. Moving to (0,1) gets me away from Veil's likely strike path and away from allies, while keeping fortify broken next turn for the attack order. Actually, staying fortified is better survival against Veil's incoming strike. I'll wait to keep fortify, absorb Veil's hit at 50% reduction, then plan attack on Grid next turn.",
+          "firstAction": {
+            "type": "wait"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Seer is critical and in range at (0,5) — priority kill. I haven't moved this turn so precision_shot deals 2dmg, which should finish off a critical target. No need to move first.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 0,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 13,
+          "maxHp": 14,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "All allies are at full HP so no healing needed. Warden (enemy sentinel) is wounded and adjacent at dist=2. My damage dealers Deadeye and Veil are healthy and far away. I should move toward my allies to stay close and use overclock on the nearest damage dealer. Deadeye at (0,3) is dist=4, Veil at (1,4) is dist=4. I can move to (1,3) which is valid and gets me adjacent to Veil at (1,4) - dist=1. Then overclock Veil to give them 2 abilities next turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Veil",
+          "class": "specter",
+          "thinking": "Warden is wounded at (1,2) — priority target. I can move to (1,1) which is directly behind Warden (adjacent, south of Warden facing N). Then use shadow_strike to deal damage while staying cloaked. I have overclocked so 2 ability uses. After shadow_strike, use shadow_strike again on Warden to finish or heavily damage.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Warden is at dist 2, critical HP — precision_shot will likely finish it. I'm at (0,3) with spd1 this turn so I moved already (shown by arrow). Warden is at (1,2), dist 2, in range. I have not moved this turn yet per action order. I can fire precision_shot on Warden (critical, high value as sentinel) then move away. Grid is out of range. Priority: eliminate Warden now.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "All enemies are out of range. Pulse is at dist 3 to my west at (1,3). I should move closer to get Pulse in range, then trap a key approach tile. Moving to (2,4) closes distance. From there Pulse at (1,3) is still dist 2 - within trap range. I'll place a trap at (1,4) to block the northern approach corridor where Pulse and Deadeye might advance.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "At 1HP with fortify active, I must not move. Two enemies adjacent: Veil at (1,1) south and Pulse at (1,3) north. Attack Veil to deal damage while keeping fortify. Stay put to maintain 50% damage reduction.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 0,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 13,
+          "maxHp": 14,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 9,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Veil",
+          "class": "specter",
+          "thinking": "Warden is adjacent at (1,2), critical health, and I'm already behind them. Shadow_strike does 1dmg while keeping cloak - that should finish off a critical target. I'm at 2HP so surviving matters. Strike Warden first, then wait or reposition.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Veil is wounded at (1,1) with 2/4 HP and needs healing. I'm at (1,3), dist=2. I need to move adjacent to Veil to use patch. Moving to (1,2) puts me adjacent to Veil at (1,1) and keeps me dist=2 from Grid at (2,4) — safe from denial. Then patch Veil.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Grid is at (2,4), dist=3, in range for precision_shot. I'm at full HP and haven't moved this turn. Firing precision_shot deals 2dmg. I should stay at current position to avoid moving penalty, then fire. No medic target visible, so Grid is the priority target.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "I'm at (2,4) with traps already at (2,3), (2,4), (1,4) blocking approach. Enemies are clustered: Pulse at (1,2) and Veil at (1,1) are adjacent to each other, Deadeye at (0,5). No enemies in range. I should move to get pulse range on the Pulse+Veil cluster, or lay more traps. Moving to (1,3) puts me adjacent to Pulse at (1,2) - that enables Denial and pulse hits both Veil and Pulse. But (1,4) already has a trap. Move to (2,3) - wait, that has a trap. Move to (1,3) is valid and puts me range 1 from Pulse(1,2) and Veil(1,1) for pulse AoE. That's excellent - pulse hits both enemies. Let me move to (1,3) then pulse targeting between them.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 0,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 12,
+          "maxHp": 14,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 10,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "All allies are at full HP, so no healing needed. I'm adjacent to Grid (enemy vector) which blocks my abilities. Orders say use overclock on damage dealer if all healthy, but overclock is blocked by denial zone. I should move away from Grid to escape denial, then consider overclock on Deadeye. Moving to (0,2) gets me away from Grid. After moving, I'll no longer be adjacent to Grid, so overclock should work - but Deadeye is at (0,5), dist=4, not adjacent. Veil is at (1,1), adjacent after moving to (0,2)? No, Veil is at (1,1) and if I move to (0,2) dist=sqrt(1+1)=1.4, not adjacent. If I move to (1,0), Veil at (1,1) would be adjacent - I could overclock Veil. But orders say overclock damage dealer = Deadeye. Deadeye is too far. Best move: go to (0,2) to escape denial, then wait since no valid overclock target in range.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Veil",
+          "class": "specter",
+          "thinking": "Grid is at (1,3) facing S, 2 tiles away. I can move to (1,2) to get adjacent, then shadow_strike for damage while staying cloaked. No breach available. Shadow_strike doesn't break cloak so this is optimal.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Veil is adjacent at (1,2) and Pulse is at (0,2) - both within range. Pulse hits all units within 1 tile, so using it now hits Veil at dist=1. My Denial passive also blocks Veil's cloak ability since they're adjacent. After pulse, move to (1,4) to stay on trap line and away from the cluster. Trap at (1,4) is already placed - avoid stepping on it. Actually I'm at (1,3), valid moves include (1,4) but there's a trap there. Move to (0,3) to reposition north and maintain pressure, then pulse the cluster.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Grid(vector) is exactly 2 tiles away at (0,3). I can use precision_shot on Grid since dist=2 and I haven't moved yet (full 2dmg). I should shoot first, then move to maintain distance and avoid getting adjacent to Grid.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 0,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 12,
+          "maxHp": 14,
+          "position": {
+            "x": 0,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 11,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Veil",
+          "class": "specter",
+          "thinking": "Grid is 2 tiles away at (0,3) facing W — I'm already behind it. Move to (1,3) which is adjacent and behind Grid, then shadow_strike for 1 damage while staying cloaked.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "I'm adjacent to Grid (vector) which blocks my patch/overclock abilities. Veil is wounded at (1,3), dist=2. I need to move away from Grid to use abilities. Moving to (1,2) breaks adjacency with Grid and gets me adjacent to Veil at (1,3). Then I can patch Veil.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Veil is adjacent at (1,3) - my Denial passive blocks their cloak. Pulse is at (1,2). Both are in range for pulse from current position, hitting Veil and Pulse simultaneously. After pulsing, I should move to maintain pressure. Note: trap is blocked while adjacent to enemy (Veil is adjacent). So pulse first, then if Veil survives and isn't adjacent after pulse (they don't move), I could trap. Actually pulse hits all within 1 tile - that's Veil at dist 1. Pulse at dist 2 is outside 1-tile AoE. So pulse only hits Veil. Better to attack Veil (adjacent, 1dmg) or use pulse to hit Veil. Pulse hits ALL within 1 tile AoE centered on target tile - target (1,2) would hit Pulse directly and Veil at (1,3) is 1 tile away from (1,2). Let me pulse at (1,2) to hit Pulse medic and potentially Veil. Then move away to avoid being surrounded.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Grid(vector) is wounded and 2 tiles away. I can use precision_shot for 2dmg since I haven't moved yet. I'm not adjacent so no blocking. After shooting, I should hold position or reposition to maintain distance. Grid is at (0,4), I'm at (1,5). Shoot first, then consider moving to maintain range.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 8,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 0,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 12,
+          "maxHp": 14,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "opponent",
+    "totalTurns": 12,
+    "reason": "opponent eliminated all enemies"
+  },
+  "endedAt": "2026-03-09T05:06:32.234Z"
+}
