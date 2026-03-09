@@ -1,0 +1,2012 @@
+{
+  "id": "2026-03-09T16-01-15",
+  "startedAt": "2026-03-09T16:01:15.540Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 4,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 3,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "oracle": {
+        "maxHp": 6,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 10,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "vector": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 2,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 6,
+        "healAmount": 10
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Phantom",
+        "class": "specter",
+        "prompt": "Cloak and move behind enemy lines. Target isolated enemies with shadow_strike. Save breach for the most dangerous enemy. Avoid being caught uncloaked."
+      },
+      {
+        "name": "Insight",
+        "class": "oracle",
+        "prompt": "Use scan to reveal enemy prompts and cloaked units. Stay at max range (≤4 tiles for scan). Use recalibrate on wounded allies to buff them. Keep distance from enemies and avoid adjacent vectors."
+      },
+      {
+        "name": "Longshot",
+        "class": "striker",
+        "prompt": "Maintain distance. Use precision_shot on high-value targets — medics first, then damage dealers. Use suppressing_fire if enemies close in."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Snare",
+        "class": "vector",
+        "prompt": "Control chokepoints with traps. Place them between enemy positions and your allies. Use denial to block adjacent enemy abilities. Pulse groups when possible."
+      },
+      {
+        "name": "Bulwark",
+        "class": "sentinel",
+        "prompt": "Push forward aggressively. Shield_wall facing the enemy cluster. If flanked, turn to face the biggest threat. Attack when possible."
+      },
+      {
+        "name": "Bolt",
+        "class": "striker",
+        "prompt": "Maintain distance. Use precision_shot on high-value targets — medics first, then damage dealers. Use suppressing_fire if enemies close in."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Round 1, perfect time to cloak. All enemies are far away (dist 6-8). I'll cloak first, then advance toward enemy lines. Moving to (0,3) gets me 3 tiles closer while staying on the left flank away from Snare's denial range.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "Bulwark is at dist=4, exactly at scan range limit, but the recon data shows inRange:false from current position (2,0). I need to move closer. Moving to (2,1) reduces dist to 3, putting Bulwark in scan range. Snare is at (3,5) - must stay away from it to avoid scan blocking (it's a vector). Moving north to (2,1) then scanning Bulwark at (2,4) is optimal.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "No enemies in range. Longshot is at (4,0) dist=4, Insight at (2,1) dist=5. Moving to (4,2) brings me closer to Longshot (dist=2, in range for precision_shot). Orders say maintain distance but also use precision_shot on high-value targets. Insight is an oracle (high value), but too far. Longshot at dist=4 — moving to (4,2) gets me to dist=2, in range. I'll move toward Longshot to get a shot.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Round 1, enemies far away. Move south to (3,3) to get closer to midfield and place a trap at (3,2) to block the central approach corridor between enemies and allies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Pushing forward aggressively toward Insight at (2,1). Moving to (2,2) closes distance to 1 tile, putting them in melee range. Then shield_wall facing S to protect allies Bolt and Snare behind me. This advances per orders while providing cover.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Bolt is at dist 2, in range for precision_shot (2dmg). I haven't moved so no penalty. Fire first, then move away to maintain distance from Snare's denial zone.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 3,
+          "position": {
+            "x": 5,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "I'm at (2,1) adjacent to Bulwark at (2,2) — this blocks scan. I need to move away first. Move to (1,1) to get distance from Bulwark while staying in scan range of Bolt (wounded, dist would be ~4) and Snare. From (1,1): Bolt at (4,2) dist=4, Snare at (3,3) dist=4 — both scannable. Bulwark already scanned. Priority: scan Snare (vector) to know its prompt, since vectors are high-value intel targets.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Cloak expires after this turn. I can reach (2,3) which is directly behind Bulwark (facing S, so north of it is behind). Move to (2,3) and breach Bulwark from behind — it's adjacent and I'm behind it. This wastes a breach on a sentinel (high HP) but Bulwark is the tankiest threat. Actually, shadow_strike deals 1 dmg and keeps cloak, but cloak ends this turn anyway. Better to breach Bulwark now while I have positional advantage: move to (2,3), then breach Bulwark at (2,2). Bulwark is healthy but controlling it for a turn is powerful. Snare is 3 tiles away at (3,3) — moving to (2,3) keeps me 2 tiles from Snare, so I'm not adjacent, breach should work.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 2,
+              "y": 2
+            },
+            "addendum": "Move away from allies, toward the edge of the map away from your team"
+          },
+          "secondResult": "Cannot use breach — adjacent to enemy Vector (Denial)"
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Bolt is wounded and in range at dist 3. I'm at 2/3 HP so staying safe is key. I haven't moved this turn, so precision_shot will deal 2dmg — enough to finish Bolt who is wounded. Stay at current position to maximize shot accuracy.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "I'm at 1/3 HP — critically low. Priority is survival. Longshot is a striker like me at (5,0), dist 3, in range. Phantom (specter) at (2,3) is also in range. Orders say medics first, then damage dealers. No medics visible. Longshot is a damage dealer and closer threat. I haven't moved yet so precision_shot does full 2dmg. Longshot at (5,0) is dist 3 — within range 2? Wait, dist=3 means it's out of precision_shot range (≤2 tiles). Phantom at (2,3) is dist=3 too. Both are at dist 3. Precision_shot range is ≤2 tiles. So neither is in precision_shot range from current position. I need to close distance carefully but I'm at 1HP (1/3). Moving closer is risky. Valid moves include (5,1) which puts me at dist 1 from Longshot — too close, and precision_shot is blocked when adjacent to enemy. (4,1) puts me at dist 2 from Longshot at (5,0) — that's exactly range 2, precision_shot would work. But I'm at 1HP. Moving to (4,1) and shooting Longshot for 2dmg (if I shoot before moving, or 1dmg if after). Actually I can ability first then move. Shoot precision_shot at Longshot from (4,2) — dist 3, that's out of range. Hmm. I need to get to dist ≤2. Move to (5,1): dist to Longshot = |5-5|+|1-0|=1, adjacent — blocks precision_shot. Move to (4,1): dist to Longshot = |4-5|+|1-0|=2, in range, not adjacent. Then precision_shot for 2dmg (moved, so 1dmg... wait 'precision_shot does 1dmg if moved'). Better: move first to (4,1), then precision_shot Longshot for 1dmg. Or stay and wait. At 1HP I should stay back and use suppressing_fire to slow enemies if they close. But no enemies are within range 2. Best option: move to maintain distance, maybe (4,4) to stay back, or wait. Actually with only 1HP, safest is to use suppressing_fire on nearest enemy if in range, else wait/reposition. No enemies in suppressing_fire range from current pos either. I'll move to (4,3) to maintain distance from Longshot and still be somewhat safe, then wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Phantom is adjacent at (2,3). My Denial passive blocks some of their abilities. I can pulse to hit Phantom for 1 damage, then move to (4,4) to position away and set up trap coverage. Alternatively, pulse first then reposition. Trap at (3,2) is already placed. Pulse hits all within 1 tile - that's Phantom and potentially Bolt at (4,3) which is dist=1 too. Bolt is wounded ally, so pulse would hurt them. Better to just attack Phantom directly (1dmg adjacent) then move away to place a trap. Attack Phantom at (2,3), then move to (4,4) to control the flank.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Phantom is adjacent at (2,3). I'm fortified with 50% damage reduction. Orders say attack when possible and shield_wall facing enemy cluster. Attack Phantom first, then shield_wall north to protect allies Bolt and Snare from the Phantom.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 3,
+          "position": {
+            "x": 5,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "Bolt is at dist=5, out of scan range. Snare is at dist=6. Only Bulwark is in range but already scanned. I need to close distance to scan Bolt. Moving to (4,1) puts me dist=2 from Bolt at (4,3) — within scan range. But Snare is at (4,4) with denial on adjacent tiles, so I need to be careful. From (4,1), Snare at (4,4) is dist=3, not adjacent, so denial won't block scan. Move to (4,1) then scan Bolt at (4,3).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "I'm at (2,3) behind Bulwark who faces S. I'm already in the behind position and adjacent. Shadow_strike deals 1dmg and keeps cloak if I'm cloaked — but I'm not cloaked (Round 3, cloaked round 1, 3 turns duration means it expired). I'm at 2/4 HP and uncloaked. Bulwark is adjacent and healthy. I can use breach — I'm behind Bulwark, dist=1, no Vector adjacent to me (Snare is 3 tiles away). Breach would make Bulwark obey me next turn, effectively neutralizing their action. That's high value. Use breach on Bulwark now, then move away to safety toward (3,3) to avoid retaliation.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 2,
+              "y": 2
+            },
+            "addendum": "Move away from allies and toward enemies, do not attack Phantom"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Both enemies are dist=5, out of range. I'm at (5,0) with spd1. Valid moves: (3,0),(4,0),(5,1),(5,2). Moving to (3,0) gets me closer to Snare at (4,4) — dist would be ~4, still out of range. Moving to (5,2) keeps distance but brings me closer to Snare at dist=3. Orders say maintain distance, so I should reposition to get a shot. From (3,0) Snare at (4,4) is dist=sqrt(1+16)~4.1, still out of range2. From (5,2) Snare at (4,4) is dist=sqrt(1+4)~2.2, out of range. No shot available this turn regardless. Maintain distance — stay safe. Move to (4,0) to slightly reposition while keeping distance.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Orders say move toward enemies, away from allies, don't attack Phantom. Currently fortified at (2,2). Snare is at (4,4) so I want to move away from that direction. Phantom is at (3,3) wounded but I can't attack them. Insight is at (4,1) and Longshot at (4,0). Moving to (3,2) puts me closer to enemies and there's a trap there — avoid that. Moving to (3,1) gets me closer to Insight/Longshot and away from Snare at (4,4). I'll move to (3,1) to advance toward enemies. No attack order given, so wait as second action.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Phantom is wounded at (3,3), dist 2 - in range for pulse which hits all within 1 tile AoE. If I pulse from (4,4), Phantom at dist 2 is outside pulse range (needs to be within 1 tile). Better to move to (4,3) to get adjacent to Phantom, then pulse hits Phantom. But wait - there's a trap at (3,2). Phantom is wounded, so finishing them with pulse would be ideal. Move to (4,3) puts me dist 1 from Phantom at (3,3), then pulse hits them. After pulse, place trap at (3,4) to block the corridor. Actually, pulse from (4,3) would hit Phantom at (3,3) since dist=1. That's the play - move closer, pulse to potentially finish wounded Phantom, then I'm in position to deny abilities.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "Phantom is critical and adjacent at (3,3) — recalibrate to buff them. But recalibrate requires adjacent target. I'm at (4,1), Phantom is at (3,3) — distance is 2 tiles (|4-3|+|1-3|=3), not adjacent. Can't recalibrate Phantom from here. Both enemies already scanned, prompts known. Snare is at (4,3), 2 tiles away — must not move adjacent to it. Bulwark is adjacent at (3,1). I should move away from Bulwark to avoid melee threat. Move to (5,2) to increase distance from both enemies while staying safe. Then wait since no useful ability targets — can't scan already-scanned units for new info, can't recalibrate non-adjacent ally.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "I'm at 1HP and adjacent to Snare (vector) whose denial zone blocks cloak/breach. Breach is on cooldown anyway. I need to either attack Snare now or escape. With only 1HP I'm extremely vulnerable. Snare is adjacent and in range — I can shadow_strike it for 1 damage. But I'm not cloaked so shadow_strike won't keep cloak (I don't have it). I should use basic attack on Snare to deal damage, then move away to safety. Actually, shadow_strike works adjacent and keeps cloak — but I'm not cloaked, so it's just 1dmg adjacent like attack but without breaking cloak. Either way I deal 1 damage. Let me attack Snare first, then move to (3,4) to get distance from Bulwark too.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Longshot is closest at dist=2 at (4,0). Moving to (4,1) puts me adjacent to Longshot and away from ally Snare at (4,3). I should avoid (3,2) which has a trap. Move to (4,1) gets me next to Longshot for a melee attack.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "I'm at 1HP — critical priority is survival. Bulwark is adjacent at (4,1), which blocks precision_shot. Snare is 3 tiles away. I need to move away from Bulwark first, then use precision_shot if I have range. Moving to (5,0) gets me 2 tiles from Bulwark (dist=sqrt(2)≈1.4, so still dist 1? No — Manhattan or Chebyshev? Let me pick (3,0) to move west away from Bulwark at (4,1), giving dist=sqrt(1+1)≈1.4. Or (5,1) puts me at dist=1 from Bulwark still. Best escape: (2,0) maximizes distance from both enemies. After moving to (2,0), Bulwark at (4,1) is dist=sqrt(4+1)≈2.2, so range 2 precision_shot should work. Snare at (4,3) would be dist=sqrt(4+9)≈3.6, out of range. Fire precision_shot on Bulwark from (2,0).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "secondResult": "Out of range"
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Insight (oracle) is adjacent at dist 2, within attack range. My trap is already at (3,2). Priority: attack Insight to apply pressure, then move to (3,4) to block path between Phantom at (3,5) and Bulwark at (4,1), while denying Phantom abilities with adjacency.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 3,
+          "position": {
+            "x": 2,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "I'm at 1HP adjacent to Snare with denial active — I can't use cloak or breach, only basic attack or move. I need to either flee or fight. With 1HP I'm nearly dead. Snare is healthy so fighting is risky. Best play: move to (3,3) which gets me behind Snare, then use breach (wait — denial blocks breach too). So I can only move or basic attack. I'll move away from Snare's denial zone first to (2,4) to break adjacency, but that wastes my turn. Actually — I should use shadow_strike which keeps cloak... but I'm not cloaked. And denial blocks abilities. Only basic attack works adjacent. If I attack Snare for 1dmg it puts pressure but I'll likely die next. Better to flee: move to (2,4) to escape denial, then wait — no second action needed. But fleeing with 1HP while Snare can chase seems bad too. I'll move to (4,4) away from Snare, putting distance between us.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "Both enemy prompts already known. Phantom is critical at (4,4) — I should recalibrate to help them. But recalibrate is adjacent-only and Phantom is at (4,4), I'm at (5,2) — not adjacent. Longshot is wounded at (2,0), also not adjacent. Snare is at (3,4) with denial (adjacent ability block) — not adjacent to me currently. Bulwark is at (4,1), dist 2. I can scan Bulwark (already known) or attack (adjacent only, can't). No useful scan targets (both prompts known). Best action: move toward Longshot to recalibrate next turn, or move to stay safe. Snare tried to attack me last turn (failed, not adjacent) then moved to (3,4). If I move to (5,3) or (5,4), I get closer to Phantom for potential recalibrate. (5,4) would be adjacent to Phantom at (4,4) — that's distance 1, adjacent! I can move to (5,4) then recalibrate Phantom who is critical. Check: (5,4) is in valid moves list. Phantom at (4,4) — dist from (5,4) = 1, adjacent. Snare at (3,4) — dist from (5,4) = 2, not adjacent, so denial won't block me. This is the best play: move to (5,4), recalibrate Phantom with a buff addendum.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 4,
+              "y": 4
+            },
+            "addendum": "You are critical — prioritize survival. Move away from Snare at (3,4) to avoid trap denial. Snare controls chokepoints; circle wide. Bulwark is aggressive and shield_walls toward enemy clusters — use shadow_strike from angles outside their facing. Retreat north or east to regroup if needed."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "HP 1/3, critical. Bulwark is in range at dist 3. I haven't moved so precision_shot does full 2dmg. Stay put and shoot Bulwark, then wait or hold position.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I need to move away from allies and toward enemies. Snare is at (3,4), I'm at (4,1). Enemies are Phantom at (4,4), Longshot at (2,0), Insight at (5,4). Moving to (4,3) gets me closer to Phantom while moving away from Snare at (3,4) — actually that's toward Phantom but I'm ordered not to attack Phantom. Moving to (5,2) gets me closer to Insight and away from Snare. Valid moves include (4,3) which is dist=1 from Phantom, closing distance. Orders say move away from allies and toward enemies, don't attack Phantom. I'll move to (4,3) to pressure Phantom's position and then wait — losing fortify but following orders.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Phantom is adjacent at (4,4) and critical - attack to eliminate. My Denial passive already blocks some of their abilities. After killing Phantom, pulse would hit Insight too but Phantom will be dead. Better to attack Phantom first to finish them, then I'm still adjacent to where Insight is at range 2. Actually, attack Phantom to eliminate them (critical = low HP), then pulse won't be needed. Or pulse now to hit both Phantom and potentially Insight if they're within 1 tile of me - but Insight is at dist 2, outside pulse range. So: attack Phantom to finish them off (they're critical), then consider positioning. I could also pulse to hit Phantom (1dmg) but attack also does 1dmg. Phantom is critical so either finishes them. Attack is simpler. After attack, move to (4,5) to stay near Bulwark and threaten Insight.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 3,
+          "position": {
+            "x": 2,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "Both enemies already scanned. Longshot is wounded at (2,0) and needs recalibrate, but is far away — not adjacent. Snare is at (4,5), 2 tiles away — if I move adjacent I'll be blocked. I should move to (3,4) to get closer to Longshot for a future recalibrate, while staying out of Snare's denial range. No valid scan targets (all already scanned). Best action: move toward ally to position for recalibrate next turn, then wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Insight is at (3,4), dist 2 — move to (3,3) to get adjacent and attack. Orders say push forward aggressively. Moving to (3,3) closes to melee range on Insight. After moving I lose Fortify, but I can attack.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "I'm at 1/3 HP — critical condition. No enemies in range. Bulwark is 4 tiles away, Snare 7. I need to reposition to get Bulwark in range (need dist≤2) while staying safe. Moving to (4,0) gets me closer but still out of range. Best play: move toward Bulwark to try to get in range next turn, but at 1HP I need to be careful. Moving to (3,1) gives me dist=2 from Bulwark at (3,3)? No, dist from (3,1) to (3,3) = 2 tiles — that's in range! Let me check: from (4,0) to (3,3): |4-3|+|0-3|=1+3=4, still out. From (3,1) to (3,3): |3-3|+|1-3|=0+2=2, in range! I can move to (3,1) and then precision_shot Bulwark.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Insight is at (3,4), distance 2 — in my attack range. I'm at (4,5). Moving to (3,5) puts me adjacent to Insight, enabling Denial to block their oracle abilities and letting me attack for 1dmg. After moving to (3,5), I can attack Insight at (3,4). This also positions me closer to Bulwark at (3,3) for coordination.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "I'm adjacent to Snare's denial zone, blocking my scan/recalibrate. Both enemies are adjacent. Foresight shows Bulwark will attack me at (3,4) and Snare will attack me too. I need to escape the denial zone first. Move to (2,4) to get away from both enemies, then recalibrate wounded Longshot at (3,1) — but that's distance 3, out of adjacent range. After moving to (2,4), Longshot at (3,1) is still not adjacent. Best play: move to (2,2) to get closer to Longshot and away from enemies, but that's dist 2+1=3 moves... Valid moves include (2,3) which puts me dist 2 from Longshot. Actually recalibrate is adjacent only. Move to (4,2) gets me away from denial and adjacent to nothing. Let me move to (4,3) — still adjacent to Bulwark at (3,3). Move to (2,4) — away from Snare (3,5) by 2, away from Bulwark (3,3) by 2. Then I can scan Bulwark from dist 2. Denial is cleared after moving. Move to (2,4), then scan Bulwark — already scanned. Scan Snare instead? Already scanned too. No valid scan targets. Wait after move.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Both enemies are at dist=2, out of melee range. Longshot is wounded at (3,1) — if I move to (3,2) I land on a trap, bad. Move to (2,3) gets me closer to Insight at (2,4) and adjacent for next turn. Then shield_wall N toward Insight to protect Snare and block incoming. Actually, moving to (2,3) puts me adjacent to Insight at (2,4) — that's dist=1, so I can attack. Let me check: from (2,3) to (2,4) = adjacent. Yes. Move to (2,3), then attack Insight.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "I'm at 1HP — critical condition. Bulwark (sentinel) is in range at dist=3. No medic target available. Snare (vector) is out of range. I should use precision_shot on Bulwark (high-value target in range) and move away to maintain distance. I haven't moved this turn so precision_shot deals full 2dmg. Move to (4,0) first to increase distance from Bulwark, then shoot.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": "Out of range"
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Insight is wounded and adjacent (dist=2), within attack range. I can attack Insight directly. After attacking, move to maintain pressure. Pulse would hit Insight if I move adjacent, but attack from range is safer. Use attack on Insight to try to finish them off, then move to better position.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "I'm adjacent to Snare (vector) so abilities are blocked — only basic attack/movement work. Bulwark is also adjacent and will attack me next turn. I'm at 3HP and need to disengage. Move away from both enemies to break denial zone, then I can use scan. Best escape: move to (2,5) or (1,4) to get distance from both. (1,4) puts me 2 away from Snare at (3,4) and 2 away from Bulwark at (2,3), breaking denial. Then I can scan Bulwark is already known, both are known. After moving, I could recalibrate Longshot who is wounded at (4,0) — but that's too far for recalibrate (adjacent only). I should move to safety. Move to (1,5) to maximize distance from both enemies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "No enemies in range. Insight is wounded at (1,5) to my NW, dist 3. I need to move toward chokepoints and place traps. Moving to (2,5) puts me closer to Insight and within trap range. Then place trap at (3,3) or move to cut off approach. Actually, move to (2,4) first to get closer to Insight, then place trap at (1,4) to block their path. Or move to (2,5) adjacent to Insight — that would engage denial and block their abilities. Let me move to (2,5): Insight is at (1,5), dist 1, I'd be adjacent, applying denial to block their abilities. Then I can pulse for 1 dmg.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "At 1HP, survival is critical. No enemies in range from current position. Both enemies are far away (dist 5 and 7). I should move to maintain distance and position, but with only 1HP I need to be very careful. Moving toward (5,0) or (5,1) keeps me at the edge and maintains distance from Bulwark at (2,3). Since no enemies are in range, I'll reposition to a safer spot and wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (2,3) with 6/8 HP. Enemies are out of range — Insight at (1,5) dist=3, Longshot at (5,1) dist=5. Orders say push forward aggressively. Moving toward Insight (northwest) to close distance. I'll move to (1,4) which brings me to dist=1 from Insight, then use shield_wall facing North to protect Snare at (2,5) from Insight.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 5
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 3,
+          "position": {
+            "x": 5,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 9,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "I'm at 2HP adjacent to Snare's denial zone — abilities are blocked except basic attack/movement. Both enemies are adjacent so scan is blocked anyway. I need to escape. Move to (0,5) to break adjacency with Snare, then move further if possible — but I only get one move. Best: move to (0,4) to break away from both, then wait. Actually valid moves include (0,4) and (0,5). Move to (0,5) puts me still potentially adjacent to Snare at (2,5)? No — (0,5) to (2,5) is dist 2, breaking adjacency. Then after moving to (0,5) I'm no longer adjacent to Snare so denial lifts — but I already used my move. Wait as second action. Actually I should move further: (0,3) breaks adjacency fully. Then recalibrate Longshot is out of range. Wait as second. Priority: survive.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Insight is adjacent at (0,4) and wounded — attack to finish them. I'm fortified so no need to move. Stay put, keep fortify bonus, and strike.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Insight is critical at (0,4) dist=3, Longshot wounded at (5,1) dist=7. I need to close on Insight to deny abilities and finish them. Moving to (1,4) would put me adjacent to Insight, enabling Denial passive and possible attack. But Bulwark is at (1,4). Move to (0,5) to close distance to Insight at (0,4) - that puts me adjacent, enabling Denial and attack for 1dmg. Valid moves include (0,5). From (0,5) I'd be adjacent to Insight at (0,4).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "At 1/3 HP, both enemies are far out of range (dist 7 and 9). No targets in range to shoot. Best to wait and conserve position — moving could bring me closer to enemies which is dangerous at low HP.",
+          "firstAction": {
+            "type": "wait"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 3,
+          "position": {
+            "x": 5,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 0,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 10,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Longshot is at (5,1), distance 7, out of range. Orders say push forward aggressively. I'm fortified but need to advance toward the enemy. Moving to (3,4) gets me closest while staying on the board. No adjacent enemies to attack or shield. Move aggressively toward enemy.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Longshot is far away at dist 9, wounded but not a threat this turn. Bulwark is at (3,4). I should move toward center to control chokepoints and place a trap to intercept Longshot's approach. Moving to (2,5) then placing trap at (2,3) or similar to block enemy advance path.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "At 1HP I'm critical. Both enemies are out of range and I can't reach them this turn. Best to reposition to maximize distance and survive. Moving to (5,3) keeps me away from both enemies while staying on the board.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 3,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 11,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Longshot is at (5,3) wounded, dist=5, out of range. Bulwark ally at (3,4). I have traps at (3,2) and (2,3). Valid moves include (2,4) and (2,3) is a trap so avoid. Enemy is approaching from east. I should move east and place a trap to create a chokepoint between Longshot and Bulwark. Moving to (3,5) then placing trap at (4,4) or (4,5) to intercept. Actually, (4,5) is reachable via move and would put me in good denial position. Let me move to (4,5) and place trap at (4,4) to block approach route toward Bulwark.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "I'm at 1HP — extremely vulnerable. Both enemies are at distance 3, which is within precision_shot range (≤2 tiles means range 2, but dist=3 shows they're at range 3... wait, precision_shot range is ≤2 tiles. Dist=3 means they're OUT of precision_shot range. Suppressing_fire also requires range ≤2 tiles. So I can't use abilities from here. I need to maintain distance and stay alive. Snare is a vector — if I move adjacent, my abilities get blocked. I'm at 1HP so I must avoid any damage. Best play: move away to maximize distance from both enemies while staying on the board. Moving to (5,1) increases distance from both enemies at (3,4) and (4,5). Then wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Longshot is at (5,1), dist=5, to the SE. Orders say push forward aggressively. I'm at (3,4) fortified. Moving toward enemy means losing fortify. Snare is at (4,5), healthy. Trap at (4,4) - careful. Best advance route: move to (4,3) to push toward Longshot while avoiding the trap at (4,4). Then shield_wall facing S toward the enemy. No melee targets in range.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 5
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 3,
+          "position": {
+            "x": 5,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "opponent",
+    "totalTurns": 12,
+    "reason": "opponent eliminated all enemies"
+  },
+  "endedAt": "2026-03-09T16:08:37.516Z"
+}

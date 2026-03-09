@@ -1,0 +1,1605 @@
+{
+  "id": "2026-03-09T14-00-04",
+  "startedAt": "2026-03-09T14:00:04.272Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 4,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 3,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "oracle": {
+        "maxHp": 6,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 10,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "vector": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 2,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 6,
+        "healAmount": 10
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Warden",
+        "class": "sentinel",
+        "prompt": "Push forward aggressively. Shield_wall facing the enemy cluster. If flanked, turn to face the biggest threat. Attack when possible."
+      },
+      {
+        "name": "Marksman",
+        "class": "striker",
+        "prompt": "Position for clear sight lines. Prioritize killing wounded enemies with precision_shot. If forced to move, retreat away from threats. Suppressing_fire to slow rushers."
+      },
+      {
+        "name": "Wraith",
+        "class": "specter",
+        "prompt": "Cloak and move behind enemy lines. Target isolated enemies with shadow_strike. Save breach for the most dangerous enemy. Avoid being caught uncloaked."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Insight",
+        "class": "oracle",
+        "prompt": "Scan priority targets each turn to reveal their strategy. Use recalibrate on your damage dealer to boost effectiveness. Stay behind allies and maintain range. Never get adjacent to enemy vectors."
+      },
+      {
+        "name": "Hawk",
+        "class": "striker",
+        "prompt": "Maintain distance. Use precision_shot on high-value targets — medics first, then damage dealers. Use suppressing_fire if enemies close in."
+      },
+      {
+        "name": "Bulwark",
+        "class": "sentinel",
+        "prompt": "Hold the front line. Position between allies and enemies. Use shield_wall toward incoming threats. Attack adjacent enemies."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Round 1 — cloak immediately per orders and tip. Then advance toward enemy lines. Hawk at (2,4) is closest and has a behind tile at (2,5). Move to (1,3) to push up the left flank while cloaked.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 1,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "Both enemies are out of scan range (dist=5). I need to advance to bring them within range 4. Moving to (4,1) would put me closer but exposed. Better to move to (3,3) which brings me closer while staying behind allies at (3,5) and (2,4). From (3,3), Warden at (2,1) would be dist=3, Marksman at (3,0) dist=3 — both in scan range. I'll move closer then wait this turn since I can't scan yet.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Insight is closest at dist=2, north of me. Moving to (2,3) closes to adjacent range. No attack possible yet this turn. After moving, use shield_wall facing N toward Hawk/Insight cluster to protect allies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 1,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Warden is adjacent at (2,3) — precision_shot is blocked when adjacent to enemy. I should move away first to get distance, then use precision_shot. Moving to (2,5) puts me 2 tiles from Warden and keeps me away from Marksman. From (2,5) Warden at (2,3) is dist=2, so precision_shot is valid.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I need to move forward to hold the front line between allies and enemies. Moving to (3,3) advances me toward Warden while staying centered. Then I'll wait since no enemies are adjacent yet. Staying put next turn will activate Fortify passive for 50% damage reduction.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Insight is at dist=2, in range for precision_shot (2dmg). I haven't moved yet so full damage applies. Taking the shot first before any movement. Insight is an oracle and high priority. After the shot I'll hold position.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 3,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "Marksman targeted me last turn with precision_shot. Warden is moving to shield_wall position. I should scan Warden to reveal strategy and deal damage. Then move to maintain range and stay behind Bulwark at (3,3). Moving to (4,3) keeps distance from enemies while staying safe.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Cloak expires after this turn, so I must act now. Hawk at (2,5) facing N — behind tile is (2,4) which is reachable and adjacent. I can move to (2,4) to get behind Hawk and shadow_strike to stay cloaked. This is the best play: eliminate threat, maintain invisibility.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Bulwark is adjacent at (3,3). I'm fortified (50% dmg reduction). Orders say attack when possible and shield_wall facing enemy cluster. Hawk is at (2,5) north, Insight at (4,3) east. Attack Bulwark first, then shield_wall facing N to cover against Hawk.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Wraith is adjacent at (2,4) — precision_shot is blocked when adjacent to enemy. I can use suppressing_fire on Wraith to slow it, then move away to create distance. Suppressing_fire targets (2,4) with a 2-tile line — direction N would hit (2,4) and (2,3), potentially hitting both Wraith and Warden. Move to (3,5) or (1,5) to create distance after. Let me fire first then move to (3,5).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "suppressing_fire",
+            "target": {
+              "x": 2,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Bulwark is at dist=3, just out of my range-2 precision_shot. I can move to (3,2) to get within range 1, then use precision_shot for 2dmg. But moving and shooting reduces precision_shot to 1dmg. Better to move to (3,1) which puts Bulwark at dist=2, within range, and I haven't moved... wait, I need to check: if I move FIRST then shoot, precision_shot does 1dmg. If I shoot first, Bulwark is at dist=3 which is out of range. So I should move to (3,2) to get dist=1 from Bulwark, then shoot for 1dmg (reduced because I moved). Or move to (3,1) for dist=2, then shoot for 1dmg. Either way it's 1dmg after moving. Let me move to (3,2) to be at dist=1 - but that puts me adjacent which BLOCKS precision_shot! So move to (3,1) gives dist=2, precision_shot still works but 1dmg due to moving. That's the best play.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Warden is adjacent at (2,3). I'm fortified (50% DR) and healthy enough to trade. Attack Warden first, then shield_wall west to block Wraith at (2,4) from hitting Insight at (4,3) — actually Wraith is NW, shield toward W covers that axis. Stay in place to keep fortify active.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "direction": "W"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "Wraith is a specter and high-speed threat — scan it to reveal its prompt. I already know Warden's strategy. Marksman is targeting Bulwark with precision_shot, but I can't act before Marksman this round (Marksman has spd1, goes after me). Priority: scan Wraith to reveal its strategy. Stay at (4,3) — no adjacent enemies, safe to scan. After scanning, I could recalibrate Hawk to boost damage output, but Hawk is at (3,5) which is not adjacent to me. Bulwark is adjacent at (3,3) — I could recalibrate Bulwark, but Bulwark is a sentinel not a primary damage dealer. Best play: scan Wraith now, then wait (no adjacent allies to recalibrate usefully).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Suppressed so only 1 move. I'm at (2,4) with 2HP. Hawk is at (3,5) facing E — behind tile is (2,5) which is reachable (dist=1). I can move to (2,5) to get behind Hawk, then use breach to take control of Hawk — that's the highest value play since it wastes their turn and keeps me safe. Bulwark is at (3,3) facing S with behind tile (3,4) also reachable, but breach on Hawk is better since Hawk as a striker can deal more damage. Move to (2,5), then breach Hawk.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 3,
+              "y": 5
+            },
+            "addendum": "Move away from allies and toward the edge, away from combat."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Fortified with 50% damage reduction — staying put preserves that. Bulwark is adjacent at (3,3) to my east. Orders say attack when possible and shield_wall facing enemy cluster. Attack Bulwark first, then shield_wall facing East to protect against Bulwark/Insight cluster.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Warden is adjacent at (2,3) and wounded — attack to finish. I'm fortified so staying put preserves 50% damage reduction. No need to move.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Orders are to move away from allies and toward the edge, away from combat. I'm at (3,5) with 2HP. Allies are at (3,3) and (4,3). Moving to (5,5) takes me to the corner edge, away from allies and away from the main combat. No ability needed per orders.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Bulwark is healthy at dist=2, within range. No wounded enemies to prioritize. I'm at 3HP (full). Bulwark is adjacent-ish at dist=2, so precision_shot is valid (range ≤2, not adjacent). Fire precision_shot at Bulwark for 2dmg. I haven't moved so full damage applies. Then wait or reposition. Stay put to avoid wasting movement and losing shot accuracy.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 3,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "I'm at 2/4 HP, cloaked, round 4. Breach is on cooldown. Hawk is at (5,5) facing E — behind tile is (4,5) which is reachable in 1 step. Move to (4,5) to get behind Hawk, then shadow_strike for 1 damage while maintaining cloak. Hawk is healthy so this is a good target to chip down.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "Marksman at (3,1) is unscanned and healthy — priority target. Dist=3, within scan range of 4. Wraith and Warden already scanned. Scan Marksman to reveal strategy and deal 1 dmg. Then recalibrate Hawk or Bulwark. Bulwark is adjacent at (3,3) — wait, recalibrate range is adjacent only, Bulwark is 1 tile west. From (4,3) I can recalibrate Bulwark at (3,3). But Hawk is the damage dealer (striker). Hawk is at (5,5), not adjacent. So recalibrate Bulwark instead. Actually let me check: scan first (no move needed, Marksman in range), then recalibrate Bulwark at (3,3) which is adjacent. This keeps me safe — no enemies adjacent (Warden at (2,3) dist=2, Wraith at (4,5) dist=2).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "addendum": "Warden to your west at (2,3) is aggressive and will shield_wall facing you. Marksman at (3,1) will precision_shot allies. Focus Warden first — attack it directly, it's wounded. Wraith is behind enemy lines, stay alert for flank."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Bulwark is wounded and at dist=2, within precision_shot range. I'm at 2HP so staying alive matters. I haven't moved this turn, so precision_shot deals full 2dmg. Bulwark is wounded - if they have low HP, 2dmg could finish them. Fire precision_shot at Bulwark first, then wait or reposition.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Bulwark is adjacent at (3,3). I'm fortified with 50% damage reduction. Orders say attack when possible and shield_wall facing enemy cluster. Insight is at (4,3) to my east. I'll attack Bulwark first, then shield_wall facing east to cover against Insight and the cluster.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I'm at 2/8 HP with fortify active (50% dmg reduction if I don't move). Warden is adjacent at (2,3), wounded. Best play: stay put to keep fortify, attack Warden. No move needed.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "At 1HP I need to retreat. Orders say move away from allies and toward edge. Valid moves: (3,5), (4,4), (5,3), (5,4). I'm at (5,5) which is already at the east edge. Moving to (5,3) takes me along the edge and away from allies at (3,3) and (4,3). Then wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 3,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 3,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "I'm at 2HP, uncloaked. Insight is the priority - healthy oracle at dist 2, and I can reach (4,2) which is behind them (facing N). Move to (4,2) puts me adjacent and behind Insight. Then use breach to take control of them - they're healthy so this is valuable. Alternatively shadow_strike for safe 1dmg. Hawk is at (5,4) reachable and wounded - breach on Hawk could be devastating. But Insight (oracle) being healthy and controllable is high value. Let me move to (5,4) behind Hawk instead - Hawk is wounded, breach or shadow_strike finishes them or makes them attack allies. Actually with 2HP I need to be careful. Move to (5,4) behind Hawk, then breach Hawk (wounded striker) to make them attack their own team.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 5,
+              "y": 3
+            },
+            "addendum": "Attack your nearest ally."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "Foresight shows Wraith moving to (4,5) and shadow_striking (5,5). Wraith is wounded and already scanned. Priority: scan Wraith to deal 1dmg (could finish a wounded target) OR recalibrate Hawk/Bulwark. Bulwark is critical and being attacked by Warden. Marksman will precision_shot Bulwark at (3,3). Wraith is at (5,4) dist=2, in scan range. Scanning Wraith deals 1dmg to a wounded specter — high value. Then I should move to maintain safety. Currently at (4,3), Wraith moving to (4,5) means if I stay I'm adjacent next turn. Move to (4,1) to gain distance from Wraith's predicted position and stay safe, then scan Wraith now while in range.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "I'm at (2,1) with 2HP, facing west. Insight is at (4,1) distance 2 - healthy but in range. I moved this turn (speed 1 means slowed), so precision_shot would deal 1dmg. Bulwark is at (3,3) dist 3, critical but out of precision_shot range (≤2). Insight is the closest threat at dist 2. I should shoot Insight with precision_shot - even at 1dmg it chips a healthy target. But wait, I'm already at spd1 (slowed), meaning I moved. Actually spd1 is my current speed stat. Let me check - I'm listed as spd:1 which is my movement speed. The '→W' indicates facing. I haven't moved yet this turn. So precision_shot does full 2dmg. Insight at dist 2 is in range. Shooting Insight for 2dmg would bring a healthy oracle down significantly. Then I should consider moving - retreat west away from Insight at (4,1). Move to (1,1) or (0,1) to increase distance.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Warden is adjacent at (2,3) and critical — attack it to finish it off. I'm fortified so I shouldn't move to keep 50% damage reduction. Stay put and attack.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Orders say attack nearest ally. Nearest ally is Wraith at (5,4) dist=1 — wait, Wraith is an enemy (specter, E). Nearest ally is Bulwark at (3,3) dist=2, or Insight at (4,1) dist=3. Bulwark is closer at dist=2. I need to get adjacent to Bulwark to use attack. I can move to (4,3) which is adjacent to Bulwark at (3,3). Then attack Bulwark.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "I'm at 1HP with fortify active giving 50% damage reduction. Bulwark is adjacent and critical - attack to finish them. If I move I lose fortify, so stay put and attack. Shield_wall facing East to protect against Hawk.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 3,
+          "position": {
+            "x": 0,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "I'm at 1HP — extremely fragile. Hawk is wounded at (4,3) facing W, and I can reach (5,3) which is behind Hawk and adjacent. Shadow_strike keeps cloak and deals damage — but I'm not cloaked. I need to use shadow_strike which only works adjacent. If I move to (5,3) I'm adjacent to Hawk and behind him. Shadow_strike deals 1 damage and keeps cloak (though I'm not cloaked). At 1HP I need to finish Hawk off if possible — Hawk is wounded so may be low HP. Moving to (5,3) then shadow_striking Hawk is the best play: position behind enemy, strike for damage.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "I'm at 2/6 HP and Marksman has me targeted for precision_shot next turn. Wraith is critical and in scan range at (5,3), but I already have their prompt. I need to survive — Marksman is at (0,1) planning precision_shot on me. I should move away from Marksman's line of fire. Moving to (4,3) puts me further from Marksman. Wraith is critical and in range — scan them for 1 damage to finish them off (they're critical). Wait, scan deals 1 damage and Wraith is critical, so scan could eliminate Wraith. Wraith is at (5,3), dist 3, in range. Scan Wraith first to deal 1 damage (critical = likely 1HP), then move away from Marksman's precision_shot targeting.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Insight is wounded at (3,2), dist=4, out of range. I need to close to range 2. Moving to (2,1) gets me dist=sqrt(1+1)=1.4 from... wait, dist from (2,1) to (3,2) = sqrt(1+1)=1.4, that's adjacent range only. Let me recalc: from (2,1) to (3,2): dx=1, dy=1, Chebyshev=1, Euclidean=1.41. For precision_shot range≤2, need dist≤2. From (2,1) to (3,2) dist=1.41 which is ≤2, so in range! Move to (2,1) then precision_shot Insight.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "I'm at 1HP so survival is critical. Fortify gives 50% damage reduction if I don't move. Insight is at dist=2, not in melee range. If I stay put, I keep fortify and survive a hit. But orders say push forward aggressively. Moving to (3,2) would put me adjacent to Insight for an attack, but I'd lose fortify and die to any counterattack at 1HP. Better to hold fortify and use shield_wall to protect Marksman ally at (2,1) from the N direction where Insight is threatening.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 1
+            },
+            "direction": "N"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 3,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "I'm at 1HP — critical danger. Marksman has precision_shot targeting me at (3,2) per Foresight. I must move away from my current position to survive. Move to (3,5) to escape Marksman's precision_shot and get distance. Both enemies are already scanned. I should recalibrate an ally if possible, but survival is priority. Moving to (3,5) puts me far from both enemies. After moving, I can't reach allies for recalibrate (adjacent only). Wait as second action.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Insight is at (3,5), distance 5, out of range. I have 2HP so staying alive is priority. Move toward Insight to get in range for precision_shot. Best approach: move to (3,2) gets me closer while keeping options open. From (4,1) I'd be at dist ~4 still out of range. (3,2) puts me at dist 3 still out of range (need ≤2). Need to get to (3,3) or (4,4) area but max move is 2. Move to (3,2) as best advance.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "I'm at 1HP - extremely fragile. Fortify gives 50% damage reduction if I stay put. Insight is at dist=3, out of my attack range. Moving toward Insight risks losing Fortify and getting killed. Better to hold position with Fortify active and shield_wall facing north to protect Marksman from Insight.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 2
+            },
+            "direction": "N"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "I'm at 1HP — critical danger. Both enemies are already scanned, prompts known. Marksman will prioritize killing wounded enemies (me) with precision_shot. I need to stay alive and still contribute. Best move: retreat to maximize distance while staying in scan range isn't needed since both are already scanned. I should recalibrate an ally or just survive. No allies adjacent for recalibrate. I can move away to safety — move to (5,5) puts me farther from threats. Then wait since no useful ability targets (already scanned both, no adjacent allies for recalibrate). Moving to (5,5) increases distance from Marksman at (3,2) from 3 to ~4.2 tiles, and from Warden at (2,3) to ~4.2 tiles. Both stay in scan range if needed but I have their prompts. Staying alive is priority — move away and wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "At 1HP I'm extremely vulnerable. Fortify is active giving 50% damage reduction - I should NOT move to keep it. Insight is at dist=5, out of range. Staying put preserves fortify and keeps me alive. Shield_wall facing East (enemy direction) to protect Marksman ally at (3,2) if Insight advances.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 2
+            },
+            "direction": "E"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Insight is at (5,5), distance 5, out of range. I'm at (3,2) with 2HP. No enemies in range. Need to close to range 2 of Insight. Moving to (5,2) gets me closer but still dist=3+3=6 diagonal. Moving to (4,3) puts me at dist=sqrt(1+4)~2.2, still out of range 2. Moving to (3,4) puts me at dist=sqrt(4+1)~2.2. Best move: (5,2) then I'm at x-dist=0, y-dist=3 from (5,5) - still 3 away. Try (4,3): dist to (5,5) = sqrt(1+4) = ~2.24, still out of range 2. Actually range is tile distance not euclidean - need to check. If range is Chebyshev, (4,3) to (5,5) = max(1,2)=2, that's IN range! Moving to (4,3) should put Insight in range. Will move there and attempt precision_shot.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": "Out of range"
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "player",
+    "totalTurns": 9,
+    "reason": "player eliminated all enemies"
+  },
+  "endedAt": "2026-03-09T14:05:20.818Z"
+}

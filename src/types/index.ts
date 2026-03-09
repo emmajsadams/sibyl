@@ -51,7 +51,7 @@ export const BALANCE: BalanceConfig = {
     precisionShot: { damage: 2, movedDamage: 1 }, // striker still 76%@192g — sentinel HP nerf should help indirectly
     scan: { damage: 1 },
     suppressingFire: { damage: 1 },
-    patch: { maxUses: 6, healAmount: 10 }, // nerfed uses 7→6 (medic 73.9%@23g in last 50)
+    patch: { maxUses: 6, healAmount: 3 }, // nerfed heal 10→3 (was full-heal every time, medic 73.9%@23g in last 50)
     overclock: { selfDamage: 1 },
     trap: { damage: 1 },
     pulse: { damage: 1 },
