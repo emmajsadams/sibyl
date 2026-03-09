@@ -37,7 +37,7 @@ export const BALANCE: BalanceConfig = {
   maxRounds: 20,
   unitStats: {
     specter: { maxHp: 4, movement: 3, range: 1, speed: 3 }, // buffed HP 3→4 (39.5%@38g in last 30) — over-nerfed, restoring to 4
-    striker: { maxHp: 4, movement: 2, range: 2, speed: 1 }, // nerfed speed 2→1 (60.9%@64g in last 50)
+    striker: { maxHp: 3, movement: 2, range: 2, speed: 1 }, // nerfed HP 4→3 (61.7%@243g overall)
     oracle: { maxHp: 6, movement: 3, range: 3, speed: 3 },
     medic: { maxHp: 14, movement: 3, range: 3, speed: 3 }, // buffed range 2→3 (34.6%@26g in last 50) — safer healing distance
     vector: { maxHp: 8, movement: 2, range: 2, speed: 1 },

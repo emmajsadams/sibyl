@@ -1,0 +1,1330 @@
+{
+  "id": "2026-03-09T07-01-07",
+  "startedAt": "2026-03-09T07:01:07.278Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 4,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 4,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "oracle": {
+        "maxHp": 6,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 14,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "vector": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 2,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 9,
+        "healAmount": 10
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Deadeye",
+        "class": "striker",
+        "prompt": "Stay at maximum range. Use precision_shot on the most wounded enemy to secure kills. If no one is wounded, target the enemy medic. Never move adjacent to enemies."
+      },
+      {
+        "name": "Warden",
+        "class": "sentinel",
+        "prompt": "Advance toward the nearest enemy. Use shield_wall facing the direction with the most enemies. If an enemy is adjacent, attack them."
+      },
+      {
+        "name": "Insight",
+        "class": "oracle",
+        "prompt": "Use scan to reveal enemy prompts and cloaked units. Stay at max range (≤4 tiles for scan). Use recalibrate on wounded allies to buff them. Keep distance from enemies and avoid adjacent vectors."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Wraith",
+        "class": "specter",
+        "prompt": "Cloak and move behind enemy lines. Target isolated enemies with shadow_strike. Save breach for the most dangerous enemy. Avoid being caught uncloaked."
+      },
+      {
+        "name": "Rampart",
+        "class": "sentinel",
+        "prompt": "Advance toward the nearest enemy. Use shield_wall facing the direction with the most enemies. If an enemy is adjacent, attack them."
+      },
+      {
+        "name": "Watcher",
+        "class": "oracle",
+        "prompt": "Scan priority targets each turn to reveal their strategy. Use recalibrate on your damage dealer to boost effectiveness. Stay behind allies and maintain range. Never get adjacent to enemy vectors."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "All enemies are out of scan range (closest is Insight at dist=5, need dist≤4). I should move toward the center to close distance while staying behind my allies. Moving to (4,2) gets me closer to Insight. After moving, still no enemies in range, so I'll wait for second action.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Round 1 — cloak immediately as instructed. Then advance south toward enemy lines. Moving to (2,2) gets me 3 tiles closer while staying on approach vector to Deadeye/Insight cluster.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "Watcher is closer (dist=2) and is an oracle like me — scanning them reveals their prompt and deals damage. Both enemies are in scan range. Scan Watcher first as higher priority target (oracle with initiative already taken). Then move to maintain distance.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Enemies are to the south. I'll advance toward them by moving to (3,2), then use shield_wall facing south to protect allies Wraith and Watcher who are nearby.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 2
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Rampart is in range at dist=3. I haven't moved, so precision_shot deals 2dmg. Watcher is out of range. Target Rampart with precision_shot, then wait.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "No enemies adjacent, so no attack. Advancing toward nearest enemy Rampart at (3,2). Best move is to (3,1) to close distance. Enemies are to the N/NE, so shield_wall facing N protects allies behind me.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 1
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Insight scanned me last turn, revealing my prompt. Priority: scan Insight to reveal their strategy and deal damage. I'm at (4,2), Insight at (2,1) dist=3, in scan range. Stay put to maintain range advantage. After scanning, recalibrate Wraith (specter damage dealer) at (2,2) — but Wraith is not adjacent to me (dist=2+). Cannot recalibrate Wraith from here. Instead, scan Insight first, then wait since no adjacent allies to recalibrate.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "Wraith is moving to (2,2) this turn — that's adjacent to me at (2,1). I need to avoid being adjacent to enemy vectors. Rampart is at (3,2) and hasn't been scanned yet. I should scan Rampart first, then move away from Wraith's incoming position. Moving to (1,2) or (0,2) keeps distance. Scan Rampart now while in range, then move to (1,2) to avoid Wraith at (2,2).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Cloak expires after this turn. I'm adjacent to Insight but not behind them. Behind tiles for Insight are [1,1] but no reachable options listed. Deadeye at [1,1] facing N, behind tile is [1,0] which is reachable. I can move to [1,0] to get behind Deadeye, then shadow_strike to deal damage while staying cloaked. That's the best play — get behind Deadeye and strike.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Rampart is adjacent at (3,2) to my north. Orders say attack adjacent enemies. I'm fortified (50% dmg reduction) which is good for staying put. Attack Rampart first, then use shield_wall facing North where Rampart is to protect allies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 1,
+              "y": 2
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Warden is adjacent at (3,1). I'm fortified with 50% damage reduction. Orders say attack adjacent enemies. Warden is directly south of me. I'll attack Warden, then use shield_wall facing south (toward Warden) to block incoming damage while staying fortified.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 1
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Wraith is adjacent at (1,0) - distance 1. precision_shot is blocked when adjacent to enemy. I must move away first to use precision_shot, or use suppressing_fire which has no adjacency restriction. Moving to (0,2) puts me at distance 2 from Wraith and avoids adjacency. From (0,2) I can use precision_shot on Wraith (dist=2, within range). But wait - if I move first, precision_shot does only 1dmg. Alternatively, I can use suppressing_fire now from current position on Wraith at (1,0) - it hits a 2-tile line from target. Then move away. Or: move to (2,2) first (dist from Wraith=2, not adjacent), then precision_shot for 1dmg since I moved. Actually suppressing_fire from current pos hits Wraith and slows it - useful. Let me use suppressing_fire first (no adjacency block), then move away to (0,2) to stay at range.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "suppressing_fire",
+            "target": {
+              "x": 1,
+              "y": 0
+            },
+            "direction": "S"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Suppressed so only 1 move tile. Insight is at (1,2) facing N, and (1,1) is behind them and reachable. Move to (1,1) to get behind Insight, then use shadow_strike to deal damage while staying cloaked — except I'm not cloaked. I can still shadow_strike from adjacent for 1 dmg. Actually shadow_strike requires being adjacent and keeps cloak, but I'm not cloaked. I should use regular attack or shadow_strike — shadow_strike says 1dmg range adjacent, keeps cloak. It doesn't require cloak. Move to (1,1) which is adjacent and behind Insight, then shadow_strike Insight.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Warden is at (3,1) dist=2, unscanned — highest value target to reveal. Insight already scanned. I'm at (4,2), not adjacent to any enemy Vector so scan is unblocked. Scan Warden first for intel and 1dmg. Then recalibrate Wraith at (1,1) — but that's dist=4, outside adjacent range. Rampart is adjacent at (3,2) dist=2, also not adjacent to me. No ally is adjacent to me. I'll move toward Rampart to enable recalibrate next turn, or just wait as second action since no adjacent ally exists. Best play: scan Warden, then wait.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "Wraith is adjacent at (1,1) — scan is blocked when adjacent to enemy Vector/specter. I need to move away first. Move to (1,3) to get distance from Wraith, then scan Wraith from range 2. Watcher prompt is known. Wraith is unscanned and close — revealing its prompt is priority.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Warden is adjacent at (3,1) to my south. Orders say attack adjacent enemies. I'm fortified (50% DR) and didn't move last turn. Attack Warden, then use shield_wall facing south to protect against enemies below.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 2
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Wraith is wounded and at distance 2 — prime target for precision_shot to secure a kill. I haven't moved yet so full 2dmg applies. Stay at current position to maintain range and avoid adjacency.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Rampart is adjacent to the north at (3,2). Orders say attack adjacent enemies. I'm fortified so I have 50% damage reduction, but if I move I lose that. Best to attack Rampart first, then use shield_wall facing North (where both enemies are clustered) to protect allies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 2
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Deadeye is the highest priority target — unknown prompt, dealing damage. It's at dist=4 from current position (0,2), which is exactly at scan range. But the range check says outRange for Deadeye at dist=4. Wait — scan range is ≤4 tiles, so dist=4 should be valid. However the inRange check shows false for Deadeye. I need to move closer to get Deadeye in scan range, or scan from a position within 4 tiles. Moving to (1,2) would put me at dist=1 from Deadeye at (0,2) — but that risks adjacency to enemy units. Let me check: Insight is at (1,3), moving to (1,2) puts me adjacent to Insight (enemy oracle/vector?). Insight is an oracle not a vector, so scan wouldn't be blocked. But orders say never get adjacent to enemy vectors. Insight is oracle, not vector — safe. Actually let me reconsider: move to (2,2) puts me at dist=2 from Deadeye. From (2,2), Deadeye at (0,2) is dist=2, well in scan range. That avoids adjacency to enemies. Rampart is already at (3,2) and attacked Warden last turn — I should recalibrate Rampart to boost effectiveness since Rampart is our damage dealer engaging Warden. Move to (3,3) to be adjacent to Rampart at (3,2) and recalibrate. But then I can't scan Deadeye this turn. Priority: scan unknown targets. Deadeye is unknown and dangerous. Move toward Deadeye to scan. Move to (2,2), then scan Deadeye at (0,2) — dist=2, well in range.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 0,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "Both enemies already scanned, prompts known. Deadeye is wounded at (0,2) — I should recalibrate to buff them. I'm at (1,3), Deadeye is at (0,2) which is adjacent (distance=1). Move to stay safe while keeping adjacency for recalibrate, then recalibrate Deadeye. Current position (1,3) is already adjacent to (0,2). I can recalibrate Deadeye first, then move away from Watcher at (2,2) who is only 2 tiles away.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 0,
+              "y": 2
+            },
+            "addendum": "Priority target is Watcher at (2,2) — oracle enemy scanning our allies. Use precision_shot on Watcher first to disrupt their reconnaissance. Rampart at (3,2) has shield_wall and will advance — attack from range when possible."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Warden is adjacent at (3,1). I'm fortified with 50% damage reduction. Orders say attack adjacent enemies. I'll attack Warden first, then use shield_wall facing S where most enemies are clustered (Deadeye at (0,2) is W but Warden is S of me). Actually enemies are at S(3,1), W(0,2), NW(0,4). Warden is directly S. I'll attack Warden, then shield_wall facing S to block further attacks from that direction while staying put to keep fortify.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 1
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Rampart is adjacent at (3,2). Orders say attack adjacent enemies. I'm fortified so if I don't move I keep 50% damage reduction. Attack Rampart, then use shield_wall facing N (where Rampart is) to protect from further damage.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 2
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Watcher at (2,2) is priority target and in range at dist=2. I'm at (0,2) with speed 1 so I moved last turn. precision_shot does 1dmg if moved, 2dmg if stationary. I haven't moved this turn yet, so I can use precision_shot for full 2dmg. Watcher is dist=2, within range. I should NOT move adjacent to enemies. Stay at (0,2) and fire precision_shot at Watcher.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "Watcher is at distance 4 (in range for scan), but I need to move closer first since current position shows Watcher as outRange (dist=4 means exactly at boundary, but inRange=false). Move to (1,3) to close distance, then scan Watcher - wait, Watcher is already scanned. Both enemies already scanned. Deadeye and Warden are wounded allies adjacent to enemies. I should recalibrate a wounded ally. Deadeye is at (0,2), which is 2 tiles away - not adjacent. Warden is at (3,1). Neither is adjacent to me at (0,4). Move toward Deadeye at (0,2) - I can move to (0,1) but that's 3 tiles. Move to (1,2) gets me closer. From (1,2), Deadeye at (0,2) would be 1 tile away - adjacent! So move to (1,2), then recalibrate Deadeye to boost their effectiveness against the wounded enemies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 0,
+              "y": 2
+            },
+            "addendum": "Focus fire on Watcher at (2,2) - they are wounded and high priority. Use your strongest attack to eliminate them this turn."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Insight is adjacent at (1,2) — this blocks my scan ability. I need to move away from Insight first to enable scanning. Moving to (2,3) puts me 2 tiles from Insight (no longer adjacent) and keeps me in range of Deadeye at distance ~2. After moving, I can scan Deadeye (already know prompt but dealing 1dmg to wounded Deadeye could finish them — wait, already scanned. Actually I should scan Rampart's attacker or recalibrate Rampart. Watcher (me) moved to (2,2) last turn per foresight, now I'm here. Insight is at (1,2) adjacent — scan is blocked. Priority: move to break adjacency with Insight, then scan... but all enemies already scanned. Recalibrate Rampart (wounded ally at (3,2)) to boost effectiveness — Rampart is adjacent after I move to (3,3)? No, valid moves don't include (3,2) occupied. Move to (2,3) then recalibrate Rampart at (3,2) — distance 1, adjacent. That works.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 2
+            },
+            "addendum": "Focus attacks on Warden at (3,1) — they are wounded and adjacent to you. Attack them to secure the kill."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Watcher at (2,3) is wounded and high priority. I'm at (0,2) with spd1 (moved penalty applies). Watcher is dist 3, within precision_shot range (≤2 tiles? No, dist=3 exceeds range 2). Wait — precision_shot range is ≤2 tiles. Watcher at dist 3 is OUT of precision_shot range from current position. I need to move closer. If I move to (1,3), Watcher at (2,3) would be dist 1 — in range, but I haven't moved adjacent to an enemy. Rampart is at (3,2), dist from (1,3) would be 2 — still not adjacent. Move to (1,3) then use precision_shot on Watcher. Since I moved, precision_shot deals 1dmg. Watcher is wounded so 1dmg may finish them. This is the best play.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Warden is adjacent at (3,1). Attack to secure the kill. Stay put to keep Fortify active for 50% damage reduction.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Rampart is adjacent to the north at (3,2). I'm fortified with 50% damage reduction. Orders say attack adjacent enemies. I'll attack Rampart, then use shield_wall facing north where Rampart is, to protect allies while staying fortified by not moving.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 2
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Deadeye is adjacent at (1,3) and targeted me with precision_shot last turn (2 HP remaining, critical). I must move away from Deadeye first. Moving to (3,3) puts distance from Deadeye and keeps range to enemies. All enemies already scanned. Rampart is wounded at (3,2) - recalibrate would help but Insight already recalibrated last turn. I'll move to (3,3) to escape Deadeye's adjacent threat, then scan Insight isn't needed (already known). Actually recalibrate Rampart from (3,3) - Rampart is at (3,2) which is adjacent to (3,3). This boosts our sentinel who is actively attacking Warden.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 2
+            },
+            "addendum": "Warden is adjacent to your south at (3,1) and is wounded - attack them to finish them off. Deadeye is at (1,3) and will shoot the most wounded target, so eliminate Warden first then reposition."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Insight",
+          "class": "oracle",
+          "thinking": "Both enemies already scanned. Deadeye is wounded at (1,3) adjacent to me — recalibrate them to boost effectiveness. Then move to maintain safe distance from Rampart at (3,2).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 1,
+              "y": 3
+            },
+            "addendum": "Rampart at (3,2) is wounded and advancing. Watcher at (3,3) is wounded and staying back. Focus fire on Rampart to eliminate the melee threat first."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Warden is adjacent at (3,1) - attack to secure the kill. Then shield_wall facing S toward where enemies cluster (Warden/south). Actually Warden is south at (3,1), enemies also at west. Attack Warden first, then shield_wall facing W toward Deadeye and Insight.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "W"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Watcher at (3,3) is in range (dist=2) and wounded — precision_shot can finish them. I haven't moved yet so no movement penalty. Stay at (1,3) to avoid closing distance.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Rampart is adjacent to the north at (3,2). Orders say attack if adjacent. I'm fortified with 50% damage reduction - staying put preserves that. Attack Rampart.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Insight",
+          "class": "oracle",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 0,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "player",
+    "totalTurns": 7,
+    "reason": "player eliminated all enemies"
+  },
+  "endedAt": "2026-03-09T07:05:38.597Z"
+}
