@@ -1,0 +1,2161 @@
+{
+  "id": "2026-03-09T02-00-05",
+  "startedAt": "2026-03-09T02:00:05.388Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 4,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 4,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "oracle": {
+        "maxHp": 6,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 14,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "vector": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 2,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 9,
+        "healAmount": 10
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Deadeye",
+        "class": "striker",
+        "prompt": "Maintain distance. Use precision_shot on high-value targets — medics first, then damage dealers. Use suppressing_fire if enemies close in."
+      },
+      {
+        "name": "Ghost",
+        "class": "specter",
+        "prompt": "Cloak and move behind enemy lines. Target isolated enemies with shadow_strike. Save breach for the most dangerous enemy. Avoid being caught uncloaked."
+      },
+      {
+        "name": "Lattice",
+        "class": "vector",
+        "prompt": "Control chokepoints with traps. Place them between enemy positions and your allies. Use denial to block adjacent enemy abilities. Pulse groups when possible."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Bulwark",
+        "class": "sentinel",
+        "prompt": "Advance toward the nearest enemy. Use shield_wall facing the direction with the most enemies. If an enemy is adjacent, attack them."
+      },
+      {
+        "name": "Watcher",
+        "class": "oracle",
+        "prompt": "Use scan to reveal enemy prompts and cloaked units. Stay at max range (≤4 tiles for scan). Use recalibrate on wounded allies to buff them. Keep distance from enemies and avoid adjacent vectors."
+      },
+      {
+        "name": "Viper",
+        "class": "vector",
+        "prompt": "Control chokepoints with traps. Place them between enemy positions and your allies. Use denial to block adjacent enemy abilities. Pulse groups when possible."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Ghost and Lattice are both at dist=4, exactly at scan range. I need to move closer to scan them. Moving to (2,3) brings me 1 step closer to both Ghost@(3,1) and Lattice@(2,0). From (2,3): dist to Ghost=(1+2)=3, dist to Lattice=(0+3)=3. Both in scan range. Lattice is a vector — I must avoid being adjacent to it. From (2,3), Lattice@(2,0) is 3 tiles away, safe. Scan Ghost first to reveal its prompt.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "Round 1 — cloak immediately as instructed. Then advance toward enemy lines. Watcher at (2,3) is closest and has a behind tile at (2,4). Move to (3,4) to get closer for next turn positioning.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Deadeye is at (4,1) moving north toward us. I should advance south to (4,2) to set a trap between us and Deadeye, cutting off their approach path. This puts a mine directly in their likely movement corridor.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "secondResult": "Position occupied"
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Watcher is at (2,3), 3 tiles away. I can move to (2,2) to get closer and place a trap at (2,2) or nearby to intercept the Watcher advancing south. Moving to (2,1) first, then placing a trap at (2,2) — that tile sits between me and Watcher, likely on their approach path. This will threaten any enemy moving through that corridor.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "I'm adjacent to Viper (vector) at (4,2), which blocks precision_shot. I need to escape the denial zone first. Moving to (5,0) or (4,0) puts distance from Viper. Best move: (4,0) keeps me south and away, then I can use precision_shot on Viper from range 2. Wait — after moving to (4,0), Viper is at dist=2, precision_shot should work. Watcher is the high-value target (oracle) but dist=4, out of range. Viper is in range at dist=2 after move. Shoot Viper.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "No enemies adjacent, so no attack possible. Orders say advance toward nearest enemy. Lattice at (2,1) is dist 5, Deadeye at (4,0) is dist 6. Move toward Lattice by heading to (3,3) — maximum advance while staying on valid tiles. Then shield_wall facing S (toward enemies to the south).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Lattice is at (2,1), dist=2, in scan range. I'm currently at (2,3). Scanning Lattice will reveal their prompt and deal 1 damage. I should NOT move adjacent to Lattice first (that would block scan). Current position is safe at dist=2. Scan Lattice now, then move away to maintain distance.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "I'm already behind Bulwark (I'm at 3,4, Bulwark at 3,3 facing S — their back is to me). Cloak has 1 turn left. I should use breach on Bulwark now while I'm in position and cloaked. Then I can shadow_strike to deal damage while staying cloaked. Wait — breach breaks cloak. But I only have 1 turn of cloak left anyway. Breaching Bulwark is high value: they're a sentinel (tanky, dangerous). Breach + shadow_strike combo: breach first (uses ability slot), then I need a second action. Breach replaces their turn, so they'll obey me next turn. After breach I could move or shadow_strike. Shadow_strike is adjacent only and keeps cloak — but breach breaks cloak. So post-breach I'm uncloaked. Better plan: shadow_strike first (keeps cloak, deals 1 dmg), then breach Bulwark — wait, both are abilities, I can only use one ability per turn. So: either shadow_strike OR breach this turn, not both. Breach is higher value (controls Bulwark next turn). I'm already in position at 3,4 (behind Bulwark). Use breach on Bulwark now. For addendum: tell Bulwark to move away from allies or attack Watcher.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "addendum": "Move north toward Watcher and attack them."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Viper is at (4,2), distance 2 — in range for precision_shot and not adjacent, so ability is not blocked. I'm stationary so precision_shot deals 2dmg. No need to move. Fire on Viper.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Deadeye is at (4,0) dist=2, within my range. I'm at (4,2). I can place a trap between Deadeye and my position — tile (4,1) is a valid move tile and sits directly between us. Move to (4,3) to hold ground away from Lattice, then place trap at (4,1) to catch Deadeye if they advance.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "There's already a trap at (2,2). Enemies are at (1,3), (3,3), (4,3) - all dist 3+. I should move north to (2,3) to get closer and place a trap at (2,2) - wait, trap already there. Move to (2,3) to threaten chokepoint area, then place trap at (3,2) to block Bulwark's path south toward our allies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Orders are to move north toward Watcher at (1,3) and attack them. Moving north to (3,4) gets me closer. Watcher is at (1,3) — not adjacent from (3,4). Move to (3,4) then check: Watcher at (1,3) is distance 3, still out of melee range. Best I can do is move toward Watcher. From (3,4), valid moves include (3,5) and (4,4). To get closer to Watcher at (1,3), I should move to (3,4) first, but that's still not adjacent. No move in my valid list gets me adjacent to Watcher at (1,3) — closest would be (2,2) which is dist 2 from Watcher. Actually (2,2) is dist=sqrt(1+1)=~1.4, not adjacent. None of my valid moves put me adjacent to Watcher. I'll move as close as possible toward Watcher using (3,4) or another tile. Wait — I can move up to 2 tiles. From (3,3) I could go to (3,4) then... but movement is a single target. Valid moves show (3,4) and (3,5). Moving to (3,5) gets me closer to Watcher at (1,3)? No, Watcher is at y=3. Moving north increases y. Watcher is at (1,3) same y as me. I should move west. Valid moves don't include (2,3) — that's where Lattice is. (2,2) is valid and gets me closer to Watcher. From (2,2) Watcher at (1,3) is dist ~1.4, still not adjacent. No position gets me adjacent to Watcher this turn given Lattice blocks (2,3). I'll move to (2,2) as closest approach, then wait since I can't reach Watcher to attack.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "Breach is on cooldown. No enemies in range. Lattice is at (2,3) blocking the tile behind Bulwark. Watcher is at (1,3) facing W — behind tile is (2,3) also occupied. I need to reposition. Moving to (1,4) gets me closer to Watcher and keeps distance from Viper. From (1,4) I'm adjacent to Watcher at (1,3) — can shadow_strike for 1 damage while staying cloaked (if cloaked) or just attack. I'm not cloaked currently. I'll move to (1,4) to get adjacent to Watcher, then shadow_strike for damage.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "I'm adjacent to Lattice (denial active), so scan is blocked. I can only attack or move. Ghost is adjacent at (1,4) and already scanned. I should move away from Lattice's denial zone to enable scanning next turn. Moving to (0,4) gets me away from Lattice while keeping distance. After moving, I'll be out of denial range. Then I can wait or attack Ghost if still in range. Actually, moving to (0,5) gets me further from both threats. But I need scan capability — moving to (0,4) still keeps Ghost at dist=1. Better to move to (3,3) or (3,4) to get range on Deadeye next turn, but that's toward enemies. Let me move to (0,3) or (0,4) to escape denial. From (0,4), Lattice is at dist=2+1=3, Ghost at dist=1. Still too close to Ghost who may shadow_strike me. Move to (0,2) — away from Ghost's predicted position (2,4) and Lattice (2,3), gives me repositioning. Actually valid moves include (3,4) which gives good scan angles next turn. Move to (3,4) puts me dist=2 from Lattice and dist=3 from Ghost's predicted spot. But that's toward Deadeye side. Best: move to (0,4) to escape denial, then wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Lattice is 2 tiles away at (2,3) — I must not move adjacent or my abilities get blocked. Deadeye is at (4,0) with a trap already at (4,1) blocking that path. I can place a trap between Lattice/Deadeye and my allies. Moving to (3,3) keeps distance from Lattice while I can place a trap at (3,2) to block the corridor toward Bulwark at (2,2). This controls the chokepoint between enemies and allies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": "Cannot use trap — adjacent to enemy Vector (Denial)"
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "All enemies are out of range (dist 4+). Need to close distance to get Viper or Bulwark in range. Moving to (4,2) gets me closer to Viper at (3,3) — that would put them at dist 2, in range for precision_shot. However, Viper is a vector with denial range adjacent, so I need to stay non-adjacent. At (4,2), distance to Viper (3,3) is 2 tiles — not adjacent, safe for precision_shot. Viper is a damage dealer, priority target.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "I'm adjacent to both Bulwark and Viper. Viper is wounded - pulse will hit both Bulwark (dist=1) and Viper (dist=1) since they're both within 1 tile. This could finish Viper and damage Bulwark. After pulsing, I should move to (2,4) to get distance from Bulwark and maintain denial pressure while positioning for trap placement next turn. Trap is blocked since I'm adjacent to enemy Vector (Viper).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Orders say move north toward Watcher and attack them. Watcher is at (0,4). Moving north from (2,2) — valid moves include (2,3) which gets me closer. But orders say attack Watcher (an ally) which I must follow. From (2,3) Watcher at (0,4) is still distance 3, out of adjacent range. Best I can do is move north to (2,3) and wait — can't reach Watcher to attack this turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Ghost is adjacent at (1,4) — scan is blocked when adjacent to enemy Vector, but Ghost is a specter not a vector, so scan should work. However, Ghost is already scanned. Lattice at (2,4) is a vector at dist 2, which means I'm NOT adjacent to Lattice (dist=2), so scan isn't blocked yet. But Ghost at dist=1 is adjacent — Ghost is a specter, not a vector, so no blocking. I need to move away from Ghost (who shadow_struck Viper last turn and is dangerous). Moving to (0,3) increases distance from Ghost and Lattice while staying out of adjacent range. From (0,3) I can recalibrate Viper at (3,3) — wait, that's not adjacent. Viper is at (3,3), that's too far for recalibrate. Bulwark is at (2,3), also not adjacent from (0,3). Best play: move to (0,3) to escape Ghost's adjacency, then wait — I have no good ability targets. Actually, I could scan Deadeye but dist=6 > 4, out of range. All enemies are already scanned or out of range. Recalibrate requires adjacent ally — from (0,4) Bulwark at (2,3) is dist=3, Viper at (3,3) is dist=4. No adjacent allies. I should move to get adjacent to a wounded ally. Moving to (1,3) puts me adjacent to Viper at (3,3)? No, dist=2. No valid recalibrate targets reachable. Best move: retreat to (0,3) away from Ghost, then wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "Watcher is already behind me (I'm at their south, they face S so I'm behind them). I can move to (0,4) which is adjacent and behind Watcher, then breach them — turning a dangerous oracle into an ally for a turn. Breach is ready and this is a high-value target. Viper is 3 tiles away so no blocking concern at (0,4).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 0,
+              "y": 3
+            },
+            "addendum": "Watcher, you will attack Bulwark next turn."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "I'm at (3,3) with 3HP, low health. Lattice is at (2,4) dist=2, Deadeye at (4,2) dist=2. I need to stay out of Lattice's denial range (adjacent). Moving to (3,2) keeps me away from Lattice while staying near Deadeye. I can place a trap at (4,3) to block Deadeye's approach path, or use pulse if enemies cluster. Trap at (4,3) would threaten Deadeye's movement corridor. From (3,2), Deadeye at (4,2) is still in range for abilities. Place trap at (4,3) to control the corridor between Deadeye and our position.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Bulwark is adjacent at (2,3) — I'm already denying their abilities. Pulse hits Bulwark for 1 damage. Then move to (3,3) to stay in denial range of Bulwark and get closer to Viper's approach path.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Viper is adjacent and critical — basic attack will finish it. I can't use precision_shot due to denial zone. After killing Viper, move away to maintain distance from Bulwark.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Orders say move north toward Watcher and attack them. Watcher is at (0,3). Moving to (2,4) gets me closer north. But orders say attack Watcher — I need to get adjacent. Watcher is at (0,3), I'm at (2,3). Moving to (1,3) puts me 1 tile away still, not adjacent. I can move up to 2 tiles (mv2 but spd1 means mv1 this turn — wait, mv2 is listed). Valid moves include (1,3) and (2,4). To get adjacent to Watcher at (0,3), I need to reach (0,2), (0,4), or (1,3). (1,3) is in valid moves and puts me adjacent to Watcher at distance 1. Then I can attack Watcher from (1,3).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Foresight shows Ghost will breach (0,3) — my current position. I must move away. Ghost is adjacent at (0,4), so attack is available. Orders say attack Bulwark next turn, but immediate survival priority: escape Ghost's breach. Moving to (1,2) gets me away from Ghost and avoids adjacency to Lattice at (3,3). From (0,3) I can attack Ghost first (adjacent, 1dmg), then move to (1,2) to vacate the breach target.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "I'm at (0,4) with 2HP, no breach available. Bulwark is at (1,3) facing W — I can reach (2,3) which is behind Bulwark and adjacent. If I move to (2,3), I'll be behind and adjacent to Bulwark, then shadow_strike deals 1dmg while keeping cloak. This is the best play — reposition behind Bulwark and hit with shadow_strike to stay hidden.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Ghost is adjacent at (2,3) — attack it since it's wounded. I'm fortified so I shouldn't move to keep damage reduction. Attack Ghost first, then shield_wall facing East where Ghost and Lattice are.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 1,
+              "y": 2
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "I'm at 1HP — critical danger. Lattice is adjacent at (3,3) applying Denial, blocking my trap/pulse. Ghost is critical at (2,3) dist=2. I need to either eliminate a target or escape. Pulse works within 1 tile and Lattice is adjacent — wait, Denial blocks pulse too. Only basic attack works. I can attack Lattice (adjacent) to deal 1dmg, but Lattice is healthy. Better to move away from Denial zone first, then use abilities. Moving to (4,2) gets me away from Lattice's Denial at (3,3). From (4,2), Ghost at (2,3) is dist=2+1=3 — out of range. But (4,3) is a trap tile — avoid. Move to (2,2) puts me dist=1 from Ghost(critical) — could attack to finish Ghost. Let me move to (2,2) then attack Ghost at (2,3) to finish the critical target.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Viper is critical at (2,2) and in range - pulse would hit both Viper and potentially others within 1 tile. But pulse hits ALL units within 1 tile of me at (3,3), so I need to check who's adjacent to me - Bulwark is at dist 2, Viper at dist 2, so no allies or enemies are adjacent to me currently. Better to trap a chokepoint to block enemy movement paths. Move to (2,3) gets me adjacent to Viper (bad - denial). Stay at (3,3) or move to (2,4) to place trap between enemies and allies. Viper at (2,2) is critical - I can attack it from (3,3) since dist=2 and my range is 2. Attack Viper to finish it, then place a trap at (2,3) to control the chokepoint between Bulwark/Watcher and our side.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "All enemies are out of range (dist 4-5, my range is 2). Viper is critical and at dist 4 — if I move toward it I could get in range. Moving to (4,2) gets me closer to Viper at (2,2), dist would be ~2+0=... let me calculate: from (4,2) to (2,2) is dist 2, which is exactly in range. Move to (4,2) then precision_shot Viper (critical, high value target).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Orders say attack Bulwark next turn, but I should follow tactical priorities. Deadeye is in scan range at dist=3, healthy, and hasn't been scanned yet. Scanning reveals prompt and deals 1dmg. Lattice at (3,3) is 3 tiles away — staying at (1,2) keeps safe distance. I'll scan Deadeye from current position (dist=3, within range 4), then stay put or reposition. No need to move for scan. After scanning, I can wait or move to better position. Moving to (2,2) would get closer to Lattice (dist=1, adjacent) — dangerous. Stay at (1,2) and scan Deadeye.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Watcher (oracle) is in range at dist 3 and is high-value (medic/support class). I'm at spd1 so I haven't moved yet this turn. I can fire precision_shot on Watcher without moving (no movement penalty, no adjacent enemy blocking). This deals 2dmg. Then I should hold position or reposition slightly.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Bulwark is at (1,3) dist=2, wounded - I can attack it from current position. There's already a trap at (2,3) blocking that path. I should attack Bulwark to press the wounded advantage, then move to maintain denial pressure. Attack first, then consider repositioning.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Lattice is adjacent at (2,3) and in denial zone blocking abilities. Only basic attack/movement work. Orders say attack adjacent enemies — Lattice qualifies. I'm fortified so staying put preserves 50% dmg reduction. Attack Lattice, then wait to keep fortify.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Orders say attack Bulwark next turn — but Bulwark is an ally at (1,3). This is a contradictory order; I will not attack my ally. Deadeye tried precision_shot on me last turn (failed, out of range). Lattice moved to (2,3) and is 2 tiles away — must not go adjacent. Lattice has denial which blocks adjacent abilities. I can scan Deadeye from current position (dist 3, within range 4) to deal damage. But Lattice at (2,3) — scan is blocked only when I'm adjacent to Lattice, and I'm not adjacent (dist 2). So scan is valid. I'll scan Deadeye at (4,2) for 1 damage, then move away to safety at (0,1) to avoid Deadeye's precision_shot range and stay away from Lattice.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Bulwark is adjacent at (1,3) - I'm already denying their abilities. I have a trap on my current tile (2,3). I should pulse Bulwark since they're within 1 tile and wounded - this could finish them. Then move to maintain chokepoint between enemies and Deadeye. Watcher is at (0,1) dist 4, not immediate threat. Pulse hits Bulwark at (1,3) from my position (2,3) - they're within 1 tile distance. After pulse, move to (1,2) to block path and leave trap coverage at (2,3).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Both enemies are out of range (Bulwark dist 4, Watcher dist 5). I need range 2 for precision_shot. I'm at 2HP so need to be careful. Moving toward Bulwark (wounded, at 1,3) to get in range. From (3,3) I'd be dist 2 from Bulwark — but there's a trap at (2,3). Moving to (3,2) puts me dist 2 from Bulwark at (1,3) — that's range 2 (Manhattan). Let me check: |3-1|+|2-3|=2+1=3, still out of range. Try (3,3): |3-1|+|3-3|=2, in range but trap at (2,3) doesn't block movement to (3,3). Actually I need to verify LoS. Move to (3,3) to get range 2 on Bulwark and fire precision_shot.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Lattice is adjacent at (1,2) and I'm in DENIAL zone so only basic attack works. Attack Lattice since they're adjacent and wounded would be better but healthy Lattice is the immediate threat. I'm at 2HP so staying fortified is critical - don't move. Attack Lattice to the south.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 0,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Bulwark is critical and was just hit by precision_shot. I should recalibrate Bulwark to buff them, but recalibrate is adjacent-only and Bulwark is at (1,3) — I need to be adjacent. I'm at (0,1). Moving to (1,1) puts me adjacent to Lattice at (1,2), which would block my abilities. Moving to (0,2) puts me adjacent to Lattice too. Moving to (1,1) is 1 tile from Lattice — blocked. Let me check: Lattice is at (1,2). Adjacent means distance=1. (0,3) is distance 2 from Lattice and distance 2 from Bulwark at (1,3) — not adjacent to Bulwark either. I cannot reach Bulwark adjacency without getting near Lattice. Deadeye is out of scan range at dist 5. I have no good ability targets. Best move: reposition to (0,3) to stay safe — dist 2 from Lattice (safe), closer to Bulwark. Then wait since no valid ability targets exist safely.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Bulwark is critical and adjacent at (1,3) - attack to finish them. My Denial passive is already blocking their abilities. Watcher is healthy at (0,3) range 2. After killing Bulwark, I should place a trap to control the area or pulse if Watcher moves adjacent. Attack Bulwark first, then place trap at (0,3) to threaten Watcher or block approach.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 0,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Bulwark is critical and at dist=2, in range for precision_shot. I haven't moved yet so no movement penalty. Take the shot to finish off Bulwark. Then I can move to maintain distance from Watcher.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 9,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Both enemies already scanned — no new intel needed. Lattice is at (1,2), 2 tiles away, and its denial blocks adjacent abilities. Last turn Lattice placed a trap at (0,2) and attacked (1,3). I'm at (0,3) with 4HP. Deadeye is at (4,3), out of scan range and already known. Priority: avoid getting adjacent to Lattice (denial blocks my abilities), avoid trap at (0,2), and maintain safe position. Moving to (3,3) gets me away from Lattice and closer to Deadeye (dist would be 1 tile — too close). Best move: go to (2,3) to keep distance from Lattice while staying mobile. From (2,3), Deadeye at (4,3) is dist 2 — still out of adjacent range. Actually I should wait or reposition — Lattice will likely attack again. Move to (0,4) to stay away from Lattice and avoid the (0,2) trap. From (0,4) I can scan Lattice next turn if needed. Since both are scanned, I'll just reposition away from threat.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Watcher is at (0,4) dist 3, out of range. Deadeye is critical at (4,3). I need to control the approach. Traps already at (2,3) and (0,2). Watcher is moving south likely toward me/Deadeye. I should move to (0,3) to get adjacent to Watcher and apply Denial, blocking their oracle abilities. Then place a trap at (1,3) to create a chokepoint corridor. Actually moving to (0,3) puts me adjacent to Watcher at (0,4) - that's 1 tile away, enabling Denial. But I'm at 5HP so need to be careful. Move to (1,3) first to get closer, then place trap at (0,3) to block Watcher's path southward.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "At 1HP I must avoid death. Watcher is at dist=5, out of range. No enemies in range currently. I should reposition to get Watcher in range while staying safe. Moving to (2,3) is a trap. Move to (3,4) to close distance toward Watcher at (0,4) while avoiding traps at (2,3),(0,2),(0,3). From (3,4) Watcher at (0,4) is still dist=3, still out of range (rng2). Best I can do is move closer — (3,4) gets me to dist=3. Still out of range. Wait is safest given 1HP and no targets in range.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 10,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Both enemies already scanned, prompts known. Deadeye is critical — priority target but I can only attack adjacent. Lattice is 2 tiles away and placed a trap at (0,3) last turn — avoid that tile. I'm at (0,4). I can't reach Deadeye to attack. Best move: reposition away from Lattice's denial range while staying useful. Move to (2,4) to get closer to Deadeye without going adjacent to Lattice at (1,3). Then wait — no adjacent allies to recalibrate, both enemies already scanned.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Watcher is at (2,4), dist 2, in range. I'm at (1,3). I can place a trap at (2,3) — wait, (2,3) already has a trap. I could pulse (1dmg all within 1 tile) but Watcher is at dist 2, out of pulse range. My ally Deadeye is critical at (3,4). I should move closer to Watcher to apply Denial and block their oracle abilities, then pulse if possible. Moving to (2,4) would be on top of Watcher — not valid. Move to (1,4) gets me adjacent to Watcher at (2,4), enabling Denial. Then pulse from (1,4) hits (2,4) Watcher for 1dmg. That's solid pressure.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "I'm at 1HP so survival is critical. Watcher is adjacent (dist=1) which blocks precision_shot. I need to move away first to enable precision_shot, then finish the wounded Watcher. Moving to (4,4) maintains distance while keeping Watcher in range 2. From (4,4) dist to Watcher at (2,4) = 2, so precision_shot is valid (no adjacent enemy blocking). Watcher is wounded so 2dmg should finish it.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 11,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "At 2HP I'm critical. Lattice at (1,4) is adjacent — DENIAL blocks my scan. Deadeye is at (4,4) and already scanned critical status. I need to escape Lattice's denial zone first. Move to (3,4) to get away from Lattice while staying close to Deadeye. From (3,4), Lattice is at distance 2 (no longer adjacent/denial), and Deadeye is at distance 1 (adjacent). I can then attack Deadeye for 1 damage to potentially finish the critical unit. Both targets already scanned so no scan needed.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Watcher is at (3,4) dist=2, wounded. I'm at (1,4). I can't use trap while adjacent to enemy, but Watcher is at dist=2 so I'm not adjacent. Move to (2,4) to get adjacent and apply Denial, then attack. This pressures the wounded Watcher directly.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 12,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "HP is critical at 1/6. DENIAL blocks my abilities while adjacent to Lattice. I need to move away first to escape the denial zone, then I'm out of danger. Foresight shows Lattice will move to (2,4) and attack (3,4) — my current position. I must flee. Moving to (4,5) puts me 3 tiles from Lattice, outside denial, and away from trap at (4,1). After moving, I can wait since I have no allied targets for recalibrate and scan is already done on Lattice.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Watcher is at (4,5) critical HP, dist=3. I can move to (3,4) to close distance, then place a trap at (4,4) to block their path. Traps already at (2,3),(0,2),(0,3). Moving toward Watcher and cutting off escape routes.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": false
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "player",
+    "totalTurns": 13,
+    "reason": "player eliminated all enemies"
+  },
+  "endedAt": "2026-03-09T02:06:06.953Z"
+}
