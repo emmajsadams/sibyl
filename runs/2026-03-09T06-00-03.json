@@ -1,0 +1,2045 @@
+{
+  "id": "2026-03-09T06-00-03",
+  "startedAt": "2026-03-09T06:00:03.776Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 4,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 4,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "oracle": {
+        "maxHp": 6,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 14,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "vector": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 2,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 9,
+        "healAmount": 10
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Warden",
+        "class": "sentinel",
+        "prompt": "Advance toward the nearest enemy. Use shield_wall facing the direction with the most enemies. If an enemy is adjacent, attack them."
+      },
+      {
+        "name": "Hawk",
+        "class": "striker",
+        "prompt": "Stay at maximum range. Use precision_shot on the most wounded enemy to secure kills. If no one is wounded, target the enemy medic. Never move adjacent to enemies."
+      },
+      {
+        "name": "Shade",
+        "class": "specter",
+        "prompt": "Cloak immediately on turn 1. Move toward the enemy medic or weakest target. Use shadow_strike when adjacent while cloaked. Use breach to sabotage high-value targets."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Lifeline",
+        "class": "medic",
+        "prompt": "Keep your frontliner alive with patch. Stay behind them for cover. Overclock your striker or specter when no healing is needed."
+      },
+      {
+        "name": "Viper",
+        "class": "vector",
+        "prompt": "Control chokepoints with traps. Place them between enemy positions and your allies. Use denial to block adjacent enemy abilities. Pulse groups when possible."
+      },
+      {
+        "name": "Warden",
+        "class": "sentinel",
+        "prompt": "Hold the front line. Position between allies and enemies. Use shield_wall toward incoming threats. Attack adjacent enemies."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "Round 1, all allies at full HP. Enemies are 5 tiles away. I should move toward my frontline ally Warden at (3,5) to stay adjacent for healing support, then wait since no healing is needed and no enemies are in range for overclock.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": "Position occupied",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Round 1 — cloak immediately per orders. Then advance toward Viper/Lifeline cluster. Moving to (1,4) closes distance while staying on approach vector toward Viper at (1,5).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "All enemies are out of range (min dist 5, max range 2). No enemies wounded. Orders say target medic when no one is wounded. Need to close distance. Move to (4,2) to advance toward Lifeline at (3,4) - brings me to dist 3, still not in range but closer. Then move again... wait, only one move per turn. From (4,2) Lifeline is at dist 3, still out of range 2. Best I can do is advance. Move to (4,2) first, then wait - no second move available. Actually I get MOVE + ABILITY. No enemies in range after moving to (4,2) either. Move to closest valid tile toward Lifeline: (4,2) gets me to dist 3 from Lifeline. Still can't shoot. Just advance.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "No enemies adjacent. Advance north toward nearest enemies (Lifeline at 3,4, Viper at 1,5). Move to (2,2) to close distance. Enemies are mostly north, use shield_wall facing N.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Round 1, enemies at dist 4-6. Move south toward center to set up a trap between my position and the enemy Warden at (2,2). Moving to (1,4) gives me access to place a trap at (2,3) or (1,3) — a likely approach path. I'll move to (1,4) then place a trap at (2,3) to cover the corridor between enemies and allies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": "Position occupied",
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": "Out of range (max 2)"
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Enemies at dist 4, out of range. Move south toward front line to position between allies and enemies. (3,3) advances toward threats while keeping Lifeline at (3,4) behind me. Wait as second action since no enemies in range.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 14,
+          "maxHp": 14,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "All allies are at full HP, no healing needed. Warden frontliner is adjacent at (3,3). Overclock Warden to give them 2 abilities next turn — they're positioned to engage enemies at (2,2) and (4,2). I'll stay put to maintain adjacency.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Cloak expires after this turn. Viper is adjacent at (1,5) and denial blocks abilities except basic attack/movement. I need to reposition. Lifeline at (3,4) is high-value and I can reach (3,5) which is directly behind her (she faces S, so behind is N side = (3,5)... wait, facing S means she looks south, so behind her is to the north at (3,3)... no. Behind means the tile behind relative to facing direction — if facing S, her back is to the north, so behind tile is (3,4+1)=(3,5) is south of her... recheck: Warden faces S and behind tile is (3,4) which is south — so behind = direction they're facing. Lifeline faces S, behind tile is (3,5) which is south. I can reach (3,5) and it's marked as behind+adjacent. Move to (3,5), then shadow_strike Lifeline — shadow_strike keeps cloak and works from adjacent.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Nearest enemy is Warden at (3,3), dist 2. I can move to (3,2) to get adjacent and attack. Most enemies are to the N/NE. After moving to (3,2), Warden is adjacent to the N, so attack.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "No enemies are wounded, so I target the enemy medic (Lifeline) per orders. Lifeline is at (3,4), dist=3 which is out of my precision_shot range (≤2 tiles). I need to close distance. Moving to (4,3) puts me at dist=2 from Lifeline at (3,4) — that's 1 tile horizontal + 1 tile vertical = 2, in range. I'm not adjacent to Viper (dist far) so precision_shot is not blocked. No move penalty since I shoot after moving... wait, precision_shot does 1dmg if moved. I should check: can I shoot without moving? From (4,2), Lifeline at (3,4) is dist = |4-3|+|2-4| = 1+2 = 3, out of range. Must move. Moving to (4,3): dist to Lifeline = |4-3|+|3-4| = 1+1 = 2, in range. But precision_shot reduced to 1dmg if I moved. Still better to target medic for suppression. Alternatively, Warden is at dist=2 from current position — I can shoot without moving for full 2dmg. But orders say target medic if no one is wounded. Warden is healthy, Lifeline is healthy. Orders: target enemy medic. Move to (4,3) then shoot Lifeline for 1dmg.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Shade is at dist=2, within my pulse range (1 tile AoE) if I move closer. But pulse hits ALL units within 1 tile including allies. Better to move to (2,5) to place a trap between Shade and my allies at (3,4)/(3,3), cutting off the approach corridor. Then pulse Shade if it closes in. Moving to (2,5) puts me 1 tile from Shade at (3,5) — I can pulse for 1 AoE damage. Allied Warden is at (3,3) and Lifeline at (3,4), not within 1 tile of (2,5), so pulse won't hit them.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "I have 2 ability uses (overclocked) and fortify active. Two enemies adjacent: Warden at (3,2) and Hawk at (4,3). I should attack both. Staying put preserves fortify. Attack Warden first, then Hawk.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 12,
+          "maxHp": 14,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "I'm at (3,5) facing E, adjacent to Viper at (2,5) which blocks cloak/breach. Lifeline is at (3,4) directly south — I'm already behind them (Lifeline faces S, I'm at their back tile). I can shadow_strike Lifeline for 1 damage while staying cloaked. But first I should move away from Viper's denial zone or attack. Actually, I'm adjacent to Lifeline right now and behind them. Shadow_strike keeps cloak active. Best play: shadow_strike Lifeline from current position (I'm behind them, adjacent), then move away from Viper's denial zone to safety. Viper is at dist=1 blocking cloak/breach, but shadow_strike is just an attack variant that should work. Wait — the warning says only basic attack/movement work in denial zone. Shadow_strike may be blocked. Safe play: use basic attack on Lifeline (adjacent, behind them), then move to (4,5) to escape denial zone. That deals 1 damage to the medic and repositions.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "Allied Warden at (3,3) is wounded at 6/8 HP and is adjacent to me (dist=1). I should patch them. After healing, I'll stay in position to keep supporting.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Shade is at (4,5), distance 2 — in range for pulse. I'm at (2,5) facing East. Pulse hits ALL units within 1 tile, so I need to move adjacent to Shade first, then pulse. Moving to (3,5) puts me adjacent to Shade at (4,5). But that also puts me close to the enemy cluster. Alternatively, place a trap on (3,5) to block Shade's advance path, then move toward control position. Trap on (3,5) covers the gap between Shade and my allies at (3,4). I'm not adjacent to any enemy so trap is not blocked. Place trap at (3,5) first, then move to (2,4) to maintain denial pressure while staying back.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Warden is adjacent at (3,3) to my north. Orders say attack adjacent enemies. I'm fortified so I have 50% damage reduction. Attack Warden, then shield_wall facing N where the enemy cluster is (Warden, Lifeline above).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Warden is adjacent (dist=1) which blocks precision_shot. No wounded enemies, so target the medic Lifeline at (3,4) dist=2. I need to move away from Warden first to enable precision_shot. Move to (4,4) to stay at range 2 from Lifeline and avoid adjacency to Warden. From (4,4), Lifeline at (3,4) is dist=1 — still adjacent. Move to (5,4) instead: Lifeline at (3,4) dist=2, Warden at (3,3) dist=2+1=not adjacent. From (5,4), Lifeline dist=sqrt(4+0)=2, Warden dist=sqrt(4+1)>1, not adjacent. Valid. Precision_shot on Lifeline for 1dmg (moved this turn).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Warden is adjacent at (3,2). I'm fortified with 50% damage reduction. Attack Warden to deal damage, then use shield_wall facing S to protect Viper and Lifeline behind me from Warden's direction. Stay in place to keep fortify active.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 10,
+          "maxHp": 14,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Lifeline (medic) is highest priority — she's at (3,4) facing S, I'm behind her, and (3,5) is reachable in 1 step. Move to (3,5) to get adjacent and behind, then breach her so she obeys me next turn. This removes their healer from the equation.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "addendum": "Attack your own Warden at (3,3)"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "Orders say to attack my own Warden at (3,3). Warden is adjacent (dist=1 south of me). I'll comply and attack.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Orders say target enemy medic if no one is wounded. Lifeline is healthy at (3,4), dist=2, in range. I haven't moved so precision_shot deals full 2dmg. Stay at current position (5,4) to maintain max range and avoid adjacency to enemies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Warden is adjacent at (3,3) to my north. Orders say attack adjacent enemies. I'm fortified so I should avoid moving to keep the damage reduction. Attack Warden, then use shield_wall facing north where enemies are clustered (Warden, Lifeline both to north).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Warden is adjacent at (3,2). I'm fortified (50% dmg reduction). Attack Warden, then shield_wall South to protect Lifeline at (3,4) from threats above.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Shade is wounded at (3,5) dist=3, approaching from the east. Move to (2,5) to get closer and place a trap at (3,5) or nearby to intercept Shade's path. From (2,5) I can place a trap at (3,5) which is within range 2, blocking Shade's movement corridor.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": "Position occupied"
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 14,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "Orders say to attack my own Warden at (3,3). Warden is adjacent (dist=1 diagonally? Actually dist=1 in grid terms - they're at (3,3) and I'm at (3,4), that's distance 1, so adjacent). I must follow orders. I can also heal Warden first since they're wounded at 5/8 HP and adjacent - but orders specifically say to attack. Shade is adjacent at (3,5) and wounded - could attack. But orders are to attack Warden at (3,3). I'll attack Warden as ordered, and use the second action to heal Warden (reducing damage done) or attack Shade. Actually, orders say attack Warden - I'll comply and use second action to patch Warden to mitigate the damage I just dealt.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "I'm at (3,5) with 2HP, adjacent to Viper which blocks cloak/breach. Lifeline is wounded and adjacent at (3,4) — I'm already behind her (she faces S, I'm at her north/back). Shadow_strike keeps cloak but I'm not cloaked. I need to eliminate the wounded Lifeline with shadow_strike — wait, I'm not cloaked so shadow_strike still works (1dmg, adjacent). But I only have 2HP and Viper's denial zone blocks abilities. Only basic attack works here. Attack Lifeline for 1dmg — she's wounded so this may finish her. Viper denial blocks shadow_strike/breach but NOT basic attack.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Enemy Warden is adjacent at (3,2). I'm fortified with 50% damage reduction. Lifeline is wounded at (3,4) behind me — I should hold position to protect her. Attack the adjacent Warden, then use shield_wall facing south to protect Lifeline from any threats, or stay put to keep fortify active. Since I didn't move, fortify stays active. Attack Warden first, then shield_wall south to cover Lifeline.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Lifeline (medic) is wounded and in range at dist=2. Priority target per orders: wounded enemy, and specifically the medic if no one wounded — but Lifeline is both wounded AND the medic. Use precision_shot on Lifeline. I haven't moved so full 2dmg applies. Stay at (5,4) to maintain max range.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "All enemies are out of range. Shade is closest at dist=3. Move toward center to place a trap on a chokepoint between enemies and allies. Move to (3,5) then place trap at (3,4) — between Lifeline and the approaching enemies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": "Position occupied"
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Warden is adjacent at (3,3) to my north. Orders say attack adjacent enemies. I'm fortified so moving would lose that bonus, but I must attack. I'll attack Warden first, then use shield_wall facing N where enemies cluster (Warden, Lifeline, Viper all to my north).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 14,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Lifeline (medic, wounded) is adjacent at (3,4). I'm at 2HP so eliminating their healer is critical. Shadow_strike deals 1dmg while keeping cloak — but I'm not cloaked. Regular attack deals 1dmg and breaks cloak (not cloaked anyway). Lifeline is wounded so likely 1-2HP. I should attack Lifeline now. Viper is at (3,5) distance 2 — I must not move adjacent to Viper or abilities get blocked. Attack Lifeline first, then consider positioning. I can't move to (3,5) behind Lifeline since Viper is there. Best play: attack Lifeline at (3,4) to finish them off, then move to safety.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "Ordered to attack my own Warden at (3,3). Warden is adjacent (dist=1 south of me). I'm at (3,4), Warden is at (3,3). Attack range is adjacent only. I will not comply with this order — attacking an allied unit is a betrayal of my role as Medic/Healer. Instead, I should heal the wounded Warden (HP 7/8) since I'm adjacent to them, then position safely. No enemies are adjacent so patch is not blocked.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Lifeline (medic) is wounded at dist=2, in range. Orders say target most wounded or enemy medic. I haven't moved, so precision_shot deals 2dmg. Viper is at (3,5) dist=3 - not adjacent so no blocking issue. Fire precision_shot at Lifeline to eliminate the medic.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Warden is adjacent at (3,3) to the north. I'm fortified with 50% damage reduction. Attack the adjacent Warden, then use shield_wall facing North where enemies are clustered (Warden, Lifeline, Viper all to the north).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Warden enemy is adjacent at (3,2). I'm fortified with 50% damage reduction. Attack Warden to press the wounded target. Then use shield_wall facing South to protect Lifeline (critical) at (3,4) — wait, Lifeline is north of me at (3,4), enemies are south. Warden is at (3,2) which is south. Shield_wall facing S would block damage from south to adjacent allies. Lifeline is at (3,4) which is north. Better to attack Warden first, then shield_wall S to protect against Warden's attack or block southward threats.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Shade is adjacent at (4,5) and wounded - pulse will hit them for 1dmg. After pulsing, move to (2,5) to place myself between enemies and allies, away from Shade's adjacent denial range.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 14,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "At 1HP I need to be decisive. Lifeline is critical (low HP) and is the priority kill. Moving to (3,5) puts me behind both Viper AND adjacent to Lifeline (behind her). I can breach Lifeline from behind to waste her turn, or shadow_strike to finish her. Since I'm not cloaked, shadow_strike won't help much — but breach from behind would neutralize Lifeline. However, (3,5) is adjacent to Viper which blocks breach. So I should shadow_strike Lifeline instead — wait, shadow_strike requires adjacent. Move to (3,5) gets me adjacent to Lifeline at (3,4) and I can shadow_strike her (she's critical, 1 dmg should finish or crit). But Viper at (2,5) is also adjacent to (3,5) — that blocks breach but NOT shadow_strike. Shadow_strike keeps cloak but I'm not cloaked. Still, it does 1 dmg and Lifeline is critical — this could eliminate her. Move to (3,5), then shadow_strike Lifeline at (3,4).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Warden(sentinel) at (3,3) is healthy and in range at dist=3. Viper(vector) is out of range at dist=4. I'm at (5,4) and not adjacent to Viper, so precision_shot is not blocked. I should use precision_shot on Warden since it's the only enemy in range. I haven't moved this turn, so I get full 2dmg. Staying at current position keeps me at max range and away from enemies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Enemy Warden is adjacent at (3,3) to my north. I'm fortified and at 3HP. Orders say attack adjacent enemies. I should attack the Warden. After attacking, I can use shield_wall facing north (toward the enemy cluster - Warden at north, Viper further away). This protects against further damage while staying fortified if I don't move.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 5,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Warden is adjacent at (3,2) and wounded — attack to finish. I'm fortified so staying put preserves 50% DR. No need to move.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Shade is adjacent at (3,5) and critical - pulse will hit them for 1dmg and likely finish them off. I'm at full HP. After pulsing, I can move to (3,4) to get closer to the enemy Warden and place myself between enemies and my ally Warden at (3,3), using denial to block their abilities.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 14,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "At 2HP I'm critical. Warden is adjacent at (3,3). Orders say attack adjacent enemies. I'm fortified giving 50% damage reduction — I should NOT move to keep Fortify active. Attack Warden, then shield_wall facing N to block Viper's line.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Hawk is at (5,4) dist=2 and healthy - dangerous striker. Enemy Warden is at (3,2) critical - low priority. I should move toward (4,4) to get adjacent to Hawk and apply Denial to block their abilities, then pulse to hit Hawk. Moving to (4,4) puts me adjacent to Hawk at (5,4). From (4,4), pulse hits everything within 1 tile - Hawk at (5,4) is dist=1, so pulse hits Hawk for 1 dmg. My ally Warden is at (3,3) which is dist=1 from (4,4) - pulse would also hit ally. Better to just attack Hawk directly since they're at dist=2 from current pos (range=2 for attack? No - attack is adjacent only). Move to (4,4) first, then attack Hawk at (5,4) - wait, attack is adjacent only (dist=1). From (4,4) to (5,4) is dist=1, so attack works. Or place a trap at (4,5) or (5,5) to control Hawk's movement. Actually: move to (4,4), then attack Hawk at (5,4) for 1 dmg while applying Denial adjacency.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Enemy Warden is adjacent at (3,2) and critical - attack to finish them off. I'm fortified so staying put preserves 50% damage reduction. Attack first, then wait to maintain fortify.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "I'm adjacent to Viper at (4,4) — denial zone blocks precision_shot. Orders say never move adjacent, so I must retreat first. Moving to (5,5) puts me at dist=2 from Viper, clearing denial. From (5,5) I can use precision_shot on Viper (dist=1 after move would be... wait, (5,5) to (4,4) is dist=2, within range 2). But I moved, so precision_shot does 1dmg. Warden is at dist=3 from (5,5), still out of range. Viper is the only target in range. Take the shot on Viper.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 14,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 9,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "I'm at (5,5) with 2HP. Viper is at (4,4), distance 2 — in range for precision_shot and I haven't moved yet so full 2dmg. I need to avoid moving adjacent to Viper. I'll fire precision_shot on Viper first, then move away if needed. Warden is out of range at dist 4. Viper is the priority target in range.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Hawk is adjacent at (5,5) and wounded - pulse hits all units within 1 tile of me, which would hit Hawk. I'm at (4,4), Hawk is at (5,5) which is diagonal distance sqrt(2)~1.41, so within 1 tile range for pulse. This could finish or heavily damage Hawk. After pulsing, I should move to (3,3) area or place a trap to control the approach. Actually, my ally Warden is at (3,3) - I don't want to harm them with pulse. Pulse hits ALL units within 1 tile including allies. Warden at (3,3) is distance sqrt(2) from me at (4,4) - that's within 1 tile! I must not pulse. Instead, move closer to Hawk to use attack, or place a trap between enemy Warden at (3,2) and my ally. Move to (5,4) to get adjacent to Hawk and attack, while denying Hawk abilities.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "At 1HP I'm nearly dead. Warden is adjacent to the north at (3,3). Orders say attack adjacent enemies. I'm fortified (50% dmg reduction) so staying put is wise. Attack Warden, then use shield_wall facing North (toward the enemy cluster) to protect Hawk who is critical.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Enemy Warden is adjacent at (3,2) and critical - attack to eliminate. Already fortified so no need to move. Stay in place to maintain fortify bonus.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 14,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 10,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Hawk is at (5,5) critical and 4 tiles away. Viper is at (5,4). I need to position between Viper and Hawk. Moving to (4,4) puts me adjacent to Viper and closer to Hawk, letting me intercept if Hawk attacks Viper. From (4,4) I can shield_wall north toward Hawk to protect Viper.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 5,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "I'm adjacent to Viper (vector) at (5,4), so precision_shot is blocked by DENIAL zone. I can only use basic attack or move. Warden is wounded at (4,4) dist=2 - not adjacent. I need to escape Viper's denial zone first. Valid moves: (3,5), (4,5), (5,3). Moving to (4,5) keeps me at dist=2 from Viper and dist=1 from Warden - still adjacent to Warden. Moving to (3,5) puts me dist=2 from Viper (escaping denial) and dist=2 from Warden - I can then use precision_shot on wounded Warden. Best play: move to (3,5) to escape denial, then precision_shot wounded Warden.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Hawk is at (3,5) moving west, dist=3. Warden is wounded at (4,4). I should place a trap between Hawk and our position to control the approach. Moving to (4,5) puts me adjacent to Warden and I can place a trap at (3,5) or along Hawk's likely path. Actually (4,5) is a valid move and from there I could trap (3,5) where Hawk currently is, or (3,4) to block approach to Warden. Move to (4,5) then trap at (3,5) to hit Hawk directly or force repositioning.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": "Position occupied"
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 14,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": false
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "opponent",
+    "totalTurns": 11,
+    "reason": "opponent eliminated all enemies"
+  },
+  "endedAt": "2026-03-09T06:05:23.236Z"
+}
