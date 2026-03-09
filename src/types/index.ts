@@ -38,8 +38,8 @@ export const BALANCE: BalanceConfig = {
   unitStats: {
     specter: { maxHp: 4, movement: 3, range: 1, speed: 3 }, // buffed HP 3→4 (39.5%@38g in last 30) — over-nerfed, restoring to 4
     striker: { maxHp: 3, movement: 2, range: 2, speed: 1 }, // nerfed HP 4→3 (61.7%@243g overall)
-    oracle: { maxHp: 6, movement: 3, range: 3, speed: 3 },
-    medic: { maxHp: 8, movement: 3, range: 3, speed: 3 }, // nerfed HP 12→10→8 (73.9%@23g in last 50) — still overperforming, reducing durability
+    oracle: { maxHp: 7, movement: 3, range: 3, speed: 3 }, // buffed HP 6→7 (39.5%@43g in last 50)
+    medic: { maxHp: 6, movement: 3, range: 3, speed: 3 }, // nerfed HP 8→6 (73.9%@23g in last 50) — still overperforming, making more fragile
     vector: { maxHp: 8, movement: 2, range: 2, speed: 1 },
     sentinel: { maxHp: 8, movement: 2, range: 1, speed: 1 }, // nerfed HP 9→8 (71.3% win rate @ 178 games)
   },
