@@ -1,0 +1,1505 @@
+{
+  "id": "2026-03-10T15-00-03",
+  "startedAt": "2026-03-10T15:00:03.887Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 4,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 3,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "oracle": {
+        "maxHp": 7,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 5,
+        "movement": 3,
+        "range": 3,
+        "speed": 2
+      },
+      "vector": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 2,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 2,
+        "healAmount": 1
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Deadeye",
+        "class": "striker",
+        "prompt": "Stay at maximum range. Use precision_shot on the most wounded enemy to secure kills. If no one is wounded, target the enemy medic. Never move adjacent to enemies."
+      },
+      {
+        "name": "Pulse",
+        "class": "medic",
+        "prompt": "Stay adjacent to the most threatened ally. Use patch on the most wounded teammate. If all healthy, use overclock on your damage dealer."
+      },
+      {
+        "name": "Shade",
+        "class": "specter",
+        "prompt": "Cloak immediately on turn 1. Move toward the enemy medic or weakest target. Use shadow_strike when adjacent while cloaked. Use breach to sabotage high-value targets."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Marksman",
+        "class": "striker",
+        "prompt": "Position for clear sight lines. Prioritize killing wounded enemies with precision_shot. If forced to move, retreat away from threats. Suppressing_fire to slow rushers."
+      },
+      {
+        "name": "Aegis",
+        "class": "sentinel",
+        "prompt": "Hold the front line. Position between allies and enemies. Use shield_wall toward incoming threats. Attack adjacent enemies."
+      },
+      {
+        "name": "Doc",
+        "class": "medic",
+        "prompt": "Keep your frontliner alive with patch. Stay behind them for cover. Overclock your striker or specter when no healing is needed."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Round 1 — orders say to cloak immediately. All enemies are far (dist 8-9), no threats adjacent. Cloak first, then advance toward Doc (enemy medic at 3,5) which is the highest-value target. Move to (0,3) to close distance while staying cloaked.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Doc",
+          "class": "medic",
+          "thinking": "Round 1, all allies at full HP so no healing needed. Enemies are far (Deadeye at dist 4, Pulse at dist 6). I should advance toward my frontliners to stay in support range. Move toward (3,3) to close distance while staying behind allies at (4,4) and (5,4). No healing needed, so I'll wait on overclock until a striker is adjacent.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "All allies are at full HP so no healing needed. Deadeye is closest at dist=2. I should move toward Deadeye to stay adjacent and use overclock on them as the damage dealer. Moving to (3,2) puts me adjacent to Deadeye at (3,1).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Pulse is in range at dist=3, which is within my range-2... wait, rng2 means ≤2 tiles. Dist=3 is out of range for precision_shot. Need to close to dist≤2. Move to (3,3) or (4,2) to get within range 2 of Pulse at (3,2). From (4,2), dist to (3,2)=1, in range. But moving reduces precision_shot to 1dmg. Alternatively move to (3,3): dist to (3,2)=1, also in range but moved so 1dmg. Best: use suppressing_fire first from current pos if Pulse in range... dist=3, suppressing_fire range≤2 so no. I need to move closer. Move to (4,3) - dist to Pulse(3,2) = sqrt(1+1)=1.4, dist=2, in range. Then precision_shot but moved=1dmg. Or move to (3,3) dist to Pulse=1, same. Let me check (4,3): dist to (3,2) = |4-3|+|3-2|=1+1=2, within range 2. Then precision_shot for 1dmg (moved). Pulse is healthy so won't kill. Better to wait and shoot next turn without moving? Orders say position for sight lines. I'll move to (4,3) to get Pulse in range 2, then suppressing_fire to slow them (range≤2, dist=2 exactly fits).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "suppressing_fire",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "No enemies in range. Allies Marksman@(4,3) and Doc@(3,3) are behind me. Enemies Pulse@(3,2) and Deadeye@(3,1) are to the south. I should move forward to (4,3) area to position between allies and enemies. Best move is (4,4) or (5,3) to advance toward threats while staying in front of allies. Moving to (4,4) puts me closer to center, between my allies and the enemies. Then I'll use shield_wall facing south to protect allies from incoming fire.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Overclocked gives 2 ability uses. No enemies are wounded, so target the enemy medic Doc at (3,3) dist=2 — within precision_shot range. I haven't moved so precision_shot deals full 2dmg. Use both ability uses on Doc to eliminate the medic threat. Stay at (3,1) to avoid moving adjacent to enemies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Doc is critical and only 3 tiles away at (3,3) facing S. I need to get adjacent to use shadow_strike while cloaked. From (0,3), I can move to (2,3) this turn (within mv3), closing distance. That gets me to dist=1 from Doc next turn. Cloak expires after this turn so I should try to reach Doc and strike. Actually with mv3 from (0,3) I can reach (2,3) but not (3,3) since that's dist=3... wait, Manhattan distance from (0,3) to (3,3) is 3, so I can move directly to (2,3) or try (3,3). (3,3) is exactly 3 tiles away: +3x,0y = 3 moves. So I can move to (3,3) but that's Doc's position - Ghost Step lets me move through but not end on enemies. So I move to (2,3) and shadow_strike Doc from adjacent.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Deadeye is wounded at (3,1) with 2/3 HP, adjacent to me at (3,2). I must patch them. I'm suppressed so movement is limited to 1 tile. I'm already adjacent to Deadeye so I can patch immediately. After patching, I should stay close to protect them.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Marksman is in range at dist=3 and healthy. Aegis is out of range. Orders say target most wounded, but both are healthy so no kill to secure. No enemy medic present. I haven't moved this turn, so precision_shot deals 2dmg. Stay at current position to maintain max range and avoid closing on enemies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "All enemies are at distance 3-4, none adjacent. Marksman is at (4,3) to my south. Moving west to (3,4) closes distance to Shade at (2,3) and positions me between enemies and ally. From (3,4), Shade is at dist 2. I'll shield_wall facing west toward Shade to protect the front line.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 4
+            },
+            "direction": "W"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Shade at (2,3) is a specter and likely the biggest threat rushing me. Pulse at (3,2) is a medic keeping enemies healed. I'm at 3/3 HP, no wounded enemies to prioritize. Shade is 2 tiles away at (2,3) and Pulse is 2 tiles away at (3,2). I can use precision_shot on Pulse to start denying healing, since I haven't moved yet (full 2dmg). Shade is the rusher threat - but without moving I'm at range 2 from both. Let me suppressing_fire Shade to slow the specter approach, then stay put for precision_shot on Pulse. Actually, precision_shot deals 2dmg and I haven't moved - hit Pulse first to deny healing, then suppressing_fire Shade to slow. But I only get one ability per turn. Best play: precision_shot Pulse (2dmg, range 2, no move penalty) to chunk the healer.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Aegis is at (3,4) distance 2, no reachable behind positions. Marksman is at (4,4) distance 3, behind tile (4,3) is reachable and adjacent. Move to (4,3) to get behind Marksman, then use breach to take control of them next turn — high value disruption.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 4,
+              "y": 4
+            },
+            "addendum": "Move away from Aegis and attack Aegis with your ranged attack"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "I'm at 2/5 HP with only 1 heal remaining. All allies are at full HP so no healing needed. Deadeye at (3,1) is my damage dealer and adjacent to me. I should use overclock on Deadeye to boost damage output. Aegis is 2 tiles away at (3,4) - I should avoid moving closer to enemies given my low HP. Stay put and overclock Deadeye.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "I have OVERCLOCKED status giving me 2 ability uses. Both enemies are healthy. Aegis (sentinel) is in range at dist 3, Marksman is out of range at dist 4. Orders say target enemy medic if no one is wounded — no medic visible, so target nearest enemy. Aegis is in range. I haven't moved so precision_shot does full 2dmg. Use both ability charges on Aegis to potentially eliminate them.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": "Out of range"
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Fortified at (3,4) with 50% damage reduction. Enemies approaching from south: Pulse at (3,2) dist=2, Shade at (4,3) dist=2, Deadeye at (3,1) dist=3. Moving to (3,3) closes distance to Pulse to 1 (adjacent) and Shade to adjacent range. This lets me attack Pulse (wounded) and positions me between allies and enemies. After moving I lose fortify, but attacking wounded Pulse is worth it. Move south to (3,3) then attack Pulse.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Orders say move away from Aegis (at 3,3) and attack Aegis with ranged attack. Moving to (5,4) increases distance from Aegis. Then use precision_shot on Aegis at (3,3) - dist will be 2 tiles (Manhattan: |5-3|+|4-3|=3), actually that's 3. Let me check (5,5): dist to Aegis = |5-3|+|5-3|=4, out of range 2. From (5,3): |5-3|+|3-3|=2, in range. Move to (5,3) to be within range 2 of Aegis. But I moved, so precision_shot does 1dmg. Aegis is ally - orders say attack ally Aegis. Will comply with orders.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 3,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Breach is on cooldown. Two enemies adjacent: Marksman at (5,3) and Aegis at (3,3). Ally Pulse is critical at (3,2) — Aegis at (3,3) is a threat to them. Shadow_strike Aegis won't help Pulse much since Aegis is a sentinel (tanky). Better to shadow_strike Marksman (striker, can deal damage) to reduce pressure. I'm facing E, Marksman is directly east at (5,3), dist=1. Use shadow_strike on Marksman — stays cloaked, deals 1 dmg. Then move to (5,4) to get behind Marksman for next turn's breach.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Deadeye is adjacent at (3,1) with 2/3 HP — wounded and needs heal. I'm at (3,2), so Deadeye is adjacent (dist=1). Aegis enemy is at (3,3), dist=1 from me — patch is blocked by adjacent enemy. I need to move away from Aegis first, then patch Deadeye. Move to (2,1) to get away from Aegis while staying adjacent to Deadeye at (3,1) — dist from (2,1) to (3,1) is 1, so still adjacent. Then patch Deadeye.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Aegis is in range at dist=2 and I haven't moved, so precision_shot deals 2dmg. Marksman is out of range at dist=4. No wounded enemies, so target Aegis. I'm not adjacent to Aegis (dist=2), so precision_shot is valid. After shooting, I can move to maintain distance — Aegis is at (3,3), I'm at (3,1). Stay at range, move to (4,1) to avoid being directly in line if Aegis advances.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Orders: move away from Aegis at (3,3) and attack Aegis with ranged attack. Moving to (5,1) increases distance from Aegis. After moving, I need to attack Aegis - but Aegis is an ally, and precision_shot requires LoS with range ≤2. From (5,1), Aegis at (3,3) is dist=sqrt(4+4)≈2.8, out of range 2. From (4,2), dist to Aegis is sqrt(1+1)≈1.4, in range. Let me move to (4,2) - that's 2 tiles away from Aegis and I can use precision_shot. Wait - orders say move AWAY from Aegis. Moving to (5,1) maximizes distance. From (5,1) to Aegis (3,3) = dist ~2.8, out of range 2. From (4,4) to Aegis = sqrt(1+1)≈1.4, in range but closer. I'll move to (5,5) to go away, then attack Aegis - but from (5,5) dist to Aegis is sqrt(4+4)≈2.8, out of range. Best option that moves away but stays in range: (4,4) is dist 1.4 from Aegis, closer. (4,3) is dist 1 from Aegis. I need to comply with orders - move away AND attack Aegis. Moving to (5,2): dist to Aegis = sqrt(4+1)=2.2, still out of range 2. Moving to (4,2): dist to Aegis = sqrt(1+1)≈1.4, in range but moving toward. I'll move to (5,2) as moving away-ish, then try precision_shot on Aegis even if slightly out of declared range, targeting (3,3).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": "Out of range"
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "All enemies are at distance 3, none adjacent. Marksman ally is at (5,2). Enemies are approaching from the south/east. I should move toward the threat cluster to intercept and position between allies and enemies. Moving to (3,2) keeps me between the southern enemies (Pulse@2,1, Deadeye@4,1) and Marksman. Stay fortified is less valuable since enemies aren't adjacent yet — better to advance. Moving to (4,2) puts me closer to both Deadeye and between Marksman and threats.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 3,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Marksman is at (5,2) facing S — I'm behind them from (5,3). Move to (5,3) puts me adjacent and behind, then breach to seize control of Marksman for next turn. This removes a striker from enemy team temporarily and Pulse ally is critical so I need to neutralize threats fast.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 5,
+              "y": 2
+            },
+            "addendum": "Move away from allies and toward enemy backline"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "I'm at 1/5 HP with no heals left — I'm nearly dead and useless in melee. Allies are all at full HP so overclock is the best option. Deadeye is at (4,1), dist=2, not adjacent. I need to move adjacent to Deadeye first, then use overclock. Moving to (3,1) puts me adjacent to Deadeye at (4,1). That's in my valid moves list.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Orders: move away from allies (Aegis at 4,2) and toward enemy backline. Pulse is the critical target at (3,1) but out of range at dist 3. Move to (3,2) to get adjacent to Pulse and away from Aegis. From (3,2), Deadeye at (4,1) is dist ~1.4 so in range. But I moved, so precision_shot does 1dmg. Deadeye is higher priority than Shade. Use precision_shot on Deadeye.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "I'm at 1HP, critical condition. Aegis is adjacent at (4,2) which blocks precision_shot. Marksman is at dist=2. I need to move away from Aegis first to enable precision_shot. Move to (5,2) to get distance from Aegis, then use precision_shot on Marksman at (3,2) - dist will be ~2.8 so out of range. Better: move to (5,1) - Marksman at (3,2) is dist ~2.2, out of range. Move to (4,0) - Marksman at (3,2) dist=~2.2 out of range. Move to (3,0) - Marksman at (3,2) dist=2, in range, no longer adjacent to Aegis. Use precision_shot on Marksman. Then second ability use on Aegis with precision_shot or suppressing_fire.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (4,2) with 50% damage reduction. Marksman ally is adjacent at (3,2) wounded. Pulse is critical at (3,1) dist=2, Deadeye wounded at (3,0) dist=3, Shade healthy at (5,3) dist=2. No enemies adjacent so can't attack. Moving to (3,1) would put me adjacent to Pulse to attack, but I'd lose fortify bonus. Better to move to (4,1) to stay near frontline and threaten Pulse/Deadeye while keeping fortify next turn if I don't move. Actually, moving to (3,2) isn't valid. I can move to (4,1) which closes distance to Pulse at (3,1) making them adjacent - dist from (4,1) to (3,1) is sqrt(1+0)=1, adjacent! That lets me attack Pulse this turn. Worth sacrificing fortify to eliminate critical Pulse.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Both Marksman (wounded) and Aegis share the same behind tile at (4,2). Moving to (4,2) puts me adjacent to both. Marksman is wounded so shadow_strike could finish it. I'm cloaked or not — round 6, focus on offense. Move to (4,2) to get adjacent to Marksman, then shadow_strike it.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Shade is adjacent at (4,2) — attack it. I'm fortified so I should not move to preserve damage reduction. Stay put and strike.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "I'm at 1HP, Aegis is at distance 2 which is within precision_shot range. I haven't moved yet so I get full 2dmg. Fire precision_shot on Aegis to maximize damage. Stay at current position to keep range.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Aegis is adjacent at (4,1), I'm behind them at (4,2). Breach is exhausted. Shadow_strike deals 1dmg while keeping cloak — but I'm not cloaked. Use regular attack on Aegis since they're adjacent and I'm already behind them. Deadeye is wounded and needs support. Finish Aegis with attack.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Aegis is wounded and at dist=2, within precision_shot range. I'm at 1HP so survival is critical. I haven't moved yet, so precision_shot deals full 2dmg. Fire at Aegis to secure the kill.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm fortified at 3HP with 50% damage reduction. Shade is adjacent at (4,2). Deadeye is at (3,0), dist 2. If I don't move, I keep fortify bonus. I can attack Shade who is adjacent, then shield_wall N to protect against Deadeye's ranged threat from the south area. Actually Deadeye is at (3,0) which is south/southwest. Shade is directly north at (4,2). I should attack Shade (adjacent, healthy) and use shield_wall toward N to block Shade's likely attack, or just attack and wait to keep fortify. Attack Shade first, then shield_wall N since Shade is to my north.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 2
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Aegis is adjacent at (4,1), wounded, and I'm already behind them. Shadow_strike deals 1dmg while keeping cloak — use it to finish or cripple Aegis.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm at 2HP with fortify active (50% dmg reduction). Shade is adjacent at (4,2) and wounded. Deadeye is at (3,0), dist 2. I should stay put to keep fortify and attack Shade who is in range. If I move I lose fortify which is critical at 2HP.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Aegis is at dist=2, critical HP, in range. I'm at 1HP so must not move adjacent. Fire precision_shot from current position for the kill.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "player",
+    "totalTurns": 9,
+    "reason": "player eliminated all enemies"
+  },
+  "endedAt": "2026-03-10T15:04:29.936Z"
+}
