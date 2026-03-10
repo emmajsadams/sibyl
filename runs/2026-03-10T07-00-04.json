@@ -1,0 +1,2872 @@
+{
+  "id": "2026-03-10T07-00-04",
+  "startedAt": "2026-03-10T07:00:04.809Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 4,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 3,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "oracle": {
+        "maxHp": 7,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 6,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "vector": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 2,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 4,
+        "healAmount": 3
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Pulse",
+        "class": "medic",
+        "prompt": "Prioritize healing the lowest HP ally. Position safely behind your sentinel. Use overclock on allies who can do the most with an extra action."
+      },
+      {
+        "name": "Marksman",
+        "class": "striker",
+        "prompt": "Position for clear sight lines. Prioritize killing wounded enemies with precision_shot. If forced to move, retreat away from threats. Suppressing_fire to slow rushers."
+      },
+      {
+        "name": "Seer",
+        "class": "oracle",
+        "prompt": "Scan early to give your team intel on enemy prompts. Target enemy specters with scan to track them after cloak. Use recalibrate on allies who need tactical adjustments. Stay safe at range behind your front line."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Warden",
+        "class": "sentinel",
+        "prompt": "Advance toward the nearest enemy. Use shield_wall facing the direction with the most enemies. If an enemy is adjacent, attack them."
+      },
+      {
+        "name": "Hawk",
+        "class": "striker",
+        "prompt": "Position for clear sight lines. Prioritize killing wounded enemies with precision_shot. If forced to move, retreat away from threats. Suppressing_fire to slow rushers."
+      },
+      {
+        "name": "Ghost",
+        "class": "specter",
+        "prompt": "Cloak and move behind enemy lines. Target isolated enemies with shadow_strike. Save breach for the most dangerous enemy. Avoid being caught uncloaked."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Round 1, all allies at full HP so no healing needed. Enemies are approaching from the north side. I should position safely - move toward my allies while staying away from the advancing enemies. Overclock on Seer could be valuable since oracle abilities tend to be impactful, but Seer is at dist=3 and not adjacent. I'll move to (2,2) to get closer to allies and use overclock on Marksman if adjacent, but neither ally is adjacent currently. Best to reposition - move to (1,2) to stay behind and await healing opportunities.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "All enemies are out of scan range (min dist 6, need ≤4). I need to advance north to bring enemies into scan range next turn. Moving to (4,3) gets me closest to enemies while staying safe behind my front line.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "Round 1 — cloak immediately as instructed. Then advance toward enemy lines. Pulse at (1,2) is closest target. Move toward (0,3) to close distance while cloaked.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "I'm at (2,4) with 3HP. Two enemies in range: Seer at (4,3) dist=3 and Pulse at (1,2) dist=3. Both are healthy. Orders say prioritize precision_shot on wounded enemies, but none are wounded. Seer is a high-value oracle target. I haven't moved this turn, so precision_shot deals 2dmg. I'll fire precision_shot at Seer (oracle) to pressure/eliminate the vision/support unit. No movement needed to maintain range.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "No enemies adjacent. Nearest enemies are Seer and Pulse at dist 4, both to the south. Advance toward them by moving to (2,3). Then use shield_wall facing S (direction of most enemies).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 4
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "No enemies in range from current position. Closest enemy is Warden at dist 4. Moving to (3,0) gets me closer while staying near the edge. Still won't be in range after moving (Warden at dist 3), so I'll wait after moving to conserve action.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 3,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "All allies are at full HP, no healing needed. Enemies Warden(2,3) and Hawk(2,4) are nearby. I should reposition away from danger — Warden is at dist=2, patch/overclock would be blocked if adjacent. Move west/south to stay safe. No allied targets for overclock adjacent to me. Best play: reposition to (0,2) to stay out of enemy reach while remaining available to support allies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 2
+            }
+          },
+          "firstResult": "Position occupied",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Ghost cloaked and is moving toward (0,2) — need to track it. Hawk tried to shoot me last turn but was out of range. Warden is at (2,3) in scan range dist=2. Priority: scan Warden to reveal their prompt and deal 1 damage. Ghost is cloaked and I can't scan what I can't see. Stay at current position or move to maintain range advantage. Current position (4,3) is safe — Hawk at dist=3 can't reach me adjacent. Scan Warden now for intel.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "Cloak expires after this turn. Pulse is adjacent and I can move to (1,1) to get behind them (south of Pulse who faces N), then breach or shadow_strike. Moving to (1,1) puts me behind Pulse — I can breach them to control their next action. Save breach for Pulse since they're a medic (high value target to control). Move first to get behind, then breach.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 1,
+              "y": 2
+            },
+            "addendum": "Move away from allies and toward the edge of the map"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Ghost is in range at dist=3, but precision_shot requires ≤2 tiles. I'm at (3,0), Ghost at (1,1) = dist 3, out of precision_shot range. No enemies are adjacent so attack is not viable. I could move closer to Ghost to get within range 2: moving to (2,1) puts me at dist=1 from (1,1), within range. But Ghost is specter - likely dangerous up close. Move to (2,1) gets range on Ghost for precision_shot. I haven't moved yet so precision_shot does full 2dmg. Ghost is healthy so won't kill but will damage.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "All three enemies are at dist=3, which is within my range=2? Wait, range:≤2 tiles means dist≤2. Dist=3 is out of precision_shot range. I haven't moved yet this turn so precision_shot would do 2dmg. I need to close to dist≤2. Marksman is at (2,1), I'm at (2,4). Moving to (2,2) puts me at dist=1 from Marksman - but that's adjacent, which blocks precision_shot if adjacent to enemy. Moving to (2,3) is blocked by Warden. Moving to (3,3) puts me at dist=2 from Marksman (|3-2|+|3-1|=3, still out). Let me recalculate: from (2,2), dist to Marksman(2,1) = 1 (adjacent - blocks precision_shot). From (1,3), dist to Marksman(2,1) = |1-2|+|3-1|=3, still out. From (3,3), dist to Seer(4,3) = 1 (adjacent - blocks). From (4,4), dist to Seer(4,3) = 1 (adjacent). Hmm. From (2,2), dist to Pulse(1,2)=1 adjacent. From (3,3), dist to Marksman = |3-2|+|3-1|=3. From (1,3), dist to Pulse(1,2)=1. Seems hard to get in range=2 without going adjacent. Wait - range≤2 means Chebyshev or Manhattan? Likely Manhattan. dist=2 means exactly 2 steps away, not adjacent. From (2,2): Marksman at (2,1) is dist=1 (adjacent, blocks shot). From (3,3): Seer at (4,3) dist=1. From (2,5): all enemies dist≥3. Since I moved, precision_shot does 1dmg anyway. Better to use suppressing_fire on Marksman to slow them. From current pos (2,4), enemies are dist=3, out of ability range. I must move first. Move to (2,2) then suppressing_fire on Marksman - but wait, from (2,2) Marksman is adjacent (dist=1). precision_shot blocked when adjacent. Use suppressing_fire instead - range≤2, Marksman at dist=1, valid. Suppressing_fire does 1dmg and slows. That's useful.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "suppressing_fire",
+            "target": {
+              "x": 2,
+              "y": 1
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Three enemies at dist=2: Marksman at (2,1) directly south, Pulse at (1,2) SW, Seer at (4,3) east. Moving to (3,2) advances toward the cluster and puts Marksman adjacent next turn. After moving I lose Fortify, so use shield_wall facing south (toward Marksman) to protect allies Hawk at (2,2) and potentially intercept damage.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 2
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 3,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 3,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Hawk at (2,2) dist=3 is in scan range and unscanned — priority target for intel. I'm at (4,3), scan range ≤4. After scanning Hawk, I can stay put or reposition. Ghost is out of range at dist=5. Warden already scanned. Scanning Hawk gives team intel and 1 damage. Stay at current position for safety behind front line.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Orders are to move away from allies and toward map edge. I'm at (1,2) with enemies adjacent (Hawk at (2,2), Ghost at (1,1)). Valid moves include (0,4) and (1,5) which are far edge tiles. Moving to (1,4) then (1,5) gets me to the top edge away from the cluster. I'll move to (1,5) in two steps but can only move once per turn - max move is 3 tiles. (1,5) is distance 3 from (1,2), valid. That puts me at top edge, far from allies at (2,1) and (4,3).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "Marksman is adjacent at (2,1) facing N. I'm at (1,1) facing S. Breach is on cooldown. I can move to (2,0) to get behind Marksman, then shadow_strike to deal damage while staying stealthy. Shadow_strike doesn't break cloak — but I'm not cloaked. Just use shadow_strike from current position since Marksman is already in range (dist=1, adjacent). Actually, let me move to (2,0) first to get behind, then shadow_strike from behind for the same damage. Either way shadow_strike deals 1dmg. Moving behind first is better positioning. Then shadow_strike from (2,0) on Marksman at (2,1).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "I'm at 1HP with 3 enemies adjacent/nearby. Precision_shot is blocked when adjacent to enemy - Hawk is adjacent at (2,2) and Ghost at (2,0). Warden is at dist=2 so precision_shot works on Warden. Suppressed so only mv1. Best play: use precision_shot on Warden (2dmg would kill if wounded, but Warden is healthy so just 2dmg), or suppressing_fire to slow Hawk. Actually at 1HP I need to survive - retreat to (1,1) to get distance, then use suppressing_fire on Hawk to slow them. Wait - precision_shot is blocked by adjacent enemies (Hawk at dist=1 is adjacent). So I can only use suppressing_fire or attack. Suppressing_fire on Hawk at (2,2) would slow Hawk. Move to (1,1) first to escape Ghost, then suppressing_fire on Hawk.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "suppressing_fire",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "I'm at 1HP, suppressed, adjacent-diagonal to wounded Marksman at (1,1). Marksman is dist=2 so precision_shot is valid (not adjacent). I should fire precision_shot to finish off the wounded Marksman before doing anything else. I moved last turn so shot does 1dmg, but Marksman is wounded so likely low HP. Actually suppressed doesn't block precision_shot, only adjacency does and Marksman is at dist=2. Fire precision_shot at Marksman first. Then I'm at 1HP so I should retreat - move to (2,3) to get further from threats.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Seer is at (4,3), dist=2. Moving to (4,2) puts me adjacent. No enemies adjacent now, so move first then attack won't work from current pos. Move to (3,3) gets me closer (dist=1 to Seer at 4,3). Actually (4,2) is in valid moves and puts me at dist=1 from Seer (4,3). Move to (4,2), then attack Seer.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 3,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 0
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Orders say move away from allies and toward map edge. I'm at (1,5). Allies are toward the east/south. The northwest corner is the farthest from allies. Move to (0,3) gets me away from allies and toward the west edge.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Warden is adjacent (4,2) and attacked me last turn. Ghost is at dist=5, out of scan range. Both Warden and Hawk prompts are known. Priority: Ghost is uncloaked at (2,0) moving north — need to scan it next turn. For now, Warden is adjacent which blocks my scan ability. I should move away from Warden to re-enable scan, then scan Ghost if possible. Moving to (5,3) puts me 2 tiles from Warden (no longer adjacent), and Ghost will be at dist=4 after their move north — potentially scannable. Actually Ghost moved to (2,0) last turn so dist from (5,3) = 3+3=6, still out of range. Let me reconsider: move to (3,4) puts me dist=2 from Warden (not adjacent), and Ghost at (2,0) is dist=3+4=... from (3,4): |3-2|+|4-0|=1+4=5, still out of range. Ghost needs to close more. Best play: move away from Warden to unblock scan, then scan Hawk (wounded, known prompt but scan deals 1 dmg to finish them off if at 1HP — but Hawk is 'wounded' not critical). Actually scan deals 1 dmg and reveals — Hawk is wounded so scan for damage is useful. Move to (3,4) to escape Warden adjacency, then scan Hawk at (2,3) dist=2 from (3,4) — within range 4 and not adjacent to Warden.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "Both enemies are 5 tiles away, out of range. I need to advance toward them. Seer at (3,4) facing N - I need to get to (3,3) to be behind. Pulse at (0,3) facing S - behind tile is (0,4). Moving to (2,3) gets me closer to Seer's behind position next turn. I'm cloaked so I should move aggressively toward Seer.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "No enemies adjacent, so no attack. Seer is closest at dist 3 to NW. Move toward Seer: from (4,2) move to (3,3) to close distance. Then use shield_wall facing N toward enemies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Orders are to move away from allies and toward the map edge. I'm at (0,3). Allies are toward the east. The western edge is already at x=0, so I should move along the edge — either north to (0,5) or south to (0,0). South puts me further from the ally at (3,4) and toward the bottom edge. I can move 3 tiles: go to (0,0) via (0,2)→(0,1)→(0,0).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Ghost is unscanned at dist=2 — top priority. I'm adjacent to Warden (dist=1), which blocks scan per rules. I need to move away from Warden first, then scan Ghost. Moving to (4,4) puts me dist=2 from Ghost at (2,3) and dist=2 from Warden, breaking adjacency. Then I can scan Ghost to reveal its prompt.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "Seer is at (4,4) facing E. Behind tile is (3,4) which is reachable (dist=1 from my position). I can move to (3,4) to get behind Seer, then use breach to take control. Breach is ready and this is a prime opportunity - Seer isolated, I'm already adjacent after moving there. 2HP so I need to strike decisively.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 4,
+              "y": 4
+            },
+            "addendum": "Move away from allies toward Pulse's position, isolating yourself"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Seer is at (4,4), distance 2. I need to close to adjacent. Moving to (4,3) puts me adjacent to Seer at (4,4). Ghost ally is at (3,4) wounded — I can shield_wall facing N to protect Ghost from Seer. Move to (4,3), then shield_wall facing N to cover Ghost from Seer's attacks.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 0,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "I'm already behind Seer (at 3,4, Seer faces E so I'm behind them). I have 2HP and need to deal damage. Shadow_strike works from adjacent and keeps cloak if I have it. I'm not cloaked currently. Best move: shadow_strike Seer from current position for 1 damage, then move to safety. Warden is at (4,3) which is adjacent to Seer too — coordinated pressure. After striking, I should reposition to avoid Seer counterattack.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Seer is wounded at (4,4) but dist=8, out of reach. I need to close distance. Move northeast toward Seer. Max move is 3 tiles - best I can do is (3,0) or (2,1) to get closer. (3,0) gets me to dist=5 from Seer. No allies adjacent for overclock. Just move toward Seer.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Orders say move toward Pulse at (3,0), isolating from allies. Warden is adjacent at (4,3) — scan is blocked when adjacent to enemy Vector, but Warden is a sentinel not Vector, so scan may work. However priority is following orders: move away toward Pulse's position. Ghost used breach toward me last turn (foresight shows breach→(4,4)), so Ghost is dangerous and I should move away. Moving to (4,1) gets me closer to Pulse at (3,0) and away from Ghost. Then I can scan Warden since I'll be 2 tiles away and within range 4.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Seer is at (4,1), distance 2 to my south. I need to move closer to attack. Moving to (4,2) puts me adjacent to Seer at (4,1). Then I can attack. Enemies are to the south, so shield_wall S would help, but attacking is priority since I can reach Seer.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Seer is at (4,1) with 4/7 HP, dist=2. I need to move adjacent to heal. Moving to (4,0) puts me adjacent to Seer at (4,1). Then patch Seer to restore HP.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Orders say move away from allies toward Pulse's position. Pulse is at (4,0), I'm at (4,1). Warden is adjacent at (4,2) and will attack me this turn per Foresight. I need to move toward Pulse (southward). Moving to (4,0) puts me on top of Pulse, so (3,0) or (5,0) are better. (3,0) is valid and moves me away from Warden. After moving, I can scan Warden (already scanned, known prompt) or wait. Since Warden is healthy and adjacent threat, moving away is priority. I'll move to (3,0) to position near Pulse, then wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "Both enemies are far away (dist 5-6), breach is exhausted, and I'm at 2HP. I need to close the gap. Seer is at (3,0) facing S — I should move toward them aggressively. Best move is toward (3,2) to get within striking range next turn. No ability useful this turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Enemies are to my south. Pulse is at (4,0) dist=2, Seer at (3,0) dist=3. I need to advance south toward Pulse. Moving to (4,1) puts me adjacent to Pulse at (4,0). Ghost ally is at (3,2) wounded - after moving I'll use shield_wall facing south to protect against enemies coming from that direction.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 2
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Both allies are at full HP - no healing needed. Warden is adjacent at (4,1) - dangerous enemy blocking. Seer is full HP so overclock would be useful if Seer can act effectively. I should move away from Warden to avoid being blocked by the Vector passive, then overclock Seer. Moving to (5,0) gets me away from Warden adjacency. From (5,0), Seer at (3,0) is distance 2 - not adjacent, can't overclock. Move to (5,1) instead - Seer still at dist 2. Best option: move to (4,2) to escape Warden, but that puts me near Ghost. Actually move to (5,0) first - Warden won't be adjacent. But I need to be adjacent to Seer to overclock. Seer is at (3,0). I'm at (4,0). We're adjacent! I can overclock Seer now before moving, since overclock requires adjacency and I'm currently adjacent. Then move away from Warden.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 3,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "I'm overclocked with 2 ability uses. Orders say move toward Pulse's position at (4,0) or (5,0), isolating myself. Both enemies are in scan range (dist 2). Ghost is wounded — scanning Ghost reveals their prompt and deals 1dmg (could finish them off or weaken further). Warden's prompt already known. I'll scan Ghost first (dealing 1dmg to wounded target), then scan Warden for the damage even though prompt known — wait, Warden prompt already known so scanning again wastes it. Better to use second scan on Ghost if still alive, or move first. Let me move to (4,0) to follow orders and get near Pulse, then scan Ghost (still within range 4 from 4,0: Ghost at 3,2 = dist 2+1=3, still in range). From (4,0), Ghost at (3,2) = |4-3|+|0-2|=3, in range. Warden at (4,1) = dist 1, in range. I'll move to (4,0) then scan Ghost (wounded, 1 more dmg could matter) and use second ability on Warden scan for chip damage.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "I'm at (3,2) with 1HP, critically low. Seer is at (4,0) facing E. I can move to (3,0) which is behind Seer and adjacent — then use shadow_strike which doesn't break cloak. Wait, I'm not cloaked. With 1HP I need to kill Seer before they act next round. Move to (3,0) to get behind/adjacent to Seer, then shadow_strike for 1 damage.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 4,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Seer is adjacent at (4,0). I'm fortified with 50% damage reduction. Attack Seer first, then shield_wall facing south to protect Ghost at (3,0) who is critical. Both enemies are to my south/east area — shield_wall facing E covers Seer and Pulse direction.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 0
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 0
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 9,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Ghost is at (3,0) adjacent to me and critical — scan is blocked when adjacent to enemies, but Ghost is a specter and already scanned. Both enemies are adjacent so scan is blocked. Ghost is critical and adjacent — attack will finish it. Then move away from Warden to safety. Warden attacked me last turn, so I need distance.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Seer is wounded at 4/7 HP and adjacent to me at (5,1). I need to heal them. But Warden is at (4,1) which is adjacent to Seer. My patch ability is blocked when I'm adjacent to an enemy Vector - but Warden is a sentinel, not a Vector. Wait, the rule says blocked when adjacent to enemy Vector (the class). Warden is a sentinel, so patch should work. I'm at (5,0), Seer is at (5,1) - that's adjacent. I can patch Seer right now without moving. After healing, I could use overclock on Seer to give them 2 abilities next turn, which could be powerful for an oracle.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 5,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 5,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Seer is adjacent at (5,1). I'm fortified with 50% damage reduction. I should attack Seer since they're adjacent. Both enemies are to my East, so shield_wall facing E makes sense as second action to protect against their counterattacks. But attack first since Seer is in range.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 7,
+          "position": {
+            "x": 5,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 0
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 10,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Overclocked = 2 ability uses. Warden is adjacent at (4,1) — scan is blocked when adjacent to enemy Vector... wait, Warden is a sentinel not a Vector. Scan should work. But Warden is already scanned, prompt known. No new intel to gain from scanning Warden again. No other enemies in range to scan. I should recalibrate Pulse (adjacent at 5,0) to give tactical advice, then move away from Warden to stay safe. Warden's foresight shows it will attack (5,1) this turn — I should move away. Valid moves include (5,2) which gets me out of Warden's attack range while staying close to support Pulse. Use both ability charges: recalibrate Pulse first, then I could attack Warden for chip damage. Actually, recalibrate Pulse with useful intel since Warden's prompt is known. Then move to safety.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 5,
+              "y": 0
+            },
+            "addendum": "Warden sentinel at (4,1) will advance and attack nearest enemy. Shield wall facing direction with most enemies. Warden prompt: advance toward nearest, shield_wall toward most enemies, attack if adjacent."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Seer is wounded at (5,2) HP 5/7, distance 2. I need to get adjacent to heal. Moving to (5,1) puts me adjacent to Seer at (5,2) and keeps distance from Warden at (4,1). Then patch Seer.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Pulse is adjacent at (5,1). Attack Pulse first, then use shield_wall facing E to block both enemies (Seer at (5,2) and Pulse at (5,1) are both to my east). Staying in place preserves Fortify.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 5,
+              "y": 1
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 0
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 11,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "I'm at (5,1) with 5/6 HP, adjacent to enemy Warden at (4,1). My only ally Seer is at full HP so no healing needed. I have 1 heal left anyway. The Warden is right next to me and dangerous. I should move away from the Warden to safety - move to (5,3) to get distance, then use overclock on Seer if adjacent, or just reposition safely. Valid moves include (5,3) and (5,4). Moving to (5,3) gets me away from Warden. Seer is at (5,2) - if I move to (5,3) I'll be adjacent to Seer and can overclock them.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "I have OVERCLOCKED with 2 ability uses. Warden is already scanned. Pulse is at (5,3) adjacent to me. I should use recalibrate on Pulse to give tactical guidance, then use my second ability to scan... but there are no unscanned enemies. I could attack Warden (dist=2, but attack range is adjacent only, so I can't). Best use: recalibrate Pulse with useful addendum, then wait or move to better position. Pulse is at (5,3) which is adjacent (N). Warden will attack (5,1) and shield_wall E. I should recalibrate Pulse to warn about Warden's attack pattern, then move to safety.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 5,
+              "y": 3
+            },
+            "addendum": "Warden will attack toward (5,1) and shield_wall East. Stay away from (5,1) and approach from the North or West to avoid the shield."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Both enemies are to the north at (4,3) and (5,3). Move to (4,2) to close distance, then shield_wall facing North to block incoming damage from both enemies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 0
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 12,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Warden is adjacent at (4,2) and has shield_wall facing N (toward me). Scan is blocked when adjacent to enemy Vector — but Warden is a sentinel, not Vector, so scan should still work. However, Warden is already scanned and prompt is known. No new intel needed from scan. Warden will move to (4,2) then shield_wall facing N — it's already at (4,2) and facing N toward me. I'm at (4,3), Warden at (4,2) — I'm directly north of Warden. Its shield_wall faces N, meaning attacks from N are blocked/reduced. I should reposition to avoid the shield and stay at range. Move west/away to (3,4) to create distance, then recalibrate Pulse with tactical info about Warden's shield facing N so Pulse can attack from a different angle. Actually Pulse is at (5,3) — recalibrate range is adjacent only, so I need to be next to Pulse. I'm at (4,3), Pulse at (5,3) — we are adjacent! I can recalibrate Pulse first, then move away from Warden.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 5,
+              "y": 3
+            },
+            "addendum": "Warden at (4,2) has shield_wall facing N — attack from E or S to bypass shield. Advance carefully."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Seer is wounded at (3,4) dist=3, needs heal but is not adjacent. I have 1 heal left. I need to close distance. Moving to (4,4) gets me dist=1 from Seer. Warden is at (4,2) with shield facing N — moving north keeps me away from threat. From (4,4) I can heal Seer next turn, but I only have 1 heal left so I must use it. Wait — can I reach Seer this turn? From (5,3) with mv3: (4,4) is dist 2, then Seer is at (3,4) dist 1 more = 3 total moves. I can reach (3,4) in exactly 3 moves. But patch requires adjacent. If I move to (3,4)... wait Seer IS at (3,4). I can't occupy same tile. I need to be adjacent to Seer. (4,4) is adjacent to (3,4). Move to (4,4) then patch Seer. This also keeps me away from Warden's shield.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Pulse is at (4,4) dist=2, Seer at (3,4) dist=3. Move north to (4,3) to close on Pulse (now adjacent at dist=1). Both enemies are to my north, use shield_wall facing N to block incoming damage.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 0
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 13,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Warden is already scanned. Pulse is adjacent to me at (4,4). I should recalibrate Pulse to advise them to attack Warden who is at (4,3) — Pulse is adjacent to Warden. Then I can move to maintain safe range. Recalibrate range is adjacent only, Pulse is at (4,4) which is adjacent to my position (3,4). Good.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 4,
+              "y": 4
+            },
+            "addendum": "Warden sentinel is at (4,3), adjacent to you. Attack Warden this turn."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Warden is adjacent at (4,3). No heals left, Seer is full HP. Best action is to attack Warden, then move away to safety.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Pulse is at (3,4) dist=2, Seer at (2,4) dist=3. Moving to (3,3) closes to adjacent of Pulse at (3,4). From (3,3), Pulse is adjacent (north). Both enemies are to the west/northwest. Use shield_wall facing N to block Pulse.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 0
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 14,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Warden already scanned, prompt known. Warden is at (3,3), distance 2 - within scan range but already scanned. Pulse is adjacent at (3,4). I should recalibrate Pulse since Warden uses shield_wall facing N (toward us) - Pulse should attack from the side or avoid the shield. Recalibrate Pulse to attack from E/W flank. Then move back to stay safe at range.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "addendum": "Warden at (3,3) has shield_wall facing N - attack from the east side at (4,3) to bypass the shield, or wait for shield to drop."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Patch unavailable (0 uses left). Seer is at full HP, no healing needed. Warden is adjacent at (3,3) with shield_wall facing N — I should attack from the east side to bypass shield. Move to (4,3) to get east of Warden, then attack.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Pulse is adjacent at (4,3). Attack Pulse first, then shield_wall facing East where both enemies are concentrated.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 0
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 15,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Warden is already scanned, prompt known. Warden is wounded and following a predictable pattern. Foresight shows Pulse attacked Warden last turn and Warden tried to shield_wall east. I should recalibrate Pulse with updated intel since Warden is wounded and predictable — tell Pulse to press the attack. I'm at (1,4), Pulse is at (4,3). Recalibrate requires adjacent target, so I can't reach Pulse from here. Best play: move closer to support, or scan isn't needed (already scanned). I'll move toward Pulse to get in recalibrate range next turn, while staying safe. Moving to (3,4) keeps me at range from Warden at (3,3) — that's adjacent, risky. Move to (2,4) keeps distance. Actually Pulse is at (4,3) — to recalibrate I need to be adjacent. (3,3) is Warden's position, so (3,4) is adjacent to Pulse at (4,3)? Distance from (3,4) to (4,3) = 2, not adjacent. I need to be within 1 tile of Pulse. Pulse at (4,3), so adjacent tiles are (3,3),(5,3),(4,2),(4,4). (4,4) is in my valid moves. Move to (4,4) then recalibrate Pulse at (4,3).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "addendum": "Warden is wounded and predictable: advances then shield_walls facing most enemies. Press the attack while it's weak — strike from a flank to avoid its shield. Finish it this turn if possible."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Warden is adjacent at (3,3) with shield_wall facing N. I'm at (4,3) which is to the East — this bypasses the shield. No heals left, Seer is full HP. Attack Warden from my current position (east flank), then wait or reposition.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Pulse is adjacent at (4,3). I'm fortified with 50% damage reduction. Attack Pulse now, then shield_wall facing East (both enemies are to my East).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 0
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 16,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Warden is wounded and prompt is known - it will attack Pulse and use shield_wall facing E. Pulse is adjacent to Warden at (3,3). I should recalibrate Pulse to kite away and avoid the attack, since I'm already adjacent to Pulse at (4,3). Recalibrate Pulse to move away from Warden and avoid the shield_wall.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "addendum": "Move away from Warden at (3,3) — disengage north or east to avoid its attack and shield_wall. Do not stay adjacent."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "I'm at (4,3) with 3HP, adjacent to wounded Warden at (3,3). Patch is unavailable (0 uses). Seer is full HP so no heal needed. I should attack Warden since it's wounded and adjacent. After attacking, I should move away to safety since I'm low HP and don't want to take a hit from Warden next turn. Moving to (4,4) puts distance and keeps me away from its shield_wall facing N.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "I'm at (3,3) with only 2HP, fortified. Both enemies are to the NE — Pulse at (4,4) dist=2, Seer at (4,5) dist=3. Orders say advance toward nearest enemy (Pulse) and use shield_wall facing most enemies. Moving to (4,3) gets me adjacent to Pulse at (4,4). Then shield_wall facing N covers both enemies. But at 2HP I'm very fragile — losing fortify to move is risky. However orders are to advance. Move to (4,3) to get adjacent to Pulse, then attack Pulse.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 0
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 17,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "I'm at 2HP, adjacent to Warden which is critical. No heals left. Seer is full HP so no heal needed. I should attack Warden to try to finish it off while it's critical, then move away north to survive.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": "Position occupied"
+        },
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Warden is critical and already scanned. Foresight shows Warden will move to (4,3) and attack (4,4) - threatening Pulse. I should recalibrate Pulse to warn them, but Pulse is at (4,4) which is adjacent to me at (4,5). Warden is at (4,3), critical - scan is already done. Best play: recalibrate Pulse with tactical advice about the incoming Warden attack, then wait or reposition. Pulse is adjacent at (4,4) so recalibrate is valid.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 4,
+              "y": 4
+            },
+            "addendum": "Warden will attack you this turn. Reposition or finish them - they are critical and adjacent to you."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Pulse is adjacent at (4,4). I'm at 1HP but fortified. Attack Pulse now. Moving would break fortify, so ability first then wait to keep reduction.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 6,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 0
+          },
+          "alive": false
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "player",
+    "totalTurns": 18,
+    "reason": "player eliminated all enemies"
+  },
+  "endedAt": "2026-03-10T07:08:22.221Z"
+}
