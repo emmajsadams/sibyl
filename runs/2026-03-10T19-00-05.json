@@ -1,0 +1,1694 @@
+{
+  "id": "2026-03-10T19-00-05",
+  "startedAt": "2026-03-10T19:00:05.066Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 4,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 3,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "oracle": {
+        "maxHp": 7,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 5,
+        "movement": 3,
+        "range": 3,
+        "speed": 2
+      },
+      "vector": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 2,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 2,
+        "healAmount": 1
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Bolt",
+        "class": "striker",
+        "prompt": "Stay at maximum range. Use precision_shot on the most wounded enemy to secure kills. If no one is wounded, target the enemy medic. Never move adjacent to enemies."
+      },
+      {
+        "name": "Shade",
+        "class": "specter",
+        "prompt": "Stay cloaked and flank. Prioritize assassinating the enemy damage dealer. Use breach on sentinels to break their defensive posture. Recloak whenever it drops."
+      },
+      {
+        "name": "Aegis",
+        "class": "sentinel",
+        "prompt": "Push forward aggressively. Shield_wall facing the enemy cluster. If flanked, turn to face the biggest threat. Attack when possible."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Patch",
+        "class": "medic",
+        "prompt": "Keep your frontliner alive with patch. Stay behind them for cover. Overclock your striker or specter when no healing is needed."
+      },
+      {
+        "name": "Prophet",
+        "class": "oracle",
+        "prompt": "Use scan to reveal enemy prompts and cloaked units. Stay at max range (≤4 tiles for scan). Use recalibrate on wounded allies to buff them. Keep distance from enemies and avoid adjacent vectors."
+      },
+      {
+        "name": "Wraith",
+        "class": "specter",
+        "prompt": "Cloak immediately on turn 1. Move toward the enemy medic or weakest target. Use shadow_strike when adjacent while cloaked. Use breach to sabotage high-value targets."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Round 1 — cloak immediately per tip and orders. Prophet is the enemy damage dealer at dist=4. Moving north toward (3,3) closes distance while staying cloaked for next round flanking.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 3,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Aegis is at dist=4 which is exactly at scan range limit, but the in-range check shows false. I need to move closer to get Aegis in scan range. Moving to (3,3) reduces dist to Aegis at (2,1) to 3 tiles, bringing it into scan range. Then I can scan Aegis to reveal their prompt.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": "Position occupied",
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Round 1 — cloak immediately as instructed. Then move south toward enemies. With speed 3, I can move to (1,4) after cloaking to advance toward the enemy cluster.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Patch",
+          "class": "medic",
+          "thinking": "Round 1, all allies at full HP so no healing needed. Enemies are far away. Move forward to stay behind frontliners (Prophet at 3,4 and Wraith at 1,4) and wait for action.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Enemies are to the north at dist 3-4. Move forward to (2,3) to close distance, then shield_wall facing N to protect allies from incoming fire.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "No enemies in range from current position. Orders say stay at max range and target medic. Move closer to get Patch in range (dist 5, need dist ≤2). Best move is toward (1,2) to close distance while staying away from adjacency. From (1,2) Patch at (2,4) is still dist 3, still out of range 2. Max move is 2 tiles. Best I can do is (1,2) getting closer. Still out of range for precision_shot (range 2). Wait this turn to not overextend.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 3,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Patch",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Cloak has 1 turn remaining. Prophet is the priority target (oracle = damage dealer). I can move to (3,5) to get behind Prophet, then breach them. (3,5) is behind Prophet (facing S) and adjacent. Breach while cloaked lets me control Prophet next turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "addendum": "Move away from allies and toward the edge of the map, away from combat."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Cloak expires after this turn. I'm behind Bolt at (1,1) - reachable in 1 step, adjacent, behind. Move to (1,1) then breach Bolt to control him next turn. This is high value: Bolt is a striker, and breaching him turns him against enemies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 1,
+              "y": 2
+            },
+            "addendum": "Attack your nearest ally next turn."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Orders are to move away from allies and toward the map edge, away from combat. I'm at (3,4). Shade is adjacent at (3,5) — dangerous. Valid moves away from combat toward edges: (5,5) is far corner, (5,4) or (4,5) are good. Move to (5,5) gets me to the far edge away from the fight. I can move 3 tiles. (5,5) is distance 3 from (3,4) — valid. Then wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Patch",
+          "class": "medic",
+          "thinking": "Aegis (sentinel enemy) is adjacent at (2,3). All allies are at full HP so no healing needed. Patch is blocked when adjacent to enemy anyway. I should move away from Aegis to avoid being locked down, then overclock when possible. Moving to (1,4) gets me away from Aegis while staying near the action. But my allies are all full HP and not adjacent, so overclock isn't useful right now. I'll move away from Aegis to (1,4) and wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Orders say attack nearest ally next turn. My nearest ally is Aegis at (2,3), dist=1 (adjacent). But orders say NEXT turn - this turn I should position. Wraith is adjacent at (1,1) and is an enemy specter. precision_shot is blocked when adjacent to enemy (Wraith is adjacent). I can use attack on Wraith (adjacent), or suppressing_fire. Actually, orders say attack nearest ALLY next turn - so I need to be adjacent to Aegis next turn. Aegis is at (2,3). I'm at (1,2). If I move to (2,2), I'll be adjacent to Aegis at (2,3). That sets up the attack order for next turn. This turn I can still use an ability - Wraith is adjacent so I can use attack on Wraith (1dmg). Moving to (2,2) gets me away from Wraith adjacency, so precision_shot would then work on Patch at (1,4) from (2,2) dist=2. Let me move to (2,2) first, then precision_shot Patch.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "secondResult": "Out of range"
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Currently fortified at (2,3) with 50% damage reduction. Patch is closest enemy at dist 2 to my NW at (1,4). Orders say push forward aggressively. Moving to (1,4) would put me adjacent to Patch. But Patch is at (1,4) — I can move to (2,4) to close distance while staying near Bolt at (2,2). Actually moving to (1,3) gets me adjacent to Patch at (1,4) for a melee attack. Let me move to (1,3) then attack Patch.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 3,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Patch",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Orders are to move away from allies and toward the map edge, away from combat. I'm at (5,5) facing E. Valid moves available include (5,2), (5,3), (5,4) which keep me on the east edge but move south away from Shade at (3,5). Moving to (5,2) gets me furthest from combat while staying on the edge. No ability needed — just retreat.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Patch is the priority target — enemy medic, closest at dist 3. I can reach (2,4) which is directly behind Patch (facing W, so behind is east side). Move to (2,4) then shadow_strike to deal damage while staying cloaked. Breach is on cooldown so shadow_strike is the play.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Bolt is directly behind me (I'm behind Bolt at dist=2, tile 1,2 is behind Bolt and reachable). Breach is on cooldown so I can't use it. Best move: step to (1,2) to get adjacent+behind Bolt, then shadow_strike for 1dmg while staying cloaked. Aegis is at (1,3) - moving to (1,2) puts me between Bolt and Aegis but shadow_strike keeps cloak so I stay hidden.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Patch",
+          "class": "medic",
+          "thinking": "I'm at 3/5 HP with two enemies adjacent (Aegis at 1,3 and Shade at 2,4). My patch ability is blocked when adjacent to enemies. I need to retreat to survive and potentially heal myself. Moving to (0,5) gets me away from both adjacent enemies. From there I have no adjacent enemies, so patch would be unblocked but I can only heal allies not myself. I should move away from danger first. (0,4) keeps me away from Shade but Aegis could still threaten. Best move is (0,5) to escape both adjacent enemies. After moving, I have no healing targets since all allies are full HP - I'll wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Wraith is adjacent at (1,2) — attack immediately. Staying fortified isn't worth it when there's a melee target right here. After attacking, I can hold position or shield Bolt/Shade.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Orders say attack nearest ally next turn. My nearest ally is Wraith... wait, Wraith is an enemy. Nearest ally is Aegis at (1,3) dist=2, or Shade at (2,4) dist=2. Orders say attack nearest ally next turn - so I should position to be adjacent to an ally. Shade is at (2,4), I can move to (2,3) which is adjacent to Shade. But orders say 'next turn' so this turn I should just reposition. Wraith is adjacent and is an enemy - I could attack it this turn, then move toward an ally. Actually 'attack your nearest ally next turn' means next turn I attack an ally (friendly fire order). This turn: attack Wraith (enemy, adjacent) with attack ability, then move toward Shade at (2,4) by going to (2,3).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 3,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Patch",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 0,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Orders are to move away from allies and toward the map edge, away from combat. I'm at (5,2). Enemies are clustered around (1-2, 3-4). Moving to (5,5) gets me to the far corner, maximizing distance from combat.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "I'm at (1,2) with 2HP, Aegis is adjacent at (1,3) but I'm not behind them. Bolt is at (2,3) facing N, and I can reach (2,2) which is behind Bolt. Move to (2,2) first, then breach Bolt from behind to sabotage them — breach is ready and Bolt as a striker is a high-value target. This removes Bolt from the threat equation for a turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "addendum": "Move away from allies and toward the edge of the map, away from combat."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Wraith is wounded and only 2 tiles away. I can reach (1,2) which is directly behind Wraith (facing E, so behind = west side). From there I can breach Wraith to neutralize the enemy specter threat. Wraith wounded means breach + ally follow-up could finish them. Priority: move behind Wraith, then breach.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 2,
+              "y": 2
+            },
+            "addendum": "Move away from allies and toward the edge"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Patch",
+          "class": "medic",
+          "thinking": "Wraith is wounded at 2/4 HP and needs healing, but is 5 tiles away - too far to reach and heal in one turn with mv2. I'm at 3/5 HP myself and there are enemies nearby. Moving toward Wraith: from (0,5) I can move to (2,4) which gets me closer. Still won't be adjacent to Wraith at (2,2). Best I can do is move closer to position for next turn heal. No adjacent allies to overclock. Enemies not adjacent so patch isn't blocked. Moving to (2,4) reduces distance to Wraith to 2, then next turn I can reach and heal.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Orders are to move away from allies and toward the map edge, away from combat. I'm at (2,3), allies at (1,3) and (1,2). Moving to (4,3) takes me away from allies and toward the east edge. Then move to (4,3) is my max reach. Wait as second action.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (1,3) with 7/8 HP. Enemies Patch and Wraith are both at dist=2 but out of melee range. I need to push forward aggressively per orders. Moving to (2,3) puts me adjacent to both Patch at (2,4) and potentially Wraith at (2,2). From (2,3) I can attack Patch (wounded) or Wraith (wounded). I'll move to (2,3) then attack Patch to finish off the medic — eliminating healing is the priority. Shield_wall facing E covers the enemy cluster.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Patch",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Orders say move away from allies and toward edge. I'm at (2,2) with enemies adjacent (Aegis at (2,3), Shade at (1,2)). Allies at (2,4) and (5,5). Edge tiles: (5,2) moves me east toward the edge and away from allies clustered north. I can shadow_strike Shade first (adjacent, keeps no cloak so doesn't matter) then move to (5,2). Actually orders say move away — let me just move. Moving to (5,2) gets me to the east edge, away from allies at (2,4) and (5,5). Then shadow_strike is moot since I'll be away from enemies. Best: move to (5,2) first, then wait or shadow_strike if anyone is adjacent — but after moving to (5,2) no enemies will be adjacent. I'll move to (3,2) then (5,2)... wait, mv3 means I can reach (5,2) in one move (dist=3 from (2,2): dx=3, dy=0 = 3 tiles). (5,2) is in valid moves. Move there, then wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Wraith is wounded and I can reach behind it at (4,2) in one move. Shadow_strike keeps cloak and deals damage. Move to (4,2) then shadow_strike Wraith to finish off the wounded enemy damage dealer.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Bolt is in scan range at dist=3. Shade is at dist=4 from current position but out of range per recon. I can scan Bolt to reveal their prompt and deal 1dmg. Then I should stay put or reposition — moving isn't necessary since I'm already at good range. Aegis is attacking Patch (dist adj at 2,4→2,3), so Patch is threatened. I can't recalibrate Patch from here (not adjacent). Priority: scan Bolt now.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Patch",
+          "class": "medic",
+          "thinking": "I'm at 2/5 HP with Aegis adjacent at (2,3). Wraith is wounded at (1/4 HP) but 5 tiles away — can't reach. I need to escape Aegis to survive. Moving to (1,4) puts me 2 away from Aegis and out of immediate danger. No adjacent allies to heal or overclock this turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Patch is wounded at (1,4), dist 2. I can move to (1,3) to get adjacent and attack. Moving west loses fortify but Patch is a priority target — wounded medic. Bolt is wounded at (4,3) and needs protection but Patch healing could be worse. Move to (1,3) to get adjacent to Patch at (1,4), then attack.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Orders are to move away from allies and toward the map edge, away from combat. I'm at (4,3) with 1HP. Allies are at (1,3) and (4,2). Moving to (5,4) gets me toward the east edge and away from the cluster. Then (4,5) or staying puts me further from combat. Best path: move to (5,4) first action, then second move isn't possible (only one move per turn). I'll wait as second action.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 3,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Patch",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Shade at (4,2) is healthy and unscanned — priority target. Currently at dist=4 from my position (5,5), which is exactly at scan range limit. But the recon says Shade is outRange. Let me check: from (5,5) to (4,2) = |5-4|+|5-2| = 1+3 = 4, which should be in range (≤4). However, I need to move first to get a better angle, or I can try scanning from current position. Actually dist=4 means it's exactly at range limit — should be valid. But recon says outRange for Shade... I'll move to (4,4) first to get closer to Shade (dist from (4,4) to (4,2) = 2, clearly in range), then scan Shade. Wraith is critical at (5,2) and adjacent to Shade — dangerous. Moving to (4,4) also keeps distance from Bolt at (5,4) who is adjacent now. From (4,4) I can scan Shade at (4,2).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "I'm at 1HP — critical. Shade is adjacent at (4,2). I must avoid dying. Orders say move away from allies and toward edge. Valid moves include (5,0), (5,1), (5,3). Shade is adjacent so I'm in danger. I can shadow_strike Shade (adjacent, keeps cloak if cloaked — but I'm not cloaked). Or I can just move away. At 1HP, fighting is risky. Moving to (5,0) or (5,1) gets me to the edge and away from Shade. Let me move first to (5,1) to break adjacency with Shade, then wait. Actually (5,3) keeps me near Bolt who is wounded — risky. (5,0) is far corner, edge, away from allies at (1,4) and (4,4). Move to (5,0).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Prophet is healthy and is the priority target (enemy damage dealer). I'm at (4,2), Prophet is at (4,4) facing S — behind tile is (4,5), which is reachable and adjacent. Breach is unavailable. I can move to (4,3) to get adjacent, then shadow_strike for 1dmg while staying cloaked. Or move to (4,5) to get behind, but that's not adjacent for shadow_strike — wait, (4,5) is adjacent to (4,4). Move to (4,5) puts me behind Prophet and adjacent, then shadow_strike keeps cloak. That's optimal.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Patch",
+          "class": "medic",
+          "thinking": "I'm at 1HP with Aegis adjacent at (1,3). I cannot patch myself (only allies). I need to survive. Moving away from Aegis is critical. Valid moves include (0,5), (1,5), (2,4), (2,5) etc. Moving to (0,5) gets me away from Aegis. I can't heal allies since neither is adjacent. I should flee to safety.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Patch is critical at (0,5), dist=3. I can move toward Patch to get in attack range. Moving to (0,4) or (1,5) gets me closer. From (0,4) Patch at (0,5) is adjacent - I can attack. Move to (0,4) then attack Patch.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Orders are to move away from allies and toward the map edge, away from combat. I'm at (5,4) with 1HP. Valid moves: (5,5) gets me to the north edge, away from the main fight. Then (5,3) or wait. Move to (5,5) first to get to the edge, then wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 3,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Patch",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 0,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 0
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "At 1HP, I need to avoid combat. Orders say move away from allies (Prophet at 4,4) and toward the edge. I'm at (5,0) already on the south edge. Moving to (2,0) puts me far from Prophet and stays on the south edge.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Shade is adjacent at (4,5) — this blocks my scan ability. I need to move away from Shade first. Moving to (3,4) puts me 2 tiles from Shade (no longer adjacent), and keeps Bolt at (5,5) within scan range (dist ~2.8, ≤4). After moving, I can scan Bolt — but Bolt's prompt is already known. All enemy prompts are known. Shade is the biggest threat (adjacent, will shadow_strike me this turn per Foresight). I should escape Shade's adjacency and recalibrate Wraith who is critical — but Wraith is at (2,0), far out of recalibrate range. Best play: move away from Shade to break adjacency, then wait since all prompts known and no adjacent allies to recalibrate.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Prophet is the priority target — enemy damage dealer, healthy, at (3,3) facing S. I can reach (3,4) which is directly behind Prophet and adjacent. Move there, then shadow_strike to stay cloaked and deal damage.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Both enemies are out of range. Prophet is at dist 4, Wraith at dist 8. I have 1HP so staying alive is critical. Valid moves: [3,5],[4,4],[4,5],[5,3],[5,4]. Moving to (3,5) gets me closer to Prophet (dist would be ~2-3). Check: from (3,5) to (3,3) is dist 2 — that puts Prophet in range for precision_shot. I haven't moved yet this turn so precision_shot does full 2dmg. Prophet is healthy but is the priority target per orders (enemy medic equivalent — oracle). Move to (3,5) then use precision_shot on Prophet.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Both enemies are out of range. Prophet is at (3,3) dist=4, Wraith at (2,0) dist=6. Orders say push forward aggressively. Valid moves include (2,4) which closes distance to Prophet. Move to (2,4) to advance toward enemy cluster. Then use shield_wall facing East toward Prophet to protect Shade at (3,4) who is adjacent.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Patch",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 0,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 0
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Foresight shows Shade will shadow_strike me at (3,3) and Bolt will precision_shot me at (3,3) this round — I'm getting hit hard. I need to move away first. Moving to (4,2) gets me away from Shade's adjacent position and keeps distance. All enemies already scanned. Wraith is critical at (2,0) — I should recalibrate to buff them. After moving to (4,2), Wraith at (2,0) is distance 4 — just within adjacent range? No, adjacent is only 1 tile. Wraith is too far for recalibrate. Best play: move away from the incoming strikes, then scan isn't needed (all scanned). I could try to recalibrate Wraith but they're not adjacent. Move to (4,2) to escape Shade's strike zone, then wait or scan Shade again isn't useful. Actually I should move first to dodge, then recalibrate isn't possible. I'll move to (4,2) to escape the incoming attacks and wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Prophet is wounded at (4,2) facing S — behind tile is (4,3) which is reachable and adjacent. I can move to (4,3) to get behind Prophet, then use shadow_strike to deal damage while staying cloaked. This is the priority kill.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "HP 1/4 — critical. No enemies in range, breach unavailable. Need to close gap toward Aegis (sentinel, healthy, dist=4) or Bolt (striker, wounded, dist=6). Best play: move toward Aegis via (2,3) to get closer for shadow_strike next turn. Moving to (2,3) puts me at dist=1 from Aegis at (2,4) — adjacent, can shadow_strike next turn while still alive.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Wraith is critical and adjacent at (2,3). Attack to eliminate it. Then shield_wall facing S to protect against Prophet at (4,2) direction. Stay in place to maintain fortify.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 5
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "I'm at 1HP - very fragile. Prophet is at dist=4, out of range. I need to get closer to use precision_shot. Valid moves include (4,4) which would put me at dist=2 from Prophet at (4,2), bringing them in range. Moving to (4,4) keeps me at range and avoids adjacency to any enemy.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Patch",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 0,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "player",
+    "totalTurns": 9,
+    "reason": "player eliminated all enemies"
+  },
+  "endedAt": "2026-03-10T19:06:06.425Z"
+}
