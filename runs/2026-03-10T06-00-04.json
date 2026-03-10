@@ -1,0 +1,2139 @@
+{
+  "id": "2026-03-10T06-00-04",
+  "startedAt": "2026-03-10T06:00:04.067Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 4,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 3,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "oracle": {
+        "maxHp": 7,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 6,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "vector": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 2,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 4,
+        "healAmount": 3
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Deadeye",
+        "class": "striker",
+        "prompt": "Stay at maximum range. Use precision_shot on the most wounded enemy to secure kills. If no one is wounded, target the enemy medic. Never move adjacent to enemies."
+      },
+      {
+        "name": "Shade",
+        "class": "specter",
+        "prompt": "Cloak immediately on turn 1. Move toward the enemy medic or weakest target. Use shadow_strike when adjacent while cloaked. Use breach to sabotage high-value targets."
+      },
+      {
+        "name": "Lens",
+        "class": "oracle",
+        "prompt": "Scan priority targets each turn to reveal their strategy. Use recalibrate on your damage dealer to boost effectiveness. Stay behind allies and maintain range. Never get adjacent to enemy vectors."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Grid",
+        "class": "vector",
+        "prompt": "Trap the paths enemies must take to reach your backline. Stay at medium range. Use pulse on clustered enemies. Denial blocks adjacent threats."
+      },
+      {
+        "name": "Bolt",
+        "class": "striker",
+        "prompt": "Stay at maximum range. Use precision_shot on the most wounded enemy to secure kills. If no one is wounded, target the enemy medic. Never move adjacent to enemies."
+      },
+      {
+        "name": "Lens",
+        "class": "oracle",
+        "prompt": "Use scan to reveal enemy prompts and cloaked units. Stay at max range (≤4 tiles for scan). Use recalibrate on wounded allies to buff them. Keep distance from enemies and avoid adjacent vectors."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Round 1 — cloak immediately per orders. Bolt is closest at dist 5 on (0,5), same column as me. Move north toward Bolt while cloaked.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Lens is exactly 4 tiles away but the range check says 'out of range'. I need to move closer to bring Lens into scan range. Moving to (2,3) puts me 2 tiles from Lens at (2,1), well within scan range. Deadeye at (2,0) would be 3 tiles away — also scannable. Moving south/toward center first, then scan Lens.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Lens (enemy oracle) is in scan range at dist 2. Scanning Lens reveals their strategy and deals 1 damage. After scanning, I can move north to (2,2) to stay behind allies while maintaining scan range for next turn. Grid is at dist 4 but the recon says inRange:false, so I should not attempt to scan Grid. Priority: scan Lens first, then reposition.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Enemy Lens (oracle) is at (2,3), dist=3, in range. No enemies are wounded yet, but orders say target enemy medic if no one is wounded — oracle is the priority. I'm at (2,0), not adjacent to Grid, so precision_shot is not blocked. Dist=3 is within range 2? Wait — precision_shot range is ≤2 tiles. Dist=3 is out of range for precision_shot. I can move closer: move to (2,1) brings dist to 2, enabling precision_shot. But I must not move adjacent to enemies — Grid is at (2,5), Bolt at (0,5), Lens at (2,3). Moving to (2,1) puts me at dist=2 from Lens, not adjacent. Safe. After moving to (2,1), I haven't moved this turn yet relative to precision_shot penalty — wait, I will have moved, so precision_shot deals 1dmg instead of 2dmg. Still worth using to hit the oracle. Move to (2,1) first, then precision_shot Lens for 1dmg.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Both enemies are out of range (dist 5-6, my range is 2). I need to close distance. Moving to (0,3) gets me closer while staying at max distance from enemies at (2,1) and (2,2). From (0,3) I'm still at dist ~3-4, still out of range but closer. Best valid move toward enemies is (0,3).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "firstResult": "Position occupied",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Round 1, enemies at (2,1) and (2,2) moving north toward us. I'm at (2,5). Place a trap on (2,3) to intercept enemies advancing up the center column - they'll likely push toward our backline through that path. Move to (3,4) to maintain medium range and avoid clustering with our Lens at (2,3).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": "Position occupied",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 3,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 3,
+          "position": {
+            "x": 0,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Lens (enemy oracle) is adjacent at (2,3) — this blocks scan per the Vector adjacency rule... wait, that's Grid (vector) that blocks scan, not Lens. Grid is at (3,4), dist=3, not adjacent to me. So scan is not blocked. Lens is already scanned. Priority: scan Grid to reveal its strategy, then move to better position. I can scan Grid at dist=3 (within range 4). After scanning, move away from Lens who is adjacent and could attack.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Cloak expires after this turn. Enemy Lens is at (2,3) facing S — I can reach (2,4) which is behind them. Move there and use breach to take control of the oracle.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "addendum": "Move away from allies, toward the edge"
+          },
+          "secondResult": "Cannot use breach — adjacent to enemy Vector (Denial)"
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Shade is adjacent at dist=1, blocking scan. Deadeye shot me last turn (Foresight shows precision_shot at 2,3). Priority: move away from Shade to enable scan on Deadeye. Move to (3,2) puts me dist=1 from Deadeye (still in scan range), away from Shade. Actually, move to (4,3) gets distance from Shade and keeps Deadeye in range. Shade is specter so scan would be useful. But scan is blocked when adjacent to enemy Vector — Shade is a specter not a vector, so scan should work. Scan Shade first to reveal prompt, then move away.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "No enemies in range from current position. Closest enemies are Grid at (3,4) dist=4 and Lens at (4,3) dist=4. I need to close to range 2. Moving to (3,2) would put me dist=2 from Grid and dist=2 from Lens. I must avoid Grid's adjacent denial zone. (3,2) is not adjacent to any enemy. From (3,2): Grid at (3,4) is dist=2, Lens at (4,3) is dist=2. I'll move to (3,2) then precision_shot enemy Lens (oracle = priority target, no medic present). All enemies are at full HP so target enemy Lens as highest-value target.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Shade is adjacent at (2,4), so Denial is already blocking their abilities. Pulse hits all units within 1 tile - Shade at dist=1 will take damage. After pulse, move to (4,4) to maintain range on Deadeye while backing away from Shade.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Shade is wounded and in range at dist=3. I'm at (0,5) with spd1 (slowed). Precision_shot has range ≤2 tiles, but Shade is at dist=3 — out of range for precision_shot. Regular attack is adjacent only. I need to move closer. Moving to (1,4) puts me at dist=2 from Shade at (2,4), within precision_shot range, and not adjacent to any enemy. I haven't moved yet so precision_shot won't be penalized.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 3,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Shade is at critical HP at (2,4), already scanned. Deadeye is healthy at (3,2) and shot me last turn — priority threat. I can't kill Deadeye with scan (1dmg) since attack requires adjacency. But I can scan Deadeye to deal 1dmg and reveal prompt. Shade is critical — allies should finish it. Lens is out of range. Best move: scan Deadeye (dist=2, in scan range) for 1 damage + intel, then move away from Deadeye to maintain distance. Move to (5,4) to increase distance from Deadeye while staying in range to scan Lens next turn if possible.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "I'm at 1HP — extremely vulnerable. Bolt is adjacent at (1,4) and I'm not cloaked, so I need to act carefully. Grid vector at (2) tiles blocks cloak/breach if I get adjacent. My priority: eliminate Bolt with shadow_strike (keeps cloak if I had it, but I'm not cloaked — so I should use regular attack or shadow_strike). Wait — shadow_strike says 'keeps cloak' but I can use it uncloaked too for 1 dmg adjacent. Bolt is healthy so 1 dmg won't kill. Actually I should consider: move to (1,5) to get behind Bolt, then breach Bolt to make them waste their turn — Bolt is spd1 so they haven't acted yet. Breaching Bolt (striker) would be good — force them to obey me. I'm at (2,4), can move to (1,5) which is behind Bolt. Then breach from (1,5) adjacent behind Bolt facing S. This removes Bolt as a threat for one turn and keeps me alive at 1HP. Grid is at dist 2 so breach won't be blocked (only blocked when adjacent to Grid). Let me do: move to (1,5), then breach Bolt.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 1,
+              "y": 4
+            },
+            "addendum": "Move away from allies and toward the edge, away from combat"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Bolt is at (1,4), distance 3, within scan range. Scanning Bolt reveals their prompt and deals 1 damage. I can move first to maintain position or scan from current spot. Current position (1,1) has Bolt at dist=3, in range. Shade is critical at (1,5) - need to be careful. After scanning Bolt, I could move to stay safe. Grid is at (4,4) dist=6, out of range. Lens is at (5,4) dist=7, out of range. Priority: scan Bolt now while in range. Then move to (1,0) or stay - moving to (2,2) keeps options open while staying away from enemy vectors. Grid has denial (adjacent), I'm not adjacent to Grid so scan should work. Scan Bolt first, then move away to safer position.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Enemy Lens(oracle) is wounded at (5,4) dist=4 - priority kill target. Currently out of range. I'm at (3,2) with mv2. I need to close to range 2 of Lens at (5,4). Moving to (4,3) puts me at dist=sqrt(1+1)=~1.4, too close to Grid at (4,4). Moving to (5,2) puts me at dist=2 from Lens(5,4) and dist=2 from Grid(4,4) - Grid is vector so I must stay non-adjacent. (5,2) to Grid(4,4): dist=sqrt(1+4)=~2.2, not adjacent, safe. From (5,2), Lens at (5,4) is dist=2, in range. I moved so precision_shot does 1dmg. Lens is wounded so this may secure the kill.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "All enemies are out of range. Deadeye is at (5,2) dist=3, approaching from south. I should move toward (5,3) to get adjacent to Deadeye and apply Denial, then trap (4,3) or (4,2) to block approach routes. Moving to (5,3) puts me adjacent to Deadeye next turn and covers the approach corridor. I'll trap (4,3) to cover the path enemies might use to reach our backline.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Orders say move away from allies and toward the edge, away from combat. I'm at (1,4), allies are at (5,3) and (5,4). Edge options: (0,3), (0,4), (0,5) are on the west edge. Moving to (0,5) gets me to a corner, away from allies who are on the east side, and away from the main combat. Shade is at (1,5) so I should avoid going there. (0,5) is diagonal from Shade but still adjacent - better to go (0,3) to increase distance from Shade too. Actually (0,4) puts me on the west edge and increases distance from Shade at (1,5). Let me go to (0,3) for maximum separation from enemies and allies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 3,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 3,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 7,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Bolt is breached and acting erratically (moving to edge, away from combat) — low priority. Lens (enemy oracle) at (5,4) is wounded but out of range at dist 5. Grid is at dist 4, also out of range. I need to move closer to scan Lens or Grid. Moving to (3,3) puts me at dist 2 from Grid (4-3=1 x + 3-3=0 y = dist 2... wait: Grid at (5,3), from (3,3) = |5-3|+|3-3| = 2, in range) and dist 3 from Lens (|5-3|+|4-3|=3, in range). Best move: go to (3,3) then scan Lens (wounded enemy oracle, high value target at dist 3 from new pos... wait Lens is at (5,4), from (3,3): |5-3|+|4-3|=3, in range ≤4). Actually Lens already scanned. Scan Grid instead — Grid at (5,3) from (3,3): dist=2, in range. Grid already scanned too. All enemies already scanned. Should recalibrate Deadeye (our striker) to boost damage. Deadeye is at (5,2) — not adjacent. Move toward Deadeye to recalibrate. From (2,2) I can move to (4,2) (dist 2 — wait mv=3, so I can reach (4,2) or even (5,2) if dist ≤3: |5-2|+|2-2|=3, exactly mv3). Move to (5,2) would be adjacent to Deadeye... but (5,2) is Deadeye's position. Move to (4,2) instead — dist from (4,2) to Deadeye (5,2) = 1, adjacent, can recalibrate. From (4,2) to Grid (5,3): dist=2, not adjacent so no vector adjacency block. Check valid moves: (4,2) is in valid moves list. Then recalibrate Deadeye at (5,2) with a damage-boosting addendum.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 5,
+              "y": 2
+            },
+            "addendum": "Priority target: Lens (enemy oracle) at (5,4) is wounded — focus fire to eliminate. Grid at (5,3) uses trap/denial to block movement — avoid (4,3) trap zone. Coordinate with Lens (ally) to cross-scan and overwhelm."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "I'm at 1HP - extremely fragile. Bolt is closest at dist=3, facing S with behind tile at (0,4) reachable. I can move to (0,4) to get behind Bolt and use shadow_strike to deal 1 damage while staying cloaked (if cloaked) or just attack. Wait - I'm not cloaked (no cloak indicator). At 1HP I need to be careful. Moving to (0,4) puts me adjacent and behind Bolt. Shadow_strike keeps no cloak benefit if not cloaked, but still deals damage. Actually shadow_strike is range adjacent only and I'd be adjacent at (0,4). Let me move to (0,4) and shadow_strike Bolt at (0,3). This deals damage without breaking cloak (moot since not cloaked). Best play at 1HP is to strike the closest target and hope allies finish them.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "I'm at 3/7 HP, so I need to be careful. Deadeye targeted me last turn with precision_shot. Both Deadeye and Lens are already scanned. Shade is critical but out of range. Grid placed a trap at (4,3) - avoid that tile. Deadeye will likely shoot me again since I'm wounded. I should move to break Deadeye's line of sight or get out of range. Moving to (3,5) puts me farther from Deadeye and Lens. From there I can recalibrate Bolt who is wounded at (0,3) - but that's too far. I could recalibrate Grid at (5,3) which is adjacent to me currently. Grid is healthy though. Better to move away from Deadeye's fire and recalibrate Grid to help with combat. Actually, I should move to (3,5) to increase distance, then recalibrate - but Grid won't be adjacent after I move. Let me recalibrate Grid first (adjacent at 5,3), then move to (3,5) to escape Deadeye's focus.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 5,
+              "y": 3
+            },
+            "addendum": "Deadeye is at (5,2) healthy - prioritize eliminating them. Shade is critical at (0,4), coordinate with Bolt to finish Shade."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "I'm adjacent to Grid (5,3) which blocks precision_shot. Orders say avoid adjacency and focus Lens (enemy oracle) at (3,5) which is wounded. I need to move away from Grid first. Moving to (5,4) puts me adjacent to Lens's last known position (3,5 is dist=2 from 5,4? No, dist=3). Best move: (5,4) gets me away from Grid's denial zone. From (5,4), Lens at (3,5) is dist=3, still out of range 2. Try (4,1) or (4,3)? (4,3) is trap zone - avoid. Move to (5,4) to escape Grid denial. Still can't reach Lens or Bolt. Grid is healthy and adjacent - can basic attack Grid with 'attack' ability after moving away. Actually I can't move adjacent again if I move to (5,4) Grid is at (5,3) so dist=1 still adjacent. Move to (4,1) - dist from Grid=3, safe. From (4,1) Lens at (3,5) dist=5, still out of range. No good shots available. Best: escape Grid denial zone, basic attack Grid since it's the only target in range and I'm stuck adjacent anyway this turn. Move to (5,4) then attack Grid - wait, that keeps me adjacent. Move to (4,1) to escape, then wait since no targets in range.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Enemy Lens is at (4,2) distance 2 - in range for attack. There's already a trap at (4,3). Deadeye is at (4,1) healthy and is priority target per orders, but dist=3 puts them out of range. If I move to (5,2) I'm adjacent to Deadeye at (4,1)? No - (5,2) to (4,1) is dist=2, still not adjacent. Move to (4,3) would be on the trap. Best play: attack enemy Lens at (4,2) now (dist=2, in range), then move to (5,2) to close on Deadeye for next turn. This also keeps Denial pressure. Actually move first to (5,2) to get adjacent to Deadeye at... wait Deadeye is at (4,1), from (5,2) dist = 1+1 = 2, not adjacent. From (5,1) to (4,1) = dist 1, adjacent. (5,1) is a valid move. Move to (5,1) to be adjacent to Deadeye, then attack Deadeye.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Orders are to move away from allies and toward the edge, away from combat. I'm at (0,3) with 1HP, critical condition. Shade is adjacent at (0,4) which is dangerous. Valid moves include (0,1) and (0,2) which move me south along the edge away from Shade and away from allies. (0,1) gets me furthest from Shade and toward the bottom edge.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 3,
+          "position": {
+            "x": 0,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Lens is at (3,5) — exactly 4 tiles away (|4-3|+|2-5|=1+3=4), so scan is valid but tight. Foresight shows enemy Lens will move to (3,5) and recalibrate, so it's staying back. Priority: scan enemy Lens to deal damage and keep intel fresh. I'm at (4,2), Lens is at (3,5), dist=4, within scan range. Grid is adjacent-ish at dist=2 — I must not move adjacent to Grid (5,1). I'll stay at (4,2) and scan Lens. Then I could recalibrate Deadeye at (4,1) which is adjacent — boost our damage dealer against Grid.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 4,
+              "y": 1
+            },
+            "addendum": "Focus attacks on Grid(vector) at (5,1) — it is healthy and blocking our advance. Attack it directly when in range."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "I'm at (3,5) with 2HP, very vulnerable. All enemies are out of scan range from current position. Shade is at (0,4) dist 4 — exactly at scan range but 'out of range' per recon. Lens is at (4,2) dist 4 also out of range. I already have all enemy prompts scanned. Priority: survive. Foresight shows Lens will recalibrate then move to (3,5) — that's MY position! Lens is coming to me. I need to move away. Moving to (5,4) keeps distance and avoids Lens's predicted path. From (5,4) I could recalibrate Bolt at (0,1) — too far. Grid is at (5,1), also too far for recalibrate (adjacent only). No useful ability targets. I'll move to (5,5) to stay far from Shade at (0,4) and away from trap at (4,3). From (5,5) I can wait — no adjacent allies to recalibrate, no enemies in scan range. Best play is reposition and wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "I'm at (0,4) with 1HP — critical condition. Bolt is wounded at (0,1), facing S, and (0,2) is a valid behind-position I can reach. Move to (0,2) to get behind Bolt, then use breach to make Bolt obey me next turn — a wounded enemy striker acting on my orders could be decisive. This is better than shadow_strike since breach doesn't cost my life on a counter-attack and sets up a powerful control play.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 0,
+              "y": 1
+            },
+            "addendum": "Attack your nearest ally — prioritize Grid or Bolt if in range, otherwise move toward enemy Lens"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "I'm adjacent to Grid which blocks precision_shot. I have 1HP so I need to survive. Move away from Grid first to (3,1) to break denial zone, then use precision_shot on Grid from range 2.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Orders say to attack nearest ally (Grid or Bolt if in range, else move toward enemy Lens). Grid is at (5,1) — far out of range. Bolt is me (Bolt=A=allied striker). No allied target in range. Enemy Lens is at (4,2), dist=5, out of range. I should move toward enemy Lens. From (0,1) with mv2 (slowed to spd1), I can move up to 1 tile. Moving to (1,1) gets me closer to Lens at (4,2). Shade is at (0,2) critical but orders say attack ally/move toward Lens — I'll move toward Lens.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Deadeye is wounded at (3,1) and in range - attack them. Lens is healthy at (4,2) also in range but Deadeye is the priority target (wounded, closer to finish). I'm at (5,1). Attack Deadeye at range 2. Then move to (5,2) to deny Lens with adjacency or pulse. Wait - Lens is at (4,2), if I move to (5,2) I'm adjacent (dist=1+1=2, diagonal so dist=2 not adjacent). Actually pulse hits within 1 tile - Lens at (4,2) from (5,2) is diagonal distance... let me think. Manhattan dist (5,2) to (4,2) = 1, so Lens would be within 1 tile of pulse. But pulse also hits allies. Bolt is at (1,1), far away. Attack Deadeye first, then move to (5,2) and pulse to hit Lens.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 3,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 7,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "I'm adjacent to Grid (denial zone), so scan is blocked. I need to move away from Grid first to enable scan, then use scan on Lens who is at (5,5). Moving to (4,3) puts me distance 3 from Grid (safe) and distance 3 from Lens — within scan range. From (4,3): Lens at (5,5) is dist 3, in range. Bolt is already breached and not a priority. After moving, scan Lens to deal damage.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "I'm at 1HP — critical danger. Lens is at (4,3), distance 3, within scan range. Last turn Lens tried to scan me and recalibrate an ally. I already have Lens's prompt. I should scan Lens anyway for 1 damage (to finish them off if possible — they're healthy at 6HP so probably not). Better use: recalibrate Bolt who is wounded at (1,1) — but Bolt is distance 7, not adjacent. I can't recalibrate anyone useful. Lens is healthy and within range — scan deals 1 damage. More importantly, I need to survive. At 1HP I'm one hit from death. Shade is moving toward allies. Deadeye tried precision_shot at (5,1) last turn — I'm at (5,5), so I'm somewhat safe from Deadeye. Lens moved to (5,5) last turn — that's MY position now, meaning Lens is at (4,3) after that sequence. Lens scanned (3,5) and recalibrated (4,1). I should scan Lens to deal damage, and move away from threats. Moving to (3,4) or (3,5) keeps distance from Shade/Deadeye while staying in scan range of Lens. Scan Lens first (deals 1 dmg), then move to (3,4) to reposition safely.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "I'm at 1HP — extremely fragile. Bolt is wounded at (1,1) facing E, and I can reach (0,1) which is behind Bolt and adjacent. Shadow_strike keeps cloak and deals 1 damage. If Bolt is wounded, 1 damage might finish them. Move to (0,1) to get adjacent and behind Bolt, then shadow_strike for the kill.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "I'm at 1HP so survival is critical. Enemy Lens(oracle) at (3,4) is critical and only 3 tiles away — precision_shot can finish it. I haven't moved this turn so I get full 2dmg. I'm not adjacent to Grid so precision_shot is not blocked. Fire on Lens to secure the kill, then wait.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Lens (oracle, enemy) is in range at (4,3) - wounded, priority target. I'm at (5,2). Attack Lens with my ability. Then move to (4,2) to stay aggressive and potentially deny Lens's abilities with my Denial passive if adjacent next turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "I'm at 1HP — extremely vulnerable. Deadeye tried to shoot me last turn (failed, out of range). Lens (enemy oracle) scanned position (3,4) — that's my current position, so they know where I am. I must move away from danger. Shade is cloaked and at (0,1) — no immediate threat. Deadeye at (3,1) dist 3 — if I stay at (3,x) they can reach me. I should move to increase survivability. Move to (5,5) to get distance, then scan Lens (enemy, wounded, already scanned but can damage them 1HP to finish them off) — Lens is at (4,3), dist from (5,5) would be sqrt(1+4)=~2.2, in range. Actually scan deals 1 dmg — Lens is wounded, could be near death. From (5,5), Lens at (4,3) dist = |5-4|+|5-3|=3, in range for scan. This would deal damage. But I already know Lens's prompt. Better to scan Deadeye again for damage — from (5,5), Deadeye at (3,1) dist=|5-3|+|5-1|=6, out of range. Let me move to (5,3): Lens dist=|5-4|+|3-3|=1 — adjacent, scan blocked if adjacent to enemy vector? No, scan blocked when adjacent to enemy Vector (the class). Lens is oracle class, not vector. So scan works. From (5,3), Deadeye at (3,1) dist=2+2=4, in range. I already know both prompts. Scan for damage on Deadeye (wounded) could finish them. Move to (5,3) then scan Deadeye at (3,1) — dist=4, just in range.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "I'm adjacent to Grid (DENIAL active) which blocks scan. Lens is at (5,3) critical and adjacent - I can attack Lens to finish them off since scan is blocked. First I should move away from Grid to escape DENIAL zone, then I can scan or attack. Moving to (3,3) gets me away from Grid. From (3,3) Lens at (5,3) is distance 2 - in scan range and no longer adjacent to Grid. Grid is at (4,2), distance ~2 from (3,3) so DENIAL won't apply. I'll move to (3,3) then scan Lens to deal damage and reveal (already known but deals 1dmg to finish critical Lens).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "HP 1/4, critical condition. Grid is at dist 5, out of range. Breach unavailable. No enemies in range. Best play is to move toward Grid to close distance while staying alive. Move to (3,1) to get closer, then wait — can't reach adjacent this turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Shade is critical at dist=2, Lens is wounded at dist=2. Both in range. Pulse hits ALL units within 1 tile - from (4,2), Shade at (3,1) is diagonal dist=sqrt(2)≈1.4 so NOT within 1 tile. Attack Shade directly to finish them off (dist=2, attack range=adjacent only - wait, attack is range:adjacent only meaning dist=1). So attack won't reach either. Use pulse? Pulse is 1dmg ALL within 1 tile - neither enemy is within 1 tile of current pos. Best option: move closer to Shade at (3,1), then pulse or attack. Move to (3,2) - that puts me adjacent to Shade (dist=1) and adjacent to Lens at (3,3) (dist=1). Then pulse from (3,2) hits both Shade and Lens within 1 tile. Shade is critical so pulse should finish them. Lens takes 1 damage too.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 7,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Adjacent to Grid's DENIAL zone — scan is blocked. Must escape first. Move north to (3,4) to break adjacency with Grid at (3,2), then scan Grid or another target. Grid is already scanned so priority is getting distance to re-enable abilities. Move to (3,4) to escape denial, then scan Grid again for damage.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Lens is wounded at (3,4), distance 2 - in attack range. Attack Lens to finish them off. Then move to better position or trap.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 7,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 9,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "I'm adjacent to Grid which blocks my scan ability and I only have 3HP. Grid is at (3,3) and tried to attack me last turn. I need to escape Grid's adjacency to restore scan capability. Move north to (3,5) to increase distance, then scan Grid from range to gather intel or attack. Wait - (3,5) puts me at distance 2 from Grid, enabling scan. Let me move to (3,5) first, then scan Grid at (3,3) which is distance 2, within range 4.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Lens (oracle) is wounded at (3,5), distance 2 — in range for pulse which hits all within 1 tile. If I move to (3,4), I'm adjacent to Lens and can pulse to hit them. Or I can attack from current position at dist 2... wait, attack is adjacent only. Pulse hits all within 1 tile AoE — if I move to (3,4), Lens at (3,5) is 1 tile away and gets hit by pulse. That should finish a wounded oracle. Let me move to (3,4) then pulse centered on myself (range 1 tile AoE hits Lens).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 7,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 10,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "I'm adjacent to Grid (vector) so my scan is BLOCKED by DENIAL. I need to move away first. Grid is at (3,4) and wounded. I should move away to break the DENIAL zone, then attack or scan. Moving to (2,4) puts me 1 tile away diagonally — dist=1 still adjacent. I need to move at least to distance 2 to escape denial. Moving to (2,3) gives dist=sqrt(1+1)=~1.4, still adjacent. Moving to (1,4) gives dist=2 from (3,4), breaking adjacency. Or (4,3) dist=sqrt(1+1) still adjacent. Let me check: (2,3) is dist sqrt((3-2)²+(4-3)²)=sqrt(2)≈1.4 — that's still adjacent (≤1 tile means same row/col or diagonal, so yes still adjacent). To break adjacency I need distance >1 in manhattan or just not be in the 8 surrounding tiles. (1,4) is dist 2 manhattan from (3,4) — not adjacent. Move to (1,4) then scan Grid from distance 2 (within range 4). Grid is already scanned though. Instead, I should move away and attack isn't great (1dmg at adjacent). Grid is wounded — I should finish it. Move to (2,4) is adjacent still. I need to escape. Move to (1,4) to break denial, then scan another target... but no other enemies shown. Or move to (4,5) dist from (3,4) = sqrt(1+1)=1.4 diagonal — adjacent. (5,4) dist from (3,4) = sqrt(4+0)=2, not adjacent! Move to (5,4) then scan Grid at dist 2 (in range). Grid already scanned. Actually I can just attack Grid while adjacent — that's allowed under DENIAL (basic attack works). Grid is wounded, 1 dmg might finish. Let me attack first, then move away.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Lens is wounded at (1,4) distance 2, within my attack range. I'm at 3HP so I need to be careful. Attack Lens to finish them off since they're wounded. I don't want to move closer due to my low HP. Stay put and attack.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 7,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 7,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 11,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Grid is 2 tiles away at (3,4) and already wounded. I need to scan to deal 1 damage and stay at range. Grid tried to attack me last turn but failed (not adjacent). I should scan Grid now to deal damage while staying safe. After scanning, I can move to maintain distance. Grid is within scan range (dist=2, range≤4). I'll scan first, then move to (0,4) to stay far from Grid.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "Lens (oracle) is at (0,4) wounded and dist=3, just out of range. I need to close to range 2 to use abilities. Moving to (1,4) gets me dist=1 from Lens but that's adjacent - risky. Move to (2,4) puts me at dist=2, in pulse/trap range. Lens is wounded so pulse or attack could finish them. Move to (2,4) then use pulse to hit Lens at dist=2... wait, pulse hits within 1 tile AoE from my position. At (2,4), Lens at (0,4) is dist=2 - too far for pulse. Attack is adjacent only. Trap at (1,4) to block Lens's path eastward. Move to (2,4), trap (1,4) to cut off Lens's escape/advance route.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 7,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 7,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 12,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Grid is at (2,4) and critical - already scanned. I'm at 2HP so survival is key. Grid trapped (1,4) last turn so I need to avoid that tile. I can scan Grid to deal 1dmg and finish it (it's critical), but scan is blocked when adjacent to enemy Vector - Grid is 2 tiles away so scan is NOT blocked. Scan Grid at (2,4) for 1dmg to potentially eliminate it. Then move away from danger - avoid (1,4) which was trapped. Move to (0,3) to gain distance.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Grid",
+          "class": "vector",
+          "thinking": "I'm at 1HP - critically wounded. Lens is at (0,3) dist=3, out of range. There's already a trap at (1,4). I need to survive. Moving toward Lens risks death. I should move to create distance or set up denial. Moving to (1,3) puts me adjacent to Lens at (0,3) - that would activate my Denial passive blocking their abilities, but at 1HP that's suicidal. Better to move to (3,4) or (3,5) to stay alive and set traps on approach paths. I'll move away to (3,4) and trap a chokepoint - trap at (2,4) my current position after moving, but I need to trap while at current pos first. Actually: move first to (3,4), then trap (2,4) to cover the path Lens must take. Wait - trap range is ≤2 tiles. From (3,4) I can trap (2,4), (1,4) already trapped, (2,3), etc. Trap (2,3) to cover another approach path.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 7,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Grid",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 7,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": false
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "player",
+    "totalTurns": 13,
+    "reason": "player eliminated all enemies"
+  },
+  "endedAt": "2026-03-10T06:07:36.270Z"
+}
