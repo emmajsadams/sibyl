@@ -625,7 +625,7 @@ describe("useAbility - patch", () => {
     const hpBefore = a.hp;
     const err = useAbility(g, m, "patch", { x: 2, y: 3 });
     expect(err).toBeNull();
-    expect(a.hp).toBe(hpBefore + 2); // healAmount nerfed 3→2
+    expect(a.hp).toBe(hpBefore + 1); // healAmount nerfed 2→1
     expect(m.healsUsed).toBe(1);
   });
 
