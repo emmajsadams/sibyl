@@ -1,0 +1,1845 @@
+{
+  "id": "2026-03-10T23-00-04",
+  "startedAt": "2026-03-10T23:00:04.201Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 4,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 3,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "oracle": {
+        "maxHp": 7,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 5,
+        "movement": 3,
+        "range": 3,
+        "speed": 2
+      },
+      "vector": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 2,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 2,
+        "healAmount": 1
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Seer",
+        "class": "oracle",
+        "prompt": "Scan priority targets each turn to reveal their strategy. Use recalibrate on your damage dealer to boost effectiveness. Stay behind allies and maintain range. Never get adjacent to enemy vectors."
+      },
+      {
+        "name": "Bastion",
+        "class": "sentinel",
+        "prompt": "Hold the front line. Position between allies and enemies. Use shield_wall toward incoming threats. Attack adjacent enemies."
+      },
+      {
+        "name": "Longshot",
+        "class": "striker",
+        "prompt": "Stay at maximum range. Use precision_shot on the most wounded enemy to secure kills. If no one is wounded, target the enemy medic. Never move adjacent to enemies."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Hawk",
+        "class": "striker",
+        "prompt": "Stay at maximum range. Use precision_shot on the most wounded enemy to secure kills. If no one is wounded, target the enemy medic. Never move adjacent to enemies."
+      },
+      {
+        "name": "Rampart",
+        "class": "sentinel",
+        "prompt": "Hold the front line. Position between allies and enemies. Use shield_wall toward incoming threats. Attack adjacent enemies."
+      },
+      {
+        "name": "Snare",
+        "class": "vector",
+        "prompt": "Place traps on tiles enemies are likely to move through. Use pulse if 2+ enemies are adjacent. Stay near allies for mutual support."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "All enemies are out of scan range (dist 5+). I need to advance to get within range 4. Moving to (2,3) gets me closer while staying behind allies. From there I still can't scan this turn, so I'll wait as second action.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Enemies are north. Move to (3,3) to advance toward Rampart and hold the front line between allies and enemies. Then shield_wall north to block incoming damage from Rampart who is directly north.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "All enemies are out of range (dist 5-7, my range is 2). I need to advance. Moving to (4,2) gets me closer while staying far from enemies. Still out of range after move, so wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Bastion is adjacent at (3,3) to my north. Attack it. Then stay put to activate Fortify (50% dmg reduction if I don't move). No move needed.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Enemies are 3-4 tiles away, closing from the south side. Longshot at (4,2) is directly in line - likely to advance north toward me. I should move to (4,4) to close distance while staying near Rampart at (3,4), then place a trap at (4,3) - the tile Longshot would most likely step through when advancing. This creates a chokepoint and denies that approach route.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "No enemies are wounded, so orders say target the enemy medic/oracle. Seer is the oracle at (2,3), dist=2, within precision_shot range. I'm not adjacent to any enemy, so precision_shot is available. Stay at current position (2,5) to maintain max range and fire.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 3,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Hawk used precision_shot on me last turn (took 2 damage). Snare placed a trap at (4,3). Priority: scan Hawk to reveal strategy and deal damage. Stay at current position to avoid moving adjacent to Snare. Bastion is shielding toward (3,4) facing N. I'll scan Hawk first, then recalibrate Longshot to boost damage output.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 4,
+              "y": 2
+            },
+            "addendum": "Hawk at (2,5) is your priority target. Rampart at (3,4) is shielded by Bastion. Snare placed trap at (4,3) — avoid that tile. Focus fire on Hawk to eliminate the precision threat."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Rampart is adjacent at (3,4). I'm fortified with 50% damage reduction. Attack Rampart now, then use shield_wall facing North to block incoming threats from Hawk and Snare behind Rampart. Don't move to preserve Fortify.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "I already have a trap at (4,3) which is between me and Longshot. Longshot is at (4,2) and may advance north. Bastion is at (3,3) moving north. I should place another trap at (5,3) or (3,4) to cover likely enemy advance routes. Rampart is at (3,4) so I shouldn't trap there. (5,3) is a valid move tile and good for cutting off Longshot's flank. I'll move to (5,4) to maintain range on both Bastion and Longshot, then place a trap at (5,3) to cover the eastern approach.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Bastion is adjacent at (3,3). I'm fortified with 50% damage reduction. Attack Bastion, then shield_wall facing south to protect allies Hawk and Snare from Bastion's counterattack direction. Stay in place to keep fortify active.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "I'm at (2,5) with 2/3 HP. Both Seer and Bastion are in range. No enemies are wounded, so I should target the enemy medic - Seer is an oracle (likely support/healer role). I'm not adjacent to any enemy, so precision_shot is available. I'll stay at current position to maintain range and fire precision_shot at Seer.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Hawk is priority but out of range at dist=5. I need to close distance while staying safe. Moving to (4,4) gets me closer to Hawk but note the trap at (4,3) — avoid that tile. From (4,4) Hawk would still be at dist=3 (2,5 to 4,4 = 2+1=3), which is within precision_shot range 2? No, dist=3 exceeds range 2. Let me recalculate: (4,4) to (2,5) = |4-2|+|4-5|=2+1=3, still out of range 2. Try (3,2) to (2,5): |3-2|+|2-5|=1+3=4, worse. Try (2,2): |2-2|+|2-5|=0+3=3, still 3. No valid move gets me within range 2 of Hawk. Best option: move to (4,4) to close distance, then precision_shot Snare at (5,4) which is dist=1 from (4,4) — wait, from (4,4) to (5,4) = dist=1, that's adjacent, which blocks precision_shot per the warning about vectors. Snare is a vector. So from (4,4) Snare is adjacent — bad. Stay at (4,2) or move to (5,2): from (5,2) to Snare (5,4)=dist=2, to Rampart(3,4)=dist=4 out of range, to Hawk(2,5)=dist=4 still out. Move to (4,1) keeps distance from Snare. Best play: move to (5,3) — dist to Snare(5,4)=1, adjacent, bad. Move to (5,2): Snare at (5,4) dist=2, not adjacent, OK. From (5,2) Snare is dist=2 within precision_shot range. But no wounded enemies. Rampart and Snare are both healthy. Orders say target enemy medic if no wounded — no medic visible. Target highest priority healthy enemy. Snare (vector) is a threat. From current (4,2), Snare at (5,4) dist=3, out of range 2. Move to (5,3): Snare dist=1 adjacent — bad (vector denial). Move to (4,4): trap there per orders. Move to (5,2): Snare dist=2, in range, not adjacent. Fire precision_shot on Snare from (5,2).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 3,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 3,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Foresight shows Hawk will precision_shot me at (2,3) and Rampart will attack Bastion then shield_wall. I'm at 3/7 HP — need to move out of Hawk's line. Move to (1,3) to dodge Hawk's shot while staying in scan range of Rampart. Then scan Rampart to reveal their prompt and deal damage. Snare is at dist=4 but scan range is ≤4 — however moving to (1,3) puts Snare at dist=5, out of scan range. Better: move to (1,4) to maintain distance from Hawk's known position, then scan Rampart (dist would be ~3). Actually Hawk targets (2,3) specifically — moving anywhere dodges it. Move to (1,3), scan Rampart at (3,4) dist=3 which is in range.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Rampart is adjacent at (3,4). I'm fortified (50% DR) and at 6/8 HP. Seer is wounded to my west. Best play: attack Rampart to apply pressure, then shield_wall North to protect against Rampart's potential counterattack while keeping fortify active by not moving.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Priority target Hawk is out of range at dist=6. Rampart is out of range at dist=4. Only Snare is in range at dist=2. Orders say to stay at max range and never move adjacent to enemies. Snare is at (5,4) which is 2 tiles away — I can shoot it with precision_shot from current position (5,2) without moving adjacent. I moved last turn (spd1 indicates I moved), so precision_shot will deal 1dmg. I should shoot Snare since it's the only target in range, and avoid tile (4,3) which has a trap.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Bastion is adjacent at (3,3) to my south-facing position. I'm fortified with 50% damage reduction which I want to maintain. I can attack Bastion without moving to keep fortify active, then use shield_wall facing south to protect allies from Bastion's direction.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 4
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Seer is wounded and in range at dist=3. Orders say target the most wounded enemy to secure kills. I'm at (2,5) and haven't moved, so precision_shot deals 2dmg. Seer is wounded so likely 1HP left — precision_shot should finish them. Stay at current position to maintain max range and avoid adjacency.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Longshot is at (5,2), distance 2 and in range. Traps already at (4,3) and (5,3) blocking southern approach. I'm at 5HP so need to be careful. I can attack Longshot directly since it's in range (dist=2, rng=2). But first, I should consider positioning - moving to (4,4) keeps me closer to allies Rampart@(3,4) and Hawk@(2,5) for mutual support, and then I can still reach Longshot with attack. Actually at dist=2 attack only works adjacent (range:adjacent only). So attack won't hit Longshot at dist=2. Trap is blocked when adjacent to enemy - not adjacent now. I could place a trap on a tile Longshot might move through. Longshot is at (5,2), traps at (4,3) and (5,3) already block paths. If Longshot moves north or stays, tiles like (4,2) or (5,1) matter. Best move: place trap somewhere useful, then reposition toward allies. Move to (4,4) to stay near Rampart, then place trap at (4,3)... wait that's already trapped. Available trap spots near Longshot's path: (4,4) is my current destination. Let me place trap at (4,5) or keep pressure. Actually I should move closer to allies - move to (4,4) and place trap at (4,3) - already trapped. Place trap at (5,3) - already trapped. Options for trap: (4,5) if enemies might push north. Or just wait/move to support allies. Move to (4,4) to be adjacent to Rampart for mutual support, then wait since no good trap spots remain ungrouped.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 7,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 3,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 3,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Snare is at dist=4, just barely in scan range but the reconnaissance data says inRange:false for Snare. Rampart and Hawk are already scanned. Priority: scan Snare to reveal its prompt (dist=4, exactly at scan range limit — but the range check says outRange). I should recalibrate Longshot to boost damage output. I'm at (1,3), Longshot is at (5,2) — not adjacent, so recalibrate won't reach. Bastion is at (3,3) — also not adjacent. No adjacent allies to recalibrate. Snare is out of scan range. Both Rampart and Hawk already scanned. Best action: move closer to Snare to get it in scan range next turn, while staying safe. Move to (2,4) gets me closer to Snare at (4,4) — dist would be 3, scannable. But (2,4) might put me in danger from Hawk at (2,5) — adjacent! Avoid. Move to (1,4) — Snare dist=4, still borderline. Move to (2,3) — Snare at (4,4) dist=3, safe. Then scan Snare from (2,3). Wait — can I scan Snare from current position (1,3)? Recon says outRange for dist=4. Scan range is ≤4 tiles, dist=4 should qualify. The recon says inRange:false though — trust the pre-computed data. Move to (2,3) to reduce dist to Snare to 3, then scan Snare.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "I'm at (4,4) with 4HP, Bastion is adjacent at distance 2. I already have traps at (4,3), (5,3), (4,5). I can't place a trap adjacent to an enemy (Bastion at 3,3 is within 2 tiles but trap placement blocked when adjacent to enemy - Bastion is at dist 2 which may not count as adjacent). Valid trap targets should be tiles enemies will path through. Seer is at (2,3) wounded and moving E, Longshot at (5,2) moving E. A trap at (4,2) could catch Longshot moving north/west. I should place a trap on a likely enemy path. (4,2) is reachable and in Longshot's likely path. I can place trap from current position at (4,2) which is within range 2. Then wait or move. Actually trap range is ≤2 tiles - (4,2) is distance 2 from (4,4), valid. Bastion at (3,3) might move toward my allies - placing trap at (3,4) but that's occupied by Rampart. Let me trap (4,2) to threaten Longshot's approach path.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Bastion is adjacent at (3,3) to my south. I'm fortified (50% dmg reduction) and should stay put to keep fortify active. Attack Bastion, then use shield_wall facing south to protect against Bastion's counterattack and shield wounded Snare at (4,4).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 4
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Seer is wounded at dist=2, within precision_shot range. I'm at (2,5) facing S with spd1. Seer at (2,3) is dist=2, not adjacent, so precision_shot is valid. I haven't moved this turn so full 2dmg. Priority: kill wounded Seer.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Hawk is priority but out of range at dist=6. Snare is wounded and in range at dist=3. Orders say stay at max range and use precision_shot on most wounded. I haven't moved yet so precision_shot does full 2dmg. Snare is at (4,4), dist=3 which is >2 tiles so out of precision_shot range (range ≤2). I need to move closer to Hawk or Snare. Moving to (4,3) is flagged as trap. Moving to (5,4) keeps distance from Snare at (4,4) - that would be adjacent, avoid. Moving to (5,3): dist to Snare=(4,4) is 2 tiles - adjacent diagonally but not orthogonally adjacent. Snare denial is 'adjacent' which typically means directly adjacent. From (5,3), Snare at (4,4) is diagonal distance 1 - need to be careful. Better: move to (4,2) - dist to Snare(4,4) is 2, not adjacent. From (4,2), Snare at (4,4) is dist=2, in precision_shot range. But I moved so it's 1dmg. Snare is wounded so 1dmg might finish. Actually from (5,1): dist to Snare(4,4)=4, still out of range. From (4,2): dist to Snare(4,4)=2, in range. Move to (4,2) then precision_shot Snare - moved so 1dmg, but Snare is wounded.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Fortified at 4/8 HP with 50% damage reduction — don't move. Rampart is adjacent at (3,4). Attack Rampart to deal damage while keeping fortify bonus active.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 3,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "I'm at 1/7 HP — critically wounded. Hawk has precision_shot aimed at me and will likely target me again (I'm wounded). I must move away from Hawk's line of sight. Snare is 3 tiles away so I must not move adjacent. Valid moves include (1,2), (1,3), (1,4) — moving to (1,2) gets me further from Hawk at (2,5) and Snare at (4,4). From (1,2) I can still scan Hawk at dist 2 (within range 4). Scanning Hawk again is redundant since prompt is known. I should recalibrate Longshot who is my main damage dealer — but recalibrate requires adjacent range and Longshot is at (4,2), too far. Best move: retreat to (1,2) to survive, then wait since no useful ability is reachable.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Priority target Hawk is out of range at dist=5. Snare (vector, wounded) is at dist=2 and in range — but I must not move adjacent to Snare or my abilities get blocked. Rampart is wounded at dist=3 and in range. Orders say focus Hawk but Hawk is out of range. I'm at 2HP (wounded) and slowed to spd1. Snare is the closest threat and wounded — a precision_shot on Snare could eliminate the vector denial threat. Snare is at (4,4), I'm at (4,2) — that's 2 tiles away (not adjacent), so precision_shot should work. I moved this turn (shown by arrow), so precision_shot does 1dmg not 2dmg. Wait — the W arrow might mean facing direction not movement. Recon says valid moves include tiles, suggesting I haven't moved yet. I should use precision_shot on Snare (wounded, dist=2, in range) to potentially eliminate the vector. Then consider moving away if needed. Actually if I shoot first then move, precision_shot is unaffected by movement. Shoot Snare first, then move to (5,2) to maintain distance.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (3,3) with 4/8 HP, and Rampart is adjacent to the north at (3,4). Attacking Rampart is the priority since they're wounded and adjacent. If I move, I lose fortify bonus and take full damage. Staying put and attacking Rampart while fortified is optimal. Snare is 2 tiles away so I must not move adjacent to it. I'll attack Rampart first, then use shield_wall facing north to block incoming damage from Rampart/Hawk.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Bastion is adjacent at (3,3). I'm fortified with 50% damage reduction. Snare is critical at (4,4) and needs protection. Attack Bastion since it's wounded and adjacent, then shield_wall south to protect Snare from Bastion's direction. Wait — Bastion is to my south (3,3) is actually north of me? I'm at (3,4), Bastion at (3,3), so Bastion is to my S. I should attack Bastion (adjacent, wounded) and use shield_wall facing S to block damage to allies. Actually shield_wall blocks damage from a direction to adjacent allies. Snare is at (4,4), adjacent to me. If I shield_wall facing S, it blocks damage coming from S to adjacent allies. Bastion is S of me. Attack Bastion first to finish it if possible, then shield_wall S to protect Snare.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 4
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Bastion is wounded and in range at dist=3. I haven't moved, so precision_shot deals 2dmg. Orders say target most wounded enemy to secure kills. Stay at current position to keep range advantage and avoid (4,5) trap.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "HP is critical at 1/8 - survival is top priority. Bastion is adjacent at dist=2 and wounded. I'm at (4,4), trap is blocked if adjacent to enemy but Bastion is at (3,3) which is diagonal dist=2, so trap should be usable. Tiles (4,3) and (4,5) already have traps. Longshot at (5,2) is healthy and likely to advance. I should place a trap on (5,3) - wait, (5,3) already has a trap. Place trap on (4,2) to block Longshot's path, or move away from Bastion first. At 1HP I cannot afford to take damage. Move to (5,5) to retreat and gain distance, then place trap on (5,4) or (5,3) - but (5,3) already trapped. Place trap on (4,2) to funnel Longshot.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 7,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 3,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 3,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "I'm at 1 HP — survival is critical. All enemies are out of scan range from current position. Hawk targets most wounded enemy; I'm at 1HP so I'm the prime target. Need to stay alive. Recalibrate Longshot to boost effectiveness. Move to (2,4) to get closer to Hawk for potential scan next turn while staying away from Snare's vector denial. Then recalibrate Longshot at (5,2) — but that's not adjacent. Longshot is at (5,2), too far. Bastion is at (3,3), also not adjacent. I should move toward Bastion to recalibrate, but staying safe. Move to (2,3) puts me closer. Actually best play: move to (2,4) to get Hawk in scan range (dist would be 3), then I can scan Hawk... wait, Hawk is already scanned. All enemies already scanned. Focus on recalibrate. Bastion is at (3,3) — I need to be adjacent. From (2,3) I'd be adjacent to Bastion. Move to (2,3), then recalibrate Bastion to help it fight Rampart. But Longshot is the damage dealer — can't reach. Move to (2,3) and recalibrate Bastion as fallback.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "addendum": "Rampart is wounded and using shield_wall facing south. Attack from the north or flank east to bypass shield. Priority target."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "I'm at (3,4) with 3HP, fortified. Bastion is adjacent at (3,3) - I should attack it since it's wounded. If I move I lose fortify, so I'll stay and attack Bastion, then use shield_wall facing South to protect allies behind me, or North to block Bastion. Actually Bastion is to my North at (3,3). I should attack Bastion (wounded, will likely finish it), then shield_wall North to block any follow-up. Wait - Snare is critical at (5,5), Hawk is healthy. My orders say hold front line and attack adjacent enemies. Attack Bastion first, then shield_wall N to block threats from north.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "I'm at 2/8 HP but fortified (50% DR). Rampart is adjacent at (3,4), wounded, using shield_wall facing south — attacking from north (my position) bypasses the shield. I should attack Rampart now. Moving would lose fortify bonus and I'm low HP. Stay and attack.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "I'm at (5,5) with only 1HP - critically low. Longshot is healthy at (5,2) distance 3, directly south of me and closing. Traps already at (5,3) and (5,4) which blocks Longshot's direct path north. I can't place more traps at those covered tiles. I need to move away from Longshot's approach. Moving to (3,5) gets me closer to allies Rampart and Hawk while opening distance from Longshot. From (3,5) I can place a trap at a choke point - (4,4) is a valid move tile that enemies might cross. Actually, traps at (4,3) and (5,3) already cover Longshot's approach. I should move toward allies for protection. Move to (3,5) to be adjacent to Hawk at (2,5) and near Rampart at (3,4). Then place a trap to cover approach routes.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "All enemies are out of range from current position (5,2). Priority target is Hawk at (2,5) dist=6, but max range is 2. Need to close distance while staying out of adjacent range. Avoid trap at (4,3). Best move is (4,2) to get closer without hitting trap, but Hawk is still at dist=5 from there. No valid move gets me in range this turn. Move to (4,2) to advance toward Hawk while avoiding trap at (4,3), then wait as no ability targets are reachable.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Both Seer and Bastion are critical. Seer is at dist=2, within precision_shot range. I'm at (2,5) and haven't moved, so precision_shot deals 2dmg. Seer at critical HP is likely killable. I'll shoot Seer first to secure the kill, then wait or stay put. No need to move — I'm already at max range and not adjacent to any enemy.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 3,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "I'm at 2/8 HP, fortified, with Rampart adjacent at (3,4) in critical condition. Attacking Rampart could finish it off. Rampart is facing south with shield_wall, so attacking from north (my current position at y=3, Rampart at y=4) means I'm attacking from the south side of Rampart — wait, Rampart is at (3,4) facing S, meaning shield blocks from S direction. I'm at (3,3) which is SOUTH of Rampart. So Rampart's shield_wall faces south, blocking my attack from south. I should stay put to keep fortify bonus and attack anyway — even reduced damage may finish a critical target. Alternatively move east to (4,3) then attack from east to bypass shield. But moving loses fortify. At 2HP I need fortify to survive. Attack from current position — even if blocked, Rampart is critical and may still take damage or shield may not cover attack direction correctly. Actually: I'm at y=3, Rampart at y=4. North is increasing y. So Rampart is NORTH of me. I am SOUTH of Rampart. Rampart faces S = faces toward me. Shield blocks from S = blocks my attack. I should move to (4,3) or (2,3) to flank east/west, but that loses fortify at 2HP. Risk: losing fortify at 2HP is dangerous with Hawk and Snare nearby. Best: attack Rampart anyway (critical, may die regardless of shield), keep fortify. Stay and attack.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Hawk is priority but out of range at dist 5. Rampart is in range at dist 3 and critical. Orders say use precision_shot on most wounded to secure kills. Rampart is critical and in range. I need to check if I can get closer to Hawk without triggering the trap at (4,3) or going adjacent to enemies. Moving to (5,3) gets me closer to Hawk but still dist 4 — still out of range. Moving to (4,4) avoids the trap and reduces dist to Hawk to 3, putting Hawk in range. But (4,4) dist to Hawk (2,5) = 3, which is within precision_shot range 2? No, range is ≤2 tiles. Max move is 2 tiles. Best play: Rampart is critical and in range right now. I'm also at 2HP and vulnerable. Secure the kill on Rampart with precision_shot now (dist 3, in range), then consider repositioning. Wait — dist 3 is within ≤2 tiles range? Precision_shot range is ≤2 tiles, but Rampart is dist 3. The recon says Rampart IS in range though. Trusting the recon data. Fire on Rampart to secure the critical kill, then move to (5,3) to reposition away from danger.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "I'm at 1/8 HP, critical condition, but fortified (50% damage reduction). Bastion is adjacent at (3,3) and also critical. I should attack Bastion to potentially finish it off while staying fortified. If I move, I lose fortify. Best play: use ability to attack Bastion, then wait to keep fortify active.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Bastion is critical and in range at dist 3. I'm at (2,5) and haven't moved, so precision_shot deals full 2dmg. Bastion is not adjacent to me so no blocking. Fire precision_shot on Bastion to secure the kill. No need to move.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "I'm at 1HP - critically vulnerable. Bastion is critical at dist=2 and in range. Longshot is wounded at dist=4. I need to attack Bastion to potentially finish them off, but I must be careful. Trap at (4,4) already placed. Valid moves include (4,5) and (4,4) but (4,4) has a trap. I can attack Bastion from current position (dist=2, range=2). Then consider moving to safety. Rampart is adjacent at (3,4) which is good for mutual support. I'll attack Bastion first (they're critical, might finish them), then move to (2,4) to stay near Hawk and away from danger. Wait - (2,4) isn't in valid moves. Valid moves: [1,5],[2,4],[4,4],[4,5],[5,5]. Actually (2,4) IS valid. Moving to (2,4) keeps me near both allies and away from Longshot.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 3,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 3,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "I'm at 1HP — critical danger. Priority is Hawk but they're out of range at dist 5. Only Rampart is in range at dist 3 (critical health). Snare trap at (4,3) must be avoided. I need to move closer to Hawk without hitting the trap. Moving to (4,4) gets me closer but Hawk is still at dist 4 (out of range 2). Moving to (5,4) keeps distance from trap. Best play: move to (4,4) to close distance, then precision_shot Rampart since they're in range and critical — secure the kill. Avoid (4,3) trap.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "I'm at 1HP — critically low. Fortified gives 50% damage reduction if I don't move, which is crucial for survival. No enemies are in range to attack. Moving toward enemies risks losing fortify and getting killed. Best play: stay fortified, use shield_wall facing north (toward enemies at y=4,5) to protect allies from incoming threats.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Bastion is critical and in range at dist=3. I'm at (2,5) with spd1 so I haven't moved. precision_shot deals 2dmg and only loses damage if I moved - I haven't moved yet. Fire precision_shot on Bastion to secure the kill. Stay put to avoid moving adjacent to enemies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "I'm at 1HP - critically low. Bastion is critical too at dist=2, in range. I can attack Bastion to finish them off since they're critical. But I need to survive. Hawk is adjacent at (2,5) providing support. Bastion is at (3,3), dist=2 which is within my range=2. I can attack Bastion to eliminate them. After attacking, I should consider positioning. Attack first to finish off Bastion.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 3,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 9,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "I'm at 1HP - critically vulnerable. Bastion is critical at dist=2, in my attack range. Attack to finish Bastion, then move away to safety. Can't use trap (adjacent enemy blocks it). Attack first, then retreat.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "I'm at 1HP - extremely fragile. Fortified gives 50% damage reduction if I don't move. Both enemies are 3 tiles away. Best play is to stay put and keep fortify active. I can use shield_wall facing north to protect allies from Hawk at (2,5) who is to my north.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Hawk",
+          "class": "striker",
+          "thinking": "Bastion is critical and in range at dist=3. I'm at (2,5) and haven't moved, so precision_shot deals full 2dmg. Fire on Bastion to secure the kill. Stay put to maintain range.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": "Out of range",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Hawk",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 3,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "opponent",
+    "totalTurns": 10,
+    "reason": "opponent eliminated all enemies"
+  },
+  "endedAt": "2026-03-10T23:06:40.816Z"
+}
