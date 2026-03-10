@@ -127,12 +127,12 @@ describe("buildContextPrompt", () => {
     u.healsUsed = 1;
     const ctx = makeCtx(u);
     const text = buildContextPrompt(ctx);
-    expect(text).toContain("Heals remaining: 2/3");
+    expect(text).toContain("Heals remaining: 1/2");
   });
 
   test("medic sees heal exhausted warning", () => {
     const u = makeUnit("medic");
-    u.healsUsed = 3;
+    u.healsUsed = 2;
     const ctx = makeCtx(u);
     const text = buildContextPrompt(ctx);
     expect(text).toContain("PATCH UNAVAILABLE");
