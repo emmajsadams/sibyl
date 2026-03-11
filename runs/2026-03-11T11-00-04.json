@@ -1,0 +1,2064 @@
+{
+  "id": "2026-03-11T11-00-04",
+  "startedAt": "2026-03-11T11:00:04.840Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 4,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 3,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "oracle": {
+        "maxHp": 7,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 5,
+        "movement": 3,
+        "range": 3,
+        "speed": 2
+      },
+      "vector": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 7,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 1,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 2
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 2,
+        "healAmount": 1
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Weaver",
+        "class": "vector",
+        "prompt": "Place traps on tiles enemies are likely to move through. Use pulse if 2+ enemies are adjacent. Stay near allies for mutual support."
+      },
+      {
+        "name": "Aegis",
+        "class": "sentinel",
+        "prompt": "Advance toward the nearest enemy. Use shield_wall facing the direction with the most enemies. If an enemy is adjacent, attack them."
+      },
+      {
+        "name": "Veil",
+        "class": "specter",
+        "prompt": "Cloak and move behind enemy lines. Target isolated enemies with shadow_strike. Save breach for the most dangerous enemy. Avoid being caught uncloaked."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Deadeye",
+        "class": "striker",
+        "prompt": "Maintain distance. Use precision_shot on high-value targets — medics first, then damage dealers. Use suppressing_fire if enemies close in."
+      },
+      {
+        "name": "Shade",
+        "class": "specter",
+        "prompt": "Cloak immediately on turn 1. Move toward the enemy medic or weakest target. Use shadow_strike when adjacent while cloaked. Use breach to sabotage high-value targets."
+      },
+      {
+        "name": "Rampart",
+        "class": "sentinel",
+        "prompt": "Push forward aggressively. Shield_wall facing the enemy cluster. If flanked, turn to face the biggest threat. Attack when possible."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Round 1 — cloak immediately as instructed. Then advance toward Veil (enemy specter at 3,0, dist=4) or Aegis (sentinel at 2,1). Moving to (3,1) closes distance to both Veil and Aegis while staying on their axis for future breach/shadow_strike.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Veil",
+          "class": "specter",
+          "thinking": "Round 1, cloak immediately as ordered. Then advance north toward enemies. Max move is 3 tiles north to (3,3).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 3,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Both enemies are at dist=4 to the north. I should advance toward them. Moving to (2,3) gets me 2 tiles closer. Enemies are north, so shield_wall facing N protects allies behind me.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Aegis is at dist 2, in range for precision_shot. I haven't moved yet so full 2dmg applies. Fire first, then stay put or reposition. No need to move — current position gives range on Aegis without being adjacent to Weaver.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Round 1, enemies are distant. Move north toward the action and place a trap on a likely enemy approach tile. Rampart at (1,4) is likely to advance south, so (1,2) or (1,3) would be a good trap location. I'll move to (1,2) first, then trap (1,3) to intercept Rampart's advance.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Push forward toward enemy cluster. Move to (1,3) to close distance with both Aegis and Weaver. Then shield_wall facing S to protect allies behind me from the enemy cluster to my south... wait, enemies are to my south at (2,3) and (1,2). I'm at (1,4), enemies at (1,2) and (2,3) — they're south of me. Move to (1,3) puts me adjacent to Weaver at (1,2). But caution says avoid moving adjacent to Weaver. Move to (2,4) instead to approach Aegis at (2,3) — that puts me adjacent to Aegis, allowing attack. From (2,4), Aegis at (2,3) is adjacent (dist=1). Attack Aegis.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 3,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Veil",
+          "class": "specter",
+          "thinking": "Cloak expires after this turn. Rampart at (2,4) facing E — behind tile is (1,4), reachable and adjacent. Move to (1,4) to get behind Rampart, then shadow_strike to deal damage while staying cloaked.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Cloak expires after this turn. Weaver is a vector (denial range) at dist 3 — must avoid moving adjacent. Aegis is at (2,3) facing N, behind tile is (2,2) which is reachable and adjacent. I can move to (2,2) to get behind Aegis AND stay away from Weaver at (1,2). From (2,2) I'm adjacent to Aegis and behind them — perfect for breach. But Weaver is at (1,2), dist from (2,2) would be 1 — that's adjacent, which would block breach. So I need to shadow_strike Aegis instead (shadow_strike is not blocked by adjacent Vector per rules... actually wait, the caution says 'cloak/breach blocked when adjacent to enemy Vector'. shadow_strike is neither cloak nor breach, so it should work). Move to (2,2) behind Aegis, then shadow_strike for 1 dmg while maintaining cloak.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Shade is adjacent at (2,2) - I can pulse to hit it for 1dmg. My Denial passive also blocks its cloak/breach/scan. Trap at (1,3) is already placed. Moving to (0,2) or staying - but I should stay to keep Denial pressure on Shade and support Aegis at (2,3). Pulse hits Shade (dist=1) for 1dmg. Then I can move to (0,2) to avoid being flanked, or place a trap somewhere useful. Wait - trap is blocked when adjacent to enemy, and Shade is adjacent, so I cannot trap. I'll pulse Shade first, then move to (2,1) to reposition while keeping pressure.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm at (2,3) with Rampart adjacent north at (2,4) and Shade adjacent south at (2,2). Orders say attack adjacent enemy and use shield_wall facing most enemies. Deadeye is at (2,5) to the north along with Rampart - two enemies to the north. I should attack Rampart (adjacent) and use shield_wall facing N to block Deadeye. Staying put preserves Fortify bonus (50% damage reduction). I'll attack first, then shield_wall N.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "I'm fortified with 50% damage reduction, two enemies in range: wounded Aegis at (2,3) and healthy Veil at (1,4). Orders say attack when possible and shield_wall facing enemy cluster. Aegis is wounded so attacking them is high value. Veil is a specter flanking from west. If I stay put I keep fortify bonus. I'll attack Aegis to finish them off, then shield_wall facing west (W) to block Veil.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 1,
+              "y": 4
+            },
+            "direction": "W"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Aegis is wounded and at dist=2 — priority target for precision_shot. I haven't moved, so I get full 2dmg. Veil is a specter at dist=2 but healthy and lower priority. Stay put to maximize precision_shot damage.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 0,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 3,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Veil",
+          "class": "specter",
+          "thinking": "I'm already behind Rampart (facing E, I'm at (1,4) which is their west/behind side). I can breach them to waste their turn, or shadow_strike for damage. Since I'm cloaked and breach would be very valuable here — Rampart is a sentinel with high HP and adjacent to wounded Aegis — I should breach Rampart to neutralize them for a turn. Then I can reposition. Wait, I need to check if I'm still cloaked... round 3, cloaked on round 1 for 3 turns, so cloak should still be active. Breach doesn't break cloak. I'm already in position behind Rampart. Use breach on Rampart now, then move to safety away from the trap at (1,3).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 2,
+              "y": 4
+            },
+            "addendum": "Move away from Aegis and Veil, retreat northwest"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Aegis is adjacent, wounded, and I'm already behind it (2,2 is a behind tile for Aegis facing N). Shadow_strike deals 1 damage while keeping cloak — perfect to finish off a wounded sentinel. Use shadow_strike first, then move away to avoid Weaver's denial range.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "At 1HP, I must not move to keep Fortify active (50% dmg reduction). Rampart is adjacent at (2,4). Orders say attack adjacent enemy. Stay put and attack Rampart.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Orders are to retreat northwest away from Aegis and Veil. Current position (2,4). Valid moves include (1,5) which moves northwest - away from Aegis at (2,3) and somewhat away from Veil at (0,5). Actually (1,3) moves northwest away from Aegis. Best retreat: move to (1,5) to gain distance from Aegis while moving away. Wait as second action to preserve fortify if needed, but fortify is lost on move anyway. Move to (1,5) - northwest from current pos, increases distance from Aegis (dist 1→2) and Veil (dist 3→2, slightly closer but moving away from Aegis is priority). Actually (3,5) moves east away from Veil. Orders say northwest - so (1,5) is best valid northwest option.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "No enemies in range. Shade is at (3,2) dist=3, approaching from east. There's already a trap at (1,3). Move to (1,2) to stay near center and block Shade's approach path, then place trap at (2,2) which is a likely path for Shade moving west.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Aegis is critical and at dist=2 — priority target for precision_shot. I haven't moved yet so full 2dmg applies. That should finish them. Veil is healthy at dist=2 but Aegis elimination is higher value. After shooting I can move to maintain distance from Weaver.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 7,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Veil",
+          "class": "specter",
+          "thinking": "Rampart is adjacent and wounded — shadow_strike keeps cloak and deals damage. I'm currently at (0,5), Rampart is at (1,5). Shadow_strike requires adjacent, and Rampart is adjacent. This finishes or severely damages Rampart without breaking cloak. Then move to (3,5) to get behind Deadeye for a future breach next turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Breach is ready and Weaver is 2 tiles away. I can move to (0,2) which is directly behind Weaver (they face E, so west side is behind), then use breach. This sabotages the Vector who blocks my abilities when adjacent, removing that threat. Move to (0,2) first, then breach Weaver.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 1,
+              "y": 2
+            },
+            "addendum": "Move away from our team and toward the edge of the map. Do not attack allies."
+          },
+          "secondResult": "Cannot use breach — adjacent to enemy Vector (Denial)"
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Veil (specter) is adjacent at (3,5) — precision_shot is blocked when adjacent to enemy Vector, but Veil is a specter not a vector, so precision_shot should work. However I'm at 3HP/3HP (full health based on 3/3). Veil is right next to me at dist=1. I need to move away first to avoid being adjacent (precision_shot needs LoS and range ≤2, but if I move it does 1dmg instead of 2dmg). Actually precision_shot is only blocked when adjacent to enemy Vector — Veil is a specter so no blocking. I can shoot Veil at dist=1 for 2dmg without moving. Then move away to maintain distance from Weaver. Priority: shoot Veil first (high value, adjacent), then reposition.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Orders are to retreat northwest away from Aegis and Veil. Current position (1,5). Veil is at (3,5) to my east, Weaver is at (1,2) to my south. Moving to (0,4) goes northwest, away from both threats. I have speed 1 so only one move. After moving, wait to preserve fortify if possible — but fortify only activates if I don't move. Since I must move to retreat, I'll move northwest to (0,4) and wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Shade is adjacent at (0,2) - perfect pulse target. I have a trap at (2,2) already. Shade is right next to me so I can't use trap (adjacent enemy blocks it). Use pulse to hit Shade now, then move to (2,3) to reposition away from Shade while staying near existing traps and covering more ground. Pulse hits all units within 1 tile - only Shade is adjacent so it's a 1-target pulse but still worthwhile to damage them.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 7,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "I'm at (0,2) with 2HP, cloaked. Weaver is at (2,3) facing N — behind tile is (2,2) which is reachable and adjacent. I can move to (2,2) to get behind Weaver, then use breach to make them obey me next turn. This is high value — Weaver is a vector unit and controlling them disrupts enemy denial. Breach requires being behind enemy, and (2,2) puts me directly behind Weaver. I have 0 breaches used out of 2.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "addendum": "Move away from your allies and toward the edge of the map, away from the fight."
+          },
+          "secondResult": "Cannot use breach — adjacent to enemy Vector (Denial)"
+        },
+        {
+          "unit": "Veil",
+          "class": "specter",
+          "thinking": "Deadeye is healthy and at dist 3, with (4,4) reachable as a behind position. Move to (4,4) puts me adjacent behind Deadeye — perfect for breach. Breach is ready and this is a high-value target (striker). Use breach to neutralize Deadeye for a turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "addendum": "Move away from allies and toward trap at (1,3)"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "Orders say move away from allies and toward trap at (1,3). I'm at (4,3). Veil is adjacent at (4,4) — I should fire at Veil first before moving, since moving will reduce precision_shot to 1dmg. But orders say move toward (1,3). Moving to (3,3) gets me closer to (1,3) and away from allies clustered at lower-left. I moved last turn so precision_shot would do 1dmg anyway (spd:1 means I already moved). Actually my speed is 1 this turn — I can move 1 tile. Valid moves show mv:2 but my spd is listed as 1. I'll use precision_shot on Veil at (4,4) first (dist=1, in range, not adjacent to Weaver from current pos), then move toward (1,3) — best available tile is (3,3). Moving after shooting means precision_shot fires at full 2dmg.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "At 3/7 HP and fortified, I need to retreat northwest away from Weaver and Veil. Orders say move away. Valid moves include (0,3), (0,2), (1,3), (1,4), (1,5). Northwest from (0,4) means staying on west edge and moving north or south. (0,3) moves me south along the west edge, away from Veil at (4,4). (0,5) moves north but that's toward the top. Orders say retreat northwest — (0,3) or (0,2) keeps me on the west wall. Moving to (1,3) then (0,2) would be ideal but I can only move speed 1 (spd:1 shown). With mv2 but spd1, I get one move of distance 1. Wait — valid moves show mv:2 tiles, so I can move up to 2 tiles away. (0,2) is 2 steps south from (0,4). That retreats me further from all enemies. I'll move to (0,2) and wait to keep fortify.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Two enemies adjacent: Shade (critical) at (2,2) and Deadeye (healthy) at (3,3). Pulse hits all units within 1 tile - both are at dist=1, so pulse from current position (2,3) hits both. This could finish Shade and damage Deadeye. After pulse, move to (3,4) to position near ally Veil and place future traps. Trap at (1,3) already set. Can't place another trap while adjacent to enemies anyway.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 7,
+          "position": {
+            "x": 0,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Veil",
+          "class": "specter",
+          "thinking": "Deadeye is at (3,3) facing W, and (4,3) is directly behind them and reachable. I'm currently uncloaked at 2HP. Move to (4,3) to get behind Deadeye, then use shadow_strike to deal 1 damage while staying cloaked. Breach is unavailable. This is the best offensive play available.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Deadeye",
+          "class": "striker",
+          "thinking": "At 1HP with Weaver adjacent blocking my precision_shot. Orders say move toward trap at (1,3). I'll move to (1,3) first. From there Weaver is out of range so I can attempt precision_shot on Veil if in range, but Veil at (4,3) will be dist=3 from (1,3) — out of range 2. Weaver at (3,4) will be dist ~2.8 — out of range. No good ability targets from (1,3). Best to just move to (1,3) and wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Enemies are at dist=5, out of range. I need to push forward. Moving to (2,2) gets me closest to the enemy cluster at (3,4) and (4,3). From there, shield_wall facing E covers the enemy direction. I'm at 3HP so staying fortified would help, but orders say push forward aggressively.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 2
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Rampart is at (2,2) heading E, likely to move toward (3,2) or (4,2). I can move to (3,3) to get closer and place a trap on (3,2) which is directly in Rampart's path. This denies that tile and threatens damage if they step through.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Veil",
+          "class": "specter",
+          "thinking": "Rampart is wounded at (2,2) facing E, dist 3. Breach is exhausted. I'm at 2HP so I need to close carefully. Move to (2,3) puts me adjacent to Rampart - then shadow_strike keeps cloak and deals damage. But (3,2) has a trap. Move to (2,3) is reachable (within mv3) and puts me directly north of Rampart for a shadow_strike.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "At 2HP with fortify active, I must not move or I lose the 50% damage reduction. Veil is adjacent at (2,3) and wounded — attack to finish them off. Stay put to keep fortify.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Rampart is wounded at (2,2) and moving E. There's already a trap at (3,2). Rampart might step on it or move to (3,2) or (4,2). I should place a trap at (4,2) to cover eastern escape routes. I can't use trap if adjacent to enemy, but Rampart is at dist=2 so I'm fine. Move to (4,3) to maintain distance and place trap at (4,2) to cut off Rampart's eastern path.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Veil",
+          "class": "specter",
+          "thinking": "I'm at 1HP and Rampart is adjacent at (2,2), wounded. Breach is unavailable. Shadow_strike deals 1dmg and keeps cloak — but I'm not cloaked. Best play: move to (1,2) which is behind Rampart, then shadow_strike for the kill. Shadow_strike works at adjacent range.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Rampart is at (2,2) moving east toward us. We have traps at (3,2) and (4,2) already. Veil is critical at (1,2). I should move to intercept and place a trap on a likely enemy path. Moving to (3,3) gets me closer while staying safe, then trap at (3,2) — wait, trap already there. Trap at (2,3) would be on Rampart's likely movement path northward. Move to (3,3) first, then trap (2,3) which is within 2 tiles and on Rampart's approach route.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "At 1HP I must be careful. Veil is critical and adjacent at (1,2) — attack to eliminate. I'm fortified so staying put gives 50% damage reduction. Attack Veil first, then wait to keep fortify active.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 9,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Rampart is at (2,2) critical health, dist=2. I already have traps at (3,2) and (2,3) which cover approaches. (2,3) is valid move tile meaning it's not blocked for me but enemy stepping on it triggers it. Rampart is facing E so likely moving east toward me. Place a trap at (1,2) to cut off western escape, or attack directly since Rampart is in range at dist=2. Attack range is adjacent only (dist=1), so I can't attack from here. Pulse hits within 1 tile - Rampart is at dist=2, out of pulse range. I should move closer to attack or place another trap. Moving to (2,3) puts me on a trap - bad. Move to (3,2) - also has a trap. Move to (4,3) keeps distance and I can place trap at (2,2) directly... but can't trap occupied tile. Place trap at (1,2) to block escape - but I need to be within 2 tiles of (1,2): dist from (3,3) to (1,2) = 2+1=3, out of range. Move to (2,4) first, then trap at (1,2) - dist from (2,4) to (1,2) = 1+2=3, still out. Move to (3,4) then trap at (2,3)... already trapped. Best: move to (4,3) staying safe, trap at (3,2)... already trapped. Trap at (2,2) occupied. Trap at (1,3) - from (3,3) dist=2, valid. Move to (4,3) then trap at (3,2) already exists. Just place trap at (1,3) to further restrict Rampart movement.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "HP is critical at 1/7. Fortified gives 50% damage reduction if I don't move. Weaver is at dist=3, not adjacent, so no immediate threat this turn. Orders say push forward aggressively, but at 1HP moving into attack range is suicidal. Best play: stay fortified, shield_wall facing E toward Weaver to protect against incoming damage.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 2
+            },
+            "direction": "E"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 10,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Rampart is at (2,2) facing East, critical HP. Traps already at (3,2) and (2,3) covering approaches. I should advance toward (3,3) to close distance and place a trap at (3,4) or another chokepoint. Moving to (3,3) puts me range 2 from Rampart. Then place trap at (2,2) adjacent tiles not yet covered — (1,2) or another path. Actually (3,3) move then trap at (3,4) to block retreat. Wait — Rampart is critical, moving East from (2,2). It might move to (3,2) but trap is there already. Let me move to (3,3) to apply Denial passive and then place trap at (2,2) directly if in range.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "HP is critical at 1/7. Fortify gives 50% damage reduction while stationary — I must not move. Weaver is at (3,3), distance 2, not adjacent so no attack possible. Best play is to stay put and keep fortify active, use shield_wall facing N (toward Weaver at 3,3 which is NE) to block incoming damage.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 11,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Rampart is at (2,2) critical and in range. I can attack for 1 damage to finish it off. Position (3,3) gives range 2 to (2,2). Attack first, then place a trap on a likely escape tile.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "secondResult": "Out of range (max 2)"
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "At 1HP, fortified gives 50% damage reduction — staying put maximizes survival. Weaver is at dist=2, not adjacent, so attack is unavailable. Shield_wall facing N (toward Weaver at 3,3 which is NE) to block incoming damage. Stay still to keep Fortify active.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 12,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "I'm at 1HP, fortified, with 50% damage reduction active. Weaver is 2 tiles away and dangerous. Moving would lose fortify and expose me. I should wait to keep fortify active, then use shield_wall facing N (toward Weaver at 3,3 which is NE of me) to protect any nearby allies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 2
+            },
+            "direction": "N"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Rampart is critical at (2,2) and within range 2. I can attack directly. (2,3) already has a trap. I should attack Rampart to finish it off, then potentially reposition. Attack is adjacent-only so dist=2 means I need to use pulse or move closer. Pulse hits all within 1 tile - Rampart is at dist=2 so pulse won't reach. I need to move to (2,2) adjacency first. Moving to (2,3) would put me adjacent but (2,3) has a trap - dangerous. Move to (3,2) puts me at dist=1 from (2,2)... wait, (3,2) has a trap too. Move to (2,4) puts me at dist 2 still. Actually let me place a trap on a likely escape tile instead, since I can't safely get adjacent. Rampart is facing E at (2,2), likely to move E toward (3,2) or (4,2). (4,2) already has trap. Place trap at (3,2)... already has one. Place at (1,2) to cut off W escape. Valid moves include tiles but trap range is ≤2 tiles from current pos (3,3): (1,2) is dist 2+1=not reachable for trap... trap range ≤2 tiles means target within 2 of me. (1,2) is dist sqrt(4+1)=2.24 - might be out of range. Safe bet: place trap somewhere useful from current pos. (2,2) is dist 2 - can I trap there? It's occupied. Place trap at (1,3) - already has one. Place at (3,1) - empty and on likely path. Stay put and trap (3,1) as a southern blocker.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Deadeye",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": false
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "player",
+    "totalTurns": 13,
+    "reason": "player eliminated all enemies"
+  },
+  "endedAt": "2026-03-11T11:06:17.618Z"
+}
