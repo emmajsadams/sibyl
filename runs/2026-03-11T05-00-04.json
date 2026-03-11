@@ -1,0 +1,1397 @@
+{
+  "id": "2026-03-11T05-00-04",
+  "startedAt": "2026-03-11T05:00:04.910Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 4,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 3,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "oracle": {
+        "maxHp": 7,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 5,
+        "movement": 3,
+        "range": 3,
+        "speed": 2
+      },
+      "vector": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 2,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 2,
+        "healAmount": 1
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Seer",
+        "class": "oracle",
+        "prompt": "Scan early to give your team intel on enemy prompts. Target enemy specters with scan to track them after cloak. Use recalibrate on allies who need tactical adjustments. Stay safe at range behind your front line."
+      },
+      {
+        "name": "Marksman",
+        "class": "striker",
+        "prompt": "Stay at maximum range. Use precision_shot on the most wounded enemy to secure kills. If no one is wounded, target the enemy medic. Never move adjacent to enemies."
+      },
+      {
+        "name": "Patch",
+        "class": "medic",
+        "prompt": "Stay adjacent to the most threatened ally. Use patch on the most wounded teammate. If all healthy, use overclock on your damage dealer."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Bulwark",
+        "class": "sentinel",
+        "prompt": "Hold the front line. Position between allies and enemies. Use shield_wall toward incoming threats. Attack adjacent enemies."
+      },
+      {
+        "name": "Longshot",
+        "class": "striker",
+        "prompt": "Maintain distance. Use precision_shot on high-value targets — medics first, then damage dealers. Use suppressing_fire if enemies close in."
+      },
+      {
+        "name": "Seer",
+        "class": "oracle",
+        "prompt": "Use scan to reveal enemy prompts and cloaked units. Stay at max range (≤4 tiles for scan). Use recalibrate on wounded allies to buff them. Keep distance from enemies and avoid adjacent vectors."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Longshot is exactly 4 tiles away at (4,4) - just in scan range. If I move north to (4,3), Longshot is at dist=1 which is adjacent, enabling scan from closer. But I should check: moving to (4,3) puts me at dist=1 from Longshot, which is adjacent - scan requires ≤4 tiles so that's fine, but WARNING says scan is blocked when adjacent to enemy Vector. Longshot is a striker, not Vector class, so scan should work. Actually, let me reconsider: from current position (4,0), Longshot at (4,4) is dist=4. The recon says 'inRange:false' for Longshot at dist=4. Scan range is ≤4 tiles. Dist=4 should be in range... but recon shows outRange. Perhaps dist calculation is Chebyshev vs Manhattan. Manhattan dist from (4,0) to (4,4) = 4, Chebyshev = 4. Both = 4. Recon says outRange though. I'll move north to (4,3) to get closer - dist to Longshot becomes 1, definitely in scan range - then scan Longshot for intel.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Seer is the highest priority target — same class as me (oracle) and acts this round. Scan to reveal its prompt and deal damage. Then hold position.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Patch",
+          "class": "medic",
+          "thinking": "Seer ally is wounded at (4,3) with 6/7 HP. I need to move toward them to heal. From (2,1) moving to (2,3) gets me closer but still dist=3 from Seer. Best valid move toward Seer is (3,3) which puts me dist=2 from Seer at (4,3) — not adjacent yet. Move to (3,2) or (3,3) to close gap. Actually (3,3) is valid and puts me at dist=1+1=2 from (4,3). I can't reach Seer this turn to patch. Move toward Seer as much as possible.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Patch is at dist=2 to the south, Seer at dist=3. I need to advance and position between allies and enemies. Moving to (3,4) puts me closer to the threat line and I can use shield_wall facing south (toward enemies) to protect allies behind me. My allies Longshot and Seer are at (4,4) and (2,4) — I should stay near them.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 5
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "All enemies are out of range (dist 5-7, my range is 2). I need to advance. Moving to (3,0) gets me closest to the enemy Seer at dist=5, but still out of range. Best move is toward enemies while staying safe. Moving to (3,0) then still no enemies in range, so I'll wait after moving.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Seer is adjacent at (4,3) — precision_shot is blocked when adjacent to enemy. Patch (medic) is at dist=2 and is high-value target per orders. I should move away from Seer to enable precision_shot, then hit Patch. Moving to (5,4) keeps distance from Seer and maintains range to Patch at (3,3) which would be dist=2+1=3... let me check: from (5,4) to (3,3) = |5-3|+|4-3|=3, out of range 2. Better: move to (4,5) — from (4,5) to (3,3): |4-3|+|5-3|=3, still out. Move to (5,3): from (5,3) to (3,3)=2, in range, and Seer at (4,3) dist=1 still adjacent. Move to (5,4): Seer at (4,3) dist=|5-4|+|4-3|=2, no longer adjacent. Patch at (3,3) from (5,4): |5-3|+|4-3|=3, out of range. Move to (4,5): Seer dist=|4-4|+|5-3|=2, not adjacent. Patch from (4,5): |4-3|+|5-3|=3, out of range. Hmm. Stay at (4,4) but precision_shot blocked due to adjacent Seer. Use suppressing_fire on Patch at (3,3) instead — no adjacency restriction mentioned. Then move away.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "suppressing_fire",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Patch",
+          "class": "medic",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 3,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Enemy Seer tried to scan me last turn and will likely try again. I haven't scanned Bulwark or enemy Seer yet - Seer is highest priority since it's an oracle that can reveal my allies' prompts. Seer is at (2,4) dist=3, within scan range. I should scan Seer to get intel and deal damage. Then I can move to safer position. Currently at (4,3), enemy Seer at (2,4) is in scan range (dist=3 ≤ 4). No enemies adjacent so scan is not blocked. Scan Seer first, then move to (4,2) to stay back from the front line.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Patch is in scan range at dist=2. Foresight shows Seer will move to (4,3) next turn, which would put them at dist=4 from my current position - still in range. Priority: scan Patch now to reveal their prompt. After scanning, I can move to maintain positioning. Seer is already known. Marksman is out of range at dist=5. Scan Patch to get their prompt intel.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Patch",
+          "class": "medic",
+          "thinking": "I'm suppressed so movement is limited to 1 tile. Seer ally is wounded at (4,2) with 6/7 HP, dist=2 — not adjacent, can't heal yet. Bulwark enemy is adjacent at (3,4). I'm at 3/5 HP myself. I should move toward the wounded Seer at (4,2) to get adjacent next turn. Best move is (4,3) — brings me closer to Seer. Can't patch this turn (not adjacent to Seer). Can't use overclock either (Bulwark is adjacent, suppressing abilities? Actually suppressed only affects movement. But patch/overclock are blocked when adjacent to enemy. Bulwark is adjacent at dist=1, so patch and overclock are BLOCKED). I'll move to (4,3) to get closer to Seer, then wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Patch (medic) is wounded and at dist=2, priority target per orders. I'm at (5,4) with 2HP. Patch is at (4,3). I can use precision_shot on Patch (dist=2, within range=2). I haven't moved yet so no damage penalty. After shooting Patch, I should reposition. Moving to (5,5) or (5,3) maintains distance from Seer at (4,2). Moving to (5,5) puts me further from Seer. Let me shoot Patch first, then move to (5,5) to maintain distance.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Patch is critical at (4,3), distance 2. I'm fortified at (3,4). Moving to (4,4) puts me adjacent to Patch — I can attack. Seer is at (4,2), also nearby. Moving to (4,4) keeps me between enemies and allies while letting me engage Patch who is vulnerable.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "All enemies are out of range (dist 5-7, my range is 2). I need to move closer. Best target will be Bulwark at (4,4). Moving to (4,1) gets me closer but still out of range. Let me check valid moves: (5,0) is farthest east I can go, dist to Bulwark from (5,0) would be |5-4|+|0-4|=5, still out. From (4,1): |4-4|+|1-4|=3, still out. No position in my move range gets me within range 2 of any enemy. Best to advance toward Bulwark - move to (4,1) to close distance while staying away from adjacency.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Patch",
+          "class": "medic",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 3,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Bulwark is at (4,4), dist=2, in scan range. I haven't scanned Bulwark yet — getting their prompt is valuable intel. I can scan Bulwark this turn to deal 1 dmg and reveal their strategy. After scanning, I should reposition — Bulwark is healthy and could close in. Moving to (3,3) puts me at dist=2 from Bulwark but gives me more escape routes and keeps me in range of allies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Seer is at (3,3), dist 3, already scanned. Marksman is out of range at dist 6. Foresight shows enemy Seer tried to scan me last turn at (1,4) — they may do so again. I should move to avoid being scanned while staying useful. Moving to (2,5) keeps me at range to scan Seer again if needed, but Seer is already known. Better to move toward Marksman to get in scan range. Move to (3,5) gets me closer — dist to Marksman from (3,5) would be |4-3|+|1-5|=5, still out of range. Move to (3,4): dist to Marksman = |4-3|+|1-4|=4, exactly in range! Then scan Marksman to reveal their prompt.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Bulwark is the only enemy in range at dist=3, outside my range-2. I need to close to range 2. Moving to (4,3) puts me at dist=1 from Bulwark — too close. Moving to (3,2) gives dist=2 from Bulwark at (4,4): |4-3|+|4-2|=3, still out of range. Best option: move to (4,2) — dist to Bulwark is |4-4|+|4-2|=2, exactly in range. Not adjacent (dist=2). Then use precision_shot. I'm at 2/3 HP so I haven't moved this turn yet (slowed spd:1 means mv1). With mv1 I can move 1 tile. From (4,1) I can reach (4,2). Then precision_shot Bulwark at (4,4) from (4,2): dist=2, in range, and I moved so it does 1dmg.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Both enemies are at distance 4, out of my range-2 precision_shot. I need to close to range 2 or less. Moving to (5,3) gets me to dist 3 from Marksman at (4,2) - still out of range. Moving to (4,5) gets dist ~3 from Seer at (3,3). Best option: move to (5,3) to reduce distance to Marksman to 2 tiles (manhattan: |5-4|+|3-2|=2), putting them in range. Then use precision_shot on Marksman (striker = damage dealer, high priority after medics).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Both enemies are at dist=2, out of melee range. I'm fortified (50% DR) which is valuable. Moving to (4,3) closes distance to Marksman at (4,2) — adjacent — enabling an attack. Longshot is at (5,3) to my SE, Seer ally at (3,4) to my W. Moving south puts me between enemies and allies. Attack Marksman after moving.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Patch",
+          "class": "medic",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 3,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Enemy Seer is adjacent at (3,3) — scan is blocked when adjacent to enemy Vector... wait, Seer is an oracle not a vector. Scan range requires ≤4 tiles and Seer is at dist 1, so scan would work. But I already have their prompt from a previous scan. Better to move away first to maintain range advantage, then scan another target if available. No other enemies visible. I should move to (4,4) to get distance from the adjacent Seer, then recalibrate an ally or wait. Actually, I can attack the adjacent Seer for 1 damage, or move away. Since Seer is already scanned and adjacent, I'll move to (4,4) to reposition, then recalibrate Bulwark at (4,3) — but after moving to (4,4), Bulwark at (4,3) would be adjacent. Recalibrate range is adjacent only. From (4,4), Bulwark at (4,3) is dist 1 — adjacent. That works. Recalibrate Bulwark with a tactical addendum.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "addendum": "Enemy Seer oracle at (3,3) is scanned — prompt: stay at range, scan enemies, recalibrate allies. Focus attacks on the Seer to eliminate their intel capability."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "All three enemies already scanned — prompts known. I'm at (3,3) with Bulwark adjacent at (4,3). Being adjacent to Bulwark (a Vector? No — sentinel) — scan block only applies to enemy Vectors. Bulwark is sentinel, not Vector, so scan is not blocked. Foresight shows enemy Seer will scan toward (4,4) then move to (3,3) — they're coming for me. Priority: move away from Bulwark to avoid melee, then scan enemy Seer to deal damage since we already know their prompt but dealing 1 dmg is still valuable. Move to (2,4) to get distance from Bulwark and Longshot cluster. From (2,4): Seer at (4,4) is dist=2, in scan range. Scan Seer for 1 damage.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Enemy Seer is at distance 4, out of my range 2. I'm at 2/3 HP with speed 1 (slowed). No enemies in range. I should reposition closer to get the Seer in range next turn while maintaining tactical positioning. Moving to (3,3) closes distance to 2 from the Seer at (2,4), putting them in range for precision_shot next turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Enemy Seer is at (2,4), dist 3. No adjacent enemies to attack. I'm fortified at (4,3) with 50% damage reduction. Moving toward the enemy Seer to close distance and pressure them. Move to (3,4) to get closer while staying between allies and enemy. Then shield_wall toward West/North to protect Longshot at (3,3) from the enemy Seer.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "W"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Patch",
+          "class": "medic",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Enemy Seer is at (2,4), distance 2 — within scan range. Foresight shows they tried to scan me last turn. I'm adjacent to enemy Seer (dist=2, not adjacent=1), so scan is not blocked. I should scan to deal damage and reveal info. After scanning, move to (4,3) to maintain range and avoid being adjacent.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "I'm adjacent to Bulwark at (3,4) which blocks my scan ability. I need to move away from Bulwark first to enable scan. Foresight shows enemy Seer will move to (4,4) next turn. All enemy prompts are already known. My priority: reposition to avoid being adjacent to Bulwark (scan blocker), then scan enemy Seer to deal damage since Seer is the biggest threat at range. Moving to (1,4) puts me 2 tiles from Bulwark, safe to scan. From (1,4), Seer at (4,3) is distance 4 (|4-1|+|3-4|=3+1=4), within scan range. I can move to (1,4) then scan Seer.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Enemy Seer is at (1,4), distance 2 — not adjacent, can't attack. Moving to (2,4) closes distance to 1 and puts me between the enemy and my allies at (4,3)/(3,3). Then I can shield_wall West to protect allies from the Seer's direction.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 1,
+              "y": 4
+            },
+            "direction": "W"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "I'm at (3,3) with 2HP, enemy Seer at (1,4) dist=3 in range. Precision_shot has range≤2 tiles, so dist=3 is out of range for precision_shot. Suppressing_fire works at range≤2 tiles too. I need to get closer. If I move to (2,3), enemy Seer would be at dist=2, within range for precision_shot. But I moved, so precision_shot deals 1dmg. Alternatively move to (2,4) - wait that's where Bulwark is. Move to (1,3) - dist to (1,4) would be 1, adjacent, which blocks precision_shot. Move to (2,3): dist to (1,4) = sqrt(1+1)=~1.4, so dist=2 tiles (Chebyshev). That works for precision_shot but I moved so 1dmg. Orders say maintain distance and prioritize precision_shot on high-value targets. Enemy Seer is high-value. I'll move to (2,3) and use precision_shot for 1dmg (moved penalty).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 7,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Patch",
+          "class": "medic",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 3,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "I'm at (1,4) adjacent to Bulwark at (2,4) — scan is blocked when adjacent to enemy Vector, but Bulwark is a sentinel not a Vector, so scan should work. However, I already have all enemy prompts scanned. Bulwark is adjacent and will shield_wall toward me. Longshot at (2,3) used precision_shot on me last turn. I'm at 4/7 HP. Best play: move away to safety to avoid another precision_shot and shield_wall, then I have no new scan targets. Move to (0,5) to get distance from Bulwark and Longshot, then wait. Actually, I could recalibrate an ally — but there are no allies adjacent. I should move to safety. Move to (0,5) gets me away from both threats. No useful abilities since all enemies scanned and no allies adjacent. Wait as second action.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Seer is at (0,5), distance 6 — out of scan range (max 4). I'm at (4,3) with 4HP. Foresight shows Seer targeted me with scan last turn, so they're tracking me. I need to get closer to scan back, but Seer is wounded and my allies Bulwark and Longshot are at (2,4) and (2,3) — adjacent to me. I can recalibrate Bulwark or Longshot to buff them. Longshot is a striker and healthy — recalibrating them could increase their damage output. Alternatively, move toward Seer to get within scan range. Moving to (3,4) or (3,5) gets me closer but still dist 4+ from (0,5). From (1,5) dist would be 1 — too close. Let me check: from (3,5) dist to (0,5) = 3 tiles — in range! Valid move tiles include (3,5). I should move to (3,5) then scan Seer. That's distance 3, within range 4. But wait — Seer is an oracle, so adjacency warning applies if I get adjacent to enemy Vector (not oracle). Seer is an oracle not a vector, so scan shouldn't be blocked. Move to (3,5) then scan Seer at (0,5).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Enemy Seer is at (0,5), dist=4, out of my range-2. I need to close to range 2. Moving to (1,4) gets me closer. From (1,4) the enemy at (0,5) would be dist=sqrt(1+1)=1.4, within range 2. Let me move to (1,4) then use precision_shot.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Enemy Seer is at (0,5), dist 3. I'm fortified at (2,4) with 50% damage reduction. Ally Seer is wounded at (3,5). Moving to (1,5) puts me between the enemy Seer and our wounded Seer, and I'd be adjacent to the enemy Seer's likely approach. Then I can use shield_wall facing W to protect allies from the enemy Seer at (0,5).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 0,
+              "y": 5
+            },
+            "direction": "W"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 7,
+          "position": {
+            "x": 0,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Patch",
+          "class": "medic",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 3,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "I'm at 2/7 HP and critically wounded. Bulwark is adjacent at (1,5) which blocks my scan ability. Longshot targeted me last turn with precision_shot, Bulwark used shield_wall toward me, and enemy Seer scanned me. I need to survive. Moving away is critical — retreat to (0,2) or (0,3) to break adjacency with Bulwark and get out of Longshot's likely range. After moving, I can scan the enemy Seer (already wounded, prompt known) or wait. Best play: move to (0,2) to maximize distance, then scan enemy Seer at (3,5) — dist would be ~3 tiles, still in range. This removes adjacency block on scan and deals 1 damage to the wounded Seer.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": "Out of range (max 4)"
+        },
+        {
+          "unit": "Seer",
+          "class": "oracle",
+          "thinking": "Seer is at (0,2), dist 6 — out of scan range (max 4). Foresight shows enemy Seer will move to (3,5) next turn to scan me — dangerous. I need to reposition. Moving to (2,3) puts me closer to Seer (dist ~3) for scan range next turn while staying away from (3,5). Actually, let me check: from (2,3) to (0,2) = dist sqrt(4+1)=~2.2, within 4. After moving to (2,3), I can recalibrate Bulwark at (1,5) — too far. Bulwark is at (1,5), Longshot at (1,4). From (2,3), Longshot at (1,4) is adjacent (dist ~1.4). I can recalibrate Longshot to buff them. Or move closer to scan Seer. Move to (2,3) then recalibrate Longshot at (1,4) who is adjacent.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 1,
+              "y": 4
+            },
+            "addendum": "Enemy Seer is at (0,2), wounded. Priority: precision_shot the Seer to finish them off. They are within your range."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Longshot",
+          "class": "striker",
+          "thinking": "Enemy Seer is at (0,2), dist=3, wounded. I'm at (1,4) with spd1. precision_shot has range≤2 tiles, so dist=3 is out of range unless I move closer. Move to (1,2) to get dist=1 from Seer at (0,2), then precision_shot. But wait — precision_shot is blocked if adjacent to enemy. (1,2) is not adjacent to (0,2) (dist=1 tile diagonal? No, (1,2) to (0,2) is dist=1 Manhattan). Adjacent means next to each other. If I'm at (1,2), the Seer at (0,2) is 1 tile away (adjacent), which blocks precision_shot. Try (1,3): dist to (0,2) = |1-0|+|3-2| = 2, within range=2 and not adjacent. I moved so precision_shot does 1dmg. Seer is wounded so likely low HP — 1dmg should finish or pressure them. Move to (1,3), then precision_shot the Seer.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 0,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I'm at (1,5) with fortify active. Enemy Seer is at (0,2), dist 4 — out of range. Allies Longshot and Seer are at (1,3) and (2,3). I need to push south to close distance and protect allies. Moving to (1,4) keeps me between allies and enemy, then I'll shield_wall south toward the threat to protect the wounded Seer at (2,3).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 7,
+          "position": {
+            "x": 0,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Patch",
+          "class": "medic",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Longshot",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 3,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Seer",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "opponent",
+    "totalTurns": 8,
+    "reason": "opponent eliminated all enemies"
+  },
+  "endedAt": "2026-03-11T05:04:45.247Z"
+}

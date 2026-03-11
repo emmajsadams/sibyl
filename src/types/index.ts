@@ -37,19 +37,19 @@ export const BALANCE: BalanceConfig = {
   maxRounds: 20,
   unitStats: {
     specter: { maxHp: 4, movement: 3, range: 1, speed: 3 }, // buffed HP 3→4 (39.5%@38g in last 30) — over-nerfed, restoring to 4
-    striker: { maxHp: 3, movement: 2, range: 2, speed: 1 }, // nerfed HP 4→3 (61.7%@243g overall)
+    striker: { maxHp: 3, movement: 2, range: 2, speed: 1 }, // still 79%@43g recent — nerfing precisionShot dmg
     oracle: { maxHp: 7, movement: 3, range: 3, speed: 3 }, // buffed HP 6→7 (39.5%@43g in last 50)
     medic: { maxHp: 5, movement: 3, range: 3, speed: 2 }, // nerfed speed 3→2 (77%@26g in last 50, still OP after HP+patch nerfs)
     vector: { maxHp: 8, movement: 2, range: 2, speed: 1 },
-    sentinel: { maxHp: 8, movement: 2, range: 1, speed: 1 }, // nerfed HP 9→8 (71.3% win rate @ 178 games)
+    sentinel: { maxHp: 7, movement: 2, range: 1, speed: 1 }, // nerfed HP 8→7 (72.5%@40g recent, still too tanky)
   },
   abilities: {
     attack: { damage: 1 },
     shadowStrike: { damage: 1 },
     breach: { maxUses: 2, cooldown: 2, duration: 3, range: 2 },
     cloak: { duration: 2 },
-    precisionShot: { damage: 2, movedDamage: 1 }, // striker still 76%@192g — sentinel HP nerf should help indirectly
-    scan: { damage: 1 },
+    precisionShot: { damage: 1, movedDamage: 1 }, // nerfed dmg 2→1 (striker 79%@43g recent, dominant outlier)
+    scan: { damage: 2 }, // buffed dmg 1→2 (oracle 43%@30g recent, underperforming)
     suppressingFire: { damage: 1 },
     patch: { maxUses: 2, healAmount: 1 }, // nerfed uses 3→2 (medic 70%@30g in last 50, still OP after heal+speed nerfs)
     overclock: { selfDamage: 1 },
