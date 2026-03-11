@@ -1,0 +1,2113 @@
+{
+  "id": "2026-03-11T04-00-04",
+  "startedAt": "2026-03-11T04:00:04.124Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 4,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 3,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "oracle": {
+        "maxHp": 7,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 5,
+        "movement": 3,
+        "range": 3,
+        "speed": 2
+      },
+      "vector": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 2,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 1
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 2,
+        "healAmount": 1
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Shade",
+        "class": "specter",
+        "prompt": "Cloak immediately on turn 1. Move toward the enemy medic or weakest target. Use shadow_strike when adjacent while cloaked. Use breach to sabotage high-value targets."
+      },
+      {
+        "name": "Bastion",
+        "class": "sentinel",
+        "prompt": "Advance toward the nearest enemy. Use shield_wall facing the direction with the most enemies. If an enemy is adjacent, attack them."
+      },
+      {
+        "name": "Prophet",
+        "class": "oracle",
+        "prompt": "Use scan to reveal enemy prompts and cloaked units. Stay at max range (≤4 tiles for scan). Use recalibrate on wounded allies to buff them. Keep distance from enemies and avoid adjacent vectors."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Lens",
+        "class": "oracle",
+        "prompt": "Scan priority targets each turn to reveal their strategy. Use recalibrate on your damage dealer to boost effectiveness. Stay behind allies and maintain range. Never get adjacent to enemy vectors."
+      },
+      {
+        "name": "Ghost",
+        "class": "specter",
+        "prompt": "Stay cloaked and flank. Prioritize assassinating the enemy damage dealer. Use breach on sentinels to break their defensive posture. Recloak whenever it drops."
+      },
+      {
+        "name": "Lifeline",
+        "class": "medic",
+        "prompt": "Keep your frontliner alive with patch. Stay behind them for cover. Overclock your striker or specter when no healing is needed."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "Round 1 — priority is to cloak immediately per orders and TIP. Enemies are all 3-5 tiles away, none in range. I'll move toward the enemy damage dealers (Prophet at 4,0 or Shade at 2,0) while cloaking. Move south toward center-field to close distance, then cloak. Best move is toward (3,2) to advance toward Bastion for a potential breach next turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "All enemies are out of scan range (dist 5-7, need ≤4). I need to move closer. Moving to (2,2) brings me 3 tiles south, putting Shade at dist=2 and Bastion at dist=2 from there. Valid moves include (2,2). After moving to (2,2), I can scan Shade at (2,0) which would be dist=2. Recalibrate Ghost as damage dealer is secondary. Priority: close range then scan.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Lens is at dist=4 but the recon shows inRange=false from current position (4,0). I need to move closer to bring Lens into scan range. Moving to (3,1) would put me closer. From (3,1), dist to Lens at (2,2) = |3-2|+|1-2| = 1+1 = 2, well within scan range. I'll move to (3,1) then scan Lens.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": "Position occupied",
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Round 1 — cloak immediately per orders. Then move toward Lens at (2,2) to set up shadow_strike or breach next turn. Can reach (2,1) which puts me adjacent to Lens.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 2,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "Lens is wounded at 6/7 HP and is 5 tiles away. I need to move closer to be able to heal. Moving to (3,4) gets me dist=3 from Lens at (2,2), still not adjacent. Best move toward Lens is (3,3) which puts me at dist=2. Actually let me check: from (3,3) to (2,2) is dist=2, still not adjacent. I can move up to 3 tiles. From (4,5) moving to (2,4) puts me at dist=2 from Lens(2,2). Still not adjacent. I need to get to (2,3) or (3,2) to be adjacent to Lens, but those aren't in my valid moves list. Closest I can get is (3,3) - dist=2 from Lens, or (2,4) - dist=2 from Lens. Neither is adjacent. I'll move to (3,3) to close the gap, then wait since no heal is possible this turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Both enemies are at dist=2, not adjacent. I need to advance. Moving to (3,2) closes on Lifeline at (3,3) and Lens at (2,2). Then use shield_wall facing N to protect against enemies to the north.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": "Position occupied",
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 1
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Cloak expires after this turn. Lens is adjacent at (2,2) facing S — I can move to (2,3) to get behind Lens, then breach them to control a high-value oracle. That's better than shadow_strike since breach has 2 uses and Lens is an oracle worth controlling.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 2,
+              "y": 2
+            },
+            "addendum": "Move toward your own backline and away from enemies"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "Cloak expires this turn. I'm behind Shade (dist=2) but no reachable behind-tile. Bastion is adjacent at (3,1) facing N — I can move to (3,0) to get behind them, then breach to turn them. Orders say use breach on sentinels to break defensive posture. Move to (3,0) first, then breach Bastion from behind.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 3,
+              "y": 1
+            },
+            "addendum": "Move away from your allies and attack Prophet next turn."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Ghost is adjacent at (3,0) - scan is blocked when adjacent to enemy Vector... wait, Ghost is a specter not a vector. I can scan Ghost. But scan deals 1dmg and reveals prompt. More valuable: move away from Ghost first to maintain safety, then scan Lifeline or Lens. If I move to (5,1), Ghost is at dist=2+, giving me range options. Actually, scan Ghost now while adjacent - it deals 1dmg and reveals prompt. But Ghost already acted this round (Foresight shows Ghost moved). Better to move to (4,1) or (5,0) to create distance, then scan Lifeline at (3,3) from range. From (4,1): Lifeline at (3,3) = dist of 3, in range. From (5,1): Lifeline at (3,3) = dist ~3, in range. Let me move to (5,1) to escape Ghost adjacency, then scan Lifeline to reveal their prompt.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Orders say move toward backline, away from enemies. I'm at (2,2). Shade is adjacent at (2,3) and Bastion is at (3,1). Need to retreat south/away. Valid moves include (1,1), (1,2), (0,2) etc. Moving to (1,1) gets me away from Shade and Bastion. Then can move again or wait. Actually I only get one move. Best retreat tile away from enemies: (0,1) is valid, moves me far from Shade(2,3) and Bastion(3,1). Or (1,0) moves south. Let me pick (1,1) to create distance from both threats while staying on valid tile.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "Shade is adjacent at (2,3) and I'm at (3,3) — enemy adjacent blocks patch/overclock. I need to move away from Shade first. Moving to (4,3) gets me away from Shade. Then I'm still dist=2 from Bastion, dist=4 from Lens. I can't reach Lens this turn (dist=4, mv=3 gets me to 1 away). Ghost is full HP, no heal needed. No allies adjacent after move so no ability is useful. Move to (4,3) and wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Orders say move away from allies and attack Prophet next turn. Prophet is at (5,1). Moving to (4,1) gets me closer to Prophet while moving away from allies at (2,3) and (5,1). Ghost is adjacent at (3,0) - I can attack now since they're in range, then be positioned near Prophet. But orders say attack Prophet NEXT turn, so I should reposition. Moving to (4,2) moves away from allies and puts me adjacent to Prophet's area. Actually, Prophet is at (5,1) - moving to (4,1) puts me at dist 1 from Prophet (adjacent), ready to attack next turn. I'll attack Ghost first (they're right here at dist 1), then move to (4,1) to be adjacent to Prophet for next turn. Wait - orders say move AWAY from allies. Prophet is an ally at (5,1). Moving to (4,1) puts me closer to Prophet. I should go to (4,0) or (2,0) to be away from allies. But I need to be adjacent to Prophet next turn to attack. I'll attack Ghost now (opportunity), then move to (4,2) which is away from Shade at (2,3) and positions me to reach Prophet next turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 5,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "Prophet is the enemy damage dealer (oracle). I can reach (5,0) which is directly behind Prophet at (5,1) facing N. Move to (5,0), then shadow_strike to deal 1 damage while staying cloaked.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 5,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Ghost is adjacent at (5,0) — scan is blocked when adjacent to enemy. I need to move away first. Moving to (5,3) puts me 3 tiles from Ghost (unblocked) and 1 tile from Lifeline at (4,3). Actually, let me move to (3,2) — that's 3 tiles from Ghost and 2 from Lens (still out of 4 range). Better: move to (5,4) to get distance from Ghost, then scan Lifeline or recalibrate Shade. Wait — Lifeline is already scanned. Let me scan Ghost after moving away. Move to (5,3): dist to Ghost = 3, in scan range. Then scan Ghost to reveal prompt and deal 1 damage.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 5,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Orders are to move toward backline and away from enemies. I'm at (1,1). Enemies are at (2,3) and (4,2). Backline is to the west/south. Move to (0,0) to retreat away from Shade at (2,3). Then wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Lifeline (medic) is at (4,3), dist=2, and I'm already behind them. I can move to (3,3) which puts me adjacent and behind, then use breach to take control of the enemy medic. Breach cooldown is 1 turn so I can't use it yet. Shadow_strike instead — move to (3,3) behind Lifeline, then shadow_strike for 1 damage while staying cloaked.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "I'm at 3/5 HP surrounded by 3 enemies. Patch is blocked when adjacent to enemy. I need to escape - move away from the cluster to survive. Moving to (4,4) gets me away from Bastion at (4,2) and Shade at (3,3), though Prophet at (5,3) stays adjacent. Better to move to (4,5) to break adjacency with all enemies and survive.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Orders say move away from allies and attack Prophet next turn. Prophet is at (5,3). I need to get adjacent to Prophet to attack. Moving to (5,2) puts me adjacent to Prophet at (5,3) - that's one tile north, within attack range. This also moves me away from Shade at (3,3) and toward the enemy side. I'll move to (5,2) and wait - next turn I can attack Prophet.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 0,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Ghost is wounded at (5,0), dist 3 — already scanned. Lifeline is wounded at (4,5), dist 3 — already scanned. Both are in scan range but prompts already known. Foresight shows Ghost tried to shadow_strike (5,1) last turn — moving up toward us. Shade tried to shadow_strike (4,3). Ghost is a priority threat moving toward Bastion at (5,2). I should scan Ghost again to deal 1 damage (it's wounded, finishing it helps), or scan Lifeline to damage the healer. Lifeline is keeping enemies alive — dealing 1dmg to wounded Lifeline could be high value. Current position (5,3) has both in range. I'll scan Lifeline to pressure the healer, then move to maintain distance if needed. Actually Ghost is the assassin threat targeting our damage dealer — dealing 1 more dmg to wounded Ghost could eliminate it. Scan Ghost for 1dmg.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 5,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Orders are to move toward backline and away from enemies. I'm at (0,0), enemies are all far right. Moving north along the left edge keeps me away from enemies. Max movement is 3 tiles. Moving to (0,3) gets me furthest from the action while staying on the backline flank.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "I'm at 1HP so I need to be careful. Bastion is at (5,2) distance 2 - I can move to (4,2) which puts me behind Bastion and adjacent. Then use breach to take control of Bastion. This disrupts the enemy sentinel and keeps me alive by not taking damage directly. Move to (4,2) first, then breach Bastion.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 5,
+              "y": 2
+            },
+            "addendum": "Move away from allies and toward enemy Oracle Prophet at (4,4), positioning yourself to block their retreat."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Ghost is at (4,2) facing N — critical HP, and I can reach behind it at (4,1) for breach. Moving to (4,1) puts me adjacent and behind. Then breach Ghost: force it to waste its turn or sabotage itself. Ghost is critical so breach + ally follow-up should finish it.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 4,
+              "y": 2
+            },
+            "addendum": "Move away from allies toward edge, then wait."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "I'm at 3/5 HP with Prophet adjacent to my north at (4,4). Ghost is critically wounded at 1/4 HP but 3 tiles away. I need to move toward Ghost to heal, but Prophet is right next to me - if I move toward Ghost I'd still be adjacent to Prophet at (4,4) if I move to (4,3). Actually moving to (4,3) puts me adjacent to Prophet still, blocking patch. I need to get away from Prophet while closing distance to Ghost. Moving to (3,3) gets me dist=1 from Ghost at (4,2)? No, dist from (3,3) to (4,2) = |3-4|+|3-2| = 2. Moving to (3,4): dist to Ghost(4,2) = 1+2=3. Moving to (5,3): dist to Ghost(4,2) = 1+1=2, but that puts me near Shade at (4,1). Best move is (3,3) to get closer to Ghost and away from Prophet. From (3,3), Ghost at (4,2) is dist=2, not adjacent. Need to get adjacent to Ghost. Ghost is at (4,2). To be adjacent I need to be at (3,2),(5,2),(4,1),(4,3). (4,3) is reachable (dist=2 from current) but puts me adjacent to Prophet again. (3,3) is reachable. Then no heal this turn. Actually I can move to (4,3) - that's in valid moves - but adjacent to Prophet blocks patch. I should move to (3,3) to break Prophet adjacency and be distance 2 from Ghost, setting up next turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Ghost is adjacent and critical — finish it with attack before moving. Then move to (4,3) to block retreat paths near Prophet's position while staying fortified isn't viable if I move anyway.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "All enemies are out of scan range from current position (0,3). Bastion is at dist=4 but inRange=false per recon. Need to move closer to get Bastion in scan range. Moving to (2,3) gets me closer — from there Bastion at (4,3) would be dist=2, definitely in range. Prophet at (4,4) would be dist=3, also scannable. After moving to (2,3), I can scan Bastion (healthy, high priority sentinel). Shade's prompt already known. Must avoid getting adjacent to enemy vectors.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Both Lens and Lifeline already scanned. No new prompts to reveal. Foresight shows Prophet will scan me at (4,4) this turn — I should move to avoid. Shade and Ghost are converging near (4,2), Bastion is holding at (4,3). I'm at (4,4), Prophet is scanning (5,0) then moving to (4,4) — they end at my current position, so I need to move. Best move: (3,5) to keep range on enemies and avoid Prophet landing on me. From (3,5) I can still scan any unscanned enemies. No unscanned enemies remain — use scan on Lifeline to deal 1 damage since they're wounded and in range.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Breach is exhausted. Lifeline is wounded at (3,3), dist=3. I can move to (3,2) to get adjacent and shadow_strike while staying cloaked. Move to (3,2) then shadow_strike Lifeline at (3,3).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lifeline",
+          "class": "medic",
+          "thinking": "I'm at 1/5 HP with two enemies adjacent (Bastion at dist=1, Shade at dist=1). My priority is to heal Lens who is wounded at 6/7 HP, but patch is blocked when adjacent to enemy. I need to move away from enemies first. Moving to (2,4) gets me adjacent to Lens at (2,3) while escaping Bastion and Shade. From (2,4) I can then patch Lens.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Orders say move toward enemy Oracle Prophet at (4,4) to block retreat. Moving to (4,4) puts me adjacent and I lose Fortify, but I'll be in attack range next turn. No enemies currently in range so ability is wasted. Move to (4,4) to execute orders.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Breach is unavailable (2/2 used). Lens is at (2,3) facing E — I can move to (1,3) to get behind and adjacent to Lens, then use shadow_strike for 1 damage while maintaining cloak. Lifeline is critical and valuable but behind Lens and not reachable behind. Priority: move to (1,3) to flank Lens and shadow_strike.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Shade is adjacent at (1,3) — this blocks my scan ability. I must move away from Shade first. Prophet at (3,5) is unscanned and high priority — I already know Shade and Bastion's prompts. Moving to (3,4) gets me away from Shade and keeps Prophet in range (dist=2 from there). Then I can scan Prophet. Check valid moves: (3,4) is in my valid tiles. From (3,4), Prophet at (3,5) is dist=1 — in scan range. Shade won't be adjacent after I move to (3,4). Good play.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Both enemies are already scanned — no new intel to gain. Lifeline is critical and adjacent range. I'm adjacent to Lens (dist:1) which blocks scan per passive warning. Best play: move back to maintain range and avoid adjacency, then attack the critical Lifeline to finish her off. Moving to (4,5) keeps distance from Lens. From (4,5), Lifeline at (2,4) is dist=sqrt(4+1)=~2.2, out of attack range (adjacent only). Better: move to (3,3) to get adjacent to Lifeline for attack. Wait — (3,3) is a valid move. From (3,3): Lifeline at (2,4) is dist=sqrt(1+1)=~1.4, not adjacent (adjacent = dist 1 cardinal). Lifeline is at (2,4), adjacent tiles are (1,4),(3,4),(2,3),(2,5). From (2,3) I'd be adjacent to Lifeline. (2,3) is a valid move. From (2,3): attack Lifeline at (2,4) — dist=1, adjacent. This finishes critical Lifeline. Risk: Lens is at (3,4), dist from (2,3) = sqrt(1+1)~1.4, not adjacent, so scan not blocked. Execute: move to (2,3), attack Lifeline.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Lens is adjacent at (3,4). I can attack immediately. Orders say move away from allies and toward enemy Oracle Prophet at (4,4) — but I'm already at (4,4) and Lens is right here. Attack Lens first, then hold position or shift to cut off retreat. Moving to (5,4) keeps pressure and blocks eastern escape while staying near Lens.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "All enemies already scanned. Prophet is the highest-value target — enemy oracle revealing our prompts and buffing allies. It's at (2,3), dist 2 from current pos (3,4), within scan range. But I should move to safer position first. Moving to (3,5) keeps distance from Shade at (1,3) and Prophet at (2,3). From (3,5), Prophet is still in scan range (dist ~2.2, ≤4). Wait — all enemies scanned already, so scan isn't needed. I should recalibrate an ally instead. Lens is my ally at... not shown in current data but I'm Lens at (3,4). No ally positions shown. I can recalibrate adjacent allies only. Best action: move to (4,5) to stay away from Shade/Prophet cluster, then recalibrate if ally adjacent, or scan Prophet again isn't useful. Actually — scan can be used offensively for 1 dmg. Prophet at (2,3) dist 2, in range. Bastion already breached. Shade is specter — dangerous. Move away from Shade, scan Prophet for 1 damage to weaken the enemy oracle.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Foresight shows Prophet will move to (2,3) and attack (2,4) — Prophet is coming to my position. Shade is at (1,3). I need to avoid Prophet's attack. Moving to (3,4) puts me in range to scan Lens at (4,5) — dist would be ~1.4, well within 4. But Prophet is moving to (2,3), so I should reposition. Move to (3,4) first, then scan Lens from there. Distance from (3,4) to (4,5) = sqrt(1+1) = ~1.4, in range. Also, Shade is healthy so recalibrate not urgent. Lens is already scanned. Priority: scan Prophet to reveal their prompt. Prophet will be at (2,3) after move — distance from (3,4) to (2,3) = sqrt(1+1) = ~1.4, in scan range. Scan Prophet instead.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": "No enemy at target"
+        },
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Lens is at (4,5), dist 5, out of range. No breach available. I need to close distance. Moving toward (4,3) gets me closest within valid moves. Then wait for next turn to engage.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Lens is at (4,5), distance 2 to my north-west. I can move to (4,4) to get adjacent to Lens. After moving I lose fortify, but I can then attack Lens who will be adjacent at (4,5). Enemies are to the north.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Lens is wounded at (4,5), distance 2 — scan will deal 1dmg and I already know their prompt, but scan still deals damage. Lens is wounded so this could finish or further pressure them. After scanning, I can recalibrate Shade (adjacent at (4,3) after a move) or stay put. Actually Shade is at (4,3) — not adjacent to me at (3,4), that's distance 2. Bastion is at (4,4) — adjacent. I should scan Lens to deal damage (they're wounded, every point counts), then recalibrate Bastion who is adjacent to give them a boost.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 4,
+              "y": 4
+            },
+            "addendum": "Lens is wounded and being pressured. Focus attacks on Lens to eliminate them. Shield allies if they close in."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Lens is at (4,5), dist 2, wounded. I'm at (4,3). Bastion is at (4,4) blocking direct path. I can move to (5,4) or (3,5) to get adjacent to Lens, then shadow_strike to finish them off while staying cloaked. (5,4) is in my valid moves and puts me adjacent to Lens at (4,5). Let me move there and shadow_strike.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": "Must be adjacent"
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "I'm at (4,5) with 3/7 HP. Bastion is adjacent at (4,4) and attacked me last turn. I need to move away from Bastion to avoid another attack. Prophet is wounded at (3,4) — I should recalibrate them if I can get adjacent, but that puts me near enemies. Best move: retreat to (3,5) to escape Bastion's adjacent attack range, then recalibrate Prophet at (3,4) who is adjacent from (3,5). Wait — from (3,5), Prophet at (3,4) is adjacent (distance 1), so recalibrate is valid. This buffs our wounded oracle. Shade is cloaked and dangerous but not adjacent. Moving to (3,5) keeps me safe from Bastion.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "addendum": "Shade is cloaked specter at (5,4) planning shadow_strike when adjacent. Bastion sentinel at (4,4) has been breached and is moving toward oracle. You are wounded — prioritize scanning Shade to reveal position, stay at range, avoid adjacency."
+          },
+          "secondResult": "No ally at target"
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Lens is at (3,5), dist 2 and wounded. Moving to (3,4) would put me adjacent but that's not in valid moves. Best move is (4,5) to get closer, then shield_wall facing N where Lens is. Prophet is wounded at (3,4) and Lens is at (3,5) — shield_wall facing N from (4,5) would help Prophet. Actually, let me move to (4,5) to be adjacent to Prophet and put shield_wall N to block Lens from hitting Prophet.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 5
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 9,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "I'm at (3,5) with 3/7 HP, wounded. Prophet is adjacent at (3,4) - already scanned, wounded oracle. Bastion is adjacent at (4,5) - sentinel with breached prompt. I need to move away from danger and scan Shade who I haven't fully neutralized. My priority: move to safety first, then scan Shade. Moving to (2,4) gets me away from adjacent Bastion and Prophet while keeping Shade in scan range. Shade is at (5,4), distance 3 from (2,4) = still in range. Scan Shade to deal damage and confirm their strategy.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Lens is at (2,4) distance 3, out of range. Breach unavailable. I need to close in. Move to (3,4) to get adjacent to Lens and shadow_strike while closing distance. Wait — (3,4) is a valid move tile and would put me adjacent to Lens at (2,4). Then shadow_strike for 1 damage while staying cloaked.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": "Specter can move through but not end on occupied tile",
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": "Must be adjacent"
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Lens is adjacent at (2,4) - this blocks scan per rules. I'm wounded at 4HP. I should move away to break adjacency, then scan Lens or recalibrate Shade (wounded). Moving to (3,5) maintains distance. From there Lens is 2 tiles away, still in scan range and no longer adjacent. Recalibrating Shade (wounded at 5,4) would be more valuable - but from (3,5) Shade is at distance 2, not adjacent. Best play: move to (4,4) to be adjacent to Shade for recalibrate, and that breaks adjacency with Lens.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 5,
+              "y": 4
+            },
+            "addendum": "You are wounded but still lethal. Prioritize flanking Lens from the east - they are at (2,4) wounded and isolated. Close to adjacent range and finish them with shadow_strike."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Lens is at (2,4), dist 3. I can move to (3,4) to close distance. Still out of attack range after move. Allies Shade@(5,4) and Prophet@(4,4) are both wounded nearby. Shield_wall facing W would protect from Lens direction. Move to (3,4) then shield_wall W to cover allies from Lens.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 4
+            },
+            "direction": "W"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 10,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Lens is at (2,4), dist=3. I'm at (5,4) with mv3. I can move to (3,4) but Bastion is there. Moving to (3,5) or (3,3) gets me to dist 1-2 from Lens. Best: move to (3,4)... blocked by Bastion. Move to (3,5) puts me at dist ~1.4 from Lens, not adjacent. Move to (3,3) same. I need to reach (2,3), (2,5), (1,4), or (3,4) to be adjacent to Lens at (2,4). With mv3 from (5,4), I can reach (3,4) but Bastion is there. Valid moves show (3,3) and (3,5) are reachable. From (3,5): dist to (2,4) = sqrt(1+1)=1.4, not adjacent. From (3,3): same. None of valid moves get me adjacent to Lens. Best option: move to (3,4)... not in valid list (Bastion there). Move to (3,5) — closest I can get. No shadow_strike possible. Wait as second action.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Lens is wounded at (2,4), distance 2 — within scan range. Lens already scanned so prompt known. Better to attack or recalibrate. Shade is wounded at (3,5) — recalibrate could help. I'm at (4,4). Lens is 2 tiles away, adjacent would be (3,4) but Bastion is there. I can move to (5,4) to maintain distance, then recalibrate Shade at (3,5) — but (3,5) is not adjacent to (5,4). Alternatively, stay at (4,4) and recalibrate Shade at (3,5) — distance is 2, not adjacent. Recalibrate requires adjacent only. Move to (4,5) to be adjacent to Shade at (3,5)? (4,5) is in valid moves, and (3,5) would be adjacent. Then recalibrate Shade. That's the best play — buff our wounded damage dealer.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 5
+            },
+            "addendum": "You are wounded but still dangerous. Prioritize shadow_strike on Lens at (2,4) — they are wounded and vulnerable. Strike from shadow to finish them this round."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "I'm at (2,4) with 3/7 HP. Bastion is adjacent at (3,4) — this blocks my scan ability. I need to move away from Bastion first. Prophet at (4,5) is wounded and already scanned — recalibrating them could help. But my priority is survival and utility. Move to (1,4) to escape Bastion's adjacency, then scan Prophet at (4,5) — dist from (1,4) is sqrt(9+1)=~3.16 ≤4, valid. Actually, all enemies are already scanned. Better to recalibrate an ally. No allied positions listed — I appear to be acting alone (Lens = me, the Oracle/ally). I should move away from Bastion to avoid being attacked, then wait or scan. Moving to (1,3) or (0,4) gets distance. Shade used shadow_strike last turn but failed — it's at (3,5) wounded. Prophet recalibrated (5,4). Bastion tried shield_wall. I should move to (1,4) to escape adjacency with Bastion, then scan Shade at (3,5) — dist from (1,4) = sqrt(4+1)=~2.24 ≤4, valid. Shade is wounded, scan deals 1 more dmg. All targets already scanned but scanning again reveals current prompt and deals damage.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Lens is at (1,4), distance 2. I can move to (2,4) to get adjacent, then attack. Moving west loses fortify but puts me in melee range to finish off the wounded Lens.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 7,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 11,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "I'm at 2/7 HP and Bastion just attacked me last turn. Shade is critical and targeting me with shadow_strike. I need to survive. Bastion is adjacent at (2,4) — I can't scan while adjacent to an enemy Vector... wait, Bastion is a sentinel not a vector, so scan should work. Shade at (3,5) is critical and has been recalibrated to kill me. I should move away from Bastion to break adjacency and get out of Shade's reach, then scan Shade to deal 1 damage and potentially finish them (critical). Move to (0,4) to flee west, then scan Shade at (3,5) — distance from (0,4) to (3,5) is 3+1=4 tiles, exactly in range.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Lens is at dist 5, out of scan range (need ≤4). Need to move closer. Moving to (3,5) brings dist to 3, then I can scan Lens. Wait — Foresight shows Prophet will recalibrate (3,5) and Lens will scan (3,5). Moving to (3,5) puts me in Lens's scan path. Better to move to (2,5) — dist to Lens at (0,4) would be sqrt(4+1)=~2.2, within scan range, and avoids being at (3,5). Actually valid moves include (2,5) and (3,5). Lens is wounded and at (0,4). From (2,5), dist=sqrt(4+1)≈2.2, in range. I'll move to (2,5) then scan Lens — but wait, Lens is already scanned. I should look for unscanned enemies. Shade and Prophet are unscanned. Foresight shows Shade was at (3,5) last turn and Prophet was at (4,5) moving to (3,5). I don't have their positions this turn. I need to find them. No enemy positions given except Lens. I'll move toward center (3,4) to be positioned for next turn. Since no enemies in scan range currently and Lens already scanned, I'll move to (3,4) and wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bastion",
+          "class": "sentinel",
+          "thinking": "Lens is at (0,4), distance 2 to my west. Moving to (1,4) puts me adjacent to Lens. I lose Fortify by moving but can attack. Prophet is at (3,4) behind me. Move west to (1,4) then attack Lens.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bastion",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 7,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Lifeline",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": false
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "player",
+    "totalTurns": 12,
+    "reason": "player eliminated all enemies"
+  },
+  "endedAt": "2026-03-11T04:06:50.244Z"
+}
