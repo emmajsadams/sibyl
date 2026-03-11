@@ -1,0 +1,2251 @@
+{
+  "id": "2026-03-11T14-00-04",
+  "startedAt": "2026-03-11T14:00:04.132Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 4,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 3,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "oracle": {
+        "maxHp": 7,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 5,
+        "movement": 3,
+        "range": 3,
+        "speed": 2
+      },
+      "vector": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 7,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 1,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 2
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 2,
+        "healAmount": 1
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Phantom",
+        "class": "specter",
+        "prompt": "Stay cloaked and flank. Prioritize assassinating the enemy damage dealer. Use breach on sentinels to break their defensive posture. Recloak whenever it drops."
+      },
+      {
+        "name": "Aegis",
+        "class": "sentinel",
+        "prompt": "Advance toward the nearest enemy. Use shield_wall facing the direction with the most enemies. If an enemy is adjacent, attack them."
+      },
+      {
+        "name": "Lens",
+        "class": "oracle",
+        "prompt": "Scan early to give your team intel on enemy prompts. Target enemy specters with scan to track them after cloak. Use recalibrate on allies who need tactical adjustments. Stay safe at range behind your front line."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Wraith",
+        "class": "specter",
+        "prompt": "Cloak and move behind enemy lines. Target isolated enemies with shadow_strike. Save breach for the most dangerous enemy. Avoid being caught uncloaked."
+      },
+      {
+        "name": "Warden",
+        "class": "sentinel",
+        "prompt": "Push forward aggressively. Shield_wall facing the enemy cluster. If flanked, turn to face the biggest threat. Attack when possible."
+      },
+      {
+        "name": "Lattice",
+        "class": "vector",
+        "prompt": "Place traps on tiles enemies are likely to move through. Use pulse if 2+ enemies are adjacent. Stay near allies for mutual support."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Round 1, all enemies are far away (dist 8-9). Perfect time to cloak and advance toward the enemy damage dealer (Wraith at 5,4). Move northeast to close distance while cloaking.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Lattice (vector) is exactly at dist=4 from my current position (3,1) to (4,4): |4-3|+|4-1|=1+3=4. But wait, the recon says 'inRange: false' for Lattice at dist=4. Scan requires ≤4 tiles. Dist=4 should be valid... but the pre-computed data says outRange. I'll move north to (3,4) to close distance, then scan Lattice. From (3,4): dist to Lattice(4,4) = |4-3|+|4-4|=1, in range. But I need to stay safe. Move to (3,3): dist to Lattice = |4-3|+|4-3|=2, in range. Move to (3,2): dist to Lattice = |4-3|+|4-2|=3, in range. I can move to (3,2) and scan Lattice from there safely.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": "Cannot use scan — adjacent to enemy Vector (Denial)"
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Round 1 - cloak first, then move to (3,3) which is behind Lens. From there I can shadow_strike next turn while cloaked.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Lens is at (3,4), distance 2 — nearby but not yet adjacent. Orders say push forward aggressively. Move to (3,5) to close on Lens and stay near Lattice at (4,4). Then shield_wall facing South to cover Wraith/Lattice cluster from the Aegis threat pushing up from below.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 4
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Lens is adjacent at (3,4). I can't use trap while adjacent to an enemy Vector would block, but trap is blocked when adjacent to enemy. However, pulse hits all units within 1 tile - Lens is at distance 1, so pulse will hit Lens. My ally Wraith is at (3,3) which is also within 1 tile, so pulse would damage them too. Better to use attack on Lens directly (adjacent). Then move away to place a trap on a likely enemy path.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "No enemies in range. Advance toward nearest enemy (Warden at 3,5, dist 6). Move northeast toward (3,1) to close distance. No ability targets available.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Last turn scan failed because Lattice was adjacent. Now Lattice is at (5,4) dist=2 and Warden is at (3,5) dist=1. I'm at (3,4). Warden is adjacent to me (dist=1) which is dangerous. I need to scan an enemy — Lattice is a vector (high priority to reveal) at dist=2, within scan range=4. But I must NOT be adjacent to a vector to scan. Lattice is at dist=2 so not adjacent — scan should work from current position. However Warden is right next to me at (3,5). I should move away first to be safer, then scan Lattice. Moving to (4,3) puts me dist=2 from Lattice (5,4): |4-5|+|3-4|=2, still in range. That also gets me away from Warden. From (4,3), Lattice at (5,4) is dist=2, not adjacent to vector, scan works. Let me move to (4,3) then scan Lattice.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Cloak expires after this turn. Both enemies are out of reach. I need to close distance toward Warden (sentinel at 3,5) since breach on sentinels is priority and it's closer. Move to (2,4) to get within striking range next turn. No ability this turn since nothing is in range.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Cloak has only 1 turn remaining. Lens (oracle) is adjacent at (4,3) facing S — I can move to (4,4) to get behind Lens, then breach or shadow_strike. Moving to (4,4) puts me behind Lens and adjacent, perfect for breach. Breach is high value on an oracle. Use move to (4,4), then breach Lens.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "addendum": "Move away from allies and toward the edge of the map, away from combat."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "No enemies adjacent. Nearest enemies are Wraith and Warden at dist 4, Lattice at dist 5. Orders say advance toward nearest enemy. Warden is at (3,5), directly north. Moving to (3,3) closes distance by 2. Then use shield_wall facing N toward the cluster of enemies at (3,5) and (4,4).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Push forward toward enemy cluster. Move to (3,4) to close distance on Aegis at (3,3) — now adjacent. Then shield_wall facing S to protect against Aegis and the southern enemy cluster. Wraith is at (4,4) to my east, Lattice at (5,4). Enemies are south and southwest.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Lens is at (4,3), dist 2 and in range. I'm at (5,4). Orders say place traps on likely enemy paths. Lens is adjacent to my ally Wraith at (4,4). I can't trap adjacent to enemies if I'm adjacent to them — check: I'm at (5,4), no enemies adjacent. Trap range ≤2 tiles from me. Likely movement tiles for enemies: Phantom at (2,4) moving east, Aegis at (3,3) moving north/east. Tile (4,4) has Wraith so can't trap there. Tile (3,4) has Warden. Good trap spots: (4,5) or (5,3) or (3,3) area — but I need empty tiles. (4,3) has Lens. (5,3) is valid move tile and empty, likely path for Lens moving south. I can place trap at (5,3) within range 2. But better: place trap at (4,5) to block northern approach, or (5,3) to catch Lens if it moves. Actually Lens is at (4,3), it might move to (5,3) or (5,4). Place trap at (5,3) to intercept. Then wait or move to (5,5) to stay back and safe.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Orders say move away from allies and toward the edge, away from combat. Best edge tiles from valid moves: (4,0), (4,1), (4,2) go south toward bottom edge. (4,0) is the farthest from combat. Move toward (4,1) first, then (4,0) to reach the edge.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Breach is on cooldown. I'm uncloaked at (4,4). Phantom is at (2,4) facing E — I can move to (1,4) to get behind them for shadow_strike next turn. Aegis is at (3,3) facing N with behind tile at (3,2) — also reachable but Phantom is the more dangerous specter threat. Move to (1,4) to get behind Phantom, then shadow_strike to deal damage while staying hidden.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "I'm already behind Wraith (facing W, I'm at (2,4) which is behind them). I have 3HP, Wraith is the enemy damage dealer (specter). Shadow_strike keeps cloak and deals 1dmg. I should shadow_strike Wraith first (kills or weakens them while staying cloaked), then reposition. Actually I'm not currently cloaked — cloak was round 1. So I should just use shadow_strike on Wraith (1dmg, adjacent) since I'm already adjacent and behind them. Wait — shadow_strike 'keeps cloak' but I'm not cloaked. It's still 1dmg adjacent. Warden is also adjacent at (3,4). Priority is killing Wraith (enemy specter/damage dealer). Shadow_strike Wraith for 1dmg, then I need to decide second action. After striking Wraith I could move away or strike again — but I only have one ability per turn. So: shadow_strike Wraith, then move to (3,5) to get behind Warden for next turn breach setup. Or stay and wait. Actually moving to (3,5) positions me behind Warden for a breach next turn. Good plan.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (3,4) with 50% damage reduction. Aegis is adjacent at (3,3) to my south, Phantom is adjacent at (3,5) to my north. Orders say attack when possible and shield_wall facing enemy cluster. Both enemies are in melee range. I should attack Aegis (fellow sentinel, tankier) while using shield_wall to protect allies. Wraith is at (1,4) to my west. I'll attack Aegis first, then shield_wall facing south to cover against Aegis direction. Actually Aegis is at (3,3) which is south of me (y=3 < y=4), and Phantom is at (3,5) which is north. Shield_wall facing N to block Phantom from hitting allies behind me, or face S toward Aegis cluster. Orders say shield_wall facing enemy cluster — Aegis is S, Phantom is N. Attack Phantom (specter, squishier) then shield_wall S toward Aegis.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Warden is adjacent to the north at (3,4). Orders say attack if adjacent. I'm fortified (50% dmg reduction) which is good for staying put. Attack Warden first, then use shield_wall facing N where Warden is to protect against retaliation. Phantom is wounded at (3,5) — shield_wall N would also help cover that direction.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Phantom is wounded and only dist=2 away at (3,5). I can attack it directly. I already have a trap at (5,3). I should move closer to cut off Phantom's escape or pressure it, then attack. Moving to (4,5) puts me adjacent to Phantom at (3,5) for an attack, and closer to Aegis path. Let me attack Phantom first from current position (dist=2, rng=2), then move to (4,4) to hold position near allies and deny area.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Orders are to move away from allies and toward the map edge, away from combat. I'm at (4,0), which is already near the south edge. Valid moves include (5,0) and (5,1) which move east toward the corner. Moving to (5,0) gets me to the southeast corner, maximally away from the combat cluster near (3,4).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "No enemies in range and no behind positions reachable this turn. Phantom is wounded at (3,5) facing N — behind tile is (3,4). Ally Warden is at (3,4) blocking that approach. Aegis is at (3,3) facing N, behind tile (3,2) unreachable this turn. Best move: advance toward Phantom via (2,5) or (2,4) to close distance. Move to (2,5) puts me 1 tile from Phantom's flank. Next turn I can reach (3,4) if Warden moves, or shadow_strike from adjacent. Actually (2,4) is reachable and puts me 1 tile from Phantom at (3,5) — adjacent diagonally but shadow_strike requires adjacent only. Move to (2,5) — distance to Phantom (3,5) becomes 1, I'm adjacent and can shadow_strike next turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "I'm at (3,5) facing N, 2HP. Wraith is adjacent at (2,5) and Warden is adjacent at (3,4). I'm already behind Warden (I'm at (3,5), Warden faces S, so behind tile is (3,5) = my current position). I should breach Warden from here — no move needed, I'm already in the behind position. After breach, Warden obeys me next turn, disrupting their defensive posture. Wraith is healthy and adjacent but breach on Warden is higher value (sentinel disruption per orders). Lattice is 2 tiles away — I must NOT move adjacent to it.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "addendum": "Move north away from your allies and attack Wraith next turn."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Aegis is at (3,3) dist=2 and Phantom is at (3,5) dist=2, both in range. Two enemies in range means pulse could hit both if I move to (4,4) adjacent... but I'm at (4,4) and they're dist=2, not adjacent. Pulse only hits within 1 tile. Need to move closer to hit both. Moving to (4,3) would put Aegis at dist=1 (3,3) and Phantom at dist=2 (3,5) - only Aegis in pulse range. No position hits both. Trap is useful - (5,3) already has a trap. Aegis is at (3,3), likely to move toward Wraith at (2,5) or me. Tile (4,3) is between me and Aegis. But I can't trap adjacent to an enemy - Aegis at (3,3) is dist=2 from me, so not adjacent, trap is allowed at current position. Place trap at (4,3) to intercept Aegis movement toward center. Then move to maintain position near Warden at (3,4).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Warden is adjacent to the north. Attack Warden. Then use shield_wall facing north where enemies are clustered (Warden, Wraith). Stay put to keep Fortify active.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Orders say move north away from allies and attack Wraith next turn. Moving north means toward Aegis at (3,3) — that's the only north option available. I'll move to (3,2) which is north and attack Phantom is not the order. Wait, orders say attack Wraith next turn, so this turn I just move north. Best north move is (3,2) to reposition. Moving will drop Fortify but orders are explicit.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 5,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Orders say move away from allies and toward the edge, away from combat. I'm at (5,0) facing E. Valid moves include (5,1), (5,2), (5,3) which move along the east edge away from the main combat cluster. (5,3) gets me furthest from the action while staying on the edge.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Wraith is wounded and adjacent at (2,5). I can shadow_strike to finish them without breaking cloak. Move to (2,4) first to get behind Wraith, then shadow_strike — but I'm already adjacent so I can shadow_strike now from current position. Actually, shadow_strike keeps cloak and deals 1dmg. Wraith is wounded (likely 1-2HP), so this could eliminate them. I'm not cloaked (no cloak status shown), so I should just shadow_strike Wraith to finish them off, then move to (4,5) to get behind Lattice for a potential breach next turn when cooldown expires.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "I'm at 1HP — extremely fragile. Phantom is wounded and I'm already behind them (facing E, behind tile is 3,5 which is reachable). I can move to (3,5) to get adjacent and behind Phantom, then use breach to take control of them. This eliminates a wounded enemy specter without risking damage to myself, and I still have breach ready.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 4,
+              "y": 5
+            },
+            "addendum": "Move away from Aegis and Lens, toward (5,5) corner"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Phantom is adjacent at (4,5) - wounded and priority target. I'm at (4,4) with a trap already at (4,3). Pulse would hit Phantom at dist 1 but need to check other adjacents - Aegis is at dist 2, Lens at dist 2, so only Phantom is within 1 tile. Single target pulse is less efficient than attack. Attack Phantom directly for 1 dmg. Then move to (5,4) to maintain pressure and potentially block Lens/Aegis coordination while staying near trap at (4,3).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Orders say move north away from allies and attack Wraith next turn. Moving north puts me at (3,3) but that's where Aegis is. Moving to (3,4) is north and closer to Wraith at (3,5). Wait — valid moves show (3,4) is available. I'll move to (3,4) to position for attacking Wraith next turn, and use my ability to attack Aegis who is adjacent at (3,3) before moving, or after. Actually if I move to (3,4), Aegis at (3,3) is still adjacent (1 tile south). I should move first then attack — but orders say attack Wraith NEXT turn. For now: move north toward (3,4) and attack Aegis who will be adjacent.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Warden is adjacent to the north. Attack Warden first, then use shield_wall facing north where enemies are concentrated (Warden at 3,4, Wraith at 3,5).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 7,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Adjacent to Lattice means scan is blocked. I can only basic attack or move. Lattice is healthy and adjacent - attacking it for 1dmg isn't great value. Better to move away from Lattice's denial zone to enable scan next turn. Moving to (4,4) gets me away from Lattice, keeps me at range 3 from Warden (wounded, good scan target), and positions me safely. Then I can scan Warden from (4,4) - dist=3, within range 4, and no longer adjacent to Lattice.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": "Cannot use scan — adjacent to enemy Vector (Denial)"
+        },
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "I'm at 1HP (critical) with Wraith adjacent. Orders say move toward (5,5) corner. I should shadow_strike Wraith first to finish them off (they're critical), then move to (5,5). Shadow_strike doesn't break cloak and deals 1dmg — Wraith is critical so this should eliminate them. Then move to (5,5) as ordered.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Warden is adjacent to the north. Orders say attack adjacent enemies. I'm fortified so no need to move — staying still preserves 50% damage reduction. Attack Warden first, then use shield_wall facing north where enemies are.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Phantom is critical and adjacent at (5,5) - pulse hits both Phantom and Lens (both within 1 tile). Pulse deals 1dmg to ALL units within 1 tile. This could finish Phantom and damage Lens. Then move to (4,5) to stay near Warden and maintain pressure.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Orders say move north away from allies and attack Wraith next turn. Moving north to (3,5) keeps me positioned. I'm currently fortified with 50% damage reduction at 3HP. Aegis is adjacent at (3,3) and Lens is wounded at (4,4). Orders say move north — (3,5) is valid. I'll move north and wait to preserve fortify for defense.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "I'm adjacent to Lattice (DENIAL zone) so scan is blocked. I need to escape DENIAL range first. Moving to (5,3) gets me away from Lattice at (4,5) — dist becomes 2, breaking adjacency. From there I can scan Warden at (3,5) — dist would be ~2-3, within range 4. Warden is wounded and unscanned. Move to (5,3) first, then scan Warden.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "At 2HP with fortify active, I need to be careful. Orders say push forward aggressively and shield_wall facing enemy cluster. Aegis is at (3,3) dist=2, Lens at (5,3). If I move to (3,4), I'll be adjacent to Aegis and can attack. But at 2HP that's risky. Shield_wall facing S would protect against Aegis. Let me move to (3,4) to close distance, then shield_wall S to block Aegis's attack on me or Lattice.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Warden is adjacent at (3,4). I'm fortified (50% dmg reduction). Attack Warden first, then use shield_wall facing North where both enemies are concentrated.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Enemies at dist=3, out of range. Warden ally is critical at (3,4). Trap at (4,3) already placed. Aegis is at (3,3) facing N, likely to advance toward us. Move to (4,4) to stay near Warden and get closer, then place trap at (3,4) or (5,4) to cover likely enemy approach paths. Actually Warden is at (3,4) so can't trap there. Place trap at (5,4) to cover Lens approach from (5,3).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 7,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Both enemies already scanned. Warden is critical — Aegis attacked it last turn and it used shield_wall. Lattice placed a trap at (5,4) last turn, so avoid that tile. I should scan Warden to finish it off with 1 dmg if at range 3... wait, scan deals 1dmg and Warden is critical (likely 1HP). Warden is at (3,4), dist 3 — within scan range of 4. Lattice is at (4,4), dist 2 — adjacent warning at dist 1, so I'm safe here. I can scan Warden to potentially kill it. But I already know Warden's prompt. Still, scan deals damage. Move first to maintain range, then scan Warden. Stay away from (5,4) trap. Current pos (5,3) is fine. I'll scan Warden from here to deal 1dmg — if critical means ~1HP this could finish it. Then wait or move to safety.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Lattice is at (4,4), distance 2 to my north-east. Orders say advance toward nearest enemy but avoid moving adjacent (denial range warning). Moving to (4,3) would put me adjacent to Lattice at (4,4) — that's 1 tile away, which triggers denial. I'll move to (3,4) instead, closing distance while staying 2 tiles from Lattice. Then use shield_wall facing N since Lattice is to my north — but Lens ally is at (5,2) to my south-east, no adjacent allies to protect. Since no enemy is adjacent, I'll move closer and use shield_wall N to prep for next round.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 5
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Aegis is adjacent at (3,4). I can't use trap when adjacent to an enemy Vector (that's me - I'm the Vector). But I can use pulse to hit Aegis (dist=1, within 1 tile AoE). After pulsing, I should reposition. Trap placement on (3,3) or (3,5) would cover Aegis's likely movement paths. Wait - I'm adjacent to Aegis so trap is blocked. Best play: pulse Aegis now (1dmg), then move away to (5,5) or place trap. Actually I can move first to break adjacency, then trap. Move to (5,4) - wait, that's a trap tile. Move to (4,5) to break adjacency with Aegis, then trap (3,5) to cover Aegis's retreat/advance path.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 7,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 9,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Lattice is at distance 4 — just out of scan range from current position (5,2). I need to close distance slightly. Moving to (4,4) puts me adjacent to Lattice — too dangerous since scan is blocked when adjacent to a Vector. Moving to (5,5) gets me closer but Lattice is at (4,5) making that adjacent. Best move: (4,3) puts me at distance sqrt(1+4)=~2.2 from Lattice — still adjacent risk. Let me check: (4,5) to (4,3) = distance 2, adjacent? No, distance 2. But scan range is ≤4 tiles. From (5,3), Lattice at (4,5): dist = sqrt(1+4) ≈ 2.2, in range. But is (4,5) adjacent to (5,3)? Adjacent means dist=1, so no. Safe to scan from (5,3). Lattice already scanned though — prompt known. Better to recalibrate Aegis. Aegis is at (3,4), I'm at (5,2) — not adjacent. Move toward Aegis to recalibrate. Move to (4,3) — Aegis at (3,4) is distance sqrt(1+1)≈1.4, not adjacent. Move to (3,3): adjacent to Aegis at (3,4). From valid moves, (3,3) is available. Recalibrate Aegis with intel about Lattice's trap-laying behavior — tell Aegis to avoid predictable paths.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "addendum": "Lattice places traps on predicted movement paths and uses pulse when enemies cluster. Move unpredictably, avoid straight-line approaches, spread out from allies before engaging."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Lattice is at (4,5), dist=2, not adjacent so can't attack yet. Orders say advance toward nearest enemy but move unpredictably. Lattice denies adjacent tiles with traps, so I should approach from an angle rather than straight line. Moving to (4,4) puts me adjacent to Lattice at (4,5) - that's direct and predictable, plus triggers denial. Moving to (3,5) approaches from the side, gets me to dist=1 from Lattice without being in their trap prediction zone. After moving to (3,5), Lattice is at (4,5) which is adjacent E - I can attack. Also, Lens is wounded at (3,3) - shield_wall facing N from my position would help protect against Lattice. But orders say attack if adjacent. Move to (3,5) then attack Lattice at (4,5).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Aegis is adjacent at (3,5). I'm at 5/8 HP. Pulse hits all units within 1 tile - Aegis is at dist=1, so pulse would hit them. But Lens is wounded at dist=3, out of pulse range. Only one enemy adjacent, so pulse hits just Aegis for 1 dmg. After pulse, I can move to (5,5) to create distance and avoid being adjacent to Aegis next turn, which blocks my trap ability. Alternatively, attack Aegis for 1 dmg then move away. Pulse is same damage as attack but AoE - use pulse then move to (5,5) to reposition away from Aegis.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 10,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Lattice is at dist 4, just out of scan range from (3,3). I can move to (4,4) to close distance, but Lattice used pulse on (4,5) last turn and moved to (5,5) — Aegis is at (3,5) wounded. Lattice's prompt says stay near allies and use pulse if 2+ adjacent. I already have Lattice's prompt scanned. Priority: recalibrate Aegis to adjust tactics since Aegis is wounded and moving into Lattice's zone. Aegis is at (3,5), adjacent if I move to (3,4) or (4,5). Move to (3,4) puts me adjacent to Aegis at (3,5) for recalibrate. This keeps me safe behind front line and supports wounded ally.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 5
+            },
+            "addendum": "Lattice(vector) at (5,5) uses pulse when 2+ enemies adjacent and places traps on predicted paths. Stay back — do not advance toward (4,5) or (5,5). Hold position and defend rather than attacking into trap coverage."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Aegis is at (3,5) distance 2, wounded and in range. I can attack for 1dmg. Lens is out of range at (3,4). Traps already at (4,3) and (5,4). I should attack Aegis to finish it off while wounded, and consider positioning. Moving to (4,5) keeps pressure on Aegis while staying in range. Attack Aegis first, then move closer or place trap on likely path.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm adjacent to Lattice but orders say to hold position and not advance. I'm fortified (50% dmg reduction) which is valuable. Lattice is in DENIAL zone so abilities may be blocked. I should attack since Lattice is adjacent - basic attack should work even in DENIAL zone. Stay put to keep Fortify bonus.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 11,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Lattice is wounded at (4,5), 2 tiles away. Already scanned so prompt is known. Aegis attacked Lattice last turn. I should recalibrate Aegis at (3,5) to advise on finishing off Lattice, then stay put or reposition. Aegis is adjacent to me so recalibrate is valid. Recalibrate Aegis first (adjacent at 3,5), then wait since I'm at 4HP and should stay safe.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 5
+            },
+            "addendum": "Lattice(vector) is wounded at (4,5). Priority: attack to finish it off. Lattice places traps on likely movement paths — move unpredictably. Avoid clustering with allies."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Two wounded enemies adjacent/near me: Aegis at (3,5) dist=1, Lens at (3,4) dist=2. Both are within 1 tile of my position if I consider pulse range. Currently at (4,5), Aegis is at (3,5) - that's 1 tile west. Lens is at (3,4) - that's diagonal, distance 2. Pulse hits ALL units within 1 tile. From (4,5), only Aegis at (3,5) is within 1 tile. If I move to (4,4), then Aegis at (3,5) is dist=sqrt(2)>1, Lens at (3,4) is dist=1. Not better. Stay at (4,5) and pulse to hit Aegis. Then I could also attack Aegis since it's adjacent. Pulse hits Aegis (1dmg), then attack Aegis (1dmg) for 2 total damage. Aegis is wounded so this might finish it. Let's pulse first then attack.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Lattice is adjacent at (4,5) and wounded. Priority is to attack and finish it off. I'm fortified with 50% damage reduction which is good defense. Attack Lattice directly — it's in range and wounded. DENIAL zone warning but basic attack should still work per the warning note.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 12,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Lattice is wounded and already scanned. Aegis is adjacent to Lattice at (3,5) and will attack it. Foresight shows Lattice will pulse then attack Aegis - Aegis is wounded so this is dangerous. I should recalibrate Aegis to warn about the incoming pulse. Aegis is at (3,5), adjacent to me at (3,4), so recalibrate is valid. I'll recalibrate Aegis first, then wait safely - no need to move since I'm at safe range from Lattice (2 tiles away, not adjacent).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 5
+            },
+            "addendum": "WARNING: Lattice will pulse then attack you this turn. You are the target. Consider retreating or bracing - do not move adjacent to Lattice."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Lattice is adjacent at (4,5), wounded. Orders say attack to finish it off. I'm fortified with 50% damage reduction, which helps against the warned pulse. Attack first while fortified, then wait to keep fortify active.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "I'm at 2HP, very fragile. Both enemies are wounded and adjacent/close. Aegis is at dist=1 (adjacent), Lens at dist=2. Both are in pulse range if I stay. Pulse hits ALL units within 1 tile - Aegis is adjacent so pulse would hit them. Lens at dist=2 is not in pulse range (1 tile AoE). I should use pulse to hit Aegis, then move away to safety. Note: trap is blocked when adjacent to an enemy (Aegis is adjacent). Pulse first to damage Aegis, then move to (5,5) to get distance.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": false
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "player",
+    "totalTurns": 13,
+    "reason": "player eliminated all enemies"
+  },
+  "endedAt": "2026-03-11T14:07:08.067Z"
+}
