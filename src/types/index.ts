@@ -37,11 +37,11 @@ export const BALANCE: BalanceConfig = {
   maxRounds: 20,
   unitStats: {
     specter: { maxHp: 4, movement: 3, range: 1, speed: 3 }, // buffed HP 3→4 (39.5%@38g in last 30) — over-nerfed, restoring to 4
-    striker: { maxHp: 3, movement: 2, range: 2, speed: 1 }, // still 79%@43g recent — nerfing precisionShot dmg
+    striker: { maxHp: 2, movement: 2, range: 2, speed: 1 }, // nerfed HP 3→2 (71.7%@272g all-time, still dominant after dmg nerf)
     oracle: { maxHp: 7, movement: 3, range: 3, speed: 3 }, // buffed HP 6→7 (39.5%@43g in last 50)
     medic: { maxHp: 5, movement: 3, range: 3, speed: 2 }, // nerfed speed 3→2 (77%@26g in last 50, still OP after HP+patch nerfs)
     vector: { maxHp: 8, movement: 2, range: 2, speed: 1 },
-    sentinel: { maxHp: 7, movement: 2, range: 1, speed: 1 }, // nerfed HP 8→7 (72.5%@40g recent, still too tanky)
+    sentinel: { maxHp: 6, movement: 2, range: 1, speed: 1 }, // nerfed HP 7→6 (69.6%@260g all-time, still overperforming)
   },
   abilities: {
     attack: { damage: 1 },

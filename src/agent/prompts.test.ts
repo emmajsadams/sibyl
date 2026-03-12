@@ -140,11 +140,11 @@ describe("buildContextPrompt", () => {
 
   test("medic sees ally HP and wound status", () => {
     const u = makeUnit("medic");
-    const ally = makeView("ally1", "striker", { x: 3, y: 2 }, { hp: 2 });
+    const ally = makeView("ally1", "striker", { x: 3, y: 2 }, { hp: 1 });
     const ctx = makeCtx(u, { allies: [ally] });
     const text = buildContextPrompt(ctx);
     expect(text).toContain("WOUNDED");
-    expect(text).toContain("HP:2/");
+    expect(text).toContain("HP:1/");
   });
 
   test("medic sees FULL HP ally note", () => {

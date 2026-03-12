@@ -1,0 +1,1619 @@
+{
+  "id": "2026-03-12T18-00-05",
+  "startedAt": "2026-03-12T18:00:05.255Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 4,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 3,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "oracle": {
+        "maxHp": 7,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 5,
+        "movement": 3,
+        "range": 3,
+        "speed": 2
+      },
+      "vector": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 7,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 1,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 2
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 2,
+        "healAmount": 1
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Ghost",
+        "class": "specter",
+        "prompt": "Stay cloaked and flank. Prioritize assassinating the enemy damage dealer. Use breach on sentinels to break their defensive posture. Recloak whenever it drops."
+      },
+      {
+        "name": "Lens",
+        "class": "oracle",
+        "prompt": "Scan early to give your team intel on enemy prompts. Target enemy specters with scan to track them after cloak. Use recalibrate on allies who need tactical adjustments. Stay safe at range behind your front line."
+      },
+      {
+        "name": "Weaver",
+        "class": "vector",
+        "prompt": "Place traps on tiles enemies are likely to move through. Use pulse if 2+ enemies are adjacent. Stay near allies for mutual support."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Ghost",
+        "class": "specter",
+        "prompt": "Cloak immediately on turn 1. Move toward the enemy medic or weakest target. Use shadow_strike when adjacent while cloaked. Use breach to sabotage high-value targets."
+      },
+      {
+        "name": "Bolt",
+        "class": "striker",
+        "prompt": "Maintain distance. Use precision_shot on high-value targets — medics first, then damage dealers. Use suppressing_fire if enemies close in."
+      },
+      {
+        "name": "Snare",
+        "class": "vector",
+        "prompt": "Trap the paths enemies must take to reach your backline. Stay at medium range. Use pulse on clustered enemies. Denial blocks adjacent threats."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Both Bolt and Snare are at dist=4 from current position but show as out of range. I need to move closer to scan one. Moving to (2,3) puts me 2 tiles from Snare at (2,5) — well within scan range. Snare is a Vector which blocks scan when adjacent, but from (2,3) I'm not adjacent. Snare is the priority target since enemy Vectors deny scan to our Oracle. Move north to (2,3) then scan Snare.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "Round 1 — cloak immediately per tip and orders. Move toward Bolt (the enemy damage dealer at 1,4) while cloaked. I'll advance north to close distance.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 1,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "Round 1 — cloak immediately per orders. Then move toward Lens (oracle) at (2,3) which is the higher-value target. I'm at (4,4), can move up to 3 tiles. Moving to (3,3) gets me closer to Lens while staying cloaked.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Lens is at distance 2, directly in range. I can pulse to hit Lens from current position (pulse hits all within 1 tile, but Lens is at dist 2 so out of pulse range). Attack requires adjacent. Trap the approach path - Lens is at (2,3) moving toward us, place trap at (2,4) to intercept. Then move to maintain distance. I'll trap (2,4) first to catch Lens advancing, then move laterally.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Lens (oracle) is in range at distance 2. I haven't moved yet, so precision_shot deals full 2dmg. Lens is high-value (oracle = support). I'm not adjacent to any Vector, so precision_shot is not blocked. Shoot Lens first, then consider repositioning. Trap at (2,4) — avoid moving there.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Enemies are approaching from the north. Snare is at (3,4) distance 5, likely moving south toward us. I should advance and place a trap on a likely path tile. Moving to (4,2) puts me closer while staying safe, then placing a trap at (3,3) or (4,3) to intercept Snare's likely approach path.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": "Position occupied"
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 3,
+          "position": {
+            "x": 0,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "Lens is adjacent at (2,3) facing N. I can move to (2,2) to get behind Lens, then use breach to take control. Cloak has 1 turn remaining — breach works while cloaked. Moving to (2,2) puts me behind Lens (adjacent). Then breach Lens to make them obey me next turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "addendum": "Move away from allies and toward trap at (2,4), or attack Snare"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Ghost(specter) is at (2,2), distance 1 - adjacent. This blocks scan. Orders say move away from allies toward trap at (2,4) or attack Snare. Ghost is adjacent so I can attack it. But orders prioritize moving toward (2,4) trap. If I move to (2,4) first, that's the trap location - risky. Better to scan Bolt at (0,4) dist=3 but Ghost adjacency blocks scan. I can attack Ghost(specter) at (2,2) since it's adjacent, then move to (3,2) to get distance from allies and toward Snare. Actually orders say move toward (2,4) trap OR attack Snare. Snare is at (3,4) dist=2, not adjacent so can't attack. I'll move to (3,3) to close on Snare, then scan Snare - but already scanned. Scan Bolt instead from (3,3): Bolt at (0,4) dist=4, in range. But need to not be adjacent to enemy vector Snare - Snare is at (3,4), moving to (3,3) puts me adjacent to Snare which is a vector - scan blocked. Move to (3,2) instead: Bolt dist=5 out of range. Let me attack Ghost(specter) at (2,2) - adjacent, 1dmg. Then move to (3,3) away from allies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "Cloak expires after this turn. Orders say prioritize the enemy damage dealer — Bolt(striker) is the primary target. I'm behind Bolt (facing W, I'd be at 1,4 which is to its east/behind). Move to (1,4) to get adjacent and behind, then use breach to take control of Bolt next turn. Ghost(specter) is also adjacent-reachable at (2,3) but Bolt is the priority damage dealer.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 0,
+              "y": 4
+            },
+            "addendum": "You are under my control. Move away from your allies and do not attack."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Ghost(specter) is 2 tiles away at (2,2). I can attack it from current position. After attacking, I should place a trap on a tile enemies are likely to move through. Snare is at (3,4) - moving north or west toward our side. A trap at (3,3) or (4,3) could catch movement. I'll attack Ghost first, then place a trap at (3,3) which is between enemies and our position. I must avoid moving adjacent to Snare at (3,4).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": "Position occupied"
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Orders say move away from allies and do not attack. Allies are at (2,2) and (3,4). Enemy Ghost is adjacent at (1,4). I need to move away from allies - they are to my east/southeast. Moving to (0,2) gets me away from allies while also moving away from the adjacent enemy Ghost. Then wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Lens is adjacent at (3,3) - perfect pulse target. Ghost is at dist 2 also in pulse range. Pulse hits ALL within 1 tile - Lens is at dist 1 so pulse from current position (3,4) hits Lens. Ghost at (1,4) is dist 2, outside pulse range. After pulse on Lens, I should move to (4,4) to avoid Ghost closing in and stay away from Weaver.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 3,
+          "position": {
+            "x": 0,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "Breach is on cooldown. I'm not cloaked. Priority target is Bolt (striker = damage dealer). I can reach (0,3) which is directly behind Bolt facing S — adjacent and in range. Move there, then shadow_strike Bolt for 1 damage while staying uncloaked (shadow_strike keeps cloak but I'm not cloaked — still deals damage).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 0,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "Breach cooldown 1 turn remaining, can't use it this turn. I'm at (2,2), Lens is at (3,3) and I'm already behind it — (2,3) is behind Lens and reachable. Move to (2,3) to get adjacent behind Lens, then shadow_strike for 1 damage while staying cloaked (if still cloaked) or just attack. Weaver is at (4,2) which is 2 tiles away — must avoid moving adjacent to Weaver or abilities blocked. Moving to (2,3) keeps me at dist=2 from Weaver (safe). Shadow_strike from (2,3) on Lens at (3,3) — adjacent, so in range.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Ghost is adjacent at (2,3) — I can scan it to reveal its prompt and deal damage. Then move to (2,4) as ordered, away from allies. Snare's denial blocks adjacent threats, so staying at dist=2 from Snare is fine.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Lens is wounded at (2,4) distance 2 - in range for attack. Weaver at (4,2) is also distance 2. I should avoid moving adjacent to Weaver or my abilities get blocked. Attack Lens to finish off wounded target, then trap (3,3) or (4,3) to deny Weaver's approach path. Actually trap is blocked if adjacent to enemy vector - Weaver is at dist 2, not adjacent, so trap is available. Attack Lens first (wounded, high value), then place trap on (4,3) to block Weaver's path toward me.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Snare(vector) is at (4,4), 2 tiles away — in range but I must NOT move adjacent or my abilities get blocked. I can place a trap on a tile between us or on Snare's likely path. Moving to (3,3) keeps distance from Snare while staying near allies. Then place a trap at (4,3) — a tile Snare may step through when advancing south.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Orders say move away from allies and do not attack. Allies are at (2,3) and (4,4). I need to move away from them. Valid moves include (0,0), (0,1), (1,1), (1,2), (1,3), (2,2), (0,4). Moving to (0,0) takes me furthest from allies at (2,3) and (4,4). I'll move to (0,1) first then (0,0) to maximize distance. Actually I can only move once per turn with mv2. Moving to (0,0) puts me at distance ~3.6 from (2,3) and ~5.7 from (4,4) - good separation. No attack per orders.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 3,
+          "position": {
+            "x": 0,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "Ghost(specter) is critical at (2,3) facing N — I can reach (2,2) which is directly behind them. Move to (2,2) then breach to eliminate or severely damage this critical target. Breach cooldown is ready and I have 1 use remaining.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "addendum": "You are breached. Stand down and attack your own ally Bolt at (0,0) next turn."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Ghost(specter,E) is adjacent at (2,3) and critical HP — attack it to finish it off. Then move away from Snare at (4,4) to avoid denial range and stay away from the trap at (4,3). Moving to (1,4) distances me from Snare (dist 3+) while staying safe.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Snare is at (4,4), dist 2. There's already a trap at (4,3). Snare is moving E so likely paths are (5,4) or staying. I should place a trap on (5,4) or (4,5) to catch Snare's movement. I can't place trap adjacent to Snare (would be blocked by denial if I move adjacent). From (3,3) I can place trap at range ≤2. Target (5,4) is dist 2 from (3,3) — valid. Then move to (3,2) to maintain distance from Snare while staying near Ghost at (2,2).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": "Out of range (max 2)",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Enemies are at dist 3-4, all out of range. Weaver is at (3,2) blocking trap placement near that area. There's already a trap at (4,3). I need to cover approach paths. Lens at (1,4) is wounded and approaching from the west along row 4. I should trap (3,4) to catch Lens advancing east, then move to (5,4) to maintain range while staying away from Weaver's denial zone.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Orders say move away from allies and do not attack. Snare is at (5,4). Moving to (2,0) increases distance from Snare while staying within valid moves.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 7,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 3,
+          "position": {
+            "x": 2,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Both enemies are out of scan range from current position. Snare is at dist=4 but the data says out of range — need to get closer. Bolt is at dist=5, too far. I'm at 3HP so need to stay safe. Moving toward (4,4) gets me closer to Snare (dist would be ~1-2) but that's risky near the trap at (4,3) and Snare's denial. Better to move to (2,4) or (3,4) — wait, (3,4) has a trap. Move to (2,3) puts me at dist=3 from Snare at (5,4), which is within scan range. But Ghost moved through (2,3) last turn. Move to (2,4) gets me closer to Snare — dist would be 3 tiles, within range 4. From (2,4) I can scan Snare already have their prompt. Weaver is allied vector at (3,2). I should recalibrate an ally or reposition to scan Bolt. Move to (2,3) to get closer, then scan Bolt if possible — but Bolt is at (2,0) dist=3 from (2,3), within range 4. Do that.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "Snare is at (5,4) distance 5, out of range. I'm cloaked and need to close distance. Move toward Snare to get in range. Best path: move to (5,2) which is in valid moves and gets me closer. From there I can threaten Snare next turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Ghost is at (5,2), dist=2, in range for attack. I'm at (5,4). I can attack Ghost directly. I should also lay a trap to block enemy approach paths. Trap at (3,4) already exists. I'll attack Ghost first (1dmg), then move to (4,4) to maintain distance and position near the trap at (3,4) which covers the approach lane.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Snare is at (4,4) heading west, with a trap already at (4,3). Likely movement paths: (3,4) or (4,3) via south. I can move to (3,3) to stay out of denial range (3 tiles from Snare) while placing a trap at (3,4) to intercept likely westward movement. This also keeps me near allies at (5,2) and (2,3).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 2,
+            "y": 0
+          },
+          "alive": false
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "Breach is unavailable. I'm at (5,2), Snare is at (4,4) facing W. (5,4) is directly behind Snare and reachable in 2 moves — but it's listed as a valid tile. I can move to (5,4) this turn to get adjacent and behind. Then use shadow_strike to deal 1 damage while staying cloaked. shadow_strike requires adjacent, and (5,4) is adjacent to (4,4). Execute: move to (5,4), then shadow_strike Snare.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Snare is already scanned. I'm at 3/7 HP so I need to stay safe. Ghost is at (5,4) and could use recalibrate for tactical guidance. I can move to (1,3) to stay at safe range from Snare (3+ tiles away) and then recalibrate Ghost if adjacent, but Ghost is at (5,4) which is too far. Better to move away from Snare and wait or recalibrate Weaver who is at (3,3) — adjacent to me. Weaver is at (3,3), I'm at (2,3), so we're adjacent. I can recalibrate Weaver to help with trap placement. But Weaver is an ally vector — giving them intel on enemy positions could help. Actually, the enemy specter hasn't been scanned yet — but there's no enemy specter visible. Let me recalibrate Weaver since they're adjacent, advising them to trap the path toward Ghost.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "addendum": "Trap tiles (4,3) and (5,3) to cut off Snare's path toward Ghost. Snare prompt: stays medium range, uses pulse on clusters, denial blocks adjacent."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Ghost is adjacent at (5,4), distance 1. I can pulse to hit Ghost (and potentially Weaver if within 1 tile - Weaver is at (3,3), distance 2 from me, so not in pulse AoE). Pulse hits all within 1 tile so Ghost gets hit. After pulse, I should move away from Ghost to avoid being adjacent and stay at medium range. Move to (4,5) to get distance from Ghost while staying away from Weaver's denial zone at (3,3). Actually, I'm at 5HP and Ghost is adjacent - danger. Use pulse first to damage Ghost, then move to (4,5) to put distance between us. Weaver is at (3,3) - moving to (4,5) keeps me away from Weaver's adjacency zone.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Traps already at (4,3) and (3,4). Orders say trap (5,3) to cut off Snare's path toward Ghost at (5,4). I'm at (3,3), (5,3) is in my valid moves list. I can move to (4,3) but that has a trap — avoid. Move to (4,2) first to get closer, then place trap at (5,3)? Actually I can reach (5,3) directly (it's in valid moves). Move to (5,3) would land on an empty tile and place me 2 tiles from Snare at (4,5) — that's adjacent-ish risk. Better: stay at (3,3) and place trap at (5,3) — but trap range is ≤2 tiles. Distance from (3,3) to (5,3) is 2, so in range. Place trap at (5,3) without moving.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 7,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 2,
+            "y": 0
+          },
+          "alive": false
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "Breach is exhausted. Snare is at (4,5) facing N — I'm behind it. Move to (4,4) which is behind Snare and adjacent, then shadow_strike for 1 damage while staying cloaked. Trap at (4,3) but (4,4) is clear. This is the kill setup.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Snare is at distance 5, out of scan range (max 4). No enemies in range at current position. Weaver is adjacent at (3,3) — I can recalibrate to give tactical guidance. Move toward Snare to get in scan range next turn, then recalibrate Weaver since they're nearby.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "addendum": "Snare is at (4,5) wounded with denial. Avoid adjacent positioning. Lay traps to cut off Snare's retreat paths north and east."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Ghost is adjacent at (4,4) wounded, Lens is at (3,4) wounded. Both in range. Pulse hits all units within 1 tile - from current position (4,5), Ghost at (4,4) is 1 tile away, Lens at (3,4) is 2 tiles away so not in pulse range. Ghost is wounded so pulse (1dmg) could finish or heavily damage it. Weaver is 3 tiles away, no denial threat. I'll pulse first to hit Ghost, then move to (5,5) to maintain distance from Weaver while staying in range of Lens for follow-up.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Snare is at (5,5) wounded, moving north or west likely. Traps already at (4,3) and (5,3). I should place a trap at (4,5) or near Snare's likely escape routes. Moving to (3,5) puts me closer and lets me trap (4,5) which is adjacent to Snare's current position - cutting off westward retreat. But I can't trap adjacent to enemy if Snare is nearby. Snare is at (5,5), so (4,5) is not adjacent to me at (3,3). Move to (3,5) then trap (4,5) to block Snare's west movement.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 2,
+            "y": 0
+          },
+          "alive": false
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "I'm at (4,4) with 1HP, wounded. Snare is at (5,5) wounded, facing E — I'm behind it. (4,5) is a trap tile AND breach is unavailable (limit reached). Shadow_strike keeps cloak and deals 1dmg. But Snare is dist=2, not adjacent. I need to move adjacent to attack. Moving to (5,4) gets me adjacent to Snare but (4,5) is a trap. (5,4) is in valid moves — move there then shadow_strike. Snare is wounded, one hit should finish it. Shadow_strike range is adjacent only, keeps cloak.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "I'm at (3,4) with 2HP - critical. There's a trap at (3,4) - my current position. Snare is at (5,5), wounded, and I've already scanned it. Ghost is critical at (5,4). I need to use recalibrate on Ghost to help them, but Ghost is at (5,4) - not adjacent to me. Valid moves include (4,4) and (4,5) but (4,5) has a trap. (4,4) is adjacent to Ghost at (5,4), allowing recalibrate. But Snare is at (5,5) - moving to (4,4) puts me 2 tiles from Snare, still not adjacent. Weaver is adjacent at (3,5). I should move to (4,4) to get adjacent to Ghost and recalibrate them, boosting their effectiveness. Ghost needs tactical guidance as they're critical. Recalibrate can give Ghost an addendum to focus on finishing off Snare.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 5,
+              "y": 4
+            },
+            "addendum": "Priority: finish off wounded Snare at (5,5) with shadow_strike. Avoid trap at (4,5). You are critical - strike fast then retreat."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Ghost is adjacent at (5,4) — critical HP, 1 hit from death. Attack kills it. Then pulse would hit both Lens and Weaver if they're within 1 tile, but they're at dist=2 from my position. Best play: attack Ghost to finish it, then move to (4,5) to get closer to Lens/Weaver for next turn, staying out of Weaver's denial range (must not go adjacent to Weaver at 3,5 — so (4,5) is safe, dist=2 from Weaver).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Weaver",
+          "class": "vector",
+          "thinking": "Snare is critical and adjacent at (4,5). I'm in DENIAL zone so trap is blocked. But basic attack works. Attack Snare to finish them off.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Weaver",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 2,
+            "y": 0
+          },
+          "alive": false
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "player",
+    "totalTurns": 9,
+    "reason": "player eliminated all enemies"
+  },
+  "endedAt": "2026-03-12T18:05:03.522Z"
+}

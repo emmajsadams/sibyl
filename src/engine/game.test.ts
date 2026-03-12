@@ -305,13 +305,13 @@ describe("getUnitStatus", () => {
 
   test("wounded between 25-60%", () => {
     const u = unit("p1", "sentinel", "player", { x: 0, y: 0 });
-    u.hp = 4; // 50%
+    u.hp = 3; // 50% of 6
     expect(getUnitStatus(u)).toBe("wounded");
   });
 
   test("critical at or below 25%", () => {
     const u = unit("p1", "sentinel", "player", { x: 0, y: 0 });
-    u.hp = 1; // 14% of 7
+    u.hp = 1; // 16.7% of 6
     expect(getUnitStatus(u)).toBe("critical");
   });
 
@@ -620,7 +620,7 @@ describe("useAbility - patch", () => {
     const g = createGame();
     const m = unit("m1", "medic", "player", { x: 2, y: 2 });
     const a = unit("a1", "sentinel", "player", { x: 2, y: 3 });
-    a.hp = a.maxHp - 6;
+    a.hp = a.maxHp - 3;
     g.units.push(m, a);
     const hpBefore = a.hp;
     const err = useAbility(g, m, "patch", { x: 2, y: 3 });
