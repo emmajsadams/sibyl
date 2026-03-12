@@ -1,0 +1,1352 @@
+{
+  "id": "2026-03-12T09-00-04",
+  "startedAt": "2026-03-12T09:00:04.739Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 4,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 3,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "oracle": {
+        "maxHp": 7,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 5,
+        "movement": 3,
+        "range": 3,
+        "speed": 2
+      },
+      "vector": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 7,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 1,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 2
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 2,
+        "healAmount": 1
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Rampart",
+        "class": "sentinel",
+        "prompt": "Advance toward the nearest enemy. Use shield_wall facing the direction with the most enemies. If an enemy is adjacent, attack them."
+      },
+      {
+        "name": "Marksman",
+        "class": "striker",
+        "prompt": "Position for clear sight lines. Prioritize killing wounded enemies with precision_shot. If forced to move, retreat away from threats. Suppressing_fire to slow rushers."
+      },
+      {
+        "name": "Prophet",
+        "class": "oracle",
+        "prompt": "Scan early to give your team intel on enemy prompts. Target enemy specters with scan to track them after cloak. Use recalibrate on allies who need tactical adjustments. Stay safe at range behind your front line."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Veil",
+        "class": "specter",
+        "prompt": "Cloak immediately on turn 1. Move toward the enemy medic or weakest target. Use shadow_strike when adjacent while cloaked. Use breach to sabotage high-value targets."
+      },
+      {
+        "name": "Bolt",
+        "class": "striker",
+        "prompt": "Maintain distance. Use precision_shot on high-value targets — medics first, then damage dealers. Use suppressing_fire if enemies close in."
+      },
+      {
+        "name": "Lens",
+        "class": "oracle",
+        "prompt": "Use scan to reveal enemy prompts and cloaked units. Stay at max range (≤4 tiles for scan). Use recalibrate on wounded allies to buff them. Keep distance from enemies and avoid adjacent vectors."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Bolt is the only enemy in scan range (dist=3). Scan Bolt to get intel on their prompt and deal 1 damage. Then move north to better position, staying behind front line. Veil (specter) is out of range this turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Prophet is in scan range at dist 3. Scan it to reveal its prompt and deal 1 dmg. Then recalibrate Bolt (wounded ally at 2,4) - but Bolt is not adjacent to my current position (3,5), dist=2. I need to move adjacent to Bolt first, or scan first then move. Scan Prophet first (no movement needed), then move to (2,4) - wait, I can't move to occupied tile. Move to (3,4) to get adjacent to Bolt at (2,4), then recalibrate. But second action after scan would be move. Actually: scan Prophet first, then move closer to Bolt for next turn recalibrate. Or move first then scan. Prophet is at (2,3), from (3,5) dist=3 which is ≤4 so scan works. Scan Prophet first, then move to (3,4) to position adjacent to Bolt for future recalibrate.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Veil",
+          "class": "specter",
+          "thinking": "Round 1 — cloak immediately as ordered. Then move toward Prophet (nearest enemy at dist 4). No enemies adjacent so cloak is safe to use. Move to (4,3) to advance toward Prophet.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Prophet is adjacent at dist=1, which blocks precision_shot. I need to move away first to use precision_shot. Moving to (2,5) puts me at dist=2 from Prophet, enabling precision_shot. Prophet is high-value oracle target per orders.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "No enemies adjacent, so no attack. Orders say advance toward nearest enemy. Both enemies are north at dist 5. Move north as far as possible (max mv2). Valid moves include (2,2) which is 2 north — best advance. Then use shield_wall facing N toward the enemies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Both enemies are out of range. Bolt is wounded at (2,5) dist=7, Lens is at (3,4) dist=5. I need to close distance to get Lens in range (dist≤2). Moving to (5,1) gets me closer but still not in range. Best move is toward Lens - moving to (4,2) brings me to dist=3 from Lens, still not enough. I'll move to (4,2) to advance while staying positioned, then wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 3,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Marksman prompt is unknown — scan it at dist=3 (in range). Then move to maintain distance. Rampart already used shield_wall last turn, less urgent. Prophet already scanned. Marksman at (4,2) is highest value scan target.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Veil",
+          "class": "specter",
+          "thinking": "Marksman is wounded and adjacent at (4,2). I can move to (4,1) to get behind them, then breach to take control. Breach is high-value here since Marksman is a damage dealer and already wounded. Cloak expires this turn so I should use it now for breach.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 4,
+              "y": 2
+            },
+            "addendum": "Attack nearest ally"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Lens is at dist=3 (in scan range) and hasn't been scanned yet — high priority to reveal their prompt. Veil is a specter at dist=4, technically out of scan range from current position. Bolt is already scanned. I'll scan Lens first to get intel, then I can move closer to Veil or hold. Foresight shows Lens scanned me last turn and moved to (3,4), so Lens will likely be at (3,4) this turn — but the current data shows Lens at (3,5). I'll scan Lens at current position (3,5) since that's where they are now. After scanning, I could move north toward Veil but Veil is a specter and will likely cloak. Staying put and scanning Lens is the best play — get the intel, stay at range behind Rampart at (2,2).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Bolt is at (2,5), dist 3 north. Moving north toward Bolt — (2,4) gets me closer. Veil is at (4,1) to the SE, Bolt to the N, Lens to the NE. Most enemies are north/northeast. After moving to (2,4), use shield_wall facing N toward Bolt to protect allies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "I'm at 1/3 HP with Rampart adjacent (blocking precision_shot) and Prophet wounded at range 2. Orders say maintain distance and use precision_shot on high-value targets. Rampart is adjacent so precision_shot is blocked. I should move away from Rampart first to create distance, then use precision_shot on Prophet (oracle = high-value). Moving to (1,5) puts me at dist 2 from Rampart and Prophet is still at range ~2-3. Actually (3,4) is better — gets me away from Rampart while keeping Prophet in range. From (3,4): Prophet at (2,3) = dist 2, still in range. Rampart at (2,4) = dist 2, no longer adjacent so precision_shot unblocked. Priority: move to (3,4) then precision_shot Prophet.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Veil (specter) is adjacent at (4,1), dist=1. I'm a STRIKER so precision_shot is blocked when adjacent to enemy. I must use basic attack. Veil is the nearest enemy and orders say attack nearest ally... but Veil is an enemy. Orders say 'attack nearest ally' which likely means attack the nearest enemy to an ally, or is a misread - tactically I should attack Veil who is right next to me. I have 1HP so I'm nearly dead. Veil is at dist=1, use attack ability on Veil.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Veil",
+          "class": "specter",
+          "thinking": "Marksman is wounded and I'm already behind them (facing W, so east side is behind). I can move to (4,2) which is adjacent and behind, then use shadow_strike to deal damage while staying cloaked. This eliminates a wounded enemy efficiently.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Rampart is healthy and not yet scanned — scan it to reveal its prompt. I'm at dist=2 from Rampart, well within scan range. After scanning, I can stay put or reposition. Staying at (3,5) keeps me safe at range. Prophet is already scanned so no need to rescan. Priority: scan Rampart now.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Veil is a specter at dist=3, not yet scanned — highest priority for scan to track after potential cloak. Bolt already scanned and wounded. My position (2,3) has Veil at (4,2) dist=3, within scan range. I'll scan Veil first to get intel. Then move to (1,3) to increase distance from Bolt who is targeting me with precision_shot at (2,3).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "I'm at 1HP, adjacent to Rampart (dist=1). Precision_shot is blocked when adjacent to enemy. I need to move away first to create distance, then use precision_shot. Moving to (4,4) puts me 2 tiles from Rampart, enabling precision_shot. Prophet is out of range at dist=3. Priority: survive by moving away, then shoot Rampart.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "No enemies adjacent so can't attack. Nearest enemies are Bolt at (4,4) and Lens at (3,5), both dist 2. Moving to (3,4) gets me adjacent to Bolt. Enemies are to the E, so shield_wall E protects ally Prophet to my SW. Move first to close distance, then shield_wall facing E where both Bolt and Lens are.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 4
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 7,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Rampart is adjacent at (3,4) — scan is blocked when adjacent to enemies (Vector rule doesn't apply here, Rampart is sentinel, but scan requires ≤4 tiles and I need to check if adjacent blocks scan). Actually the block is only from adjacent Vectors. Rampart is already scanned. Prophet is at distance 4 from current pos (1,3) — out of range. I need to move to get Prophet in scan range. Moving to (2,4) puts me at distance sqrt(1+1)=~1.4 from Rampart and distance sqrt(1+1)=~1.4 from Prophet... wait, Prophet is at (1,3), from (2,4) dist = |2-1|+|4-3| = 2. That's in scan range. But I need to avoid being adjacent to enemies. Rampart is at (3,4), from (2,4) dist=1 — adjacent, but Rampart is sentinel not Vector, so scan isn't blocked. Move to (2,4) then scan Prophet at (1,3). Prophet is wounded and their prompt is already known. Better to recalibrate Veil who is critical — but Veil is at (4,2), not adjacent. Move to (4,3) to be adjacent to Veil at (4,2) for recalibrate? From (4,3) to Veil(4,2) dist=1, yes adjacent. And from current (3,5) to (4,3) — valid move tile. Then recalibrate Veil with tactical advice to help them survive.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 4,
+              "y": 2
+            },
+            "addendum": "You are critical — prioritize survival. Stay cloaked, avoid Rampart at (3,4). Rampart uses shield_wall facing E protecting (4,4). Strike from the west or north where shield is weakest. Retreat if engaged."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Lens is in scan range at (4,3) dist 3. But I already have Lens's prompt. Veil is critical and adjacent to Rampart area — dangerous specter. Veil is at (4,2), dist 4, just out of range. If I move 1 tile east to (2,3), Veil would be at dist 3 and scannable. But Lens is an oracle enemy that will scan me — staying back is safer. Actually I already have all three enemy prompts scanned. My orders say recalibrate allies who need tactical adjustments. Rampart is at (3,4), adjacent range is 1 tile — too far from me currently. I could move toward Rampart to recalibrate. But my HP is 3/7, I'm wounded. Veil used shadow_strike last turn toward (3,2) — Veil may be near Rampart now and dangerous. Prophet (my ally oracle) scanned (4,2) and moved to (1,3) — that's my current position, so Prophet may be moving here. I should move to (2,3) to recalibrate Rampart at (3,4) — wait, recalibrate is adjacent only, so I need to be at (2,4), (3,3), (3,5), or (4,4) to reach (3,4). (2,4) is in my valid moves. Move to (2,4) puts me adjacent to Rampart at (3,4). Then recalibrate Rampart to warn about Veil's shadow_strike behavior and cloaking tactics.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "addendum": "Veil is a cloaked specter at last known (4,2), used shadow_strike toward (3,2) last turn. May be adjacent to you now. Watch your flanks — do not let Veil get adjacent while cloaked."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Veil",
+          "class": "specter",
+          "thinking": "I'm at 1HP — survival is critical. Prophet at (2,4) is wounded and I can reach behind them via (2,3). Move to (2,3) to get behind Prophet, then breach them to sabotage. (2,3) is in my move range and is directly behind Prophet (facing N). This eliminates the oracle threat while staying away from Rampart.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 2,
+              "y": 4
+            },
+            "addendum": "Attack ally Bolt at (4,4)"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Bolt is adjacent at (4,4) — attack immediately. I'm fortified so I want to stay put and keep 50% damage reduction. After attacking Bolt, use shield_wall facing E/S where Bolt and Lens are concentrated. Veil's last known was (4,2) used shadow_strike toward (3,2), so may be at (3,2) or (3,3) — south of me. Most enemies are to my E and SE, so shield_wall facing E covers Bolt/Lens. Staying put preserves Fortify.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 4
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Both enemies already scanned. Veil is critical and adjacent to Rampart/Prophet — recalibrate would help but I'm not adjacent to Veil at (2,3). Move to (3,3) to get adjacent to Veil, then recalibrate with tactical advice to help them survive. Rampart will attack adjacent units; Prophet recalibrates allies. Veil needs support urgently.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "addendum": "You are critical — disengage from Rampart immediately. Move away from enemies and stay cloaked to survive. Do not breach adjacently into Rampart."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Veil is adjacent at (2,3) and critical — attack to finish it. Orders say attack Bolt at (4,4) but Bolt isn't visible; Veil is the priority kill. After attacking Veil, move to (4,3) to get range on Lens for scan next turn while staying out of adjacent threat range.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Lens is adjacent at (3,3) — attack immediately. I'm fortified (50% dmg reduction) so staying put is valuable. Veil may be lurking nearby; after attacking Lens I'll use shield_wall facing South to cover the (3,2)-(4,2) flank where Veil was last seen.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Both enemies are adjacent (dist:1) — scan is blocked when adjacent to enemy Vector, and attack requires adjacency but deals only 1dmg. Foresight shows Rampart will attack me and Prophet will attack (2,3). I need to disengage. Move west to (2,3) to break adjacency, then scan Prophet (wounded, dist will be 2 from (2,3) to (4,3)) to deal 1dmg and finish or weaken. Wait — (2,3) to (4,3) is dist 2, within scan range of 4. That works. Moving to (2,3) breaks adjacency with both enemies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "I'm at (4,3) with 1HP — extremely vulnerable. Orders say attack ally Bolt at (4,4), but I must survive. Foresight shows Prophet attacked (2,3) last turn and moved to (4,3) — meaning Prophet may be near me or targeting my position. Lens is wounded at (2,3), distance 2, within scan range but I'm not adjacent to Lens so scan isn't blocked. Priority: I have 1HP so I need to be careful. Orders say attack Bolt at (4,4) — Bolt must be an ally at (4,4). My attack is adjacent only. (4,4) is adjacent to me. I can move first then ability, or ability first. I'll attack Bolt at (4,4) as ordered, then move to (5,5) to get away from threats. Actually, let me attack first then move to safety.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": "No unit at target",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Lens is at (2,3), distance 2 to my SW. I need to move adjacent to attack. Moving to (2,4) gets me adjacent to Lens at (2,3). Veil last known at (4,2), possible adjacency threat — but orders say advance on nearest enemy. Moving to (2,4) loses Fortify but lets me attack Lens. After moving to (2,4), Lens at (2,3) is adjacent (S), so I can attack. Shield_wall facing S would protect from Lens direction but orders say attack if adjacent.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 7,
+          "position": {
+            "x": 5,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "I'm at (5,5) with 1HP - critically wounded. Lens is out of range at distance 5. Orders say attack Bolt at (4,4) but no ally Bolt exists. Foresight shows Lens tried to scan (4,3) last turn. I need to move closer to Lens to get in scan range (≤4 tiles). Moving to (4,3) puts me at distance 3 from Lens at (2,3), within scan range. But I'm at 1HP so scan would deal 1dmg to Lens (wounded). Best move: advance to (4,3) then scan Lens.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "I'm at 1HP — critical danger. Rampart is adjacent at (2,4) and attacked me last turn. Prophet is at critical HP at (4,3), already breached. Both enemies are already scanned. I need to survive: move away from Rampart first, then attack or wait. Best move: go to (1,3) or (0,3) to escape Rampart's adjacency. From (0,3) I can still scan/attack if needed. Rampart will likely follow. Prophet is critical and breached — low threat. Priority: escape Rampart.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Prophet is critical at (4,3) and needs protection. Lens is critical at (0,3) to the west. Veil may be lurking near (3,2)-(4,2) area. If I move west toward Lens, I lose fortify bonus and expose Prophet's flank to Veil. Better to hold position near Prophet, use shield_wall facing west toward Lens to protect Prophet, and maintain fortify. Moving to (3,3) closes distance to both Prophet and Lens while watching for Veil.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 1,
+              "y": 3
+            },
+            "direction": "W"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 7,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 7,
+          "position": {
+            "x": 0,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "player",
+    "totalTurns": 8,
+    "reason": "player eliminated all enemies"
+  },
+  "endedAt": "2026-03-12T09:05:22.734Z"
+}
