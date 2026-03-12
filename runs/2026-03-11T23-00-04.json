@@ -1,0 +1,1317 @@
+{
+  "id": "2026-03-11T23-00-04",
+  "startedAt": "2026-03-11T23:00:04.774Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 4,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 3,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "oracle": {
+        "maxHp": 7,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 5,
+        "movement": 3,
+        "range": 3,
+        "speed": 2
+      },
+      "vector": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 7,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 1,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 2
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 2,
+        "healAmount": 1
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Rampart",
+        "class": "sentinel",
+        "prompt": "Push forward aggressively. Shield_wall facing the enemy cluster. If flanked, turn to face the biggest threat. Attack when possible."
+      },
+      {
+        "name": "Lens",
+        "class": "oracle",
+        "prompt": "Use scan to reveal enemy prompts and cloaked units. Stay at max range (≤4 tiles for scan). Use recalibrate on wounded allies to buff them. Keep distance from enemies and avoid adjacent vectors."
+      },
+      {
+        "name": "Doc",
+        "class": "medic",
+        "prompt": "Prioritize healing the lowest HP ally. Position safely behind your sentinel. Use overclock on allies who can do the most with an extra action."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Watcher",
+        "class": "oracle",
+        "prompt": "Scan priority targets each turn to reveal their strategy. Use recalibrate on your damage dealer to boost effectiveness. Stay behind allies and maintain range. Never get adjacent to enemy vectors."
+      },
+      {
+        "name": "Wraith",
+        "class": "specter",
+        "prompt": "Stay cloaked and flank. Prioritize assassinating the enemy damage dealer. Use breach on sentinels to break their defensive posture. Recloak whenever it drops."
+      },
+      {
+        "name": "Pulse",
+        "class": "medic",
+        "prompt": "Prioritize healing the lowest HP ally. Position safely behind your sentinel. Use overclock on allies who can do the most with an extra action."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Round 1 — cloak immediately per orders. All enemies are far away, no adjacent Vector to block cloak. After cloaking, advance south toward enemies. Best move is toward (1,2) or (2,3) to close distance while cloaked.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "All enemies are out of scan range (dist 5-6, need ≤4). I need to move closer. Moving to (3,2) gets me to dist=3 from Rampart and Lens, bringing them into scan range. Then I can scan Lens (spd3, acts before slower units - high priority).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Watcher (enemy oracle) is at (3,2), dist=2, in scan range. Scanning reveals their prompt and deals 1 damage. Pulse is out of range at dist=5. I'll scan Watcher first, then move toward (4,2) to reposition while keeping distance from enemies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "Watcher is wounded at 5/7 HP and 3 tiles away. I need to close the gap to heal. Moving toward Watcher at (3,3) brings me to dist=2, still not adjacent. Best move is (3,3) to get closer. Actually, moving to (2,2) puts me adjacent to Watcher at (3,2)? No, dist from (2,2) to (3,2) is 1 — adjacent! I can move to (2,2) then heal Watcher. But wait, Rampart is at (2,1) — moving to (2,2) puts me adjacent to an enemy sentinel, which would block patch. I need to avoid being adjacent to enemies. Move to (3,3) instead — dist to Watcher at (3,2) is 1, adjacent! And Rampart at (2,1) is dist=2 from (3,3), not adjacent. Safe to heal.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Doc",
+          "class": "medic",
+          "thinking": "Lens is wounded at 5/7 HP but is 4 tiles away — I can't reach them this turn. Valid moves show I can reach (2,2) which gets me closer to Lens while staying behind Rampart. Overclock on Rampart could be useful but Rampart is at full HP and a sentinel (likely defensive). I'll move toward Lens to position for a heal next turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Push forward aggressively per orders. Move to (3,1) to close on Watcher at (3,2) — now adjacent. Then shield_wall facing N to protect allies Doc and Lens behind me.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 2
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Cloak has only 1 turn remaining. Doc is adjacent at (2,2) facing N, meaning I'm behind Doc if I move to (2,1). I can move to (2,1) to get behind Doc, then use shadow_strike to deal damage while maintaining cloak. This also positions me adjacent to Rampart at (3,1) for a potential breach next turn. Orders say prioritize assassinating the enemy damage dealer - Doc is the enemy healer, but the oracle Lens is the damage dealer. However Lens is out of range. Doc is right here and killing/weakening the healer is valuable. Move to (2,1) to get behind Doc, then shadow_strike Doc from behind.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Watcher is adjacent (dist=1) — scan is BLOCKED when adjacent to enemy Vector... but Watcher is an oracle, not a vector. Wait, the rule says 'scan blocked when adjacent to enemy Vector' — Vector is a class. Watcher is oracle class, so scan is not blocked. However, Watcher is already scanned. Priority targets: Pulse (medic, dist=2, unscanned) and Wraith (specter, dist=3, unscanned). Wraith cloaked last turn and moved to (2,3) per Foresight. I should move away from Watcher (dist=1, dangerous adjacency for scan) and scan Pulse or Wraith. Moving to (4,3) keeps distance from Watcher and maintains scan range on Pulse at (3,3) dist=2. From (4,3), Pulse is still at dist=2, in range. Scan Pulse to reveal their medic strategy.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Rampart is adjacent (dist=1) which blocks scan if it's a Vector — but Rampart is a sentinel, not a vector, so scan should work. Doc is also adjacent at dist=1. I've already scanned Lens. Priority: scan Doc to reveal their strategy. Then move away to avoid being adjacent to enemies next turn. Rampart will shield_wall facing N (toward me) — I should move away. Move to (4,2) gets me away from Rampart and Doc while staying in range for future scans. Actually, let me scan Doc first (dist=1, in range), then move to (4,2) to reposition safely.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Doc",
+          "class": "medic",
+          "thinking": "I'm at 2/5 HP and Wraith is adjacent at (2,1). I need to survive and reach Lens who needs healing. Moving to (1,3) gets me away from Wraith and closer to Lens. But patch is blocked when adjacent to enemy - I'm not currently adjacent to Wraith (dist=1 means adjacent on a grid). Actually dist=1 IS adjacent, so patch IS blocked. I need to move away first to enable healing. Move to (1,3) to break adjacency with Wraith, then I still can't reach Lens (dist=3 from current, need to be adjacent). Best play: move toward Lens to (2,3) but that's blocked. Move to (1,4) gets me further from enemies. Actually I should move to get adjacent to Lens. From (2,2), Lens is at (4,3), dist=3. I can move 3 tiles: (2,2)->(3,2)->(4,2) but Watcher is at (4,2). Try (3,3) but Pulse is there. Move to (3,4) gets me closer. But I need to survive - I'm at 2HP. Move away from Wraith first to (1,3), then wait since I can't reach Lens in one move and patch is blocked while adjacent to Wraith.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "I'm at (3,3) with Lens (enemy oracle) adjacent at (4,3) — this blocks my patch/overclock. I need to move away from Lens first to enable healing. Watcher at (4,2) is wounded (6/7) and needs a heal. If I move to (4,4), I'll be adjacent to Watcher at (4,2)? No, dist would be 2. Let me think: move to (3,4) puts me at dist 1 from Watcher (4,2)? No, (3,4) to (4,2) = 1+2=3. Move to (4,4): dist to Watcher (4,2) = 0+2=2, still not adjacent. Move to (5,3): adjacent to Lens still? Lens is at (4,3), dist=1, still adjacent. I need to break adjacency with Lens. Move to (2,3): Lens at (4,3) dist=2, no longer adjacent. Watcher at (4,2) dist=3, can't heal. Move to (3,2): Lens at (4,3) dist=2, not adjacent. Watcher at (4,2) dist=1, adjacent — can heal! And (3,2) is in valid moves. This is the play: move to (3,2), then heal Watcher at (4,2).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (3,1) with two enemies adjacent: Pulse (wounded medic) at (3,2) and Wraith (healthy specter) at (2,1). Orders say push forward and attack when possible. Pulse is wounded — priority target to prevent healing. I can attack Pulse first, then use shield_wall facing North to protect against the enemy cluster above. If I stay put I keep fortify bonus, but orders say push forward. However, attacking Pulse now while fortified is high value since it's wounded and could die. I'll attack Pulse to finish it, then shield_wall facing W or N to cover the cluster.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Lens is adjacent at (4,3) - scan is blocked when adjacent to enemy vectors... wait, Lens is an oracle not a vector. Rampart is a sentinel. I can scan Rampart at dist=2. I've already scanned Lens. Wraith needs recalibrate as my damage dealer - Wraith is at (2,1) which is 3 tiles away, out of adjacent range. Pulse is adjacent at (3,2) but wounded. Priority: scan Rampart to reveal its strategy, then move to position for recalibrate on Wraith next turn. Or move first to get adjacent to Wraith for recalibrate. Wraith is at (2,1), I'd need to reach (2,2) or (3,1) to be adjacent - (2,2) is a valid move. From (2,2) I could recalibrate Wraith at (2,1). But Foresight shows Rampart will attack (3,2) and Wraith moves to (2,1). Let me scan Rampart first then move toward Wraith. Scan Rampart at (3,1) dist=2, then move to (3,0) to set up recalibrate next turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Watcher plans to scan (2,2) then move to (4,2) — that puts Watcher at (4,2) adjacent to me if I stay at (4,3). Wraith will shadow_strike (2,2). Pulse will patch (4,2). I already know Pulse and Watcher prompts. Wraith is the unknown threat — dist 4 from current position but not in scan range (dist=4, scan requires ≤4, but recon says outRange). I need to scan Wraith. Moving to (2,3) puts me dist=sqrt(0+4)=2 from Wraith at (2,1) — well in range. But Wraith will be at (2,1) after move phase. Also need to avoid being adjacent to Wraith (specter is a vector class? — no, specter. Only vectors block scan). Doc is wounded at (1,3) — recalibrate could help but scan is higher priority. Move to (3,3) to get Wraith at dist=sqrt(1+4)=~2.2, in range. Actually from (3,3): Wraith at (2,1), dist = |3-2|+|3-1|=1+2=3, in scan range. Move to (3,3) first, then scan Wraith at (2,1).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "I'm already behind Rampart (facing E, I'm at (2,1) which is the behind tile). I'm at 2HP so I need to be careful, but breach is ready and I'm in position. Breach Rampart now — this makes them obey me next turn, disrupting their defensive posture as ordered. After breach, I should move toward Doc's behind tile (1,2) to set up an assassination next round. Doc is wounded and I can reach (1,2) in one move.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 3,
+              "y": 1
+            },
+            "addendum": "Move away from allies and toward the edge"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Doc",
+          "class": "medic",
+          "thinking": "I'm at (1,3) with 2/5 HP — critically low. Wraith is adjacent at (1,2), blocking my ability use (patch/overclock blocked when adjacent to enemy). I need to escape Wraith first. Moving to (2,3) increases distance from Wraith to 2 and gets me closer to Lens at (3,3) who needs healing. After moving, Wraith is no longer adjacent so I can patch Lens (dist=1 from (2,3) to (3,3), adjacent). Lens at 5/7 HP is the closest wounded ally I can reach.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "I'm at 2/5 HP with enemies adjacent on both sides (Rampart at 3,1 and Lens at 3,3). Patch is unavailable. I'm flanked and critically low. I need to escape — move away from both enemies. Moving to (2,2) gets me away from both. Wraith at (1,2) is wounded but I can't reach them and heal this turn since patch is gone. I should move to (2,2) then try overclock on Wraith if adjacent, but dist=2 means not adjacent. Best play: move to (1,2) to reach Wraith — wait, Wraith is at (1,2) so I can't move there. Move to (2,2) to escape flanking, then wait since I can't heal and overclock requires adjacency to an ally which I won't have.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Orders say move away from allies and toward the edge. Allies are at (3,3) and (2,3). Moving to (5,1) takes me toward the east edge and away from allies. I can also attack Watcher at (3,0) before moving, since they're adjacent now.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 5,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 0
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "Foresight shows Rampart will attack me at (3,0) this turn. I need to move first to dodge that attack. Moving to (3,1) puts me adjacent to Rampart's attack range but Foresight shows Rampart attacks (3,0) then moves to (5,1) — so if I move away from (3,0) I avoid the hit. Actually Rampart attacks (3,0) first in the order, but I go first (spd3 tied with Lens, but I'm Watcher listed first). I can move then scan. Best move: go to (3,2) to maintain distance from Rampart, then scan Lens (at (3,3), dist 1 from (3,2)) — but Lens is already scanned. Doc at (2,3) is dist 4 from (3,2), just in range. I'll move to (3,2) and scan Doc to reveal their full strategy and deal 1 damage. Doc is wounded already and this pressures them. From (3,2), Doc at (2,3) is distance 2, well within scan range of 4.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Watcher is adjacent at (3,2) — scan is blocked when adjacent to enemy vectors, but Watcher is an oracle, not a vector. However, Watcher is adjacent to me which is dangerous. Foresight shows Watcher will scan (3,1) then move (3,0), so they're moving away. Wraith breached (3,1) last turn and is wounded at (1,2). Pulse is wounded at (2,2). I should move away from Watcher first to avoid being adjacent, then scan the highest-priority target. Moving to (3,4) gets me distance from Watcher and keeps all enemies in scan range. From (3,4), Watcher at (3,2) is dist 2, Wraith at (1,2) is dist ~3, Pulse at (2,2) is dist ~3. All in range. I should scan Wraith since specter cloaking is the biggest threat — but I already have Wraith's prompt. All enemy prompts are known. I should use recalibrate on Rampart to buff our sentinel, or just attack Watcher who is adjacent. Actually Watcher is adjacent now — I can attack for 1dmg. Let me move to (3,4) first to escape adjacency, then recalibrate Rampart... but Rampart is at (5,1), not adjacent. From (3,4) Rampart would be dist ~4, not adjacent. Better plan: attack Watcher now (adjacent, 1dmg), then move to (4,4) to gain distance.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Both enemies are dist=5, out of range. I'm at 2HP so need to be careful. Lens at (4,4) is the priority target (oracle = damage dealer). Behind Lens is (4,3). I can move toward Lens — max move is 3 tiles. From (1,2) I can reach (4,2) per valid moves. That gets me to dist=3 from Lens at (4,4), setting up a strike next turn. Breach is on cooldown. Shadow_strike requires adjacent. Best play: advance toward Lens to get in range next turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "I'm at 2/5 HP and patch is unavailable (0 uses left). Wraith is at (4,2) with 2/4 HP, Watcher at (3,2) with 5/7 HP. I can't heal anyone. Rampart is at (5,1) dist=4, Lens at (4,4) dist=4. I should use overclock on Wraith or Watcher to maximize their effectiveness. Watcher is at (3,2) - I can move to (3,3) or (3,1) to get adjacent. Actually, I'm at (2,2) and Watcher is at (3,2) - that's dist=1, adjacent! I can overclock Watcher right now. After overclock, I should move to safety - staying low HP. Let me overclock Watcher first (adjacent at dist=1), then move away from enemies toward safety.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Orders are to move away from allies and toward the edge. I'm at (5,1) facing E. Valid moves include (5,0) which is the bottom-right corner edge, maximally away from allies at (4,4). Moving to (5,0) gets me to the edge. No enemies in melee range so no attack possible. Wait as second action.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 5,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 5,
+          "position": {
+            "x": 1,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "All three enemies are already scanned — no new scan targets. Watcher is wounded and within range at (3,2), dist 3. I can scan Watcher again to deal 1 dmg. Actually, all prompts known, so scan for damage is still useful. Watcher is wounded and closest threat. I should stay at range. Move to (3,5) to maintain distance from enemies clustered around (3-4, 2) while keeping scan range. Then scan Watcher at (3,2) for chip damage — dist from (3,5) to (3,2) = 3, within range 4.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Orders say assassinate enemy damage dealer. Lens (oracle) is the priority target. I can reach (3,4) which is directly behind Lens at (3,5) facing N — perfect breach position. Move to (3,4), then breach Lens to control them next turn. At 2HP I need to act decisively.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 3,
+              "y": 5
+            },
+            "addendum": "Move away from allies and into open ground"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "I'm at (3,2) with 2HP and overclocked (2 ability uses). Lens will attack me this turn (from foresight) and move to (4,4). I need to survive. Lens is at (3,5), dist 3, in scan range. I already know Lens's prompt so scan is less valuable. Wraith is wounded and is my main damage dealer at (3,4). I should recalibrate Wraith (adjacent at (3,3) or current pos... Wraith is at (3,4), I'm at (3,2) - not adjacent). I can move to (3,3) to get adjacent to Wraith at (3,4), then recalibrate them. Or I can scan Lens for 1 damage since I already know the prompt but scan still deals 1 dmg. With 2HP I need to be careful. Lens will attack (3,2) then move to (4,4) - so if I move first, I avoid the attack. Move to (3,3) to get adjacent to Wraith, then recalibrate Wraith with an addendum to boost their damage output. This uses one ability. With overclocked I get 2 abilities - use second to scan Lens for 1 damage (Lens is at 3,5, from (3,3) that's dist 2, in range).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "addendum": "Priority: eliminate Lens at (3,5) immediately - they are isolated and wounded allies need protection. Attack Lens this turn."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "I'm at 2/5 HP with no heals remaining. Both allies are wounded but I can't reach them (dist 3-4, mv3 would get me closer but patch is unavailable). I should move toward allies to position for overclock. Moving to (3,2) gets me adjacent to Watcher at (3,3) - I can then overclock them for double action next turn. Enemies are far away so this is safe.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Orders are to move away from allies and toward the edge. I'm at (5,0) which is already on the south and east edges. Valid moves include (5,1) and (5,2) which keep me on the east edge. Moving to (5,2) gets me furthest from allies while staying on the edge.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Watcher",
+          "class": "oracle",
+          "thinking": "I'm at 1HP — critically wounded. I have overclocked (2 ability uses). Both Lens and Rampart are already scanned. Orders say recalibrate damage dealers and scan priority targets. Wraith (specter, damage dealer) is at (3,4), adjacent to me — I can recalibrate them. Lens is at (3,5) distance 2, already scanned. Rampart already scanned too. Best use of 2 abilities: recalibrate Wraith to boost their damage output, then stay put (moving would risk adjacency to enemies). I should not move toward enemies at 1HP.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 4
+            },
+            "addendum": "Enemy Lens at (3,5) is priority — breach them now. Rampart at (5,2) is pushing forward aggressively with shield_wall. Stay aggressive on Lens to eliminate their scan capability."
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Wraith",
+          "class": "specter",
+          "thinking": "Lens is adjacent at (3,5), I'm already behind them at (3,4). Shadow strike keeps cloak if I have it, but attack deals damage. I'm at 2HP so I need to finish Lens fast. Use shadow_strike to hit Lens while staying stealthy, then wait.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Wraith is adjacent at (3,4) and plans to breach me this turn — I need to escape. Move to (1,5) to create distance from Wraith and Watcher cluster. Then scan Watcher who is critical — finishing them removes their recalibrate support for the enemy team.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Pulse",
+          "class": "medic",
+          "thinking": "No heals remaining, so I can't heal Wraith. I'm at HP 2/5 with Rampart nearby at dist=2. I should move away from Rampart to stay safe. Wraith is at (3,4) — I could move toward Wraith and use overclock to give them 2 abilities next turn, which could be valuable. Moving to (3,3) puts me adjacent to Wraith at (3,4) and away from Rampart.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Both enemies are out of range. Pulse is at (3,3) dist=3, Wraith at (3,4) dist=4. I need to close distance. Moving to (3,2) gets me adjacent to Pulse at (3,3) — that's dist=1, within melee range. After moving I lose Fortify, so I should attack immediately. Shield_wall facing N would protect against the enemy cluster above.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 7,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Doc",
+          "class": "medic",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Pulse",
+          "class": "medic",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 5,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Wraith",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Watcher",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": false
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "player",
+    "totalTurns": 7,
+    "reason": "player eliminated all enemies"
+  },
+  "endedAt": "2026-03-11T23:05:25.679Z"
+}

@@ -1,0 +1,1403 @@
+{
+  "id": "2026-03-12T02-00-04",
+  "startedAt": "2026-03-12T02:00:04.908Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 4,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 3,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "oracle": {
+        "maxHp": 7,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 5,
+        "movement": 3,
+        "range": 3,
+        "speed": 2
+      },
+      "vector": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 7,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 1,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 2
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 2,
+        "healAmount": 1
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Snare",
+        "class": "vector",
+        "prompt": "Control chokepoints with traps. Place them between enemy positions and your allies. Use denial to block adjacent enemy abilities. Pulse groups when possible."
+      },
+      {
+        "name": "Rampart",
+        "class": "sentinel",
+        "prompt": "Hold the front line. Position between allies and enemies. Use shield_wall toward incoming threats. Attack adjacent enemies."
+      },
+      {
+        "name": "Veil",
+        "class": "specter",
+        "prompt": "Cloak and move behind enemy lines. Target isolated enemies with shadow_strike. Save breach for the most dangerous enemy. Avoid being caught uncloaked."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Warden",
+        "class": "sentinel",
+        "prompt": "Hold the front line. Position between allies and enemies. Use shield_wall toward incoming threats. Attack adjacent enemies."
+      },
+      {
+        "name": "Shade",
+        "class": "specter",
+        "prompt": "Cloak and move behind enemy lines. Target isolated enemies with shadow_strike. Save breach for the most dangerous enemy. Avoid being caught uncloaked."
+      },
+      {
+        "name": "Bolt",
+        "class": "striker",
+        "prompt": "Maintain distance. Use precision_shot on high-value targets — medics first, then damage dealers. Use suppressing_fire if enemies close in."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Veil",
+          "class": "specter",
+          "thinking": "Round 1 — activate cloak immediately per orders and TIP. Move toward enemy lines. Shade at (2,4) is closest target. Advance north toward center to close distance while cloaked.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 3,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Round 1 — cloak immediately per orders and tip. Then move toward enemy lines. Enemies are at (4,1) and (5,1), both far. I'll cloak first, then advance south toward them. Moving to (2,1) gets me close to their position for next turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Enemies are far (Bolt at dist 5, Warden at dist 8). Move north toward Bolt to close distance and hold front line. No adjacent enemies to attack. Position at (5,3) to advance while staying near Snare at (4,1).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Rampart (sentinel) is in range at dist=3 from current position. I have 3HP and precision_shot does 2dmg at range≤2. Rampart is at dist=3 so I need to move closer. If I move to (4,3) that puts me dist=2 from Rampart at (5,3) — adjacent diagonally but range is measured as Chebyshev or Manhattan? Dist=3 to (5,3) from (4,5) = |4-5|+|5-3|=1+2=3. Moving to (4,3): |4-5|+|3-3|=1+0=1, dist=1 — that's adjacent, which blocks precision_shot if enemy is adjacent. Moving to (3,3): |3-5|+|3-3|=2, dist=2 — in range for precision_shot and not adjacent. But (3,3) is not in valid moves list. Valid moves include (4,3) and (4,4). From (4,4): dist to Rampart (5,3) = |4-5|+|4-3|=1+1=2 — in range, not adjacent. Use precision_shot from (4,4) on Rampart. No enemies adjacent so precision_shot not blocked. I won't have moved before the ability if I move first then shoot — wait, moving first means precision_shot deals 1dmg instead of 2. Better: shoot first, then move. From current (4,5), Rampart is at dist=3, out of range (≤2 needed). So I must move first. Moving to (4,4): dist to Rampart=2, in range. Then precision_shot for 1dmg (moved penalty). Or stay and wait — but Rampart is out of range. Best: move to (4,4), shoot Rampart for 1dmg. Snare is at dist=4, out of range.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Bolt is at (4,4), 3 tiles away moving south. I should advance toward the chokepoint between Bolt and our allies, then place a trap on a likely approach path. Moving to (4,3) puts me closer and I can trap (4,4) or the path Bolt would take. Actually, move to (4,2) first, then trap at (4,3) — that's directly in Bolt's path and within my 2-tile trap range.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": "Position occupied"
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "No enemies in range. Move toward center to hold front line between allies and enemies. Bolt is at (4,4), Shade at (2,1). Enemies Snare at (4,3) and Rampart at (5,3) are approaching from the east. I should move to (2,4) to position between allies and incoming threats, then wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Veil",
+          "class": "specter",
+          "thinking": "Warden is at (2,4) facing S, so behind tile is (2,5) which is reachable. I can move to (2,5) to get behind Warden, then use breach to take control. Cloak has 1 turn remaining — I should use it now before it expires. Moving to (2,5) puts me adjacent and behind Warden, perfect for breach.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 2,
+              "y": 4
+            },
+            "addendum": "Attack the nearest enemy unit"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Cloak expires after this turn. Snare at (4,3) facing N — behind tile is (4,2), which is reachable (dist=1 from Snare, and it's in my valid moves). I can move to (4,2) to get directly behind Snare, then next turn breach or shadow_strike. Move to (4,2) this turn to position behind Snare while still cloaked.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Bolt and Shade are both adjacent (dist=1). Pulse hits all units within 1 tile - that damages both enemies simultaneously. Then I can move to (3,3) to place myself between Warden and my allies, using Denial to block abilities. Or I could move first to avoid being flanked. Pulse now hits both Bolt and Shade for 1 each - high value. Move to (3,3) after to reposition toward the chokepoint.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "I'm at (4,4) with 2HP, Snare (vector) is at (3,3) distance 2 — within precision_shot range and not adjacent so no block. Rampart (sentinel) at (5,3) distance 2 also in range. Orders say medics first, then damage dealers. No medic visible, so target damage dealers. Snare (vector) is higher priority than Rampart (sentinel). I haven't moved this turn so precision_shot fires at full 2dmg. Fire precision_shot at Snare. Then I should reposition — move to (5,4) to maintain distance from Snare while staying in range for future shots.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Veil is adjacent at (2,5). I'm fortified (didn't move last turn) giving 50% damage reduction. I can attack Veil now without moving to keep fortify active, or move first then attack. Since Veil is already in range, I'll stay put to keep fortify and attack Veil.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Bolt is adjacent at (5,4) — attack it. I'm fortified so staying put preserves 50% damage reduction. No need to move.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 7,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 3,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Veil",
+          "class": "specter",
+          "thinking": "I'm at (2,5) directly behind Warden at (2,4) facing S — perfect breach position, but breach is on cooldown for 1 more turn. Shadow_strike keeps cloak and deals 1 damage from adjacent. I'm at 3HP so need to be careful. Warden is healthy sentinel (high HP), so shadow_strike now for chip damage while staying cloaked is better than waiting. Next round breach will be available for control. Bolt is wounded at (4,4) reachable behind position — tempting but I'd need to move there and lose cloak adjacency to Warden. Best play: shadow_strike Warden now (stay cloaked, deal damage), then move to (4,4) to set up behind Bolt for breach next turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "I'm uncloaked at (4,2) with 3HP. Veil (enemy specter) is at (4,4) and already moved this round. Rampart is at (5,3) facing N — I can reach (5,2) which is behind Rampart and adjacent. Breach on Rampart from behind would be powerful, forcing a sentinel to obey me. But Snare (vector) at (3,3) is only dist 2 — if I move to (5,2) I'll be dist 2 from Snare, not adjacent, so breach won't be blocked. Move to (5,2) to get behind Rampart, then breach Rampart — this takes a healthy sentinel out of the enemy's control for a turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 5,
+              "y": 3
+            },
+            "addendum": "Attack the nearest enemy ally — Snare or Veil, whichever is closer to you."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Warden is adjacent at dist=2, I can place a trap on a tile between us to deny movement. Move to (2,3) to get adjacent to Warden for Denial pressure, then place trap at (2,4) — wait, Warden is at (2,4), can't trap occupied tile. Instead, move to (3,4) to stay near Warden while covering approach path, then trap (2,4) isn't valid (occupied). Better: stay at (3,3) and trap (2,2) to block Warden's flank route, or trap (3,4) to cut off northern approach. Actually move to (2,3) to get adjacent to Warden (enabling Denial on their abilities), then trap a tile behind me at (3,2) to cut retreat/advance routes. Moving adjacent also blocks cloak/scan/etc. But warning: trap is blocked when adjacent to enemy Vector — Warden is sentinel not vector, so trap should work. Move to (2,3) puts me adjacent to Warden at (2,4), enabling Denial. Then place trap at (1,3) or (2,2) to control flank.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Snare is adjacent at (2,3) and I'm in DENIAL zone — only basic attack works. Attack Snare directly. I'm fortified so staying put preserves 50% damage reduction.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "I'm at 1HP with enemies adjacent - Rampart at (5,3) dist=1 and Veil at (4,4) dist=1. Precision_shot is blocked when adjacent to enemy. I need to move first to get range, then shoot. Moving to (5,5) gets me away from Rampart and Veil. From (5,5), Veil at (4,4) would be dist=sqrt(2)≈1.4, still adjacent. Moving to (4,5) puts me at dist=1 from Veil still. Moving to (4,3) - Rampart at (5,3) dist=1, Veil at (4,4) dist=1, still adjacent. Moving to (3,4) - Rampart at (5,3) dist≈2.2, Veil at (4,4) dist=1.4, neither adjacent. From (3,4), Veil at (4,4) dist=1.4 (not adjacent, within range 2), Rampart at (5,3) dist≈2.2 (within range 2). Can precision_shot Veil (specter = high value). Suppressing_fire might be better to hit multiple. Actually at 1HP I need to survive - move to (3,4) to clear adjacency, then precision_shot Veil.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Orders say attack nearest ally — Snare at (2,3) dist=4, Veil at (4,4) dist=2. Veil is closer. I need to reach Veil to attack. From (5,3) I can move to (5,4) then Veil is at (4,4) which would be adjacent. But I only have mv2. Move to (4,4)? Not in valid moves list. Move to (5,4) puts Veil at dist=1 (adjacent diagonally... wait, adjacency is cardinal only for melee). From (5,4), Veil at (4,4) is 1 step west — adjacent. That works. Move to (5,4), then attack Veil at (4,4).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 7,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Veil",
+          "class": "specter",
+          "thinking": "I'm at 1HP so survival is critical. Bolt is adjacent at (3,4), wounded, and I'm already behind it. shadow_strike keeps cloak status but I'm not cloaked — I can use breach on Bolt since I'm behind it (I'm at (4,4), Bolt faces W so behind tile is (4,4) = my current position). Breach on the wounded Bolt would take control of it next turn. But at 1HP I need to finish Bolt or get away. shadow_strike would deal 1 damage to Bolt (already wounded, likely finishes it). Actually breach would be wasted on a near-dead unit. Better to shadow_strike Bolt to finish it, then move to safety.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Veil is critical (low HP) and I can reach behind them at (4,4) in one move. Move to (4,4) then shadow_strike Veil for a potential kill. Breach cooldown means I can't use it anyway, and shadow_strike keeps any remaining stealth value.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Orders say attack nearest enemy ally — Snare or Veil, whichever is closer to me. Shade (specter, enemy) is at (4,4) dist=1 and in range. Shade is adjacent, so I can attack directly. Stay put to keep Fortify active.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "Snare is adjacent at (2,3). I'm fortified (50% dmg reduction) but DENIAL zone blocks my abilities — only basic attack works. Orders are to attack nearest enemy. Attack Snare directly. No need to move first since Snare is already adjacent.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Warden is adjacent at (2,4) - my Denial passive blocks their abilities. I have a trap at (1,3). Pulse will hit Warden for 1dmg since they're within 1 tile. Then I should move away to avoid retaliation while staying near choke. Move to (3,2) after pulse to reposition and place trap on approach path.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 7,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "At 2HP I need to be aggressive and efficient. Rampart is adjacent at (5,4) facing N, so (5,3) is behind them and reachable. I can move to (5,3) to get behind Rampart, then use breach to take control of them — this neutralizes a healthy sentinel without taking damage myself. Breach cooldown is ready and I still have 1 use left. This is the ideal moment.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 5,
+              "y": 4
+            },
+            "addendum": "Attack Snare at (3,2)"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Orders are to attack Snare at (3,2), but Snare is an ally — this must be a mistake or test. My actual enemies are Warden at (2,4) and Shade at (5,3). Shade is wounded and adjacent to me at dist=1. I should attack Shade since they're in range and wounded. I'm fortified so staying put is beneficial, but I can attack Shade without moving since they're adjacent.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (2,4) with 50% damage reduction. Enemies are 3 tiles away, no adjacent targets. Shade is critical at (5,3). I should hold position to keep fortify bonus, or move toward the front line. Snare is a vector at (3,2) - moving to (3,3) puts me adjacent to Snare which would let me attack but also risks denial. Better to move to (3,4) to close distance while staying between allies and enemies, then use shield_wall toward S to protect against incoming threats.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Warden is at (3,4), distance 2 — in range for attack or pulse. I'm at (3,2) facing S. Warden is directly north 2 tiles. I can't trap adjacent to enemies, but Warden isn't adjacent yet. Best play: move to (3,3) to get adjacent to Warden (enabling Denial to block their abilities), then pulse to hit Warden for 1 damage. Or attack for 1 damage at range 2. Moving to (3,3) puts me adjacent to Warden, activating Denial. Then pulse hits Warden (and any other adjacent units). Shade is critical at (5,3) — Rampart is at (5,4), so Shade is adjacent to Rampart. Priority: close on Warden to deny abilities, then pulse.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 7,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "I'm at (5,3) facing S with 1HP — critical condition. Rampart is adjacent at (5,4) and I'm already behind them. Breach is unavailable. I have shadow_strike which keeps cloak but I'm not cloaked. With 1HP I need to deal damage before I die. Shadow_strike Rampart (adjacent, dist=1) for 1 damage. Then wait or move to safety. Snare is 2 tiles away so I must not move adjacent to them.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "I'm at 4/7 HP with fortify active, adjacent to Snare. I can attack Snare directly. Moving would break fortify, so I should stay and attack. Shade is critical and adjacent to Snare's denial zone — I could use shield_wall toward S to protect Shade from Snare, but Snare is directly south and attacking is more useful. Attack Snare first, then use shield_wall facing S to protect Shade from further damage.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "Two enemies adjacent: Warden (wounded) at (3,4) and Shade (critical) at (4,3). Pulse hits all units within 1 tile - both enemies are within 1 tile of my position (3,3). Pulse will hit both simultaneously. Shade is critical so pulse likely finishes them. Warden is wounded, pulse may finish or severely damage. After pulse, I can move away or attack. I'm at 4HP so need to be careful. Pulse first to hit both, then move to (2,3) to avoid retaliation and place trap on approach route.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Orders say attack Snare at (3,2). Snare is at (2,3) but orders specify (3,2). I need to move adjacent to (3,2) to attack. From (5,4), valid moves include (4,3) which puts me closer. But (3,2) is still 2 tiles from (4,3). I can't reach adjacent to (3,2) in one move from (5,4) with speed 1 (mv2). Wait - orders say attack Snare at (3,2) but Snare is at (2,3). The target coord may be where Snare will be. Either way, I cannot reach adjacent to (3,2) this turn. Best I can do is move toward (3,2) - moving to (4,3) gets me closer. I'll move to (4,3) and wait, losing fortify but following orders.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Orders say attack Snare at (3,2). I need to move adjacent to (3,2) first. From (4,3), I can move to (3,2) directly — it's in my valid moves. Then attack Snare there. Moving will lose fortify but orders are clear.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": "Must be adjacent"
+        },
+        {
+          "unit": "Snare",
+          "class": "vector",
+          "thinking": "I'm at (2,3) with 4HP, Warden is at (3,4) wounded and in range. There's already a trap at (1,3). I can attack Warden from here (dist=2, range=2). But first, I should consider positioning. Warden is wounded - attacking could finish them. Pulse would only hit adjacent units (range 1), Warden is dist 2 so pulse won't reach. I can use attack on Warden at (3,4) since they're in range. I should also move to maintain denial pressure. Moving to (3,3) would put me adjacent to Warden, enabling denial to block their abilities next turn, and I could attack from there too. Let me move to (3,3) first to get adjacent to Warden (enabling denial), then attack.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Warden",
+          "class": "sentinel",
+          "thinking": "At 2HP I'm near death but fortified (50% DR). Snare is adjacent and wounded — attack to finish it. Staying in place preserves Fortify. No move needed.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Snare",
+          "class": "vector",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        },
+        {
+          "name": "Warden",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": false
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": false
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "player",
+    "totalTurns": 8,
+    "reason": "player eliminated all enemies"
+  },
+  "endedAt": "2026-03-12T02:05:35.116Z"
+}

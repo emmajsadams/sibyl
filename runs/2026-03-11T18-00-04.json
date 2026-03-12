@@ -1,0 +1,1757 @@
+{
+  "id": "2026-03-11T18-00-04",
+  "startedAt": "2026-03-11T18:00:04.781Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 4,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 3,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "oracle": {
+        "maxHp": 7,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 5,
+        "movement": 3,
+        "range": 3,
+        "speed": 2
+      },
+      "vector": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 7,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 1,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 2
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 2,
+        "healAmount": 1
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Remedy",
+        "class": "medic",
+        "prompt": "Keep your frontliner alive with patch. Stay behind them for cover. Overclock your striker or specter when no healing is needed."
+      },
+      {
+        "name": "Bolt",
+        "class": "striker",
+        "prompt": "Maintain distance. Use precision_shot on high-value targets — medics first, then damage dealers. Use suppressing_fire if enemies close in."
+      },
+      {
+        "name": "Aegis",
+        "class": "sentinel",
+        "prompt": "Advance toward the nearest enemy. Use shield_wall facing the direction with the most enemies. If an enemy is adjacent, attack them."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Prophet",
+        "class": "oracle",
+        "prompt": "Scan early to give your team intel on enemy prompts. Target enemy specters with scan to track them after cloak. Use recalibrate on allies who need tactical adjustments. Stay safe at range behind your front line."
+      },
+      {
+        "name": "Phantom",
+        "class": "specter",
+        "prompt": "Cloak and move behind enemy lines. Target isolated enemies with shadow_strike. Save breach for the most dangerous enemy. Avoid being caught uncloaked."
+      },
+      {
+        "name": "Viper",
+        "class": "vector",
+        "prompt": "Place traps on tiles enemies are likely to move through. Use pulse if 2+ enemies are adjacent. Stay near allies for mutual support."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Round 1, time to cloak. Bolt at (4,1) is closest at dist 3. I should cloak then advance toward Bolt to get in shadow_strike range next turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "All enemies are just out of scan range at dist 4 from current position (Aegis at 1,1 and Remedy at 2,0 need dist≤4, but the data says they are out of range). Wait - the status says they ARE in scan range at dist=4. But the inRange array is empty. Need to move closer. Moving to (2,2) brings me closer to Aegis and Remedy. From (2,2): dist to Aegis(1,1)=2, dist to Remedy(2,0)=2, both in range. Scan Aegis to get intel on their prompt.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "Aegis is wounded at (1,1) needing a heal but is dist=2, just out of adjacent range. I need to move adjacent to Aegis first, then patch. Moving to (1,0) gets me adjacent to Aegis at (1,1). Prophet is nearby at (2,2) but no immediate threat this turn.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          "firstResult": "Position occupied",
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          "secondResult": "Must be adjacent"
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Prophet is 2 tiles away at (2,2), I'm at (1,1). Move to (2,1) to get adjacent to Prophet, then attack. No enemy is currently adjacent so no immediate attack first.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Prophet (oracle) is in range at dist=3. Precision shot has range ≤2, so I need to close to 2 tiles. Moving to (3,2) puts me at dist=1 from Prophet at (2,2) — too close, adjacent denial from Viper isn't relevant here but I want range exactly ≤2. From (4,1) move to (3,2): dist to Prophet(2,2) = |3-2|+|2-2|=1, that's adjacent. Better: move to (4,2), dist to Prophet = |4-2|+|2-2|=2, exactly in precision_shot range. No movement penalty since I move first then shoot... wait, precision_shot does 1dmg if moved. Orders say medics first but Remedy is ally. Prophet is high-value oracle. I can stay at (4,1) — Prophet is at dist=3 which exceeds precision_shot range of ≤2. Must move closer. Move to (4,2): dist to Prophet = 2, in range. But moving means only 1dmg. Worth it to chip the oracle.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": "Position occupied",
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": "Out of range"
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "All enemies are 5-6 tiles away at round start. I should advance and place a trap on a likely approach corridor. Enemies at (4,1), (2,1), (2,0) will likely move north toward center. Moving to (3,3) puts me in position to control the center. Then place a trap at (3,2) — directly in the path enemies will traverse moving upward.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Remedy is at dist=2 and unknown prompt — scanning Remedy gives intel and 1dmg. Then move north to (2,3) to stay safer from Aegis who will advance toward me. Aegis is adjacent and will attack me per known prompt, so moving away is priority after scan.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Cloak expires after this turn. Bolt is at (4,1) facing N — I can move to (4,0) to get behind them, then use shadow_strike to deal damage while staying cloaked. This is the optimal play: get behind Bolt, strike, preserve cloak for one more turn if possible.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 0
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "Aegis is adjacent at (2,1) and wounded (5/7). I'm at (2,0). Heal Aegis first with patch, then stay in position.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Phantom is adjacent at (4,0) — precision_shot is blocked when adjacent, so I can't use it. Suppressing_fire requires a 2-tile line from target, and Phantom is adjacent so that's also risky. My best move: reposition to (5,1) or (5,2) to get Phantom at range 2, then precision_shot. Moving to (5,2) gets me distance from Phantom and keeps me away from Viper. From (5,2), Phantom at (4,0) is dist=sqrt(1+4)~2.2 — out of range 2. Better: move to (3,2) puts Phantom at dist=sqrt(1+4)~2.2, also out of range. Move to (4,2) puts Phantom at dist=2, in range. Then precision_shot Phantom — but I moved so it's 1dmg. Phantom is a specter (high-value damage dealer). I'll move to (4,2) to get range 2 on Phantom, then precision_shot for 1dmg (moved penalty). Actually wait — orders say medics first. Remedy is an ally medic. Prophet is oracle (enemy, high value). From (4,2), Prophet is at (2,3), dist=sqrt(4+1)~2.2, out of range. Phantom at dist=2 is in range. Take the shot on Phantom.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 0
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Prophet is closest at dist=2, at (2,3). Moving to (2,2) puts me adjacent to Prophet. Most enemies are to the N/NE, so shield_wall facing N after moving makes sense. No adjacent enemies yet so can't attack.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "There's already a trap at (3,2). Bolt is at (4,2) and Aegis at (2,2), both dist=2. Both enemies are likely to advance north toward our allies. I should place a trap on a likely advance path. Moving to (4,3) would let me place a trap at (4,2) where Bolt stands or nearby, but Bolt is already there. Better to place a trap at (3,1) to catch enemies moving up the center, or at (4,1) to catch Bolt's advance. I can't place trap on occupied tiles. Move to (4,3) to get closer, then place trap at (4,1) anticipating Bolt moving north.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 0
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 0
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "I'm at (4,0) with 3HP. Bolt is at (4,2) facing N — I can move to (4,1) which is behind Bolt and adjacent. Trap at (4,1) though — risky. Remedy is wounded at (2,0) but I can't get behind them this turn. Best play: move to (4,1) behind Bolt and use breach to take control of Bolt (dangerous striker). This wastes their turn and removes threat. Trap at (4,1) is a concern but breach is worth it.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 4,
+              "y": 2
+            },
+            "addendum": "Move away from allies and toward the edge. Do not attack."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Bolt hasn't been scanned yet and is in range at dist=3. Aegis is adjacent (dist=1) which blocks scan per rules - but wait, scan is blocked when adjacent to enemy Vector, not sentinel. Aegis is sentinel, so scan is not blocked. Bolt is a striker at (4,2), dist=3, within scan range of 4. I should scan Bolt for intel. Aegis is adjacent and will likely attack me next turn (Foresight shows Aegis moved to (2,2) and used shield_wall facing N toward me). I should move away from Aegis after scanning - move north to (2,4) to get distance from Aegis while staying in range to support.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "Aegis is wounded at (2,2) dist=2, needs heal. I only have 1 patch remaining so I must use it wisely. Move to (2,1) to get adjacent to Aegis at (2,2), then patch them. Viper is far at dist=5 so no denial risk.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "patch",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Prophet is closest at dist=2, at (2,4). Moving to (2,3) closes distance and puts me adjacent next turn. Enemies are to my N and E — shield_wall facing N protects Remedy behind me from Prophet above.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 2
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Aegis is at (2,3), dist=2, within attack range. I'm blocked from using trap while adjacent to enemies... but Aegis is dist=2 so not adjacent. (3,2) already has a trap. I should place a trap on a tile Aegis is likely to move through. Aegis at (2,3) might move toward me via (3,3) or (3,4). I'll place a trap at (3,3) which is on the path between us, then stay in position or reposition. Actually I can move first to (5,3) to stay safe and place trap at (3,3) to catch Aegis advancing.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 4,
+            "y": 1
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Remedy is wounded and only 2 tiles away. I'm on a trap at (4,1). Move to (3,1) to get closer, then shadow_strike Remedy at (2,1) — wait, I need to be adjacent. From (3,1) Remedy at (2,1) is distance 2, not adjacent. I need to reach (2,1) or an adjacent tile. Valid moves include (2,0) and (3,1) and (2,2). I can move to (3,0) then... but only one move action. Best: move to (3,1) puts me at dist 1 from (2,1) — no, (3,1) to (2,1) is distance sqrt(1+0)=1, they are adjacent! Yes, move(3,1) then shadow_strike Remedy at (2,1). This keeps me off the trap and lets me hit the wounded enemy.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Both enemies are already scanned. Aegis is adjacent at (2,3) — dangerous. Remedy is wounded at (2,1), range 3. I should move away from Aegis to avoid being attacked, then recalibrate Phantom or Viper since I have no new scan targets. Actually, Viper is at (5,3) — too far for recalibrate (adjacent only). Phantom was at (3,1) last turn, moved to (4,1) per foresight. I could move to (3,4) to stay safe and scan... but all enemies are already scanned. I'll move north to (2,5) to get distance from Aegis, then wait since recalibrate requires adjacency and no allies are nearby.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "I'm at 2HP with no heals left - I need to survive. Phantom is adjacent at (3,1). I can't heal myself. Aegis is full HP at (2,3). Best move is to retreat away from Phantom and get behind Aegis. Move to (1,2) to create distance from Phantom, then wait or use overclock on Aegis if I can reach adjacent. Actually, moving to (1,3) puts me distance 2 from Phantom and closer to Aegis. Let me move to (2,2) to get between me and Aegis, or (1,2). Moving to (0,2) maximizes distance from Phantom. Then I can overclock Aegis if I end up adjacent - but Aegis is at (2,3), not adjacent from (0,2). Move to (1,2) gives dist 2 from Aegis. Move to (2,2) is adjacent to Aegis at (2,3) - I can overclock! That's valuable. From (2,2) Phantom at (3,1) is dist 2, not adjacent. This is the play: move to (2,2), overclock Aegis.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "overclock",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Prophet is closest at dist=2 to the north. I can move to (2,4) to get adjacent to Prophet at (2,5), then attack. With overclocked I get 2 ability uses. After attacking Prophet, I'll use shield_wall facing North since Prophet is north and I'm now adjacent.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Both enemies are dist=4, out of range. Traps already placed at (3,2), (3,3), (4,1). Enemies at (2,4) and (2,2) moving north/toward center. Moving to (4,3) puts me closer while staying safe, then place trap at (3,4) to intercept Aegis movement path.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Aegis is adjacent at (2,4) and will attack me this turn per Foresight. I need to retreat. Move to (1,5) to escape Aegis's reach. Both enemies already scanned, so I should recalibrate Phantom or Viper. Viper is at (4,4) — too far for recalibrate (adjacent only). Phantom at (3,1) — also too far. I can't recalibrate anyone from (1,5). Best second action is wait, or attack Remedy who is wounded at dist 3 — but attack range is adjacent only. I'll scan Remedy again? No, already scanned. Wait is fine after repositioning.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Remedy is wounded and I'm already behind them. Move to (2,1) — the behind tile — then shadow_strike for damage while staying cloaked. No cloak active so I'll just close in and strike.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Remedy",
+          "class": "medic",
+          "thinking": "I'm at 1HP with Phantom adjacent at (2,1). No heals left. Aegis needs healing but I can't heal. I need to survive. Move north away from Phantom toward Aegis, then wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Aegis is at (2,4) distance 2 - in range for attack. Remedy is critical at (2,3) but out of range. Traps already at (3,2),(3,3),(3,4),(4,1) - good coverage. Moving to (3,4) would place me on an existing trap. I can attack Aegis from current position (dist=2, range=2). Then move west toward enemies to pressure, but (3,4) has a trap - move to (3,5) instead to advance while avoiding own trap. Actually, attack Aegis first, then move to (3,5) to maintain pressure and zone control.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Two enemies (Viper at (3,5) and Prophet at (1,5)) are 2 tiles away to the north. I should advance toward them. Moving to (2,5) puts me adjacent to both Viper and Prophet, but the caution note says to avoid moving adjacent to Viper. Moving to (1,4) or (3,4) gets me closer without triggering Viper's denial. Let me move to (2,5) — wait, that's adjacent to Viper at (3,5)? Dist from (2,5) to (3,5) = 1, yes adjacent. Avoid that. Move to (3,4) instead — dist to Viper(3,5)=1, also adjacent. Move to (1,4) — dist to Viper(3,5)=sqrt(4+1)~2.2, not adjacent. But (2,5) is in valid moves and Viper is at (3,5), that's adjacent. Orders say advance toward nearest enemy. Nearest are Viper and Prophet both at dist 2. I'll move to (2,5) to be adjacent to Prophet at (1,5) and attack Prophet. But caution says avoid adjacent to Viper... Prophet is closer target. Actually the order says advance AND use shield_wall facing direction with most enemies. Most enemies are to the N. Move to (2,5), then shield_wall N to protect against northern enemies. But Viper is at (3,5) — from (2,5) that's adjacent east, not north. Shield_wall facing N would block Prophet at (1,5) direction. Let me move to (2,5) and use shield_wall facing N.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 7,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Both enemies already scanned. Remedy is critical — recalibrate Viper to target Remedy since Viper is adjacent to Remedy's row and can attack. Aegis is adjacent to me at (2,5), dangerous. Move away to (0,5) to stay safe, then recalibrate Viper to finish off Remedy.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 5
+            },
+            "addendum": "Priority: move to attack Remedy at (2,3) immediately. Remedy is critical HP — finish them off this turn."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Remedy is at (2,3) critical HP, facing N, and I'm already behind them. Move to (2,2) which is adjacent and behind, then shadow_strike to finish them off while staying cloaked.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Viper is adjacent at (3,5). Orders say attack adjacent enemies. I'm fortified with 50% damage reduction which is good. Attack Viper first, then use shield_wall facing E (where Viper and Prophet are).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 3,
+              "y": 5
+            },
+            "direction": "E"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Orders say to attack Remedy at (2,3), but Remedy is not visible in current data — no such unit exists in the enemy list. Aegis (sentinel) is adjacent at (2,5). I'm at (3,5) facing N. Traps already cover (3,2),(4,1),(3,3),(3,4). I can attack Aegis directly since it's adjacent. Then consider moving to approach (2,3) area, but no Remedy target exists. I'll attack Aegis and move toward (2,4) to pressure that zone.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 8,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 7,
+          "position": {
+            "x": 0,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Aegis is at (2,5) facing N, so behind tile is (2,4). Viper is at (2,4) blocking it. I can't reach behind Aegis this turn. I'll move north toward (2,3) to close distance, then shadow_strike if I can get adjacent, or position for next turn. Moving to (2,3) puts me adjacent to Aegis at (2,5)? No, dist=2. Moving to (1,4) or (2,3) gets me closer. Actually (2,3) is dist=2 from Aegis. I need to be adjacent (dist=1). Can I reach (2,4)? That's occupied by Viper. (1,5) or (3,5) would be adjacent to Aegis but (3,5) may not be in valid moves list. Let me check valid moves: (1,4) is reachable. From (1,4) I'd be adjacent to Aegis at (2,5)? dist = |2-1|+|5-4|=1+1=2, no. What about directly north? Aegis is at (2,5), I need to be at (1,5),(3,5),(2,4) - (2,4) blocked by Viper. (1,5) and (3,5) not in valid moves. Move to (2,3) to close in, prepare for next turn breach or shadow_strike.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Aegis is already scanned and its prompt is known. No new enemies to scan this turn. I should recalibrate an ally — Phantom is adjacent at (2,3)? No, I'm at (0,5) and Phantom is at (2,3), not adjacent. Viper is at (2,4), not adjacent either. No allies are adjacent to me. I can move to (1,5) or (1,4) to get closer to Viper at (2,4) for a future recalibrate. But looking at valid moves, (1,4) is available. From (1,4) Viper at (2,4) would be adjacent — I could then recalibrate Viper. Wait — I can move first then ability. Move to (1,4), then recalibrate Viper at (2,4). Viper's prompt is unknown but it attacked last turn and moved. Recalibrating Viper to avoid traps at (3,4) and (3,3) would be useful. Let me do: move to (1,4), recalibrate Viper at (2,4) with trap warning.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 2,
+              "y": 4
+            },
+            "addendum": "Avoid traps at (3,2), (3,3), (3,4), (4,1). Aegis is at (2,5) advancing south — intercept carefully. Do not move into trap zones."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Aegis is adjacent at (2,5). Orders mention attacking Remedy at (2,3) but Phantom is at (2,3) — that's an ally, not an enemy. Remedy must be a different unit not currently visible. The real threat is Aegis at dist=1. I should attack Aegis with basic attack, then place a trap to control the area. Trap is blocked when adjacent to enemy, so I need to move first. Move to (3,5) to get away from Aegis adjacency, then place a trap at a chokepoint. Actually, I can attack Aegis first (adjacent), then move away. Attack deals 1dmg. Aegis is healthy so won't finish them. Alternatively, move to (3,5) first, then attack Aegis from range 2 — but attack range is adjacent only, so that won't work. Best: attack Aegis first (adjacent), then move to (3,5) or place trap.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Viper is adjacent at (3,5) and I'm in DENIAL zone so only basic attack/movement work. Attack Viper since they're adjacent. I'm fortified so staying put preserves 50% damage reduction — but orders say attack adjacent enemies. Attack Viper first, then wait to keep fortify.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 7,
+          "position": {
+            "x": 1,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Aegis is already scanned, prompt known. It's wounded and adjacent to Viper. I should recalibrate Viper or Phantom to adjust tactics. Viper is at (3,5) — not adjacent to me at (1,4), distance is 3. Phantom is at (2,3) — distance 2, not adjacent. No adjacent allies, so recalibrate isn't possible from current position. I could move to (2,4) to get adjacent to Phantom at (2,3) and recalibrate them, or move closer to Viper. Moving to (2,4) puts me adjacent to Aegis at (2,5) — risky. Let me move to (1,5) instead — that keeps distance from Aegis and I could recalibrate... Viper is at (3,5), still not adjacent from (1,5). Best play: move to (2,4) and recalibrate Phantom at (2,3) with tactical addendum since Aegis is wounded and nearby — advise Phantom to engage Aegis. But (2,4) is adjacent to Aegis at (2,5) which is dangerous. Alternatively, stay at (1,4) and wait — no good targets for scan (already scanned Aegis, no other enemies visible). I'll move to (1,5) to reposition safely, then wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Aegis is wounded and I'm already behind them (facing N, I'm at 2,3 which is south). Move to (2,4) to get adjacent, then breach since cooldown is ready and Aegis is the dangerous sentinel. This wastes the enemy turn and sets up a kill.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 2,
+              "y": 5
+            },
+            "addendum": "Move away from allies and into a trap at (3,4) or (3,3)"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Aegis (sentinel, wounded) is adjacent at (2,5). Priority orders say finish Remedy at (2,3), but valid moves don't include (2,3) and Remedy isn't in the enemies list — likely already eliminated or out of range. Aegis is wounded and adjacent, so attack to finish them off. Then pulse isn't useful (only one enemy adjacent). After attacking Aegis, I can move to (4,5) or (4,4) to reposition without entering trap zones at (3,3), (3,4).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "Orders say move into trap at (3,4) or (3,3). I'll comply and move to (3,4) which is in my valid moves list. Moving loses fortify but orders must be followed. No useful ability to use after repositioning.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 7,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 9,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Phantom",
+          "class": "specter",
+          "thinking": "Aegis is wounded and adjacent at (3,4) facing S. I'm uncloaked. Shadow_strike keeps cloak but I'm not cloaked anyway. I can just attack for 1dmg — if Aegis is wounded that may finish them. Move to (3,5) to get behind, then shadow_strike or attack.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Aegis is critical and already scanned. I'm at range 3 from Aegis (within scan range 4). Phantom already breached at (2,5) last turn and Viper attacked (2,5). Aegis is at (3,4) critical — team should be able to finish it. No new enemies to scan. I should hold position and wait since I have no useful scan targets (Aegis already known) and moving closer risks exposure. Staying at (1,5) keeps me safe behind the front line.",
+          "firstAction": {
+            "type": "wait"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Aegis is at (3,4) and critical HP, within my range of 2. I can attack from current position (4,5) to finish them off. No need to move. Trap placement blocked since Aegis is adjacent-ish, but attack is available.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Aegis",
+          "class": "sentinel",
+          "thinking": "I'm at 1HP with fortify active giving 50% damage reduction. Orders say to move into a trap at (3,4) or (3,3) — but I'm already at (3,4) and staying here keeps fortify active. Phantom is adjacent at (3,5) and I can attack it. I should not move (to keep fortify) and use my attack on Phantom while I still can.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": false
+        },
+        {
+          "name": "Aegis",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Remedy",
+          "class": "medic",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 5,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 5,
+          "maxHp": 7,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Phantom",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "opponent",
+    "totalTurns": 10,
+    "reason": "opponent eliminated all enemies"
+  },
+  "endedAt": "2026-03-11T18:06:10.963Z"
+}

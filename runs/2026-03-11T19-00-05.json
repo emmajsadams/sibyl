@@ -1,0 +1,1329 @@
+{
+  "id": "2026-03-11T19-00-05",
+  "startedAt": "2026-03-11T19:00:05.218Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 4,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 3,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "oracle": {
+        "maxHp": 7,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 5,
+        "movement": 3,
+        "range": 3,
+        "speed": 2
+      },
+      "vector": {
+        "maxHp": 8,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 7,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 1,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 2
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 2,
+        "healAmount": 1
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Lens",
+        "class": "oracle",
+        "prompt": "Scan priority targets each turn to reveal their strategy. Use recalibrate on your damage dealer to boost effectiveness. Stay behind allies and maintain range. Never get adjacent to enemy vectors."
+      },
+      {
+        "name": "Bolt",
+        "class": "striker",
+        "prompt": "Maintain distance. Use precision_shot on high-value targets — medics first, then damage dealers. Use suppressing_fire if enemies close in."
+      },
+      {
+        "name": "Lattice",
+        "class": "vector",
+        "prompt": "Trap the paths enemies must take to reach your backline. Stay at medium range. Use pulse on clustered enemies. Denial blocks adjacent threats."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Ghost",
+        "class": "specter",
+        "prompt": "Cloak and move behind enemy lines. Target isolated enemies with shadow_strike. Save breach for the most dangerous enemy. Avoid being caught uncloaked."
+      },
+      {
+        "name": "Bulwark",
+        "class": "sentinel",
+        "prompt": "Push forward aggressively. Shield_wall facing the enemy cluster. If flanked, turn to face the biggest threat. Attack when possible."
+      },
+      {
+        "name": "Prophet",
+        "class": "oracle",
+        "prompt": "Scan priority targets each turn to reveal their strategy. Use recalibrate on your damage dealer to boost effectiveness. Stay behind allies and maintain range. Never get adjacent to enemy vectors."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Bolt is at dist=4 but inRange=false per recon. Need to move closer. Moving to (4,2) brings me to dist=3 from Bolt, within scan range. Then scan Bolt to reveal strategy.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Prophet is in scan range at dist 3. Scan it to reveal its strategy and deal 1 damage. Then move north toward (3,2) to reposition for next turn while staying behind allies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "Round 1, perfect time to cloak. All enemies are far (dist 6-8), no adjacent Vector to block cloak. I'll cloak first then move toward center to close distance while invisible.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 0,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Prophet is adjacent at (4,2) — precision_shot is blocked when adjacent to enemy. I'm at 1HP, critical danger. Must move away first to enable precision_shot. Move to (5,2) to create distance from Prophet (dist becomes 2), then precision_shot Prophet (high-value oracle target, dist=2, no movement penalty since ability comes after move... wait, I moved so precision_shot does 1dmg). Still worth it — oracle is priority target.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Enemy cluster at (3,2), (3,1), (5,2) — all to the south. Orders say push forward aggressively. Move to (2,3) to close distance, then shield_wall facing S to protect allies from the southern threat cluster.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Prophet is wounded and at dist=2, in range. I can place a trap on a tile between us to zone, or use attack. Better to place a trap on (4,1) to cut off Prophet's movement south, then stay put. Bulwark is at dist=3, not in range yet. My Denial passive will block Prophet's scan if they get adjacent. Trap (4,1) blocks the path Prophet would take to advance, then wait.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 3,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "Cloak expires after this turn. No enemies reachable this turn. Lens is at (3,2) facing N, behind tile is (3,1) which is occupied by Lattice. I need to close distance. Move to (3,3) puts me adjacent to Lens next turn if they don't move, and I can shadow_strike from cloak. Moving to (4,3) or (3,3) gets me closer. Lens at dist 3, I can move to (3,3) which is distance 1 from Lens — then shadow_strike next turn if still cloaked but cloak expires this turn. Actually cloak has 1 turn remaining meaning it lasts through this turn. So next turn I'll be uncloaked. Best play: move as close as possible to set up shadow_strike while still cloaked. Move to (4,3) — dist 2 from Lens. Or (3,3) — directly adjacent, could shadow_strike this turn as second action. Wait, (3,3) is distance 1 from Lens at (3,2). Shadow_strike is range adjacent. So move to (3,3) then shadow_strike Lens!",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Ghost is adjacent (dist=1) at (3,3) — scan is blocked when adjacent to enemy Vector, but Ghost is a specter, not a vector. However Ghost is at dist=1 which is dangerous. Lattice (our vector ally) is at (3,1). I need to stay out of adjacency to enemy vectors — Bulwark is sentinel, Prophet is oracle, Ghost is specter, none are vectors so scan is not blocked. Priority: scan Ghost to reveal their strategy (Ghost is healthy and threatening, dist=1, in scan range). Then move away to maintain safety. Move to (4,3) to get distance from Ghost and Prophet, then scan Ghost. Wait — if I move first to (4,3), Ghost dist becomes 2, still in scan range. But Prophet is at (4,2), moving to (4,3) puts me adjacent to Prophet. Better to scan Ghost first, then move. Scan Ghost at (3,3) from current pos (3,2) — dist=1, in range. Then move to (2,2) or (4,3) to create distance. Moving to (2,2) keeps distance from Prophet too.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Bolt is adjacent (dist=1) and targeted me last turn with precision_shot — I need to move away. Lattice is at dist=2, so I must not move adjacent to (3,1). Moving to (4,3) keeps me safe from Lattice and out of melee with Bolt, while staying in scan range of Lens (dist will be ~3). Lens is a priority target — scan it to reveal its strategy and deal 1 damage.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "I'm at 1/3 HP, critical condition. Prophet (oracle, wounded) is closest at dist=2, high priority target. I haven't moved yet so precision_shot deals 2dmg - enough to finish a wounded oracle. Stay at current position to keep precision_shot at full power, then shoot Prophet.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "Lens is at (2,1), distance 2 — moving to (2,2) puts me adjacent for attack next turn and keeps me between Lens and wounded allies. Lattice denial zone means I should not go adjacent to (3,1). Moving to (2,2) is safe and closes distance on Lens. Shield_wall facing S covers Lens approach direction.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 2
+            },
+            "direction": "S"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Ghost(3,3) and Bulwark(2,2) are both in range at dist 2. Pulse hits all within 1 tile - from (3,2) I'd be adjacent to both Ghost and Bulwark, hitting both. Move to (3,2) then pulse to damage two enemies. Also there's a trap at (4,1) already placed. This gets me closer for Denial pressure and multi-hit pulse.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 3,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "I'm adjacent to Bulwark (dist=1), which blocks scan. Prophet is at dist=4 (out of range from current pos). Ghost is already scanned. I need to move away from Bulwark to enable scanning, and recalibrate Bolt (wounded damage dealer) to boost effectiveness. Moving to (1,1) keeps distance from Bulwark and stays safe. From (1,1) I can recalibrate Bolt at (5,2)? No, recalibrate is adjacent only. Bolt is at (5,2), too far. Lattice is at (3,2), also not adjacent from (1,1). Let me reconsider. Recalibrate requires adjacent ally. From (2,1), Lattice at (3,2) is dist=2, Bolt at (5,2) is far. No adjacent allies currently. Moving to (2,0) doesn't help adjacency. Moving to (1,1) puts me adjacent to Lattice at... no (3,2) is still dist=2. I should move to (2,3) to get behind allies. Wait - Lattice is at (3,2), moving to (2,3) makes dist=2. Moving to (3,1) puts me adjacent to Lattice at (3,2) - dist=1! That's valid and in my move tiles. Then I can recalibrate Lattice to boost their effectiveness as they're healthy and active. Also need to avoid Bulwark at (2,2). (3,1) is safe from Bulwark. Move to (3,1), then recalibrate Lattice at (3,2).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 2
+            },
+            "addendum": "Ghost (specter, critical) is at (3,3) cloaking and targeting isolated units — coordinate to finish it before it uses breach. Enemy Prophet at (4,3) is wounded and scanning us — prioritize blocking or pressuring it."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "Ghost is critical at (3,3) and needs recalibrate support. Ghost just shadow_struck Lattice at (3,2) — Ghost is our damage dealer who needs boosting. I can recalibrate Ghost since they're adjacent to me at (3,3). After recalibrating, I should reposition. Lattice is at (3,2) distance 2 — I must not move adjacent. Bolt has precision_shot targeting me at (4,3) — I should move to avoid that. Move to (5,3) to dodge Bolt's shot, then recalibrate Ghost to boost their effectiveness.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "addendum": "Ghost: you are critical but vital. Lattice(vector) at (3,2) is wounded from your strike — finish them with shadow_strike next turn. Bolt(striker) at (5,2) is wounded too. Prioritize Lattice to remove their ability-denial threat."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "I'm at 1HP — critical condition. Lattice is adjacent and blocking abilities. I need to move away from Lattice's denial zone first, then act. Moving to (2,1) puts me behind Lens (who is wounded) and adjacent for shadow_strike. That removes Lens and gets me out of Lattice's denial. Shadow_strike doesn't break cloak but I'm not cloaked. Still, killing a wounded enemy is the priority. Move to (2,1) first (exits denial zone), then shadow_strike Lens at (3,1) — wait, (2,1) is adjacent to Lens at (3,1)? dist=1 yes. Shadow_strike range is adjacent only. From (2,1), Lens at (3,1) is 1 tile east — adjacent. And I'd be behind Lens (facing E, behind tile is (2,1)). Perfect: move to (2,1), then shadow_strike Lens.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Prophet is adjacent at (5,3) — precision_shot is blocked when adjacent. I'm at 1HP and need to survive. Move away to (4,3) to get distance from Prophet, then use precision_shot on Prophet (now 1 tile away, still in range 2). Watch trap at (4,1) — avoid it.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Bulwark is adjacent at (2,2), so my Denial passive is already blocking their abilities. Ghost is critical at (2,1) and in range. I should pulse to hit both Bulwark and Ghost simultaneously — pulse hits all units within 1 tile, and both are within 1 tile of my current position (2,2) is adjacent, (2,1) is dist 2 so only Bulwark gets hit by pulse from (3,2). Wait — pulse hits within 1 tile AoE from my position: Bulwark at (2,2) is dist 1, Ghost at (2,1) is dist 2 — Ghost is out of pulse range. So pulse hits only Bulwark. Instead, I can attack Ghost directly (dist 2, within range 2) to finish it off since it's critical. Use ability attack on Ghost at (2,1) to eliminate the critical specter threat. Then move to (4,2) to reposition away from Bulwark while staying relevant.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I'm fortified at (2,2) with 50% damage reduction. Ghost is critical at (2,1) and needs protection. Enemy cluster: Lattice(vector) at (4,2) dist=2 is a denial threat, Lens at (3,1) dist=2, Bolt at (4,3) dist=3. Orders say push forward and shield_wall facing enemy cluster. If I move to (3,2) I get closer to enemies and can shield_wall East to protect against Lattice/Bolt/Lens cluster. But moving loses fortify. Alternatively, shield_wall East now while fortified, then move. Shield_wall East from (2,2) would protect adjacent ally — Ghost is at (2,1) which is South, not adjacent East-side. Prophet is at (5,3). Let me shield_wall East first (protecting eastward damage to adjacent allies), then move to (3,2) to advance. Actually Ghost at (2,1) is adjacent South — shield_wall E would block damage from East direction to adjacent allies. That protects Ghost from Lens at (3,1) which is ESE. Move to (3,2) first puts me adjacent to Lens at (3,1) for an attack, but I'd lose fortify. I'll shield_wall East first while fortified, then advance to (3,2) to threaten Lens.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 1
+            },
+            "direction": "E"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 8,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 6,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 7,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "I'm at 2HP — critical. Bolt is adjacent (4,3) and already scanned. Lattice is 2 tiles away at (4,2). I must not move adjacent to Lattice. Moving to (5,4) keeps distance from both enemies and avoids adjacency to Lattice. From (5,4) I can scan Lattice at dist=2 to deal damage and reveal its prompt — Lattice is healthy and a threat worth revealing. Lens is out of range at dist=4. Bolt is wounded and already scanned.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "Ghost is critical and adjacent - but scan is blocked when adjacent to enemies. Bulwark is adjacent at (3,2), healthy sentinel threatening me. Foresight shows Ghost will shadow_strike me at (3,1) this turn - I'm in danger. I need to move away from Ghost's attack. Moving to (2,2) gets me away from Ghost and still lets me scan Bulwark. Actually, let me move first to break adjacency with Ghost, then scan Bulwark who's still in range. Moving to (2,3) puts distance from Ghost. But I need to stay useful - recalibrate Bolt (damage dealer) or scan Bulwark. Bulwark is healthy and a threat. Let me move to (2,2) to escape Ghost's strike zone, then scan Bulwark at (3,2) - dist will be ~1.4, within range 4.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Ghost",
+          "class": "specter",
+          "thinking": "At 1HP I'm critical. Lens is adjacent at (2,2) and I'm already behind them (I'm at their south, they face N). Shadow_strike keeps cloak and deals 1dmg to finish this wounded oracle. Then I need to survive — move away from danger toward safety.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I'm fortified (50% DR) and adjacent to Lattice who has DENIAL active — shield_wall and intercept are blocked, only basic attack/move work. I have two adjacent targets: Lattice (healthy) and Lens (wounded). Priority: attack Lens to finish off the wounded oracle, then stay put to keep fortify active. If I move I lose fortify. Best play: attack Lens first, then attack Lattice. But I can only use one ability per turn. Lens is wounded so attacking it is highest value. I'll attack Lens and wait to preserve fortify.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "I'm at 1HP - critical. Prophet is wounded oracle (high-value target) at (5,4) dist=2, in range. Bulwark sentinel is healthy at (3,2) dist=2. Orders say medics/oracles first. I haven't moved this turn so precision_shot deals 2dmg - enough to kill wounded Prophet. Need to check adjacency: Bulwark at (3,2) is dist=2 from me at (4,3), not adjacent, so precision_shot is not blocked. I should shoot Prophet first, then consider moving away from Bulwark to survive. Moving to (5,3) or (5,2) keeps distance from Bulwark. Actually (4,4) moves me away from Bulwark and maintains range on remaining enemies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Bulwark is adjacent at (3,2) - Denial is already suppressing their abilities. I can pulse to hit Bulwark for 1dmg. But first, I should move to (5,2) to escape Bulwark's adjacency and get better positioning, then pulse would need recalculation. Actually, staying put and pulsing Bulwark (dist=1, within pulse AoE of 1 tile) deals 1dmg to them. After pulsing, I can move to (5,3) to get away from Bulwark and closer to Prophet. Wait - pulse hits ALL within 1 tile including allies. Check: Bolt is at (4,4) dist=2, Lens at (2,2) dist=2+. No allies within 1 tile. Safe to pulse. Then move to (5,3) to pressure Prophet and place trap on (4,3) next turn.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 3,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 7,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "I'm at 1HP — critically vulnerable. Ghost is at (1,1) critical and just shadow_struck me last turn. Bulwark at (3,2) attacked me. I need to survive. Move away from both threats first. Ghost is at (1,1) heading W, Bulwark at (3,2) heading E — both are adjacent/near me. I should move north to (2,4) to escape, then recalibrate Bolt who is wounded at (4,4) — but that's not adjacent. Better: move to (2,4) to get distance, then scan Ghost at (1,1) who is critical — finish them off with scan damage. Ghost is 2 tiles away from (2,2), and from (2,4) would be dist 3+1=? Let me check: (2,4) to (1,1) = 1+3=4, still in scan range. Actually scan does 1dmg and Ghost is critical — that could finish Ghost. Move to (2,3) first to stay within scan range of Ghost at (1,1): dist = 1+2=3, in range. Or move to (1,3): dist to Ghost(1,1)=2, in range. Move north to (2,4) to escape both Bulwark and Ghost, then scan Ghost to finish them (dist from 2,4 to 1,1 = 1+3=4, exactly at range limit). This is the play.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "scan",
+            "target": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Prophet",
+          "class": "oracle",
+          "thinking": "I'm at 1HP, adjacent to Lattice (DENIAL active, blocking scan/recalibrate). Foresight shows Bolt will precision_shot me at (5,4) — I must move away to survive. Move to (4,5) to escape both Bolt's shot and Lattice's denial zone. From (4,5) I'm no longer adjacent to Lattice, so I can scan Lens (critical, dist 3 from new position — wait, Lens is at (2,4), dist from (4,5) = 2+1=3, in range). Actually Lens is already scanned. All enemies already scanned. Use recalibrate on Bulwark at (3,2) — but that's not adjacent from (4,5). Better: move to (4,3) to be adjacent to Bulwark? No, Bulwark is at (3,2). From (4,3) dist to Bulwark = 1+1=2, not adjacent. Move to (4,5) gets me away from Bolt's shot and Lattice. Then wait — all targets already scanned, no adjacent allies to recalibrate. Priority: survive.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "At 4/7 HP with Fortify active, I need to advance carefully. Orders say push forward and shield_wall facing enemy cluster. Enemies are at (4,4), (5,3), (2,4) — cluster is NE. Moving to (4,3) gets me adjacent to Bolt at (4,4) and Lattice at (5,3). Then shield_wall facing N to protect against Bolt above me. Prophet is critical at (4,5) — adjacent to both Bolt and Lattice, so shielding N from (4,3) also helps block damage to Prophet.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 4,
+              "y": 4
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "I'm at 1HP, critical danger. Bulwark is adjacent at (4,3) - this blocks precision_shot. Prophet is adjacent at (4,5), also critical HP. I need to move first to create distance, then use precision_shot. Valid moves: (3,3),(3,4),(3,5),(4,2),(5,4),(5,5). Moving to (3,5) gets me away from Bulwark and keeps Prophet at distance 2, enabling precision_shot. Prophet is critical HP - one shot should finish them. Orders say medics first, oracle qualifies.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Bulwark is adjacent at (4,3) - my Denial passive is already blocking some of their abilities. I can pulse to hit Bulwark for 1dmg (they're wounded, so this could be significant). Ghost at (3,3) is critical and cloaked - I should move toward (3,3) area to threaten it with Denial, but pulse will hit anyone within 1 tile. If I pulse now from (5,3), only Bulwark at (4,3) is in range (dist=1). After pulsing, I should move to (4,4) or (4,2) to maintain pressure on Bulwark while also cutting off Ghost. Actually, Ghost is at (3,3) - if I move to (3,3) first... but that's occupied. Move to (4,4) gets me adjacent to both (3,3) Ghost zone and keeps Denial on Bulwark. Let me pulse first to damage Bulwark, then move to (4,4) to maintain Denial on Bulwark and threaten Ghost at (3,3).",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 8,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Lens",
+          "class": "oracle",
+          "thinking": "I'm at 1HP so survival is critical. Bulwark is already scanned. No new priority targets in range to scan. I should recalibrate Bolt (my striker/damage dealer) to boost effectiveness, but Bolt is at (3,5) which is not adjacent to me at (2,4) - distance is 2, so recalibrate won't reach. I could move to (3,4) or (2,5) to get adjacent to Bolt at (3,5). Moving to (2,5) puts me adjacent to Bolt and keeps me away from enemies. Then recalibrate Bolt with useful addendum about the wounded Bulwark.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 5
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "recalibrate",
+            "target": {
+              "x": 3,
+              "y": 5
+            },
+            "addendum": "Bulwark sentinel at (4,3) is wounded and uses shield_wall facing N. Attack from south or flank west to bypass shield. Priority target."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Lattice",
+          "class": "vector",
+          "thinking": "Bulwark (wounded sentinel) is adjacent at (4,3) — my Denial passive blocks their scan ability. Ghost (specter, critical) is at (3,3) cloaking and threatening backline. I should pulse to hit Bulwark at (4,3) and potentially Ghost at (3,3) if within 1 tile of my current position. Pulse hits ALL units within 1 tile — from (4,4), that covers (3,3),(3,4),(3,5),(4,3),(4,5),(5,3),(5,4),(5,5). Ghost at (3,3) and Bulwark at (4,3) are both within 1 tile. This could finish or critically wound both. After pulsing, I should move to (4,5) to stay at medium range and protect backline, or trap a path. Let me pulse first from current position to hit both clustered enemies, then move to (4,5) to maintain Denial pressure on Bulwark while positioning for trap coverage.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bulwark",
+          "class": "sentinel",
+          "thinking": "I'm at 2/7 HP, fortified with 50% damage reduction. Lattice is adjacent at (5,3) with DENIAL active blocking abilities except basic attack. I should attack Lattice since it's in range and I can still use basic attack despite denial. I'll stay in place to keep fortify active and attack Lattice.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "I'm at (3,5) with 1HP - critical condition. Bulwark sentinel at (4,3) is wounded and within range (dist=3, range=2 for precision_shot). Wait - precision_shot range is ≤2 tiles, dist=3 so OUT of range. I need to move closer. Moving to (4,4) puts me at dist=1 from Bulwark (adjacent), which blocks precision_shot. Moving to (3,4) gives dist=2 from (4,3) - within precision_shot range and not adjacent. But I moved so precision_shot does 1dmg. Bulwark is wounded, 1dmg might finish it. Also shield_wall faces N - attacking from (3,4) is west of target, which should bypass the shield. Let me move to (3,4) then fire precision_shot.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 3,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Lattice",
+          "class": "vector",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 8,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Lens",
+          "class": "oracle",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Ghost",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": false
+        },
+        {
+          "name": "Bulwark",
+          "class": "sentinel",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Prophet",
+          "class": "oracle",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 5
+          },
+          "alive": false
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "player",
+    "totalTurns": 7,
+    "reason": "player eliminated all enemies"
+  },
+  "endedAt": "2026-03-11T19:05:04.088Z"
+}
