@@ -40,7 +40,7 @@ export const BALANCE: BalanceConfig = {
     striker: { maxHp: 2, movement: 2, range: 2, speed: 1 }, // nerfed HP 3→2 (71.7%@272g all-time, still dominant after dmg nerf)
     oracle: { maxHp: 7, movement: 3, range: 3, speed: 3 }, // buffed HP 6→7 (39.5%@43g in last 50)
     medic: { maxHp: 5, movement: 3, range: 3, speed: 2 }, // nerfed speed 3→2 (77%@26g in last 50, still OP after HP+patch nerfs)
-    vector: { maxHp: 8, movement: 2, range: 2, speed: 1 },
+    vector: { maxHp: 7, movement: 2, range: 2, speed: 1 }, // nerfed HP 8→7 (62.9%@35g in last 50, overperforming)
     sentinel: { maxHp: 6, movement: 2, range: 1, speed: 1 }, // nerfed HP 7→6 (69.6%@260g all-time, still overperforming)
   },
   abilities: {
