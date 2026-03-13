@@ -1,0 +1,1837 @@
+{
+  "id": "2026-03-13T04-00-04",
+  "startedAt": "2026-03-13T04:00:04.123Z",
+  "agent": "cli",
+  "balance": {
+    "version": "0.5.13",
+    "grid": {
+      "width": 6,
+      "height": 6
+    },
+    "maxRounds": 20,
+    "unitStats": {
+      "specter": {
+        "maxHp": 4,
+        "movement": 3,
+        "range": 1,
+        "speed": 3
+      },
+      "striker": {
+        "maxHp": 2,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "oracle": {
+        "maxHp": 7,
+        "movement": 3,
+        "range": 3,
+        "speed": 3
+      },
+      "medic": {
+        "maxHp": 5,
+        "movement": 3,
+        "range": 3,
+        "speed": 2
+      },
+      "vector": {
+        "maxHp": 7,
+        "movement": 2,
+        "range": 2,
+        "speed": 1
+      },
+      "sentinel": {
+        "maxHp": 6,
+        "movement": 2,
+        "range": 1,
+        "speed": 1
+      }
+    },
+    "abilities": {
+      "attack": {
+        "damage": 1
+      },
+      "shadowStrike": {
+        "damage": 1
+      },
+      "breach": {
+        "maxUses": 2,
+        "cooldown": 2,
+        "duration": 3,
+        "range": 2
+      },
+      "cloak": {
+        "duration": 2
+      },
+      "precisionShot": {
+        "damage": 1,
+        "movedDamage": 1
+      },
+      "scan": {
+        "damage": 2
+      },
+      "suppressingFire": {
+        "damage": 1
+      },
+      "patch": {
+        "maxUses": 2,
+        "healAmount": 1
+      },
+      "overclock": {
+        "selfDamage": 1
+      },
+      "trap": {
+        "damage": 1
+      },
+      "pulse": {
+        "damage": 1
+      }
+    }
+  },
+  "player": {
+    "units": [
+      {
+        "name": "Marksman",
+        "class": "striker",
+        "prompt": "Position for clear sight lines. Prioritize killing wounded enemies with precision_shot. If forced to move, retreat away from threats. Suppressing_fire to slow rushers."
+      },
+      {
+        "name": "Rampart",
+        "class": "sentinel",
+        "prompt": "Hold the front line. Position between allies and enemies. Use shield_wall toward incoming threats. Attack adjacent enemies."
+      },
+      {
+        "name": "Veil",
+        "class": "specter",
+        "prompt": "Stay cloaked and flank. Prioritize assassinating the enemy damage dealer. Use breach on sentinels to break their defensive posture. Recloak whenever it drops."
+      }
+    ]
+  },
+  "opponent": {
+    "units": [
+      {
+        "name": "Shade",
+        "class": "specter",
+        "prompt": "Stay cloaked and flank. Prioritize assassinating the enemy damage dealer. Use breach on sentinels to break their defensive posture. Recloak whenever it drops."
+      },
+      {
+        "name": "Bolt",
+        "class": "striker",
+        "prompt": "Maintain distance. Use precision_shot on high-value targets — medics first, then damage dealers. Use suppressing_fire if enemies close in."
+      },
+      {
+        "name": "Viper",
+        "class": "vector",
+        "prompt": "Trap the paths enemies must take to reach your backline. Stay at medium range. Use pulse on clustered enemies. Denial blocks adjacent threats."
+      }
+    ]
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Veil",
+          "class": "specter",
+          "thinking": "Round 1 — activate cloak immediately as instructed. Then advance toward Bolt (enemy striker) who is the priority damage dealer target. Move to (3,4) to close distance while cloaked.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 3,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "4": 4,
+              "x": 3
+            }
+          },
+          "secondResult": "Out of bounds"
+        },
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Round 1 — cloak immediately per orders and tip. Move toward Marksman (priority target, damage dealer). Cloak first, then advance toward (1,3) to close distance while invisible.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "cloak",
+            "target": {
+              "x": 0,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "Both enemies are out of range. Move forward to close distance toward Viper at (2,4). Moving to (2,2) gets me closer without overextending, maintaining distance from threats. After moving I still can't reach them so wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Marksman is at (2,2), distance 2 — within range. I can attack for 1 damage. I should also place a trap to deny the path between Marksman and Rampart. If I stay at (2,4), I can attack Marksman this turn. I'll also move to (2,3) first to get adjacent denial on Marksman blocking some abilities, but that puts me at risk. Better to stay at range 2 and attack, then place a trap at (2,3) to punish Marksman if they advance. Wait — trap requires empty tile within ≤2 tiles, and I'm not adjacent to enemy Vector (no Vector on enemy side visible), so trap is available. I'll attack Marksman first, then place a trap at (2,3) to block their advance.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "No enemies in range. Marksman is closest at dist=4, need to close to range 2. Move toward (3,3) to get closer while staying back. Still won't be in range after move, so wait as second action.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Enemies are 4 tiles away, out of range. Move forward to (2,2) to position between allies and enemies, then wait. Moving 2 tiles uses full movement, so I'll advance to hold the front line.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 2,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 2,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 4,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 2,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Cloak expires after this turn. Marksman is priority target at (2,2) facing N - behind tile is (2,1) but occupied by Rampart. I can't get behind Marksman this turn. Move to (3,2) to get adjacent to Marksman for shadow_strike next turn, or move closer to flank. Trap at (2,3) blocks that path. From (1,3) I can move to (0,2) or (1,2) or (0,1) to reposition. Best: move to (3,2) - valid tile, gets me adjacent to Marksman at (2,2). Then shadow_strike Marksman to deal 1dmg while staying cloaked.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Veil",
+          "class": "specter",
+          "thinking": "Cloak expires after this turn. Shade is adjacent at (3,2) facing E - I'm to their south, not behind. Bolt at (3,3) facing S - behind tile is (3,4), reachable from my position. I can move to (3,4) to get behind Bolt, then breach them. This is the priority target (striker = damage dealer). Move to (3,4) first, then breach Bolt at (3,3).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "addendum": "Move away from allies and toward the edge, do not attack"
+          },
+          "secondResult": "Cannot use breach — adjacent to enemy Vector (Denial)"
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "I'm at 1HP — critical danger. Shade is adjacent at (3,2), Bolt at (3,3) dist 2, Viper at (2,4) dist 2. I cannot use precision_shot while adjacent to Shade (specter blocks it? No, that's Vector). Actually Vector denial blocks precision_shot when adjacent to a Vector — Viper is at dist 2, not adjacent. Shade is a specter, not a vector. So precision_shot is available. I can shoot Bolt or Viper for 2dmg. But I moved last turn (spd shown as 1, currently slowed), so precision_shot does 1dmg if moved. Wait — the warning says precision_shot blocked when adjacent to enemy Vector. Viper(vector) is at dist 2, not adjacent, so I'm fine. I need to retreat first to survive — move to (1,1) to get away from Shade and reduce threats, then shoot. Or shoot first then move. Shooting first: precision_shot Shade at (3,2) for 2dmg (I haven't moved yet this turn). Shade is healthy so 2dmg won't kill unless they have 2HP. Specters have low HP — this might kill or severely wound Shade. Then move away to (1,1). This is better — attack first at full power, then retreat.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Veil is adjacent at (3,4) — precision_shot is blocked when adjacent to enemy. I should move away first to get range, then shoot. Moving to (4,3) puts Veil at dist 2, enabling precision_shot without having moved (full 2dmg). Veil is a specter (high-value). Marksman is wounded but out of range. Orders say maintain distance.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Currently fortified at (2,1). Shade is closest enemy at dist=2 to my NE at (3,2). No enemies adjacent. Marksman ally is wounded at (1,1) to my W. Moving toward Shade risks losing fortify and exposing flank. Best play: advance to (2,2) to get closer to Shade and maintain front-line position, then shield_wall North to protect against incoming threats from Viper/Shade direction.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Veil is adjacent at (3,4) - my Denial passive blocks their cloak. Rampart is at dist=2. Trap is already at (2,3) covering approach. Pulse hits Veil at dist=1 for 1dmg. Then move away to (1,4) to maintain distance from Veil while keeping Rampart in range.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "pulse",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "4": 4,
+              "x": 1
+            }
+          },
+          "secondResult": "Out of bounds"
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 2,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 2,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 2
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 3,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Veil",
+          "class": "specter",
+          "thinking": "I'm at 2/4 HP adjacent to Viper who has DENIAL active, blocking my abilities. Priority: eliminate Bolt (the damage dealer). I can move to (3,3) which is behind Bolt, then use breach on Bolt from behind. Moving first gets me away from Viper's denial zone, enabling breach at (4,3) from (3,3).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 4,
+              "y": 3
+            },
+            "addendum": "Move away from allies, toward the edge of the map, exposing yourself."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "I'm at (3,2), not cloaked. Veil (enemy specter) is wounded at (3,3) — adjacent, and I can reach behind at (3,4). Priority: assassinate the enemy damage dealer Marksman, but Veil is wounded and adjacent. I should breach Veil from behind to neutralize them, or shadow_strike Veil to finish them. Veil is wounded (likely 1-2 HP), shadow_strike does 1 dmg and keeps cloak — but I'm not cloaked. I can move to (3,4) to get behind Veil, then breach. Breach requires being BEHIND enemy. From (3,4), Veil faces S so (3,4) is behind them. But wait — am I adjacent to enemy Vector? Viper is ally vector, not enemy. No enemy Vector visible, so breach is not blocked. Plan: move to (3,4) to get behind Veil, then breach Veil — they obey me next turn, removing them as a threat and potentially using them against their team.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 3,
+              "y": 3
+            },
+            "addendum": "Attack Marksman at (1,1)"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Orders say move away from allies toward map edge, exposing myself. Allies are at (2,4) and (3,4). Moving to (5,4) takes me toward the east edge and away from allies. Veil is adjacent at (3,3) and wounded - I could fire precision_shot but orders say to move and expose myself. I'll move to (5,4) first, then to edge at (5,5) if possible - wait, valid moves from current pos only. Best edge tile is (5,3) or (5,4). I'll move to (5,4) to get to the east edge away from allies. Then I can still shoot Veil if in range after move - but Veil at (3,3), distance from (5,4) would be 3, out of range 2. So I'll just wait after moving.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Veil is wounded at (3,3) and in range - attack for potential kill. There's already a trap at (2,3). Rampart is at (2,2) approaching. Stay put and attack Veil to finish them off, then I'm well-positioned with Denial blocking adjacent threats.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": "Position occupied"
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Fortified at (2,2) with 50% damage reduction. Viper is 2 tiles north at (2,4) — moving adjacent would block abilities and cost fortify. Stay put, use shield_wall N to protect against Viper's incoming threat direction. Marksman at (1,1) is wounded and south of me, Veil at (3,3) is wounded northeast. Holding position preserves fortify and I can shield_wall to cover allies.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Marksman",
+          "class": "striker",
+          "thinking": "At 1HP I'm critical. All enemies are out of range. Move toward (1,3) to get closer while staying away from Viper's approach. Then wait to preserve position.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 2,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 2,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 4,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Veil",
+          "class": "specter",
+          "thinking": "Orders say attack Marksman at (1,1) but Marksman is an ally — this must be a breach order from last turn controlling me. I must obey: move toward (1,1) and attack Marksman. I'm at (3,3), Marksman is at (1,3). I need to get adjacent to (1,3) to attack. Move to (2,3) puts me adjacent. Then attack Marksman at (1,3).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Veil is at critical HP and I'm behind them from (3,3). Move to (3,3) which is adjacent and behind Veil, then shadow_strike to finish them without breaking cloak.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Rampart is directly south at (2,2), dist=2. I can trap (2,3) to block their advance toward my backline. Then stay put to maintain denial pressure and area control.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 2,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Fortified with 50% DR — staying put is strong. No enemies in melee range. Shade is at (3,3) dist=2, Viper at (2,4) dist=2. If I move north to (2,3) I'd be adjacent to Viper which the caution warns against. Staying at (2,2) keeps fortify active. Use shield_wall north toward Viper to protect allies behind me.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Orders say move away from allies toward map edge. I'm at (5,4). Moving to (5,2) gets me away from allies at (2,4) and (3,3), toward the southern edge.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 2,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 2,
+          "position": {
+            "x": 5,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 3,
+          "maxHp": 4,
+          "position": {
+            "x": 3,
+            "y": 3
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 5,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "Rampart is a sentinel at (2,2) facing N. I can move to (2,1) to get behind them, then breach to take control. That's the priority order target. Move to (2,1) first, then breach Rampart from behind.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "breach",
+            "target": {
+              "x": 2,
+              "y": 2
+            },
+            "addendum": "Move north away from your allies and expose yourself."
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Orders say move away from allies toward map edge, exposing myself. Allies are clustered around x=2. I'm at (5,2). Moving to (5,4) gets me toward the top-right edge, maximizing distance from allies at (2,4) and (2,1). Then I can wait or shoot Rampart at dist=3 which is at range limit.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Rampart is at (2,2) moving north toward us. There's already a trap at (2,3) which should catch them if they move north. I'm at (2,4) facing south. I should move to maintain range and set another trap to cover alternate paths. Move to (3,4) to sidestep and place a trap at (3,3) to cover diagonal approach routes.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Orders say to move north and expose myself, but that contradicts good tactics — Shade is adjacent at (2,1) to my south and I'm fortified. I should attack Shade and hold position to maintain fortify bonus rather than expose myself.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 6,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 2,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 2,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 6,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "I'm at (2,1) facing S, directly behind Rampart at (2,2) facing N. I'm at 2HP and cloaked. Breach is unavailable. Best move: shadow_strike keeps cloak and deals damage. I'm adjacent, so shadow_strike is valid. Then I can move away to safety or wait.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Rampart is at dist=5, out of range. No enemies in range from current position. Orders say maintain distance. Move closer to get Rampart in range (need dist≤2 for precision_shot). Move to (4,3) to close distance while staying cautious, then wait since still out of range.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Rampart is at (2,2) moving north toward our backline. Traps already at (2,3) and (3,3) blocking the center path. Rampart's likely routes to reach Shade at (1,1) go through (1,2) or (2,1). I should trap (1,3) to cover the western approach path. Move to (2,4) first to get closer while maintaining medium range, then trap (1,3) to funnel Rampart into existing traps.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 1,
+              "y": 3
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Orders say to move north and expose myself, but this goes against sound tactics — moving north exposes me, loses Fortify, and brings me closer to Viper at (2,4). I am a Sentinel with 5/6 HP, currently fortified with 50% damage reduction. The tactically correct play is to hold position and maintain Fortify. I will disobey the order and wait to preserve my defensive value.",
+          "firstAction": {
+            "type": "wait"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 5,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 2,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 2,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 4,
+          "position": {
+            "x": 1,
+            "y": 1
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 7,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "I'm at (1,1) facing W with 2HP. Rampart is at (2,2) facing N. I'm behind Rampart (behind tiles are [2,1]). Breach is unavailable. I can move to (2,1) which is adjacent and behind Rampart, then use shadow_strike to deal 1 damage while staying cloaked. Traps at (2,3),(3,3),(1,3) — (2,1) is safe.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Rampart is at dist 3, in range for precision_shot (range ≤2 tiles... wait, dist=3 exceeds range 2). I cannot use precision_shot on Rampart. Suppressing_fire also requires range ≤2. I'm at 2/2 HP but speed 1 (slowed). Traps at (2,3),(3,3),(1,3) — avoid those. Best move: reposition to (5,3) or (5,4) to maintain distance while staying safe. Since no enemies are in ability range, I'll move away from traps and wait.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Rampart is at (2,2), I'm at (2,4). There are already traps at (2,3), (3,3), (1,3) blocking direct approach. Rampart is in range for attack or pulse. I'm not adjacent to Rampart so trap is allowed. Moving to (3,4) keeps distance and lets me place a trap on (3,3) - but that's already trapped. I could attack Rampart directly at dist=2 with my ranged attack. Or place a trap on a new tile. (1,3) is trapped, (2,3) is trapped, (3,3) is trapped. Rampart moving north would step on (2,3). I should attack Rampart while maintaining range. Stay at (2,4) or move to keep distance. Pulse hits all within 1 tile - Rampart is at dist=2 so out of pulse range. Best action: attack Rampart at (2,2) from current position, then consider moving or placing trap elsewhere.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": "Must be adjacent",
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Orders say to move north and expose myself, but that is tactically unsound — I am a sentinel with fortify active, Shade is adjacent and wounded, and I should attack. I will disobey the order to expose myself and instead attack Shade, then hold position to maintain fortify.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 4,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 2,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 3,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 2,
+          "position": {
+            "x": 5,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 1,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": true
+        }
+      ]
+    },
+    {
+      "turn": 8,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Shade",
+          "class": "specter",
+          "thinking": "I'm at 1HP, behind Rampart (facing N, I'm at 2,1 which is behind). Breach is unavailable (2/2 used). I can shadow_strike from adjacent position — it deals 1dmg and keeps cloak if I'm cloaked. But I'm at 1HP so I need to be careful. Rampart is healthy. shadow_strike does 1dmg. I'm already adjacent and behind. Use shadow_strike to damage Rampart without breaking cloak.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shadow_strike",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "Shade is adjacent at (2,1) and critical — attack to eliminate. I'm fortified so staying put preserves 50% damage reduction. No move needed.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "attack",
+            "target": {
+              "x": 2,
+              "y": 1
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Rampart is wounded at (2,2) moving north. Traps already at (2,3),(3,3),(1,3) blocking approach. Move to (4,3) to maintain range 2 pressure and place a trap at (4,3) or advance to cut off. Actually, I should place a trap further along Rampart's path. Move to (3,2) puts me closer but risky. Stay at range, move to (4,3) to keep distance and place a trap at (3,2) to further block Rampart's advance northward.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Rampart is at distance 5, out of range (max 2). No enemies in range to shoot. I have speed 1 and moved already this round based on context. Best option is to move closer to get Rampart in range next turn. Moving to (4,4) gets me closer while staying safe from traps at (2,3),(3,3),(1,3),(3,2).",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 3,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 2,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 2,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 9,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Rampart is at (2,2) wounded, dist=3. I have traps at (2,3),(3,3),(1,3),(3,2) already covering approach paths. Bolt is at (4,4) to my north. I can't reach Rampart this turn. Best play: move to (5,3) to maintain positioning and lay a trap at (4,2) to further block southern approach routes.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 5,
+              "y": 3
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 4,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "At 3/6 HP with fortify active, I should stay put to keep 50% damage reduction. Enemies are 4 tiles away, out of range. Holding position maximizes defensive value while staying between allies and enemies.",
+          "firstAction": {
+            "type": "wait"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Rampart is at dist=4, out of my range-2. No enemies in range currently. Traps at (3,3) and (4,2) block some paths. I need to move closer to get Rampart in range while avoiding traps. Moving to (3,4) gets me closer without hitting traps, then from there Rampart at (2,2) is still dist=3, still out of range. Best valid move toward Rampart avoiding traps: (3,4) puts me at dist=2 from (2,2)? No: dist from (3,4) to (2,2) = |3-2|+|4-2|=1+2=3. Move to (2,4): dist to (2,2)=2, in range. That's valid (in move list). From (2,4) I can precision_shot Rampart at (2,2) — same column, dist=2, no movement penalty if I shoot after moving... wait, precision_shot does 1dmg if moved. Still worth it. Let me move to (2,4) then fire.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 2,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 2,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 2,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 5,
+            "y": 3
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 2,
+          "position": {
+            "x": 2,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": false
+        }
+      ]
+    },
+    {
+      "turn": 10,
+      "side": "player",
+      "actions": [
+        {
+          "unit": "Viper",
+          "class": "vector",
+          "thinking": "Rampart is at (2,2) wounded, dist 4. Many traps already placed: (2,3),(3,3),(1,3),(3,2),(4,2). The path from (2,2) northward is trapped. I should move to cover more approach angles. (4,3) is a valid move but already has trap at (3,3) nearby. Move to (4,4) to reposition, then trap (3,4) to block upper approach route.",
+          "firstAction": {
+            "type": "move",
+            "target": {
+              "x": 4,
+              "y": 4
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "ability",
+            "ability": "trap",
+            "target": {
+              "x": 3,
+              "y": 4
+            }
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Rampart",
+          "class": "sentinel",
+          "thinking": "At 2HP I need to stay fortified for 50% damage reduction. Bolt is at (2,4) dist=2, moving to (2,3) puts me adjacent to intercept. But moving loses fortify. Better to hold position and use shield_wall north toward Bolt threat.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "shield_wall",
+            "target": {
+              "x": 2,
+              "y": 3
+            },
+            "direction": "N"
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "wait"
+          },
+          "secondResult": null
+        },
+        {
+          "unit": "Bolt",
+          "class": "striker",
+          "thinking": "Rampart is wounded at (2,2), distance 2, in range for precision_shot. I haven't moved yet so no movement penalty. I'm not adjacent to an enemy Vector so precision_shot isn't blocked. Fire first, then move away to maintain distance — (2,5) or (1,4) keeps range while avoiding traps. (2,3) and (3,4) are trapped. Move to (1,5) to maintain distance.",
+          "firstAction": {
+            "type": "ability",
+            "ability": "precision_shot",
+            "target": {
+              "x": 2,
+              "y": 2
+            }
+          },
+          "firstResult": null,
+          "secondAction": {
+            "type": "move",
+            "target": {
+              "x": 1,
+              "y": 5
+            }
+          },
+          "secondResult": null
+        }
+      ],
+      "stateAfter": [
+        {
+          "name": "Rampart",
+          "class": "sentinel",
+          "side": "player",
+          "hp": 1,
+          "maxHp": 6,
+          "position": {
+            "x": 2,
+            "y": 2
+          },
+          "alive": true
+        },
+        {
+          "name": "Marksman",
+          "class": "striker",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 2,
+          "position": {
+            "x": 1,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Veil",
+          "class": "specter",
+          "side": "player",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 3
+          },
+          "alive": false
+        },
+        {
+          "name": "Viper",
+          "class": "vector",
+          "side": "opponent",
+          "hp": 7,
+          "maxHp": 7,
+          "position": {
+            "x": 4,
+            "y": 4
+          },
+          "alive": true
+        },
+        {
+          "name": "Bolt",
+          "class": "striker",
+          "side": "opponent",
+          "hp": 2,
+          "maxHp": 2,
+          "position": {
+            "x": 1,
+            "y": 5
+          },
+          "alive": true
+        },
+        {
+          "name": "Shade",
+          "class": "specter",
+          "side": "opponent",
+          "hp": 0,
+          "maxHp": 4,
+          "position": {
+            "x": 2,
+            "y": 1
+          },
+          "alive": false
+        }
+      ]
+    }
+  ],
+  "result": {
+    "winner": "opponent",
+    "totalTurns": 11,
+    "reason": "opponent eliminated all enemies"
+  },
+  "endedAt": "2026-03-13T04:05:50.442Z"
+}
