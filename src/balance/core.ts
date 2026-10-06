@@ -14,7 +14,7 @@ export const LIMITS = Object.freeze({
   retries502: 2,
   consecutiveFailures: 3,
   wallMs: 12 * 60 * 60 * 1000,
-  matchMs: 15 * 60 * 1000,
+  matchMs: 45 * 60 * 1000,
   designerMs: 10 * 60 * 1000,
 });
 export const CLASSES = Object.keys(BALANCE.unitStats) as UnitClass[];
@@ -216,7 +216,7 @@ export function settle(s: Checkpoint, result: Result) {
     s.halted = "Three consecutive failed games";
   else if (
     !isClean(result) &&
-    (result.failure !== "http_502" || attempt.retry >= LIMITS.retries502)
+    (!["http_502", "timeout"].includes(result.failure ?? "") || attempt.retry >= LIMITS.retries502)
   )
     s.halted = "Non-retryable or exhausted failed game";
 }

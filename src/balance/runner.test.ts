@@ -5,7 +5,19 @@ import { join } from "node:path";
 import { BALANCE } from "../types";
 import { generateRandomConfig } from "../training/squads";
 import { createGame, createUnit, advanceRound } from "../engine/game";
-import { evidence, journalFailure } from "./runner";
+import { evidence, journalFailure, compatibleSources } from "./runner";
+
+test("operational migration is pinned and rejects mechanics or unexpected runner edits", () => {
+  const before = { "src/balance/core.ts": "old", "src/balance/runner.ts": "old", engine: "frozen" };
+  const after = { ...before, "src/balance/core.ts": "new", "src/balance/runner.ts": "new" };
+  const migration = { fromSourceHash: hash(before), toSourceHash: hash(after) };
+  expect(compatibleSources(before, after, migration)).toBe(true);
+  expect(compatibleSources(before, { ...after, engine: "changed" }, migration)).toBe(false);
+  expect(
+    compatibleSources(before, { ...after, "src/balance/runner.ts": "unexpected" }, migration),
+  ).toBe(false);
+  expect(compatibleSources(before, after)).toBe(false);
+});
 import type { Manifest } from "./runner";
 import { bounded, safeEnv } from "./process";
 import { CLASSES, hash, isClean, WHITELIST } from "./core";

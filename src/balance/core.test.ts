@@ -128,6 +128,22 @@ test("checkpoints settle once, count discovery/evaluation separately, no dirty c
   expect(counts(s)).toEqual({ attempts: 2, discovery: 1, evaluation: 0, failed: 1 });
   expect(s.halted).toBeNull();
 });
+test("timeouts retry the whole game at most twice without clean credit", () => {
+  const s = checkpoint();
+  for (let retry = 0; retry < 3; retry++) {
+    const a = { id: retry + 1, cycle: 1, stage: "discovery" as const, slot: 0, retry };
+    s.pending = a;
+    s.attempts.push(a);
+    settle(s, { ...terminal(), clean: false, failure: "timeout" });
+    expect(counts(s).discovery).toBe(0);
+    if (retry < 2) expect(s.halted).toBeNull();
+  }
+  expect(() => guard(s)).toThrow("Three consecutive");
+});
+test("finite match budget supports 188 sequential ten-second decisions", () => {
+  expect(LIMITS.matchMs).toBeGreaterThanOrEqual(188 * 10000 + 120000);
+  expect(LIMITS.matchMs).toBeLessThanOrEqual(60 * 60 * 1000);
+});
 test("502 retries are whole attempts, max two; third consecutive failure halts", () => {
   const s = checkpoint();
   for (let i = 0; i < 3; i++) {

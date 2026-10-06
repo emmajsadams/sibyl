@@ -69,6 +69,30 @@ function sources() {
     SOURCE_FILES.map((path) => [path, readFileSync(join(ROOT, path), "utf8")]),
   );
 }
+export function compatibleSources(
+  before: Record<string, string>,
+  after: Record<string, string>,
+  migration?: { fromSourceHash: string; toSourceHash: string },
+) {
+  if (hash(before) === hash(after)) return true;
+  if (
+    !migration ||
+    migration.fromSourceHash !== hash(before) ||
+    migration.toSourceHash !== hash(after)
+  )
+    return false;
+  return (
+    Object.keys(before).length === Object.keys(after).length &&
+    Object.entries(before).every(
+      ([path, text]) =>
+        ["src/balance/core.ts", "src/balance/runner.ts"].includes(path) || after[path] === text,
+    )
+  );
+}
+function sourceCompatible(m: Manifest) {
+  const path = join(DEST, "operational-resume.json");
+  return compatibleSources(m.rules, sources(), existsSync(path) ? read(path) : undefined);
+}
 export interface Manifest {
   cycle: number;
   codeCommit: string;
@@ -210,7 +234,7 @@ async function runAttempt(
   balance: BalanceConfig,
 ) {
   guard(s);
-  if (hash(sources()) !== m.sourceHash) throw Error("Frozen source changed");
+  if (!sourceCompatible(m)) throw Error("Frozen source changed");
   const attempt: Attempt = { id: s.attempts.length + 1, cycle: m.cycle, stage, slot, retry };
   const dir = join(RAW, `attempt-${String(attempt.id).padStart(4, "0")}`);
   mkdirSync(dir, { recursive: true, mode: 0o700 });
@@ -485,7 +509,7 @@ export async function main() {
         state.manifestHashes[String(state.cycle)] = hash(manifest);
         atomicJSON(CHECKPOINT, state);
       }
-      if (hash(sources()) !== manifest.sourceHash || hash(manifest.whitelist) !== hash(WHITELIST))
+      if (!sourceCompatible(manifest) || hash(manifest.whitelist) !== hash(WHITELIST))
         throw Error("Cycle freeze mismatch");
       for (let n = 0; n < 50; n++)
         await slot(
