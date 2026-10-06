@@ -21,6 +21,8 @@ export interface GameLog {
     winner: Side | "draw";
     totalTurns: number;
     reason: string;
+    clean?: boolean;
+    failedDecisions?: number;
   };
 }
 
@@ -131,11 +133,17 @@ export class GameLogger {
   }
 
   finish(state: GameState, reason: string) {
+    this.endTurn(state);
+    const failedDecisions = this.log.turns
+      .flatMap((t) => t.actions)
+      .reduce((n, a) => n + Number(a.firstResult !== null) + Number(a.secondResult !== null), 0);
     this.log.endedAt = new Date().toISOString();
     this.log.result = {
       winner: state.winner || "draw",
-      totalTurns: state.turn,
-      reason,
+      totalTurns: state.round,
+      reason: state.terminalReason ?? reason,
+      failedDecisions,
+      clean: state.phase === "ended" && !!state.terminalReason && failedDecisions === 0,
     };
     this.save();
   }

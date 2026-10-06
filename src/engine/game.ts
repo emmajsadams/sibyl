@@ -818,6 +818,7 @@ export function advanceRound(state: GameState): boolean {
   if (playerAlive === 0) {
     state.phase = "ended";
     state.winner = "opponent";
+    state.terminalReason = "All player units eliminated";
     state.log.push("=== Opponent wins ===");
     emit({
       type: "game_end",
@@ -831,6 +832,7 @@ export function advanceRound(state: GameState): boolean {
   if (opponentAlive === 0) {
     state.phase = "ended";
     state.winner = "player";
+    state.terminalReason = "All opponent units eliminated";
     state.log.push("=== Player wins ===");
     emit({
       type: "game_end",
@@ -852,6 +854,7 @@ export function advanceRound(state: GameState): boolean {
     const reason = winner
       ? `Stalemate after 20 rounds — ${winner} wins by HP (${playerHP} vs ${opponentHP})`
       : `Stalemate after 20 rounds — draw (${playerHP} HP each)`;
+    state.terminalReason = reason;
     state.log.push(`=== ${reason} ===`);
     emit({
       type: "game_end",
@@ -880,6 +883,7 @@ export function checkWinCondition(state: GameState): boolean {
   if (playerAlive === 0) {
     state.phase = "ended";
     state.winner = "opponent";
+    state.terminalReason = "All player units eliminated";
     state.log.push("=== Opponent wins ===");
     emit({
       type: "game_end",
@@ -893,6 +897,7 @@ export function checkWinCondition(state: GameState): boolean {
   if (opponentAlive === 0) {
     state.phase = "ended";
     state.winner = "player";
+    state.terminalReason = "All opponent units eliminated";
     state.log.push("=== Player wins ===");
     emit({
       type: "game_end",

@@ -170,6 +170,7 @@ export interface GameState {
   turn: number;
   phase: "setup" | "play" | "ended";
   winner?: Side;
+  terminalReason?: string;
   log: string[];
   /** Tracks which enemies each Oracle has scanned: oracleId -> { enemyId -> last known prompt } */
   scanHistory: Record<string, Record<string, string>>;
