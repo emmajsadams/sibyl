@@ -1,6 +1,55 @@
 import { test, expect } from "bun:test";
 import { createGame, createUnit } from "../engine/game";
-import { legalActions, decideAction, getPlacement } from "./jev-agent";
+import { legalActions, decideAction, getPlacement, selectChoice } from "./jev-agent";
+
+test("oversized lossless requests fail explicitly before transport without dropping choices", async () => {
+  let called = false;
+  await expect(
+    selectChoice(
+      { a0: "wait" },
+      "x".repeat(32000),
+      mockClient(() => {
+        called = true;
+        return "a0";
+      }),
+    ),
+  ).rejects.toThrow("lossless request exceeds");
+  expect(called).toBe(false);
+});
+
+test("growing Oracle orders are losslessly shared across all legal choices", async () => {
+  const state = createGame();
+  const prompt = 'Protect allies. addendum: "Hold position."\n'.repeat(4096);
+  const unit = createUnit("o", "o", "oracle", "player", { x: 0, y: 0 }, prompt);
+  state.units = [unit, createUnit("a", "a", "medic", "player", { x: 1, y: 0 }, "Heal")];
+  const actions = legalActions(state, unit);
+  const before = JSON.stringify(state);
+  const result = await decideAction(
+    state,
+    unit,
+    [prompt],
+    mockClient((options, context) => {
+      expect(Object.keys(options)).toHaveLength(actions.length);
+      expect(Buffer.byteLength(context + JSON.stringify(options))).toBeLessThan(24000);
+      const data = JSON.parse(context);
+      const expand = (ref: string): string => {
+        const entry = data.textDictionary[ref];
+        return typeof entry === "string" ? entry : entry.map(expand).join("");
+      };
+      expect(expand(data.unit.prompt.textRef)).toBe(prompt);
+      const label = Object.keys(options).find((key) => {
+        const option = JSON.parse(options[key]!);
+        return option.addendumRef && expand(option.addendumRef) === prompt;
+      })!;
+      expect(label).toBeDefined();
+      return label;
+    }),
+  );
+  expect(result.action).toEqual(
+    expect.objectContaining({ ability: "recalibrate", addendum: prompt }),
+  );
+  expect(JSON.stringify(state)).toBe(before);
+});
 
 test("malformed quoted game orders do not crash legal enumeration", () => {
   const state = createGame();
