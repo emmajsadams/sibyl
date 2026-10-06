@@ -6,7 +6,7 @@ Four steps, repeating:
 
 ### 1. RUN
 - Run a game with the current version: `npx tsx src/main.ts --auto [config]`
-- Uses Claude CLI (subscription) by default. Pass `--api` to use Anthropic API credits instead.
+- Uses Jev via the official TypeSafe SDK by default (`TYPESAFE_API_KEY`). Pass `--cli` for legacy Claude subscription or `--api` for legacy Anthropic API credits.
 - `--auto` skips interactive squad selection and uses random config (required for automated/subagent runs)
 - If no config provided, `generateRandomConfig()` creates random squads
 - Training data auto-saves to `training/training-v{version}-{gameId}.json`
@@ -57,7 +57,7 @@ CLAUDE.md orchestrates. `skills/` contains subagent prompts (read by spawned age
 - Runtime: Bun + TypeScript
 - Path: `~/code/sibyl/`
 - CLI mode: `bun run src/main.ts <config> --cli` (uses Claude Pro subscription)
-- API mode: `bun run src/main.ts <config>` (uses API credits)
+- Jev mode: `bun run src/main.ts <config>`; legacy API mode: append `--api` (uses Anthropic credits)
 
 ## Key Directories
 - `src/engine/` — game logic (no presentation)

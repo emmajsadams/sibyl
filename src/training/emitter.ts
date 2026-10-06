@@ -11,6 +11,17 @@ export function clearTrainingListener(): void {
   _listener = null;
 }
 
+/** Synchronous engine probes only: never pass an async callback. */
+export function withoutTrainingEvents<T>(probe: () => T): T {
+  const listener = _listener;
+  _listener = null;
+  try {
+    return probe();
+  } finally {
+    _listener = listener;
+  }
+}
+
 export function emit(event: TrainingEvent): void {
   _listener?.(event);
 }

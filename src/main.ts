@@ -12,15 +12,21 @@ import {
   advanceRound,
   checkWinCondition,
 } from "./engine/game";
-import * as apiAgent from "./agent/agent";
-import * as cliAgent from "./agent/cli-agent";
-import { CLAUDE_MODEL_ID } from "./agent/cli-agent";
+import * as jevAgent from "./agent/jev-agent";
 import { renderFullState, renderGameOver } from "./cli/renderer";
 
-// Select agent backend: CLI by default, --api to use API credits instead
+// Only initialize legacy clients when explicitly requested.
 const USE_API = process.argv.includes("--api");
-const USE_CLI = !USE_API;
-const { getUnitAction, getPlacement } = USE_CLI ? cliAgent : apiAgent;
+const USE_CLI = process.argv.includes("--cli");
+if (USE_API && USE_CLI) throw Error("Choose only one of --api or --cli");
+const USE_JEV = !USE_API && !USE_CLI;
+const BACKEND = USE_JEV ? "jev" : USE_CLI ? "cli" : "api";
+const legacyAgent = USE_CLI
+  ? await import("./agent/cli-agent")
+  : USE_API
+    ? await import("./agent/agent")
+    : undefined;
+const getPlacement = legacyAgent?.getPlacement ?? jevAgent.getPlacement;
 import { ask, askMultiline, close } from "./cli/input";
 import { GameLogger } from "./logger";
 import { BALANCE } from "./types";
@@ -274,7 +280,9 @@ async function executeUnitTurn(
 
   try {
     const t0 = Date.now();
-    const response = await getUnitAction(ctx);
+    const response = USE_JEV
+      ? await jevAgent.executeJevTurn(state, unit, lastRoundLog)
+      : await legacyAgent!.getUnitAction(ctx);
     const durationMs = Date.now() - t0;
     process.stdout.write(` \x1b[2m💭 ${response.thinking}\x1b[0m\n`);
 
@@ -289,14 +297,14 @@ async function executeUnitTurn(
 
     const actions: string[] = [];
 
-    const err1 = executeAction(state, unit, response.firstAction);
+    const err1 = USE_JEV ? null : executeAction(state, unit, response.firstAction);
     if (err1) {
       actions.push(`⚠ ${describeAction(response.firstAction)} FAILED: ${err1}`);
     } else {
       actions.push(describeAction(response.firstAction));
     }
 
-    const err2 = executeAction(state, unit, response.secondAction);
+    const err2 = USE_JEV ? null : executeAction(state, unit, response.secondAction);
     if (err2) {
       actions.push(`⚠ ${describeAction(response.secondAction)} FAILED: ${err2}`);
     } else {
@@ -320,7 +328,7 @@ async function executeUnitTurn(
     logger.logError(unit, e.message);
     return {
       actionLog: `${unit.name}: agent error`,
-      actionSummary: `${sideLabel}${unit.name}\x1b[0m: \x1b[31mAGENT ERROR — turn wasted\x1b[0m`,
+      actionSummary: `${sideLabel}${unit.name}\x1b[0m: \x1b[31mAGENT ERROR — see log (earlier actions may have resolved)\x1b[0m`,
     };
   }
 }
@@ -361,14 +369,16 @@ async function main() {
     gameConfig = loadConfig(configPath);
     interactive = false;
     console.log(`  Config: ${configPath}`);
-    console.log(`  Agent:  ${USE_CLI ? "claude CLI (subscription)" : "API (credits)"}`);
+    console.log(
+      `  Agent:  ${USE_JEV ? "Jev (TypeSafe)" : USE_CLI ? "claude CLI (subscription)" : "Anthropic API (credits)"}`,
+    );
     console.log(
       `  ${"\x1b[36m"}Player:${"\x1b[0m"}   ${gameConfig.player.units.map((u) => `${u.name} (${u.class})`).join(" · ")}`,
     );
     console.log(
       `  ${"\x1b[31m"}Opponent:${"\x1b[0m"} ${gameConfig.opponent.units.map((u) => `${u.name} (${u.class})`).join(" · ")}`,
     );
-  } else if (USE_CLI && !AUTO) {
+  } else if ((USE_CLI || USE_JEV) && !AUTO) {
     const playerUnits = await selectSquad();
     const opponentUnits: UnitConfig[] = [
       {
@@ -401,7 +411,9 @@ async function main() {
     gameConfig = generateRandomConfig();
     interactive = false;
     console.log("  Config: random squad generation");
-    console.log(`  Agent:  ${USE_CLI ? "claude CLI (subscription)" : "API (credits)"}`);
+    console.log(
+      `  Agent:  ${USE_JEV ? "Jev (TypeSafe)" : USE_CLI ? "claude CLI (subscription)" : "Anthropic API (credits)"}`,
+    );
     console.log(
       `  ${"\x1b[36m"}Player:${"\x1b[0m"}   ${gameConfig.player.units.map((u) => `${u.name} (${u.class})`).join(" · ")}`,
     );
@@ -416,13 +428,17 @@ async function main() {
   const opponentPlacementPrompt = gameConfig.opponent.placementPrompt;
 
   const state = createGame();
-  const logger = new GameLogger(USE_CLI ? "cli" : "api", configPath);
+  const logger = new GameLogger(BACKEND, configPath);
   logger.setSquad("player", playerUnits);
   logger.setSquad("opponent", opponentUnits);
 
   // Training data recorder
-  const model = USE_CLI ? CLAUDE_MODEL_ID : undefined;
-  const recorder = new TrainingRecorder(USE_CLI ? "cli" : "api", gameConfig, model);
+  const model = USE_JEV
+    ? jevAgent.JEV_MODEL
+    : USE_CLI
+      ? "sonnet (CLI alias; resolved model unavailable)"
+      : "claude-sonnet-4-20250514";
+  const recorder = new TrainingRecorder(BACKEND, gameConfig, model);
   setTrainingListener((event) => recorder.record(event));
 
   // Record full game config at start
@@ -430,7 +446,7 @@ async function main() {
     type: "game_config",
     player: { units: playerUnits, placementPrompt: playerPlacementPrompt },
     opponent: { units: opponentUnits, placementPrompt: opponentPlacementPrompt },
-    agent: USE_CLI ? "cli" : "api",
+    agent: BACKEND,
     configFile: configPath,
   });
 

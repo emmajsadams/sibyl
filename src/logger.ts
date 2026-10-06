@@ -11,7 +11,7 @@ export interface GameLog {
   id: string;
   startedAt: string;
   endedAt?: string;
-  agent: "api" | "cli";
+  agent: "api" | "cli" | "jev";
   config?: string;
   balance?: typeof BALANCE;
   player: SquadLog;
@@ -59,7 +59,7 @@ export class GameLogger {
   private log: GameLog;
   private currentTurn: TurnLog | null = null;
 
-  constructor(agent: "api" | "cli", config?: string) {
+  constructor(agent: "api" | "cli" | "jev", config?: string) {
     const now = new Date();
     this.log = {
       id: `${now.toISOString().replace(/[:.]/g, "-").slice(0, 19)}`,

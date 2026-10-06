@@ -210,7 +210,22 @@ const GameConfigEvent = z.object({
 
 // === Union ===
 
+const JevDecisionEvent = z.object({
+  type: z.literal("jev_decision"),
+  phase: z.enum(["action", "placement"]),
+  unitId: z.string(),
+  provider: z.literal("typesafe"),
+  model: z.string(),
+  selected: z.string(),
+  confidence: z.number(),
+  probabilities: z.record(z.string(), z.number()),
+  usage: z.object({ input_tokens: z.number(), output_tokens: z.number() }),
+  durationMs: z.number(),
+  options: z.record(z.string(), z.string()),
+});
+
 export const TrainingEvent = z.discriminatedUnion("type", [
+  JevDecisionEvent,
   GameConfigEvent,
   GameStartEvent,
   RoundStartEvent,
