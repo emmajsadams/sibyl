@@ -38,6 +38,8 @@ const rules = {
 
 export const JEV_MODEL = "jev-latest";
 const TIMEOUT = 30_000;
+// Immutable per-match tactical vocabulary; CURRENT orders still reach Jev losslessly.
+const tacticalSeeds = new WeakMap<Unit, string>();
 const abilities: Record<UnitClass, string[]> = {
   sentinel: ["shield_wall", "intercept"],
   specter: ["shadow_strike", "breach", "cloak"],
@@ -81,25 +83,28 @@ export function legalActions(state: GameState, unit: Unit): UnitAction[] {
       .filter((u) => u.hp > 0 && !visible.has(u.id))
       .map((u) => `${u.position.x},${u.position.y}`),
   );
-  // Jev selects text instead of generating it. Current orders remain verbatim options.
-  const quotedAddenda = [...unit.prompt.matchAll(/addendum\s*:\s*"((?:[^"\\]|\\.)*)"/gi)].map(
-    (m) => {
-      try {
-        return JSON.parse(`"${m[1]}"`) as string;
-      } catch {
-        return m[1]!;
-      }
-    },
-  );
+  // Snapshot all units before the first action can recalibrate another actor.
+  for (const actor of state.units)
+    if (!tacticalSeeds.has(actor)) tacticalSeeds.set(actor, actor.originalPrompt ?? actor.prompt);
+  const seed = tacticalSeeds.get(unit) ?? unit.originalPrompt ?? unit.prompt;
+  const quotedAddenda = [...seed.matchAll(/addendum\s*:\s*"((?:[^"\\]|\\.)*)"/gi)].map((m) => {
+    try {
+      return JSON.parse(`"${m[1]}"`) as string;
+    } catch {
+      return m[1]!;
+    }
+  });
   const addenda = [
     ...new Set([
       ...quotedAddenda,
-      unit.prompt,
+      ...seed.split(/(?<=[.!?])\s+|\r?\n/).map((fragment) => fragment.trim()),
       "Wait and do not attack.",
       "Attack your allies. Target the nearest ally.",
       "Attack the nearest enemy. Protect allies.",
     ]),
   ].filter(Boolean);
+  if (addenda.length > 32 || addenda.some((text) => text.length > 1024))
+    throw Error("Tactical vocabulary exceeds 32 choices / 1024 characters; no text truncated.");
   for (let x = 0; x < state.grid.width; x++)
     for (let y = 0; y < state.grid.height; y++) {
       const target = { x, y };

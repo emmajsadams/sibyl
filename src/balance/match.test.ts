@@ -1,7 +1,12 @@
 import { expect, test } from "bun:test";
 import { TypeSafeClient } from "@typesafe-ai/sdk";
 import { BALANCE } from "../types";
-import { applyBalance, credential, failureKind, playMatch } from "./match";
+import { applyBalance, credential, failureKind, playMatch, errorCategory } from "./match";
+
+test("worker diagnostics preserve error class without serializing secret-bearing messages", () => {
+  expect(errorCategory(new RangeError("secret request headers"))).toBe("RangeError");
+  expect(errorCategory({ name: "secret", message: "secret" })).toBe("UnknownError");
+});
 import type { MatchRequest } from "./match";
 import { isClean } from "./core";
 

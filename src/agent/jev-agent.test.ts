@@ -1,6 +1,41 @@
 import { test, expect } from "bun:test";
 import { createGame, createUnit } from "../engine/game";
-import { legalActions, decideAction, getPlacement, selectChoice } from "./jev-agent";
+import { legalActions, decideAction, getPlacement, selectChoice, applyAction } from "./jev-agent";
+
+test("500 self recalibrations reuse finite original fragments, not accumulated orders", () => {
+  const state = createGame();
+  const unit = createUnit(
+    "o",
+    "o",
+    "oracle",
+    "player",
+    { x: 0, y: 0 },
+    'Protect allies. addendum: "Hold position."',
+  );
+  state.units = [unit];
+  const vocabulary = legalActions(state, unit).filter(
+    (a) => a.type === "ability" && a.ability === "recalibrate",
+  );
+  for (let i = 0; i < 500; i++) {
+    const action = legalActions(state, unit).find(
+      (a) => a.type === "ability" && a.ability === "recalibrate" && a.addendum === "Hold position.",
+    )!;
+    expect(action).toBeDefined();
+    expect(applyAction(state, unit, action)).toBeNull();
+  }
+  const after = legalActions(state, unit).filter(
+    (a) => a.type === "ability" && a.ability === "recalibrate",
+  );
+  expect(after).toEqual(vocabulary);
+  expect(unit.prompt.length).toBeLessThan(8000);
+});
+
+test("oversized original tactical fragments fail explicitly without silent truncation", () => {
+  const state = createGame();
+  const unit = createUnit("o", "o", "oracle", "player", { x: 0, y: 0 }, "x".repeat(1025));
+  state.units = [unit];
+  expect(() => legalActions(state, unit)).toThrow("no text truncated");
+});
 
 test("oversized lossless requests fail explicitly before transport without dropping choices", async () => {
   let called = false;
@@ -41,13 +76,11 @@ test("growing Oracle orders are losslessly shared across all legal choices", asy
         const option = JSON.parse(options[key]!);
         return option.addendumRef && expand(option.addendumRef) === prompt;
       })!;
-      expect(label).toBeDefined();
-      return label;
+      expect(label).toBeUndefined();
+      return "a0";
     }),
   );
-  expect(result.action).toEqual(
-    expect.objectContaining({ ability: "recalibrate", addendum: prompt }),
-  );
+  expect(result.action).toEqual({ type: "wait" });
   expect(JSON.stringify(state)).toBe(before);
 });
 

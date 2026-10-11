@@ -51,6 +51,12 @@ export function applyBalance(value: BalanceConfig) {
   for (const cls of Object.keys(BALANCE.unitStats))
     Object.assign((BALANCE.unitStats as any)[cls], (value.unitStats as any)[cls]);
 }
+export function errorCategory(error: unknown): string {
+  if (!(error instanceof Error)) return "UnknownError";
+  return ["Error", "RangeError", "TypeError", "SyntaxError"].includes(error.name)
+    ? error.name
+    : "OtherError";
+}
 export function failureKind(error: unknown): Failure {
   const e = error as {
     status?: number;
@@ -163,12 +169,17 @@ export async function playMatch(
       lastRoundLog = roundLog;
       if (!advanceRound(state)) break;
     }
-  } catch {
+  } catch (error) {
     if (!failure) {
       failure = "decision_error";
       failedDecisions++;
     }
-    record({ type: "match_failure", failure, failedDecisions });
+    record({
+      type: "match_failure",
+      failure,
+      failedDecisions,
+      errorCategory: errorCategory(error),
+    });
   } finally {
     clearTrainingListener();
   }
@@ -196,7 +207,18 @@ if (import.meta.main) {
   const request = JSON.parse(readFileSync(path, "utf8")) as MatchRequest;
   const dir = resolve(path, "..");
   const fd = openSync(`${dir}/events.jsonl`, "ax", 0o600);
+  let observedDecisions = 0,
+    observedFailures = 0,
+    observedRounds = 0;
   const record = (value: unknown) => {
+    const event = value as { type?: string; round?: number; failedDecisions?: number };
+    if (event.type === "provider_start") {
+      observedDecisions++;
+      observedRounds = Math.max(observedRounds, event.round ?? 0);
+    }
+    if (event.type === "provider_failure") observedFailures++;
+    if (event.type === "match_failure")
+      observedFailures = Math.max(observedFailures, event.failedDecisions ?? 0);
     appendFileSync(fd, `${JSON.stringify(value)}\n`);
     fsyncSync(fd);
   };
@@ -214,14 +236,21 @@ if (import.meta.main) {
       record,
     );
     atomicJSON(`${dir}/result.json`, result);
-  } catch {
+  } catch (error) {
+    atomicJSON(`${dir}/worker-diagnostic.json`, {
+      errorCategory: errorCategory(error),
+      stage: "worker_boundary",
+      observedDecisions,
+      observedFailures,
+      observedRounds,
+    });
     atomicJSON(`${dir}/result.json`, {
       clean: false,
       winner: null,
       reason: null,
-      rounds: 0,
-      decisions: 0,
-      failedDecisions: 1,
+      rounds: observedRounds,
+      decisions: observedDecisions,
+      failedDecisions: Math.max(1, observedFailures),
       failure: "worker_error",
       codeCommit: request.codeCommit,
       requestHash: hash(request),

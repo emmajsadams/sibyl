@@ -1,5 +1,12 @@
 import { bounded, safeEnv } from "./process";
-import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import {
+  createReadStream,
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
 import { join, resolve } from "node:path";
 import { BALANCE } from "../types";
 import type { BalanceConfig, GameConfig, UnitClass } from "../types";
@@ -142,6 +149,16 @@ export function failure(request: MatchRequest, kind: Result["failure"]): Result 
     requestHash: hash(request),
   };
 }
+export function reconcileFailure(candidate: Result, journal: Result): Result {
+  if (candidate.clean) return candidate;
+  return {
+    ...candidate,
+    decisions: Math.max(candidate.decisions, journal.decisions),
+    failedDecisions: Math.max(candidate.failedDecisions, journal.failedDecisions),
+    rounds: Math.max(candidate.rounds, journal.rounds),
+    failure: candidate.failure === "worker_error" ? journal.failure : candidate.failure,
+  };
+}
 export function journalFailure(
   request: MatchRequest,
   kind: Result["failure"],
@@ -158,10 +175,16 @@ export function journalFailure(
     } catch {
       continue;
     } // last append may be torn
-    if (e.type === "provider_start") result.decisions++;
+    if (e.type === "provider_start") {
+      result.decisions++;
+      result.rounds = Math.max(result.rounds, e.round ?? 0);
+    }
     if (e.type === "provider_response") responses++;
     if (e.type === "provider_failure") failed++;
-    if (e.type === "match_failure") recordedFailures = e.failedDecisions;
+    if (e.type === "match_failure") {
+      recordedFailures = e.failedDecisions;
+      if (kind === "worker_error") result.failure = e.failure;
+    }
     if (e.type === "engine_event" && e.event?.type === "game_end") {
       result.reason = e.event.reason;
       result.winner = e.event.winner;
@@ -174,10 +197,42 @@ export function journalFailure(
   );
   return result;
 }
-function recovered(request: MatchRequest, kind: Result["failure"], dir: string) {
-  return existsSync(join(dir, "events.jsonl"))
-    ? journalFailure(request, kind, readFileSync(join(dir, "events.jsonl"), "utf8"))
-    : failure(request, kind);
+export async function recoveredJournal(
+  request: MatchRequest,
+  kind: Result["failure"],
+  dir: string,
+) {
+  const path = join(dir, "events.jsonl");
+  if (!existsSync(path)) return failure(request, kind);
+  // Project only fixed journal headers. Never load/parse potentially enormous game text.
+  // Original journal bytes and CURRENT orders remain untouched.
+  const headers: string[] = [];
+  let prefix = "";
+  const project = () => {
+    const type = /^\{"type":"([^"]+)"/.exec(prefix)?.[1];
+    if (["provider_start", "provider_response", "provider_failure"].includes(type ?? "")) {
+      const round = /,"round":(\d+)/.exec(prefix)?.[1];
+      headers.push(JSON.stringify({ type, round: round ? Number(round) : 0 }));
+    } else if (type === "match_failure" || type === "engine_event") {
+      try {
+        headers.push(JSON.stringify(JSON.parse(prefix)));
+      } catch {
+        /* not a small complete event */
+      }
+    }
+  };
+  for await (const chunk of createReadStream(path, { encoding: "utf8", highWaterMark: 65536 })) {
+    const parts = String(chunk).split("\n");
+    for (let i = 0; i < parts.length; i++) {
+      prefix += parts[i]!.slice(0, Math.max(0, 4096 - prefix.length));
+      if (i < parts.length - 1) {
+        project();
+        prefix = "";
+      }
+    }
+  }
+  // An unterminated last append is not reliable evidence.
+  return journalFailure(request, kind, headers.join("\n"));
 }
 export function evidence(s: Checkpoint, m: Manifest) {
   const games = s.attempts.filter(
@@ -255,7 +310,8 @@ async function runAttempt(
     Math.min(LIMITS.matchMs, s.startedAt + LIMITS.wallMs - Date.now()),
     ROOT,
   );
-  let result = recovered(
+  atomicJSON(join(dir, "process-exit.json"), run);
+  let result = await recoveredJournal(
     request,
     run.interrupted ? "interrupted" : run.timedOut ? "timeout" : "worker_error",
     dir,
@@ -268,7 +324,7 @@ async function runAttempt(
       candidate.codeCommit === request.codeCommit &&
       (run.code === 0 || !candidate.clean)
     )
-      result = candidate;
+      result = reconcileFailure(candidate, result);
   }
   settle(s, result);
   atomicJSON(CHECKPOINT, s);
@@ -487,11 +543,11 @@ export async function main() {
     if (state.pending) {
       const dir = join(RAW, `attempt-${String(state.pending.id).padStart(4, "0")}`);
       const request = read<MatchRequest>(join(dir, "request.json"));
-      let result = recovered(request, "interrupted", dir);
+      let result = await recoveredJournal(request, "interrupted", dir);
       if (existsSync(join(dir, "result.json"))) {
         const saved = parseResult(read(join(dir, "result.json")));
         if (saved && saved.requestHash === hash(request) && saved.codeCommit === request.codeCommit)
-          result = saved;
+          result = reconcileFailure(saved, result);
       }
       settle(state, result);
       atomicJSON(CHECKPOINT, state);

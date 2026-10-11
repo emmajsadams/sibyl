@@ -5,7 +5,23 @@ import { join } from "node:path";
 import { BALANCE } from "../types";
 import { generateRandomConfig } from "../training/squads";
 import { createGame, createUnit, advanceRound } from "../engine/game";
-import { evidence, journalFailure, compatibleSources } from "./runner";
+import { evidence, journalFailure, compatibleSources, reconcileFailure } from "./runner";
+
+test("worker fallback cannot erase journal-derived completed decisions", () => {
+  const result: Result = {
+    clean: false,
+    winner: null,
+    reason: null,
+    rounds: 0,
+    decisions: 0,
+    failedDecisions: 1,
+    failure: "worker_error",
+    codeCommit: "fixture",
+    requestHash: "fixture",
+  };
+  const journal = { ...result, decisions: 182, rounds: 20, failure: "decision_error" as const };
+  expect(reconcileFailure(result, journal)).toEqual(journal);
+});
 
 test("operational migration is pinned and rejects mechanics or unexpected runner edits", () => {
   const before = { "src/balance/core.ts": "old", "src/balance/runner.ts": "old", engine: "frozen" };
