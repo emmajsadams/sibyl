@@ -1,10 +1,23 @@
 /** Shared subprocess boundary: no shell, no credential inheritance, bounded lifetime. */
 export function safeEnv() {
-  const env = { ...process.env };
-  delete env.TYPESAFE_API_KEY;
-  delete env.OPENAI_API_KEY;
-  delete env.OPENAI_ACCESS_TOKEN;
-  return env;
+  const allowed = [
+    "PATH",
+    "HOME",
+    "USER",
+    "LOGNAME",
+    "SHELL",
+    "TMPDIR",
+    "LANG",
+    "LC_ALL",
+    "TERM",
+    "COLORTERM",
+    "CODEX_HOME",
+    "SSL_CERT_FILE",
+    "SSL_CERT_DIR",
+  ];
+  return Object.fromEntries(
+    allowed.flatMap((key) => (process.env[key] === undefined ? [] : [[key, process.env[key]!]])),
+  );
 }
 export async function bounded(
   args: string[],

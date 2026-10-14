@@ -224,7 +224,14 @@ const JevDecisionEvent = z.object({
   options: z.record(z.string(), z.string()),
 });
 
+const PromptRecalibratedEvent = z.object({
+  type: z.literal("prompt_recalibrated"),
+  sourceId: z.string(),
+  targetId: z.string(),
+});
+
 export const TrainingEvent = z.discriminatedUnion("type", [
+  PromptRecalibratedEvent,
   JevDecisionEvent,
   GameConfigEvent,
   GameStartEvent,

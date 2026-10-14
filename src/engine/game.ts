@@ -517,6 +517,16 @@ function abilityScan(state: GameState, unit: Unit, target?: Position): string | 
   const prompt = enemy.prompt + (enemy.originalPrompt ? " [BREACHED — original overwritten]" : "");
   // Oracle scan deals minor damage (disorienting effect)
   const scanDmg = applyDamage(enemy, BALANCE.abilities.scan.damage);
+  emit({
+    type: "damage_dealt",
+    sourceId: unit.id,
+    targetId: enemy.id,
+    amount: scanDmg,
+    ability: "scan",
+    targetHpAfter: enemy.hp,
+  });
+  if (enemy.hp <= 0)
+    emit({ type: "unit_killed", unitId: enemy.id, killerId: unit.id, ability: "scan" });
   state.log.push(`${unit.name} scans ${enemy.name} (-${scanDmg} HP): "${prompt}"`);
   // Track scan history
   if (!state.scanHistory) state.scanHistory = {};
@@ -538,6 +548,7 @@ function abilityRecalibrate(
   if (!ally || ally.side !== unit.side) return "No ally at target";
   // Recalibrate appends to prompt (buff, not replacement)
   ally.prompt = ally.prompt + "\n" + addendum;
+  emit({ type: "prompt_recalibrated", sourceId: unit.id, targetId: ally.id });
   state.log.push(`${unit.name} recalibrates ${ally.name}`);
   return null;
 }
@@ -787,6 +798,7 @@ export function cleanupAfterUnitActs(state: GameState, unit: Unit): void {
         unit.originalPrompt = undefined;
       }
       unit.breachTurnsLeft = undefined;
+      emit({ type: "status_removed", unitId: unit.id, effectType: "breach", reason: "expired" });
       state.log.push(`${unit.name} shakes off the breach!`);
     }
   }
