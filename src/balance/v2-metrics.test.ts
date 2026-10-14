@@ -37,6 +37,12 @@ test("quality aggregate reports real composition coverage not matchup equality",
   const summary = summarizeQuality([c.finish()]);
   expect(summary.games).toBe(1);
   expect(summary.duration.mean).toBe(7);
+  expect(
+    summarizeQuality([
+      { ...c.finish(), rounds: 7 },
+      { ...c.finish(), rounds: 19 },
+    ]).duration.median,
+  ).toBe(13);
   expect(summary.compositions.medic!.wins).toBe(1);
   expect(summary.compositions.specter!.wins).toBe(0);
 });

@@ -258,7 +258,10 @@ export function summarizeQuality(evidence: Quality[]) {
     games: n,
     duration: {
       mean: average(rounds),
-      median: rounds.length ? rounds[Math.floor(rounds.length / 2)] : null,
+      median: rounds.length
+        ? (rounds[Math.floor((rounds.length - 1) / 2)]! + rounds[Math.floor(rounds.length / 2)]!) /
+          2
+        : null,
       min: rounds[0] ?? null,
       max: rounds.at(-1) ?? null,
     },
