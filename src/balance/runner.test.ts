@@ -19,13 +19,26 @@ test("worker fallback cannot erase journal-derived completed decisions", () => {
     codeCommit: "fixture",
     requestHash: "fixture",
   };
-  const journal = { ...result, decisions: 182, rounds: 20, failure: "decision_error" as const };
+  const journal = {
+    ...result,
+    decisions: 182,
+    rounds: 20,
+    failure: "decision_error" as const,
+  };
   expect(reconcileFailure(result, journal)).toEqual(journal);
 });
 
 test("operational migration is pinned and rejects mechanics or unexpected runner edits", () => {
-  const before = { "src/balance/core.ts": "old", "src/balance/runner.ts": "old", engine: "frozen" };
-  const after = { ...before, "src/balance/core.ts": "new", "src/balance/runner.ts": "new" };
+  const before = {
+    "src/balance/core.ts": "old",
+    "src/balance/runner.ts": "old",
+    engine: "frozen",
+  };
+  const after = {
+    ...before,
+    "src/balance/core.ts": "new",
+    "src/balance/runner.ts": "new",
+  };
   const migration = { fromSourceHash: hash(before), toSourceHash: hash(after) };
   expect(compatibleSources(before, after, migration)).toBe(true);
   expect(compatibleSources(before, { ...after, engine: "changed" }, migration)).toBe(false);
@@ -36,7 +49,39 @@ test("operational migration is pinned and rejects mechanics or unexpected runner
 });
 import type { Manifest } from "./runner";
 import { bounded, safeEnv } from "./process";
-import { CLASSES, hash, isClean, WHITELIST } from "./core";
+import { CLASSES, hash, isClean, WHITELIST, guard } from "./core";
+import * as core from "./core";
+
+test("authorized finite window preserves historical cost and excludes archived evidence", () => {
+  const s = {
+    version: 1,
+    startedAt: 0,
+    cycle: 2,
+    attempts: [],
+    consecutiveFailures: 1,
+    manifestHashes: {},
+    pending: null,
+    halted: null,
+    complete: false,
+    activeWindow: {
+      startedAt: 100000000,
+      deadline: 143200000,
+      authorization: "policy-epoch-2",
+    },
+  } as Checkpoint;
+  expect((core as any).activeDeadline?.(s)).toBe(143200000);
+  expect(() => guard(s, 100000001)).not.toThrow();
+  expect(() => guard(s, 143200000)).toThrow("12-hour wall cap");
+  s.attempts = Array.from({ length: 800 }, (_, i) => ({
+    id: i + 1,
+    cycle: 2,
+    stage: "discovery",
+    slot: i,
+    retry: 0,
+    archived: true,
+  }));
+  expect(() => guard(s, 100000001)).toThrow("800-attempt cap");
+});
 import type { Checkpoint, Result } from "./core";
 
 const cwd = process.cwd();
@@ -165,6 +210,9 @@ test("designer evidence refuses 49 clean games, failed replacements and duplicat
   expect(() => evidence(s, m)).toThrow();
   s.attempts[49]!.result = result;
   expect(evidence(s, m).cleanDiscovery).toBe(50);
+  s.attempts[49]!.archived = true;
+  expect(() => evidence(s, m)).toThrow();
+  s.attempts[49]!.archived = false;
   s.attempts[49]!.slot = 0;
   expect(() => evidence(s, m)).toThrow();
 });

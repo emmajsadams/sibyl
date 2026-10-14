@@ -186,6 +186,8 @@ export interface Attempt {
   slot: number;
   retry: number;
   result?: Result;
+  archived?: boolean;
+  policyEpoch?: string;
 }
 export interface Checkpoint {
   version: 1;
@@ -197,10 +199,24 @@ export interface Checkpoint {
   pending: Attempt | null;
   halted: string | null;
   complete: boolean;
+  policyEpoch?: string;
+  activeWindow?: { startedAt: number; deadline: number; authorization: string };
+}
+export function activeDeadline(s: Checkpoint) {
+  const w = s.activeWindow;
+  if (!w) return s.startedAt + LIMITS.wallMs;
+  if (
+    w.authorization !== "policy-epoch-2" ||
+    !Number.isFinite(w.startedAt) ||
+    !Number.isFinite(w.deadline) ||
+    w.deadline - w.startedAt !== LIMITS.wallMs
+  )
+    throw Error("Invalid authorized active window");
+  return w.deadline;
 }
 export function guard(s: Checkpoint, now = Date.now(), needsAttempt = true) {
   if (s.halted) throw Error(`Experiment halted: ${s.halted}`);
-  if (now - s.startedAt >= LIMITS.wallMs) throw Error("12-hour wall cap");
+  if (now >= activeDeadline(s)) throw Error("12-hour wall cap");
   if (needsAttempt && s.attempts.length >= LIMITS.attempts) throw Error("800-attempt cap");
   if (s.consecutiveFailures >= LIMITS.consecutiveFailures)
     throw Error("Three consecutive failed games");
