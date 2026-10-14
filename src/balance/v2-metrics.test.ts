@@ -69,6 +69,64 @@ test("journal replay preserves exact lines and hashes, rejects torn tails", asyn
     rmSync(dir, { recursive: true, force: true });
   }
 });
+import { advanceRound } from "../engine/game";
+test("real engine round-end events prevent late kills being labeled early and count survival", () => {
+  const c = new metrics.QualityCollector("late-kill-fixture");
+  setTrainingListener((event) => c.add({ type: "engine_event", event }));
+  try {
+    const s = createGame();
+    const p = createUnit("p", "P", "sentinel", "player", { x: 0, y: 0 }, "wait"),
+      o = createUnit("o", "O", "striker", "opponent", { x: 0, y: 1 }, "wait");
+    s.units = [p, o];
+    startPlay(s);
+    for (let i = 0; i < 3; i++) advanceRound(s);
+    useAbility(s, p, "attack", o.position);
+    useAbility(s, p, "attack", o.position);
+    checkWinCondition(s);
+    const q = c.finish();
+    expect(q.earlyEliminations).toBe(0);
+    expect(q.classes.striker.survivalRounds).toBe(4);
+  } finally {
+    clearTrainingListener();
+  }
+});
+test("zero healing is no direct impact and cleanup effects cannot leak into next provider action", () => {
+  const c = new metrics.QualityCollector("no-effect-fixture");
+  c.add({
+    type: "engine_event",
+    event: { type: "status_applied", unitId: "x", source: "passive" },
+  });
+  c.add({ type: "provider_start", round: 4 });
+  c.add({
+    type: "engine_event",
+    event: { type: "healing_done", sourceId: "m", targetId: "x", amount: 0 },
+  });
+  c.add({
+    type: "resolved_action",
+    unit: "m",
+    action: { type: "ability", ability: "patch" },
+    error: null,
+  });
+  expect(c.finish().policy.zeroDirectImpactAbilities).toBe(1);
+});
+import { moveUnit } from "../engine/game";
+test("real trap impact is attributed through actual placement and trigger events", () => {
+  const c = new metrics.QualityCollector("trap-impact-fixture");
+  setTrainingListener((event) => c.add({ type: "engine_event", event }));
+  try {
+    const s = createGame(),
+      v = createUnit("v", "V", "vector", "player", { x: 0, y: 0 }, "trap"),
+      e = createUnit("e", "E", "striker", "opponent", { x: 0, y: 2 }, "move");
+    s.units = [v, e];
+    startPlay(s);
+    expect(useAbility(s, v, "trap", { x: 0, y: 1 })).toBeNull();
+    expect(moveUnit(s, e, { x: 0, y: 1 })).toBeNull();
+    expect(c.finish().classes.vector.damage).toBe(1);
+    expect(c.finish().abilities.trap!.damage).toBe(1);
+  } finally {
+    clearTrainingListener();
+  }
+});
 import * as metrics from "./v2-metrics";
 
 test("real breach and recalibrate effects are observed without prompt disclosure", () => {

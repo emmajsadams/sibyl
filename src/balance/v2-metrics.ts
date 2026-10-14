@@ -33,6 +33,7 @@ export class QualityCollector {
   private ended = false;
   private directImpact = false;
   private rewritten = new Set<string>();
+  private traps = new Map<string, string>();
   private refs: { id: string; type: string }[] = [];
   private classes = Object.fromEntries(CLASSES.map((c) => [c, role()])) as Record<
     UnitClass,
@@ -58,6 +59,10 @@ export class QualityCollector {
   }
   add(raw: any) {
     this.line++;
+    if (raw.type === "provider_start") {
+      this.directImpact = false;
+      if (Number.isInteger(raw.round) && raw.round > 0) this.round = raw.round;
+    }
     if (raw.type === "provider_failure") this.policy.providerErrors++;
     if (raw.type === "match_failure" && raw.failure === "decision_error")
       this.policy.decisionErrors++;
@@ -81,19 +86,31 @@ export class QualityCollector {
     if (raw.type !== "engine_event") return;
     const e = raw.event;
     if (!e || typeof e.type !== "string") return;
+    if (e.type === "game_start") this.round = 1;
     if (e.type === "game_start")
       for (const u of e.units) {
         this.units.set(u.id, { class: u.class, side: u.side, alive: true });
         this.classes[u.class as UnitClass].units++;
       }
-    if (e.type === "turn_start") {
-      this.round = e.turn;
+    if (e.type === "turn_end") {
+      this.round = e.turn + 1;
       for (const u of e.units ?? [])
         if (u.hp > 0)
           this.classes[u.class as UnitClass].statusExposureRounds += u.statusEffects.length;
     }
     const source = this.units.get(e.sourceId ?? e.killerId ?? e.attackerId);
     const target = this.units.get(e.targetId ?? e.unitId);
+    if (e.type === "trap_placed") this.traps.set(`${e.position.x},${e.position.y}`, e.unitId);
+    if (e.type === "trap_triggered") {
+      const key = `${e.position.x},${e.position.y}`,
+        owner = this.units.get(this.traps.get(key) ?? "");
+      this.ability("trap").damage += e.damage;
+      if (owner) {
+        if (owner.side === target?.side) this.classes[owner.class].friendlyDamage += e.damage;
+        else this.classes[owner.class].damage += e.damage;
+      }
+      this.traps.delete(key);
+    }
     if (e.type === "damage_dealt") {
       this.ability(e.ability).damage += e.amount;
       if (source) {
@@ -143,11 +160,11 @@ export class QualityCollector {
         "prompt_recalibrated",
         "status_applied",
         "trap_placed",
-      ].includes(e.type)
+      ].includes(e.type) &&
+      (!(e.type === "damage_dealt" || e.type === "healing_done") || e.amount > 0)
     )
       this.directImpact = true;
-    if (e.type === "ability_used" && e.ability === "recalibrate" && e.success)
-      this.ability("recalibrate").promptRewrites++;
+
     if (e.type === "game_end") {
       this.ended = true;
       this.winner = e.winner ?? "draw";
