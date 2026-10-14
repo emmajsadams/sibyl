@@ -31,6 +31,8 @@ import {
 } from "./core";
 import type { Attempt, Checkpoint, Proposal, Result } from "./core";
 import type { MatchRequest } from "./match";
+import { loadCredential } from "./match";
+export const credentialPreflight = loadCredential;
 
 const ROOT = resolve(import.meta.dir, "../..");
 const DEST = join(ROOT, "experiments/jev-balance-20261006");
@@ -80,7 +82,7 @@ function sources() {
 export function compatibleSources(
   before: Record<string, string>,
   after: Record<string, string>,
-  migration?: { fromSourceHash: string; toSourceHash: string },
+  migration?: { fromSourceHash: string; toSourceHash: string; changedFiles?: string[] },
 ) {
   if (hash(before) === hash(after)) return true;
   if (
@@ -89,11 +91,28 @@ export function compatibleSources(
     migration.toSourceHash !== hash(after)
   )
     return false;
+  const changed = Object.keys(before)
+    .filter((path) => before[path] !== after[path])
+    .sort();
+  const allowed = [
+    "src/balance/core.ts",
+    "src/balance/runner.ts",
+    "src/balance/match.ts",
+    "src/balance/process.ts",
+  ];
+  if (
+    migration.changedFiles &&
+    (migration.changedFiles.some((path) => !allowed.includes(path)) ||
+      JSON.stringify([...migration.changedFiles].sort()) !== JSON.stringify(changed))
+  )
+    return false;
   return (
     Object.keys(before).length === Object.keys(after).length &&
     Object.entries(before).every(
       ([path, text]) =>
-        ["src/balance/core.ts", "src/balance/runner.ts"].includes(path) || after[path] === text,
+        (migration.changedFiles ?? ["src/balance/core.ts", "src/balance/runner.ts"]).includes(
+          path,
+        ) || after[path] === text,
     )
   );
 }
@@ -300,6 +319,7 @@ async function runAttempt(
 ) {
   guard(s);
   if (!sourceCompatible(m)) throw Error("Frozen source changed");
+  const apiKey = credentialPreflight();
   const attempt: Attempt = {
     id: s.attempts.length + 1,
     cycle: m.cycle,
@@ -326,6 +346,7 @@ async function runAttempt(
     join(dir, "worker.log"),
     Math.min(LIMITS.matchMs, activeDeadline(s) - Date.now()),
     ROOT,
+    { TYPESAFE_API_KEY: apiKey },
   );
   atomicJSON(join(dir, "process-exit.json"), run);
   let result = await recoveredJournal(
@@ -512,7 +533,7 @@ export async function main() {
     );
     return;
   }
-  delete process.env.TYPESAFE_API_KEY;
+  credentialPreflight(); // Fail before lock, checkpoint writes, or attempt reservation.
   if (command(["git", "branch", "--show-current"]) !== "main") throw Error("Run on main only");
   const changed = [
     ...command(["git", "diff", "--name-only"]).split("\n"),

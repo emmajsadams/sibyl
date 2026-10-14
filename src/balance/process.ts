@@ -6,11 +6,17 @@ export function safeEnv() {
   delete env.OPENAI_ACCESS_TOKEN;
   return env;
 }
-export async function bounded(args: string[], log: string, timeoutMs: number, cwd: string) {
+export async function bounded(
+  args: string[],
+  log: string,
+  timeoutMs: number,
+  cwd: string,
+  workerEnv: { TYPESAFE_API_KEY: string } | undefined = undefined,
+) {
   const file = Bun.file(log);
   const proc = Bun.spawn(args, {
     cwd,
-    env: safeEnv(),
+    env: { ...safeEnv(), ...workerEnv },
     stdout: file,
     stderr: file,
     stdin: "ignore",

@@ -1,5 +1,5 @@
 import { TypeSafeClient } from "@typesafe-ai/sdk";
-import { appendFileSync, closeSync, fsyncSync, openSync, readFileSync } from "node:fs";
+import { appendFileSync, closeSync, fsyncSync, openSync, readFileSync, statSync } from "node:fs";
 import { resolve } from "node:path";
 import { applyAction, decideAction, getPlacement } from "../agent/jev-agent";
 import type { Boundary } from "../agent/jev-agent";
@@ -20,7 +20,49 @@ import type { BalanceConfig, GameConfig, UnitAction } from "../types";
 import { atomicJSON, hash, LIMITS, WHITELIST } from "./core";
 import type { Failure, Result } from "./core";
 
-export const CREDENTIAL_FILE = "/Users/emma/.hermes/cache/scratch/sibyl-jev.env";
+export const CREDENTIAL_FILE = "/Users/emma/.hermes/credentials/sibyl-jev.env0600";
+const LEGACY_CREDENTIAL_FILES = [
+  "/Users/emma/.hermes/cache/scratch/sibyl-jev.env0600",
+  "/Users/emma/.hermes/cache/scratch/sibyl-jev.env",
+];
+export class CredentialError extends Error {
+  constructor(
+    public diagnosis:
+      | "missing_credential"
+      | "unreadable_credential"
+      | "invalid_credential"
+      | "unsafe_credential_permissions",
+  ) {
+    super(`Credential preflight: ${diagnosis}`);
+  }
+}
+export function loadCredential(
+  env: Record<string, string | undefined> = process.env,
+  paths = [CREDENTIAL_FILE, ...LEGACY_CREDENTIAL_FILES],
+): string {
+  if (env.TYPESAFE_API_KEY !== undefined) {
+    const key = env.TYPESAFE_API_KEY;
+    if (!key || /[\s`$\\"']/.test(key)) throw new CredentialError("invalid_credential");
+    return key;
+  }
+  for (const path of paths) {
+    try {
+      const stat = statSync(path);
+      if (!stat.isFile() || (stat.mode & 0o077) !== 0)
+        throw new CredentialError("unsafe_credential_permissions");
+      try {
+        return credential(readFileSync(path, "utf8"));
+      } catch {
+        throw new CredentialError("invalid_credential");
+      }
+    } catch (error) {
+      if (error instanceof CredentialError) throw error;
+      if ((error as NodeJS.ErrnoException).code !== "ENOENT")
+        throw new CredentialError("unreadable_credential");
+    }
+  }
+  throw new CredentialError("missing_credential");
+}
 export function credential(text: string): string {
   const lines = text.split(/\r?\n/).filter((l) => /^\s*(?:export\s+)?TYPESAFE_API_KEY\s*=/.test(l));
   if (lines.length !== 1) throw Error("Credential file must contain exactly one TYPESAFE_API_KEY");
@@ -200,8 +242,7 @@ export async function playMatch(
 }
 
 if (import.meta.main) {
-  // Explicit worker entrypoint only. No dotenv import, environment fallback, or legacy recorder.
-  delete process.env.TYPESAFE_API_KEY;
+  // Explicit worker entrypoint only; no shell, dotenv, or legacy recorder.
   const path = process.argv[2];
   if (!path) throw Error("Match request path required");
   const request = JSON.parse(readFileSync(path, "utf8")) as MatchRequest;
@@ -224,7 +265,8 @@ if (import.meta.main) {
   };
   try {
     applyBalance(request.balance);
-    const apiKey = credential(readFileSync(CREDENTIAL_FILE, "utf8"));
+    const apiKey = loadCredential();
+    delete process.env.TYPESAFE_API_KEY;
     const result = await playMatch(
       request,
       new TypeSafeClient({
@@ -239,6 +281,7 @@ if (import.meta.main) {
   } catch (error) {
     atomicJSON(`${dir}/worker-diagnostic.json`, {
       errorCategory: errorCategory(error),
+      credentialDiagnosis: error instanceof CredentialError ? error.diagnosis : null,
       stage: "worker_boundary",
       observedDecisions,
       observedFailures,

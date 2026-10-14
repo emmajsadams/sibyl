@@ -2,6 +2,42 @@ import { expect, test } from "bun:test";
 import { TypeSafeClient } from "@typesafe-ai/sdk";
 import { BALANCE } from "../types";
 import { applyBalance, credential, failureKind, playMatch, errorCategory } from "./match";
+import * as match from "./match";
+import { mkdtempSync, writeFileSync, chmodSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+
+test("credential loader retains literal legacy file fallback and refuses public or invalid files", () => {
+  const dir = mkdtempSync(join(tmpdir(), "jev-credential-test-"));
+  const file = join(dir, "legacy.env");
+  try {
+    writeFileSync(file, "export TYPESAFE_API_KEY='test-only'\n", { mode: 0o600 });
+    expect(match.loadCredential({}, [join(dir, "missing"), file])).toBe("test-only");
+    chmodSync(file, 0o644);
+    expect(() => match.loadCredential({}, [file])).toThrow("unsafe_credential_permissions");
+    chmodSync(file, 0o600);
+    writeFileSync(file, "TYPESAFE_API_KEY=$(shell)\n");
+    expect(() => match.loadCredential({}, [file])).toThrow("invalid_credential");
+    expect(() => match.loadCredential({ TYPESAFE_API_KEY: "" }, [file])).toThrow(
+      "invalid_credential",
+    );
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("credential loader prefers environment and reports allowlisted missing-file diagnosis", () => {
+  const load = (match as any).loadCredential;
+  expect(typeof load).toBe("function");
+  expect(load({ TYPESAFE_API_KEY: "test-only" }, ["/nonexistent/jev-test"])).toBe("test-only");
+  try {
+    load({}, ["/nonexistent/jev-test"]);
+    throw Error("expected failure");
+  } catch (error) {
+    expect((error as any).diagnosis).toBe("missing_credential");
+    expect((error as Error).message).toBe("Credential preflight: missing_credential");
+  }
+});
 
 test("worker diagnostics preserve error class without serializing secret-bearing messages", () => {
   expect(errorCategory(new RangeError("secret request headers"))).toBe("RangeError");

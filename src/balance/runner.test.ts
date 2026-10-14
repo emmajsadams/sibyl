@@ -6,6 +6,52 @@ import { BALANCE } from "../types";
 import { generateRandomConfig } from "../training/squads";
 import { createGame, createUnit, advanceRound } from "../engine/game";
 import { evidence, journalFailure, compatibleSources, reconcileFailure } from "./runner";
+import * as runner from "./runner";
+
+test("credential preflight fails without reserving an attempt or changing counters", () => {
+  const s = { attempts: [], consecutiveFailures: 1, pending: null };
+  const before = JSON.stringify(s);
+  const preflight = (runner as any).credentialPreflight;
+  expect(typeof preflight).toBe("function");
+  expect(() => preflight({}, ["/nonexistent/jev-test"])).toThrow("missing_credential");
+  expect(JSON.stringify(s)).toBe(before);
+});
+
+test("credential operational migration requires exact explicit changed-file whitelist", () => {
+  const before = {
+    "src/balance/match.ts": "old",
+    "src/balance/runner.ts": "old",
+    engine: "frozen",
+  };
+  const after = { ...before, "src/balance/match.ts": "new", "src/balance/runner.ts": "new" };
+  const migration = {
+    fromSourceHash: hash(before),
+    toSourceHash: hash(after),
+    changedFiles: ["src/balance/match.ts", "src/balance/runner.ts"],
+  };
+  expect(compatibleSources(before, after, migration)).toBe(true);
+  expect(
+    compatibleSources(before, after, { ...migration, changedFiles: ["src/balance/runner.ts"] }),
+  ).toBe(false);
+  expect(
+    compatibleSources(before, after, {
+      ...migration,
+      changedFiles: [...migration.changedFiles, "engine"],
+    }),
+  ).toBe(false);
+});
+
+test("operational migration pins explicit worker environment boundary edits", () => {
+  const before = { "src/balance/process.ts": "old", engine: "frozen" };
+  const after = { ...before, "src/balance/process.ts": "new" };
+  const migration = {
+    fromSourceHash: hash(before),
+    toSourceHash: hash(after),
+    changedFiles: ["src/balance/process.ts"],
+  };
+  expect(compatibleSources(before, after, migration)).toBe(true);
+  expect(compatibleSources(before, after, { ...migration, changedFiles: [] })).toBe(false);
+});
 
 test("worker fallback cannot erase journal-derived completed decisions", () => {
   const result: Result = {
@@ -111,6 +157,22 @@ test("worker and designer child environments never inherit API keys", () => {
     else process.env.TYPESAFE_API_KEY = original;
   }
 });
+test("startup credential preflight leaves real checkpoint untouched before reservation", () => {
+  const path = "experiments/jev-balance-20261006/raw/checkpoint.json";
+  const before = existsSync(path) ? readFileSync(path, "utf8") : null;
+  const result = Bun.spawnSync(
+    [process.execPath, "run", "src/balance/runner.ts", "--run", "--resume"],
+    {
+      env: { ...safeEnv(), TYPESAFE_API_KEY: "" },
+      stdout: "pipe",
+      stderr: "pipe",
+    },
+  );
+  expect(result.exitCode).toBe(1);
+  expect(result.stderr.toString()).toContain("Credential preflight: invalid_credential");
+  expect(existsSync(path) ? readFileSync(path, "utf8") : null).toBe(before);
+});
+
 test("no-flag runner is inert and creates no experiment checkpoint", () => {
   const before = existsSync("experiments/jev-balance-20261006/raw/checkpoint.json");
   const result = Bun.spawnSync([process.execPath, "run", "src/balance/runner.ts"], {
